@@ -2,7 +2,7 @@ import { asyncHandler } from "../utils/asyncHandler.js"
 import { ApiError } from "../utils/ApiError.js"
 import { User } from "../models/user.model.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
-import { Card } from "../models/card.model"
+import { Card } from "../models/card.model.js"
 
 const createCard = asyncHandler(async (req, res) => {
     const { title, content, link } = req.body

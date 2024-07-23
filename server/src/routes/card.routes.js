@@ -11,3 +11,5 @@ router.route("/").post(verifyJWT, createCard)
 router.route("/").get(verifyJWT, getCards)
 router.route("/:cardId").patch(verifyJWT, updateCard)
 router.route("/:cardId").delete(verifyJWT, deleteCard)
+
+export default router
