@@ -16,21 +16,21 @@ const userSchema = new Schema({
         required: true,
         unique: true,
         lowercase: true,
-        trim: true
+        trim: true,
+        index: true
     },
     fullName: {
         type: String,
         required: true,
         trim: true,
-        index: true
-    },
-    bio: {
-        type: String,
-        trim: true
     },
     password: {
         type: String,
         required: [true, "Password is required"]
+    },
+    avatarImage: {
+        type: String,
+        default: ""
     },
     refreshToken: {
         type: String

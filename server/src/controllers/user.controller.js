@@ -3,6 +3,7 @@ import { ApiError } from "../utils/ApiError.js"
 import { User } from "../models/user.model.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
 import jwt from "jsonwebtoken"
+import { uploadOnCloudinary, deleteFromCloudinary } from "../utils/cloudinary.js"
 
 const options = {
     httpOnly: true,
@@ -35,15 +36,11 @@ const registerUser = asyncHandler(async (req, res) => {
     // you can receive data using req.body given in json or form from frontend
     const { fullName, email, username, password } = req.body
 
-    console.log("its running")
-
     if (
         [fullName, email, username, password].some(field => field?.trim() === "")
     ) {
         throw new ApiError(400, "All fields are required")
     }
-
-    console.log(fullName, email, username, password)
 
     const existedUser = await User.findOne({
         $or: [{ username }, { email }]
@@ -53,13 +50,23 @@ const registerUser = asyncHandler(async (req, res) => {
         throw new ApiError(409, "User with email or username already exists")
     }
 
+    const avatarLocalPath = req.files?.avatar[0]?.path;
+
+    let avatar = null;
+    if (avatarLocalPath) {
+        avatar = await uploadOnCloudinary(avatarLocalPath)
+    } else {
+        avatar = { url: "" } // update a default avatar image
+    }
+
+
     const user = await User.create({
         fullName,
         email,
         password,
+        avatarImage: avatar.url,
         username: username.toLowerCase()
     })
-    
 
     const createdUser = await User.findById(user._id).select(
         "-password -refreshToken"
@@ -69,16 +76,15 @@ const registerUser = asyncHandler(async (req, res) => {
         throw new ApiError(500, "Something went wrong while registering the user")
     }
 
-
     return res
-    .status(201)
-    .json(
-        new ApiResponse(
-            201,
-            createdUser,
-            "User registered successfully"
+        .status(201)
+        .json(
+            new ApiResponse(
+                201,
+                createdUser,
+                "User registered successfully"
+            )
         )
-    )
 })
 
 const loginUser = asyncHandler(async (req, res) => {
@@ -256,33 +262,48 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
         ))
 })
 
-const updateBio = asyncHandler(async (req, res) => {
-    const { bio } = req.body
+const updateUserAvatar = asyncHandler(async (req, res) => {
 
-    if (!bio) {
-        throw new ApiError(400, "Bio is required")
+    const avatarLocalPath = req.file?.path
+
+    if (!avatarLocalPath) {
+        throw new ApiError(400, "Avatar file is missing")
     }
 
+    const avatar = await uploadOnCloudinary(avatarLocalPath)
+
+    if (!avatar.url) {
+        throw new ApiError(400, "Error while uploading on avatar")
+    }
+
+    // deleting avatar from cloudinary
+
+    const avatarName = getPublicId(req.user.avatar)
+
+    if (!avatarName) {
+        throw new ApiError(500, "Error while extracting image name from avatar URL",)
+    }
+
+    const response = await deleteFromCloudinary(avatarName)
+
+    // updating user in the database
+
     const user = await User.findByIdAndUpdate(
-        req.user?._id,
-        {
-            $set: {
-                bio
-            }
-        },
-        {
-            new: true
-        }
-    ).select("-password -refreshToken")
+        req.user._id,
+        { $set: { avatar: avatar.url } },
+        { new: true, select: "-password -refreshToken" }
+    );
 
     return res
         .status(200)
         .json(new ApiResponse(
             200,
-            user,
-            "Bio updated successfully"
+            {
+                user,
+                deletionResponse: response
+            },
+            "Avatar updated successfully"
         ))
-
 })
 
 export {
@@ -293,5 +314,5 @@ export {
     changeCurrentPassword,
     getCurrentUser,
     updateAccountDetails,
-    updateBio
+    updateUserAvatar
 }
