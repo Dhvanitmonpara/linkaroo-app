@@ -4,6 +4,7 @@ import { User } from "../models/user.model.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
 import jwt from "jsonwebtoken"
 import { uploadOnCloudinary, deleteFromCloudinary } from "../utils/cloudinary.js"
+import { Profile } from "../models/profile.model.js"
 
 const options = {
     httpOnly: true,
@@ -76,12 +77,21 @@ const registerUser = asyncHandler(async (req, res) => {
         throw new ApiError(500, "Something went wrong while registering the user")
     }
 
+    const profile = await Profile.create({ userId: user?.id })
+
+    if(!profile) {
+        throw new ApiError(500, "Failed to create profile")
+    }
+
     return res
         .status(201)
         .json(
             new ApiResponse(
                 201,
-                createdUser,
+                {
+                    createdUser,
+                    profile
+                },
                 "User registered successfully"
             )
         )
@@ -224,11 +234,23 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
 })
 
 const getCurrentUser = asyncHandler(async (req, res) => {
+
+    const { userId } = req.user?.id
+
+    const profile = await Profile.find({ userId })
+
+    if (!profile) {
+        throw new ApiError(404, "Profile not found")
+    }
+
     return res
         .status(200)
         .json(new ApiResponse(
             200,
-            req.user,
+            {
+                profile,
+                user: req.user?.id,
+            },
             "Current user fetched successfully"
         ))
 })
@@ -290,7 +312,7 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
 
     const user = await User.findByIdAndUpdate(
         req.user._id,
-        { $set: { avatar: avatar.url } },
+        { $set: { avatarImage: avatar.url } },
         { new: true, select: "-password -refreshToken" }
     );
 
@@ -314,5 +336,5 @@ export {
     changeCurrentPassword,
     getCurrentUser,
     updateAccountDetails,
-    updateUserAvatar
+    updateUserAvatar,
 }

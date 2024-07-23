@@ -1,8 +1,8 @@
 import { asyncHandler } from "../utils/asyncHandler.js"
 import { ApiError } from "../utils/ApiError.js"
-import { User } from "../models/user.model.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
-import { Card } from "../models/card.model.js"
+import { Profile } from "../models/profile.model.js"
+import { uploadOnCloudinary, deleteFromCloudinary, getPublicId } from "../utils/cloudinary.js"
 
 const updateBio = asyncHandler(async (req, res) => {
     const { bio } = req.body
@@ -11,8 +11,8 @@ const updateBio = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Bio is required")
     }
 
-    const user = await User.findByIdAndUpdate(
-        req.user?._id,
+    const profile = await Profile.findByIdAndUpdate(
+        { userId: req.user?._id },
         {
             $set: {
                 bio
@@ -21,16 +21,142 @@ const updateBio = asyncHandler(async (req, res) => {
         {
             new: true
         }
-    ).select("-password -refreshToken")
+    )
 
     return res
         .status(200)
         .json(new ApiResponse(
             200,
-            user,
+            profile,
             "Bio updated successfully"
         ))
 
 })
 
-export { updateBio }
+const updateUserCoverImage = asyncHandler(async (req, res) => {
+
+    const coverImageLocalPath = req.file?.path
+
+    if (!coverImageLocalPath) {
+        throw new ApiError(400, "Cover image file is missing")
+    }
+
+    const coverImage = await uploadOnCloudinary(coverImageLocalPath)
+
+    if (!coverImage.url) {
+        throw new ApiError(400, "Error while uploading on cover image")
+    }
+
+    // deleting cover image from cloudinary
+
+    const oldImagePath = Profile.findOne({ userId: req.user?._id }).select("coverImage")
+
+    console.log(oldImagePath)
+
+    const coverImageName = getPublicId(oldImagePath)
+
+    if (!coverImageName) {
+        throw new ApiError(500, "Error while extracting image name from image URL",)
+    }
+
+    const response = await deleteFromCloudinary(coverImageName)
+
+    // updating user in the database
+
+    const profile = await Profile.findByIdAndUpdate(
+        { userId: req.user._id },
+        {
+            $set: {
+                coverImage: coverImage.url
+            }
+        },
+        {
+            new: true
+        }
+    ).select("-bio")
+
+    return res
+        .status(200)
+        .json(new ApiResponse(
+            200,
+            {
+                profile,
+                deletionResponse: response
+            },
+            "Cover image updated successfully"
+        ))
+})
+
+const uploadUserCoverImage = asyncHandler(async (req, res) => {
+    const coverImageLocalPath = req.file?.path
+
+    if (!coverImageLocalPath) {
+        throw new ApiError(400, "Cover image file is missing")
+    }
+
+    const coverImage = await uploadOnCloudinary(coverImageLocalPath)
+
+    if (!coverImage.url) {
+        throw new ApiError(400, "Error while uploading on cover image")
+    }
+
+    const coverImageURL = coverImage?.url
+
+    const profile = await Profile.findByIdAndUpdate(
+        { userId: req.user._id },
+        {
+            $set: {
+                coverImage: coverImageURL
+            }
+        },
+        {
+            new: true
+        }
+    )
+
+    return res
+        .status(200)
+        .json(new ApiResponse(
+            200,
+            {
+                profile,
+                coverImageURL
+            },
+            "Cover image uploaded successfully"
+        ))
+})
+
+const toggleTheme = asyncHandler(async (req, res) => {
+
+    const { theme } = req.body
+
+    const profile = await Profile.findByIdAndUpdate(
+        { userId: req.user?._id },
+        {
+            $set: {
+                theme: theme
+            }
+        },
+        {
+            new: true
+        }
+    ).select("-coverImage -bio")
+
+    setCookie("theme", profile.theme)
+
+    return res
+        .status(200)
+        .json(new ApiResponse(
+            200,
+            profile,
+            "Theme updated successfully"
+        ))
+
+})
+
+export {
+    updateBio,
+    updateUserCoverImage,
+    uploadUserCoverImage,
+    toggleTheme
+}

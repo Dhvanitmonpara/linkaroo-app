@@ -6,10 +6,12 @@ import { verifyJWT } from "../middlewares/auth.middleware.js";
 
 const router = Router()
 
+router.use(verifyJWT)
+
 // secure routes
-router.route("/").post(verifyJWT, createCard)
-router.route("/").get(verifyJWT, getCards)
-router.route("/:cardId").patch(verifyJWT, updateCard)
-router.route("/:cardId").delete(verifyJWT, deleteCard)
+router.route("/").post(createCard)
+router.route("/").get(getCards)
+router.route("/:cardId").patch(updateCard)
+router.route("/:cardId").delete(deleteCard)
 
 export default router

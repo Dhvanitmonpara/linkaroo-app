@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 
 const profileSchema = new Schema({
-    email: {
+    userId: {
         type: Schema.Types.ObjectId,
         ref: "User",
     },
@@ -19,4 +19,4 @@ const profileSchema = new Schema({
     },
 }, { timestamps: true })
 
-export const User = mongoose.model("Profile", profileSchema)
+export const Profile = mongoose.model("Profile", profileSchema)
