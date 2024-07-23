@@ -1,1 +1,1 @@
-export const DB_NAME = "likaroo"
+export const DB_NAME = "linkaroo"
