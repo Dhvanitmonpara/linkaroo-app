@@ -7,7 +7,7 @@ const cardSchema = new Schema({
         required: true,
         unique: true
     },
-    content: {
+    description: {
         type: String,
         required: true
     },
@@ -19,8 +19,12 @@ const cardSchema = new Schema({
     userId: {
         type: Schema.Types.ObjectId,
         ref: "User"
-    }
-
+    },
+    lisId: {
+        type: Schema.Types.ObjectId,
+        ref: "List"
+    },
+    
 }, { timestamps: true })
 
 export const Card = mongoose.model("Card", cardSchema)

@@ -30,7 +30,6 @@ const updateBio = asyncHandler(async (req, res) => {
             profile,
             "Bio updated successfully"
         ))
-
 })
 
 const updateUserCoverImage = asyncHandler(async (req, res) => {
@@ -51,8 +50,6 @@ const updateUserCoverImage = asyncHandler(async (req, res) => {
 
     const oldImagePath = Profile.findOne({ userId: req.user?._id }).select("coverImage")
 
-    console.log(oldImagePath)
-
     const coverImageName = getPublicId(oldImagePath)
 
     if (!coverImageName) {
@@ -61,9 +58,9 @@ const updateUserCoverImage = asyncHandler(async (req, res) => {
 
     const response = await deleteFromCloudinary(coverImageName)
 
-    // updating user in the database
+    // updating profile in the database
 
-    const profile = await Profile.findByIdAndUpdate(
+    const profile = await Profile.findOneAndUpdate(
         { userId: req.user._id },
         {
             $set: {
@@ -102,7 +99,7 @@ const uploadUserCoverImage = asyncHandler(async (req, res) => {
 
     const coverImageURL = coverImage?.url
 
-    const profile = await Profile.findByIdAndUpdate(
+    const profile = await Profile.findOneAndUpdate(
         { userId: req.user._id },
         {
             $set: {

@@ -1,0 +1,409 @@
+import { asyncHandler } from "../utils/asyncHandler.js"
+import { ApiError } from "../utils/ApiError.js"
+import { ApiResponse } from "../utils/ApiResponse.js"
+import { List } from "../models/list.model.js"
+
+const createList = asyncHandler(async (req, res) => {
+
+    const { title, description, theme = "dark", font = "space-mono" } = req.body
+
+    if (!title || !description) {
+        throw new ApiError(400, "Title and description are required")
+    }
+
+    const list = await List.create({
+        createdBy: req.user._id,
+        title,
+        description,
+        theme,
+        font,
+        collaborators: []
+    })
+
+    if (!list) {
+        throw new ApiError(500, "Failed to create list")
+    }
+
+    return res
+        .status(200)
+        .json(new ApiResponse(
+            200,
+            list,
+            "List created successfully"
+        ))
+})
+
+const addCollaborator = asyncHandler(async (req, res) => {
+
+    const { listId } = req.params.listId
+
+    const listOnDatabase = await List.findById(listId)
+
+    if (!listOnDatabase) {
+        throw new ApiError(404, "List not found")
+    }
+
+    if (listOnDatabase.createdBy == req.user._id) {
+
+        const { userId } = req.body
+
+        if (!userId) {
+            throw new ApiError(400, "User ID is required")
+        }
+
+        const list = await List.findByIdAndUpdate(
+            listId,
+            {
+                collaborators: [...list.collaborators, userId]
+            },
+            { new: true }
+        )
+
+        if (!list) {
+            throw new ApiError(404, "List not found")
+        }
+
+        return res
+            .status(200)
+            .json(new ApiResponse(
+                200,
+                list,
+                "Collaborator added successfully"
+            ))
+    } else {
+        return res
+            .status(403)
+            .json(new ApiResponse(
+                403,
+                "You are not a owner of this list"
+            ))
+    }
+})
+
+const deleteCollaborator = asyncHandler(async (req, res) => {
+
+    const { listId } = req.params.listId
+
+    const listOnDatabase = await List.findById(listId)
+
+    if (!listOnDatabase) {
+        throw new ApiError(404, "List not found")
+    }
+
+    if (listOnDatabase.createdBy == req.user._id) {
+
+        const { userId } = req.body
+
+        if (!userId) {
+            throw new ApiError(400, "User ID is required")
+        }
+
+        const list = await List.findByIdAndUpdate(
+            req.params.listId,
+            {
+                collaborators: list.collaborators.filter((id) => id.toString() !== userId)
+            },
+            { new: true }
+        )
+
+        if (!list) {
+            throw new ApiError(404, "List not found")
+        }
+
+        return res
+            .status(200)
+            .json(new ApiResponse(
+                200,
+                list,
+                "Collaborator deleted successfully"
+            ))
+    } else {
+        return res
+            .status(403)
+            .json(new ApiResponse(
+                403,
+                "You are not a owner of this list"
+            ))
+    }
+})
+
+const updateList = asyncHandler(async (req, res) => {
+    const { listId } = req.params.listId
+
+    if (!listId) {
+        throw new ApiError(400, "List ID is required")
+    }
+
+    const listOnDatabase = await List.findById(listId)
+
+    if (listOnDatabase.createdBy == req.user._id) {
+
+        const { title, description, theme = "dark", font = "space-mono" } = req.body
+
+        if (!title || !description) {
+            throw new ApiError(400, "At least one field needs to be updated")
+        }
+
+        const updatedList = await List.findByIdAndUpdate(
+            listId,
+            {
+                $set: {
+                    title,
+                    description,
+                    theme,
+                    font
+                }
+            },
+            { new: true }
+        )
+
+        return res
+            .status(200)
+            .json(new ApiResponse(
+                200,
+                updatedList,
+                "List updated successfully"
+            ))
+
+    } else {
+        return res
+            .status(403)
+            .json(new ApiResponse(
+                403,
+                "You are not a owner of this list"
+            ))
+    }
+
+})
+
+const deleteList = asyncHandler(async (req, res) => {
+
+    const { listId } = req.params.listId
+
+    if (!listId) {
+        throw new ApiError(400, "List ID is required")
+    }
+
+    const listOnDatabase = await List.findById(listId)
+
+    if (listOnDatabase.createdBy == req.user._id) {
+
+        const deletedList = await List.findByIdAndDelete(listId)
+
+        if (!deletedList) {
+            throw new ApiError(404, "List not found")
+        }
+
+        return res
+            .status(200)
+            .json(new ApiResponse(
+                200,
+                deletedList,
+                "List deleted successfully"
+            ))
+
+    } else {
+
+        return res
+            .status(403)
+            .json(new ApiResponse(
+                403,
+                "You are not a owner of this list"
+            ))
+    }
+})
+
+const getListsByOwner = asyncHandler(async (req, res) => {
+
+    const lists = await List.find({ createdBy: req.user?._id })
+
+    if (!lists) {
+        throw new ApiError(404, "No lists found for this user")
+    }
+
+    return res
+        .status(200)
+        .json(new ApiResponse(
+            200,
+            lists,
+            "Lists fetched successfully"
+        ))
+})
+
+const getListsByCollaborator = asyncHandler(async (req, res) => {
+
+    const lists = await List.find({ collaborators: req.user._id })
+
+    if (!lists) {
+        throw new ApiError(404, "No lists found for this user")
+    }
+
+    return res
+        .status(200)
+        .json(new ApiResponse(
+            200,
+            lists,
+            "Lists fetched successfully"
+        ))
+
+})
+
+const getListsByTitle = asyncHandler(async (req, res) => {
+    const { title } = req.query
+
+})
+
+const getListsByDescription = asyncHandler(async (req, res) => {
+    const { description } = req.query
+})
+
+const getListsByTheme = asyncHandler(async (req, res) => {
+    const { theme } = req.query
+})
+
+const uploadCoverImage = asyncHandler(async (req, res) => {
+    const { listId } = req.params.listId
+
+    if (!listId) {
+        throw new ApiError(400, "List ID is required")
+    }
+
+    const listOnDatabase = await List.findById(listId)
+
+    if (!listOnDatabase) {
+        throw new ApiError(404, "List not found")
+    }
+
+    if (listOnDatabase.createdBy == req.user._id) {
+
+        const coverImageLocalPath = req.file?.path
+
+        if (!coverImageLocalPath) {
+            throw new ApiError(400, "Cover image file is missing")
+        }
+
+        const coverImage = await uploadOnCloudinary(coverImageLocalPath)
+
+        if (!coverImage.url) {
+            throw new ApiError(400, "Error while uploading on cover image")
+        }
+
+        const coverImageURL = coverImage?.url
+
+        const list = await List.findByIdAndUpdate(
+            listId,
+            {
+                $set: {
+                    coverImage: coverImageURL
+                }
+            },
+            {
+                new: true
+            }
+        )
+
+        return res
+            .status(200)
+            .json(new ApiResponse(
+                200,
+                {
+                    list,
+                    coverImageURL
+                },
+                "Cover image uploaded successfully"
+            ))
+    } else {
+        return res
+            .status(403)
+            .json(new ApiResponse(
+                403,
+                "You are not a owner of this list"
+            ))
+    }
+})
+
+const updateCoverImage = asyncHandler(async (req, res) => {
+
+    const { listId } = req.params.listId
+
+    if (!listId) {
+        throw new ApiError(400, "List ID is required")
+    }
+
+    const listOnDatabase = await List.findById(listId)
+
+    if (!listOnDatabase) {
+        throw new ApiError(404, "List not found")
+    }
+
+    if (listOnDatabase.createdBy == req.user._id) {
+
+        const coverImageLocalPath = req.file?.path
+
+        if (!coverImageLocalPath) {
+            throw new ApiError(400, "Cover image file is missing")
+        }
+
+        const coverImage = await uploadOnCloudinary(coverImageLocalPath)
+
+        if (!coverImage.url) {
+            throw new ApiError(400, "Error while uploading on cover image")
+        }
+
+        // deleting cover image from cloudinary
+
+        const oldImagePath = req.body.oldImagePath
+
+        const coverImageName = getPublicId(oldImagePath)
+
+        if (!coverImageName) {
+            throw new ApiError(500, "Error while extracting image name from image URL",)
+        }
+
+        const response = await deleteFromCloudinary(coverImageName)
+
+        // updating list in the database
+
+        const list = await List.findByIdAndUpdate(
+            listId ,
+            {
+                $set: {
+                    coverImage: coverImage.url
+                }
+            },
+            {
+                new: true
+            }
+        )
+
+        return res
+            .status(200)
+            .json(new ApiResponse(
+                200,
+                {
+                    list,
+                    deletionResponse: response
+                },
+                "Cover image updated successfully"
+            ))
+
+    } else {
+
+        return res
+            .status(403)
+            .json(new ApiResponse(
+                403,
+                "You are not a owner of this list"
+            ))
+    }
+})
+
+export {
+    createList,
+    getListsByOwner,
+    getListsByCollaborator,
+    updateList,
+    deleteList,
+    addCollaborator,
+    deleteCollaborator,
+}
