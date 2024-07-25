@@ -24,7 +24,7 @@ const listSchema = new Schema({
     },
     font: {
         type: String,
-        default: "Space mono"
+        default: "space-mono"
     },
     collaborators: [
         {

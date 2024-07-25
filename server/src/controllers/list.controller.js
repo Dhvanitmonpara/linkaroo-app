@@ -406,4 +406,9 @@ export {
     deleteList,
     addCollaborator,
     deleteCollaborator,
+    updateCoverImage,
+    uploadCoverImage,
+    getListsByTitle,
+    getListsByDescription,
+    getListsByTheme
 }
