@@ -268,51 +268,13 @@ const uploadCoverImage = asyncHandler(async (req, res) => {
         throw new ApiError(400, "List ID is required")
     }
 
-    const listOnDatabase = await List.findById(listId)
+    const list = await List.findById(listId)
 
-    if (!listOnDatabase) {
+    if (!list) {
         throw new ApiError(404, "List not found")
     }
 
-    if (listOnDatabase.createdBy == req.user._id) {
-
-        const coverImageLocalPath = req.file?.path
-
-        if (!coverImageLocalPath) {
-            throw new ApiError(400, "Cover image file is missing")
-        }
-
-        const coverImage = await uploadOnCloudinary(coverImageLocalPath)
-
-        if (!coverImage.url) {
-            throw new ApiError(400, "Error while uploading on cover image")
-        }
-
-        const coverImageURL = coverImage?.url
-
-        const list = await List.findByIdAndUpdate(
-            listId,
-            {
-                $set: {
-                    coverImage: coverImageURL
-                }
-            },
-            {
-                new: true
-            }
-        )
-
-        return res
-            .status(200)
-            .json(new ApiResponse(
-                200,
-                {
-                    list,
-                    coverImageURL
-                },
-                "Cover image uploaded successfully"
-            ))
-    } else {
+    if (list.createdBy.toString() !== req.user._id.toString()) {
         return res
             .status(403)
             .json(new ApiResponse(
@@ -320,83 +282,80 @@ const uploadCoverImage = asyncHandler(async (req, res) => {
                 "You are not a owner of this list"
             ))
     }
+
+    const coverImageLocalPath = req.file?.path
+
+    if (!coverImageLocalPath) {
+        throw new ApiError(400, "Cover image file is missing")
+    }
+
+    const coverImage = await uploadOnCloudinary(coverImageLocalPath)
+
+    if (!coverImage.url) {
+        throw new ApiError(400, "Error while uploading on cover image")
+    }
+
+    list.coverImage = coverImage.url;
+    await list.save();
+
+    return res
+        .status(200)
+        .json(new ApiResponse(
+            200,
+            {
+                list,
+                coverImage: coverImage.url,
+            },
+            "Cover image uploaded successfully"
+        ))
 })
 
 const updateCoverImage = asyncHandler(async (req, res) => {
-
     const { listId } = req.params.listId
 
     if (!listId) {
         throw new ApiError(400, "List ID is required")
     }
 
-    const listOnDatabase = await List.findById(listId)
+    const list = await List.findById(listId);
 
-    if (!listOnDatabase) {
+    if (!list) {
         throw new ApiError(404, "List not found")
     }
 
-    if (listOnDatabase.createdBy == req.user._id) {
-
-        const coverImageLocalPath = req.file?.path
-
-        if (!coverImageLocalPath) {
-            throw new ApiError(400, "Cover image file is missing")
-        }
-
-        const coverImage = await uploadOnCloudinary(coverImageLocalPath)
-
-        if (!coverImage.url) {
-            throw new ApiError(400, "Error while uploading on cover image")
-        }
-
-        // deleting cover image from cloudinary
-
-        const oldImagePath = req.body.oldImagePath
-
-        const coverImageName = getPublicId(oldImagePath)
-
-        if (!coverImageName) {
-            throw new ApiError(500, "Error while extracting image name from image URL",)
-        }
-
-        const response = await deleteFromCloudinary(coverImageName)
-
-        // updating list in the database
-
-        const list = await List.findByIdAndUpdate(
-            listId ,
-            {
-                $set: {
-                    coverImage: coverImage.url
-                }
-            },
-            {
-                new: true
-            }
-        )
-
-        return res
-            .status(200)
-            .json(new ApiResponse(
-                200,
-                {
-                    list,
-                    deletionResponse: response
-                },
-                "Cover image updated successfully"
-            ))
-
-    } else {
-
-        return res
-            .status(403)
-            .json(new ApiResponse(
-                403,
-                "You are not a owner of this list"
-            ))
+    if (list.createdBy.toString() !== req.user._id.toString()) {
+        return res.status(403).json(new ApiResponse(403, "You are not a owner of this list"))
     }
-})
+
+    const coverImageLocalPath = req.file?.path;
+    if (!coverImageLocalPath) {
+        throw new ApiError(400, "Cover image file is missing")
+    }
+
+    const coverImage = await uploadOnCloudinary(coverImageLocalPath);
+    if (!coverImage.url) {
+        throw new ApiError(400, "Error while uploading on cover image")
+    }
+
+    const oldImagePath = req.body.oldImagePath;
+    const coverImageName = getPublicId(oldImagePath);
+    if (!coverImageName) {
+        throw new ApiError(500, "Error while extracting image name from image URL")
+    }
+    const cloudinaryRes = deleteFromCloudinary(coverImageName);
+
+    list.coverImage = coverImage.url;
+    await list.save();
+
+    return res
+        .status(200)
+        .json(new ApiResponse(
+            200,
+            { list, cloudinaryRes },
+            "Cover image updated successfully"
+        ))
+});
+
 
 export {
     createList,
@@ -410,5 +369,5 @@ export {
     uploadCoverImage,
     getListsByTitle,
     getListsByDescription,
-    getListsByTheme
+    getListsByTheme,
 }
