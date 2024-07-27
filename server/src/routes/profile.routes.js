@@ -10,10 +10,12 @@ import { verifyJWT } from "../middlewares/auth.middleware.js";
 
 const router = Router()
 
+router.use(verifyJWT)
+
 // secure routes
-router.route("/update-bio").patch(verifyJWT, updateBio)
-router.route("/cover-image").post(verifyJWT, upload.single("coverImage"), uploadUserCoverImage)
-router.route("/cover-image").patch(verifyJWT, upload.single("coverImage"), updateUserCoverImage)
-router.route("/toggle-theme").patch(verifyJWT, toggleTheme)
+router.route("/update-bio").patch(updateBio)
+router.route("/cover-image").post(upload.single("coverImage"), uploadUserCoverImage)
+router.route("/cover-image").patch(upload.single("coverImage"), updateUserCoverImage)
+router.route("/toggle-theme").patch(toggleTheme)
 
 export default router;

@@ -132,7 +132,7 @@ const updateList = asyncHandler(async (req, res) => {
 
     if (!listId) {
         throw new ApiError(400, "List ID is required")
-    }
+    }``
 
     const listOnDatabase = await List.findById(listId)
 
@@ -343,6 +343,48 @@ const updateCoverImage = asyncHandler(async (req, res) => {
         ))
 });
 
+const deleteCoverImage = asyncHandler(async (req, res) => {
+    const { listId } = req.params.listId
+
+    if (!listId) {
+        throw new ApiError(400, "List ID is required")
+    }
+
+    const list = await List.findById(listId);
+
+    if (!list) {
+        throw new ApiError(404, "List not found")
+    }
+
+    if (list.createdBy.toString()!== req.user._id.toString()) {
+        return res.status(403).json(new ApiResponse(403, "You are not a owner of this list"))
+    }
+
+    if(!list.coverImage) {
+        return res.status(400).json(new ApiResponse(400, "No cover image found"))
+    }
+
+    const coverImageName = getPublicId(list.coverImage);
+
+    const coverImage = deleteFromCloudinary(coverImageName);
+
+    if(!coverImage.result) {
+        throw new ApiError(500, "Error while deleting cover image from Cloudinary")
+    }
+
+    list.coverImage = "";
+    await list.save();
+
+    return res
+       .status(200)
+       .json(new ApiResponse(
+            200,
+            { list, coverImage },
+            "Cover image deleted successfully"
+        ))
+
+})
+
 export {
     createList,
     getListsByOwner,
@@ -353,4 +395,5 @@ export {
     deleteCollaborator,
     updateCoverImage,
     uploadCoverImage,
+    deleteCoverImage
 }
