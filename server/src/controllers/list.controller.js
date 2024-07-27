@@ -248,19 +248,6 @@ const getListsByCollaborator = asyncHandler(async (req, res) => {
 
 })
 
-const getListsByTitle = asyncHandler(async (req, res) => {
-    const { title } = req.query
-
-})
-
-const getListsByDescription = asyncHandler(async (req, res) => {
-    const { description } = req.query
-})
-
-const getListsByTheme = asyncHandler(async (req, res) => {
-    const { theme } = req.query
-})
-
 const uploadCoverImage = asyncHandler(async (req, res) => {
     const { listId } = req.params.listId
 
@@ -366,7 +353,4 @@ export {
     deleteCollaborator,
     updateCoverImage,
     uploadCoverImage,
-    getListsByTitle,
-    getListsByDescription,
-    getListsByTheme,
 }
