@@ -2,7 +2,8 @@ import { asyncHandler } from "../utils/asyncHandler.js"
 import { ApiError } from "../utils/ApiError.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
 import { Profile } from "../models/profile.model.js"
-import { uploadOnCloudinary, deleteFromCloudinary, getPublicId } from "../utils/cloudinary.js"
+import { uploadOnCloudinary, deleteFromCloudinary } from "../utils/cloudinary.js"
+import getPublicId from "../utils/getPublicId.js"
 
 const updateBio = asyncHandler(async (req, res) => {
     const { bio } = req.body
