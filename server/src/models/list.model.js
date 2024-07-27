@@ -26,6 +26,12 @@ const listSchema = new Schema({
         type: String,
         default: "space-mono"
     },
+    tags: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "Tag"
+        }
+    ],
     collaborators: [
         {
             type: Schema.Types.ObjectId,
