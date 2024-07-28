@@ -5,6 +5,7 @@ import { ApiResponse } from "../utils/ApiResponse.js"
 import jwt from "jsonwebtoken"
 import { uploadOnCloudinary, deleteFromCloudinary } from "../utils/cloudinary.js"
 import { Profile } from "../models/profile.model.js"
+import getPublicId from "../utils/getPublicId.js"
 
 const options = {
     httpOnly: true,
@@ -213,6 +214,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 })
 
 const changeCurrentPassword = asyncHandler(async (req, res) => {
+    
     const { oldPassword, newPassword } = req.body
 
     const user = await User.findById(req.user._id)
@@ -236,9 +238,9 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
 
 const getCurrentUser = asyncHandler(async (req, res) => {
 
-    const { userId } = req.user?.id
+    const userId  = req.user?._id
 
-    const profile = await Profile.find({ userId })
+    const profile = await Profile.find({ userId: userId })
 
     if (!profile) {
         throw new ApiError(404, "Profile not found")
@@ -301,7 +303,7 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
 
     // deleting avatar from cloudinary
 
-    const avatarName = getPublicId(req.user.avatar)
+    const avatarName = getPublicId(req.user.avatarImage)
 
     if (!avatarName) {
         throw new ApiError(500, "Error while extracting image name from avatar URL",)
