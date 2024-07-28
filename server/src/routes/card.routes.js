@@ -9,8 +9,9 @@ const router = Router()
 router.use(verifyJWT)
 
 // secure routes
-router.route("/").post(createCard)
-router.route("/").get(getCards)
+router.route("/:listId")
+    .post(createCard)
+    .get(getCards)
 router.route("/:cardId").patch(updateCard)
 router.route("/:cardId").delete(deleteCard)
 

@@ -5,7 +5,14 @@ import { ApiResponse } from "../utils/ApiResponse.js"
 import { Card } from "../models/card.model.js"
 
 const createCard = asyncHandler(async (req, res) => {
-    const { title, content, link } = req.body
+
+    const { listId } = req.params
+
+    if(!listId) {
+        throw new ApiError(400, "List ID is required")
+    }
+
+    const { title, description, link } = req.body
 
     if (!title || !link) {
         throw new ApiError(400, "title and link are required")
@@ -17,11 +24,12 @@ const createCard = asyncHandler(async (req, res) => {
         throw new ApiError(404, "User not found")
     }
 
-    const card = await user.createCard({
+    const card = await Card.create({
         title,
-        content,
+        description: description?description: "",
         link,
-        userId: user._id
+        userId: user._id,
+        listId: listId
     })
 
     if (!card) {

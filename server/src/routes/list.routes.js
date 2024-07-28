@@ -21,14 +21,15 @@ router.use(verifyJWT)
 // secure routes
 router.route("/").post(createList)
 
-router.route("/o")
-    .get(getListsByOwner)
+router.route("/o").get(getListsByOwner)
+
+router.route("/o/:listId")
     .delete(deleteList)
     .patch(updateList)
 
 router.route("/c").get(getListsByCollaborator)
 
-router.route("/o/:listId")
+router.route("/o/c/:listId")
     .patch(addCollaborator)
     .delete(deleteCollaborator)
 

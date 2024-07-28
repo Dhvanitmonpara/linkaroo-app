@@ -33,44 +33,8 @@ const createList = asyncHandler(async (req, res) => {
         ))
 })
 
-const addCollaborator = asyncHandler(async (req, res) => {
-
-    const { listId } = req.params.listId
-
-    const listOnDatabase = await List.findById(listId)
-
-    if (!listOnDatabase) {
-        throw new ApiError(404, "List not found")
-    }
-
-    if (listOnDatabase.createdBy == req.user._id) {
-
-        const { userId } = req.body
-
-        if (!userId) {
-            throw new ApiError(400, "User ID is required")
-        }
-
-        const list = await List.findByIdAndUpdate(
-            listId,
-            {
-                collaborators: [...list.collaborators, userId]
-            },
-            { new: true }
-        )
-
-        if (!list) {
-            throw new ApiError(404, "List not found")
-        }
-
-        return res
-            .status(200)
-            .json(new ApiResponse(
-                200,
-                list,
-                "Collaborator added successfully"
-            ))
-    } else {
+const areYouOwnerOfThisList = (list, user, res) => {
+    if ((typeof list == 'object' ? list.valueOf() : list) !== (typeof user._id == "object" ? user._id.valueOf() : user._id)) {
         return res
             .status(403)
             .json(new ApiResponse(
@@ -78,65 +42,92 @@ const addCollaborator = asyncHandler(async (req, res) => {
                 "You are not a owner of this list"
             ))
     }
+}
+
+const addCollaborator = asyncHandler(async (req, res) => {
+
+    const listId = req.params.listId
+
+    const list = await List.findById(listId)
+
+    if (!list) {
+        throw new ApiError(404, "List not found")
+    }
+
+    areYouOwnerOfThisList(list.createdBy, req.user, res)
+
+    const { userId } = req.body
+
+    if (!userId) {
+        throw new ApiError(400, "User ID is required")
+    }
+
+    if (userId == req.user?.id) {
+        throw new ApiError(400, "You cannot add yourself as a collaborator")
+    }
+
+    if (list.collaborators.includes(userId)) {
+        throw new ApiError(400, "User is already a collaborator")
+    }
+
+    list.collaborators.push(userId)
+    await list.save()
+
+    return res
+        .status(200)
+        .json(new ApiResponse(
+            200,
+            list,
+            "Collaborator added successfully"
+        ))
 })
 
 const deleteCollaborator = asyncHandler(async (req, res) => {
 
-    const { listId } = req.params.listId
+    const listId = req.params.listId
 
-    const listOnDatabase = await List.findById(listId)
+    const list = await List.findById(listId)
 
-    if (!listOnDatabase) {
-        throw new ApiError(404, "List not found")
+    if (!list) {
+        throw new ApiError(404, "List not found")``
     }
 
-    if (listOnDatabase.createdBy == req.user._id) {
+    areYouOwnerOfThisList(list.createdBy, req.user, res)
 
-        const { userId } = req.body
+    const { userId } = req.body
 
-        if (!userId) {
-            throw new ApiError(400, "User ID is required")
-        }
-
-        const list = await List.findByIdAndUpdate(
-            req.params.listId,
-            {
-                collaborators: list.collaborators.filter((id) => id.toString() !== userId)
-            },
-            { new: true }
-        )
-
-        if (!list) {
-            throw new ApiError(404, "List not found")
-        }
-
-        return res
-            .status(200)
-            .json(new ApiResponse(
-                200,
-                list,
-                "Collaborator deleted successfully"
-            ))
-    } else {
-        return res
-            .status(403)
-            .json(new ApiResponse(
-                403,
-                "You are not a owner of this list"
-            ))
+    if (!userId) {
+        throw new ApiError(400, "User ID is required")
     }
+
+    console.log(list.collaborators)
+
+    // FIXME: not working as expected
+    list.collaborators.filter(collaborator => (
+        (typeof collaborator == "object" ? collaborator.valueOf().toString() : collaborator.toString()) !== userId.toString()
+    ))
+    await list.save()
+
+    return res
+        .status(200)
+        .json(new ApiResponse(
+            200,
+            list,
+            "Collaborator deleted successfully"
+        ))
 })
 
 const updateList = asyncHandler(async (req, res) => {
-    const { listId } = req.params.listId
+
+    const listId = req.params.listId
 
     if (!listId) {
         throw new ApiError(400, "List ID is required")
-    }``
+    }
 
     const listOnDatabase = await List.findById(listId)
 
-    if (listOnDatabase.createdBy == req.user._id) {
+    if (listOnDatabase.createdBy.valueOf() == req.user?._id) {
 
         const { title, description, theme = "dark", font = "space-mono" } = req.body
 
@@ -178,7 +169,7 @@ const updateList = asyncHandler(async (req, res) => {
 
 const deleteList = asyncHandler(async (req, res) => {
 
-    const { listId } = req.params.listId
+    const listId = req.params.listId
 
     if (!listId) {
         throw new ApiError(400, "List ID is required")
@@ -186,7 +177,7 @@ const deleteList = asyncHandler(async (req, res) => {
 
     const listOnDatabase = await List.findById(listId)
 
-    if (listOnDatabase.createdBy == req.user._id) {
+    if (listOnDatabase.createdBy.valueOf() == req.user._id) {
 
         const deletedList = await List.findByIdAndDelete(listId)
 
@@ -356,11 +347,11 @@ const deleteCoverImage = asyncHandler(async (req, res) => {
         throw new ApiError(404, "List not found")
     }
 
-    if (list.createdBy.toString()!== req.user._id.toString()) {
+    if (list.createdBy.toString() !== req.user._id.toString()) {
         return res.status(403).json(new ApiResponse(403, "You are not a owner of this list"))
     }
 
-    if(!list.coverImage) {
+    if (!list.coverImage) {
         return res.status(400).json(new ApiResponse(400, "No cover image found"))
     }
 
@@ -368,7 +359,7 @@ const deleteCoverImage = asyncHandler(async (req, res) => {
 
     const coverImage = deleteFromCloudinary(coverImageName);
 
-    if(!coverImage.result) {
+    if (!coverImage.result) {
         throw new ApiError(500, "Error while deleting cover image from Cloudinary")
     }
 
@@ -376,8 +367,8 @@ const deleteCoverImage = asyncHandler(async (req, res) => {
     await list.save();
 
     return res
-       .status(200)
-       .json(new ApiResponse(
+        .status(200)
+        .json(new ApiResponse(
             200,
             { list, coverImage },
             "Cover image deleted successfully"

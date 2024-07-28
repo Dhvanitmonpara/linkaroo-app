@@ -5,7 +5,6 @@ const cardSchema = new Schema({
     title: {
         type: String,
         required: true,
-        unique: true
     },
     description: {
         type: String,
@@ -14,15 +13,16 @@ const cardSchema = new Schema({
     link: {
         type: String,
         required: true,
-        unique: true
     },
     userId: {
         type: Schema.Types.ObjectId,
-        ref: "User"
+        ref: "User",
+        required: true
     },
-    lisId: {
+    listId: {
         type: Schema.Types.ObjectId,
-        ref: "List"
+        ref: "List",
+        required: true
     },
     
 }, { timestamps: true })
