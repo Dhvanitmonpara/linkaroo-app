@@ -6,14 +6,17 @@ import { uploadOnCloudinary, deleteFromCloudinary } from "../utils/cloudinary.js
 import getPublicId from "../utils/getPublicId.js"
 
 const updateBio = asyncHandler(async (req, res) => {
-    const { bio } = req.body
+
+    const bio = req.body.bio
 
     if (!bio) {
         throw new ApiError(400, "Bio is required")
     }
 
-    const profile = await Profile.findByIdAndUpdate(
-        { userId: req.user?._id },
+    const userId = req.user?._id
+
+    const profile = await Profile.findOneAndUpdate(
+        { userId: userId },
         {
             $set: {
                 bio
@@ -49,9 +52,11 @@ const updateUserCoverImage = asyncHandler(async (req, res) => {
 
     // deleting cover image from cloudinary
 
-    const oldImagePath = Profile.findOne({ userId: req.user?._id }).select("coverImage")
+    const oldImagePath = await Profile
+        .findOne({ userId: req.user?._id }, {coverImage: 1})
+        .select("-bio")
 
-    const coverImageName = getPublicId(oldImagePath)
+    const coverImageName = getPublicId(oldImagePath.coverImage)
 
     if (!coverImageName) {
         throw new ApiError(500, "Error while extracting image name from image URL",)
@@ -128,8 +133,10 @@ const toggleTheme = asyncHandler(async (req, res) => {
 
     const { theme } = req.body
 
-    const profile = await Profile.findByIdAndUpdate(
-        { userId: req.user?._id },
+    const userId = req.user?._id
+
+    const profile = await Profile.findOneAndUpdate(
+        { userId: userId },
         {
             $set: {
                 theme: theme
@@ -139,8 +146,6 @@ const toggleTheme = asyncHandler(async (req, res) => {
             new: true
         }
     ).select("-coverImage -bio")
-
-    setCookie("theme", profile.theme)
 
     return res
         .status(200)
