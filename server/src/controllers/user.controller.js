@@ -51,7 +51,7 @@ const registerUser = asyncHandler(async (req, res) => {
         throw new ApiError(409, "User with email or username already exists")
     }
 
-    const avatarLocalPath = req.files?.avatar[0]?.path;
+    const avatarLocalPath = req.file?.path;
 
     let avatar = null;
     if (avatarLocalPath) {
@@ -59,7 +59,6 @@ const registerUser = asyncHandler(async (req, res) => {
     } else {
         avatar = { url: "" } // update a default avatar image
     }
-
 
     const user = await User.create({
         fullName,
@@ -125,6 +124,8 @@ const loginUser = asyncHandler(async (req, res) => {
     }
 
     const isPasswordValid = await user.isPasswordCorrect(password)
+
+    console.log(user)
 
     if (!isPasswordValid) {
         throw new ApiError(401, "Invalid user credentials")

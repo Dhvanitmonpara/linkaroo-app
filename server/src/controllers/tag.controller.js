@@ -125,8 +125,8 @@ const addTag = asyncHandler(async (req, res) => {
         await listOnDatabase.save()
 
         return res
-           .status(200)
-           .json(new ApiResponse(
+            .status(200)
+            .json(new ApiResponse(
                 200,
                 listOnDatabase,
                 "Tag added successfully"
@@ -144,7 +144,7 @@ const getTagsByList = asyncHandler(async (req, res) => {
 
     const listId = req.params.listId
 
-    if(!listId){
+    if (!listId) {
         throw new ApiError(400, "List ID is required")
     }
 
@@ -163,8 +163,8 @@ const getTagsByList = asyncHandler(async (req, res) => {
     const tags = tagsWithUsername.map((tag) => removeUsernameTag(tag.tagname))
 
     return res
-     .status(200)
-     .json(new ApiResponse(
+        .status(200)
+        .json(new ApiResponse(
             200,
             tags,
             "Tags retrieved successfully"
@@ -172,21 +172,88 @@ const getTagsByList = asyncHandler(async (req, res) => {
 
 })
 
+const getTagsByOwner = asyncHandler(async (req, res) => {
+    const tags = await Tag.find({ owner: req.user._id })
+
+    if (!tags) {
+        throw new ApiError(404, "No tags found for this user")
+    }
+
+    return res
+        .status(200)
+        .json(new ApiResponse(
+            200,
+            tags,
+            "Tags retrieved successfully"
+        ))
+})
+
+const getTagsByCollaborator = asyncHandler(async (req, res) => {
+
+    const tags = await List.aggregate([
+        {
+            $match: {
+                collaborators: req.user._id
+            }
+        },
+        {
+            $unwind: "$tags"
+        },
+        {
+            $lookup: {
+                from: "tags",
+                localField: "tags",
+                foreignField: "_id",
+                as: "tags"
+            }
+        }
+    ])
+
+    console.log(tags)
+
+    if (!tags || tags.length === 0) {
+        return res
+            .status(200)
+            .json(new ApiResponse(
+                200,
+                tags,
+                "No tags found for this user"
+            ))
+    }
+
+    const tagArray = tags.map((tag) => removeUsernameTag(tag.tags.tagname))
+
+    console.log(tagArray)
+
+    if(!tagArray){
+        throw new ApiError(500, "Error while remove username in tags")
+    }
+
+    return res
+        .status(200)
+        .json(new ApiResponse(
+            200,
+            tagArray,
+            "Tags retrieved successfully"
+        ))
+
+})
+
 const renameTag = asyncHandler(async (req, res) => {
 
-    const {tagId, newTagname} = req.body
+    const { tagId, newTagname } = req.body
 
     if (!tagId || !newTagname) {
         throw new ApiError(400, "Tag ID and new tagname are required")
     }
 
     const newTag = await Tag.findByIdAndUpdate(
-        tagId, 
-        { tagname: newTagname }, 
-        { new: true}
+        tagId,
+        { tagname: newTagname },
+        { new: true }
     )
 
-    if(!newTag) {
+    if (!newTag) {
         throw new ApiError(404, "Tag not found")
     }
 
@@ -205,5 +272,7 @@ export {
     deleteTag,
     addTag,
     getTagsByList,
+    getTagsByOwner,
+    getTagsByCollaborator,
     renameTag,
 }

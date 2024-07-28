@@ -13,8 +13,8 @@ const tagSchema = new Schema({
     owner: {
         type: Schema.Types.ObjectId,
         ref: "User"
-    },
-
+    }
+    
 }, { timestamps: true })
 
 export const Tag = mongoose.model("Tag", tagSchema)
