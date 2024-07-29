@@ -5,10 +5,10 @@ const cardSchema = new Schema({
     title: {
         type: String,
         required: true,
+        unique: true,
     },
     description: {
         type: String,
-        required: true
     },
     link: {
         type: String,

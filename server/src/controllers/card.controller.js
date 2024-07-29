@@ -1,6 +1,5 @@
 import { asyncHandler } from "../utils/asyncHandler.js"
 import { ApiError } from "../utils/ApiError.js"
-import { User } from "../models/user.model.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
 import { Card } from "../models/card.model.js"
 
@@ -8,7 +7,7 @@ const createCard = asyncHandler(async (req, res) => {
 
     const { listId } = req.params
 
-    if(!listId) {
+    if (!listId) {
         throw new ApiError(400, "List ID is required")
     }
 
@@ -18,17 +17,17 @@ const createCard = asyncHandler(async (req, res) => {
         throw new ApiError(400, "title and link are required")
     }
 
-    const user = await User.findById(req.user.id)
+    const cards = await Card.find({ userId: req.user.id, listId: listId })
 
-    if (!user) {
-        throw new ApiError(404, "User not found")
+    if (cards.some(card => card.title == title)) {
+        throw new ApiError(400, "Card with the same title already exists")
     }
 
     const card = await Card.create({
         title,
-        description: description?description: "",
+        description: description ? description : "",
         link,
-        userId: user._id,
+        userId: req.user?._id,
         listId: listId
     })
 
@@ -46,12 +45,18 @@ const createCard = asyncHandler(async (req, res) => {
 
 })
 
-const getCards = asyncHandler(async (req, res) => {
+const getCardsByList = asyncHandler(async (req, res) => {
 
-    const cards = await Card.find({ userId: req.user.id })
+    const listId = req.params.listId
+
+    if (!listId) {
+        throw new ApiError(400, "List ID is required")
+    }
+
+    const cards = await Card.find({ listId })
 
     if (!cards) {
-        throw new ApiError(404, "No cards found for this user")
+        throw new ApiError(404, "Card not found for the given list")
     }
 
     return res
@@ -65,26 +70,28 @@ const getCards = asyncHandler(async (req, res) => {
 
 const updateCard = asyncHandler(async (req, res) => {
 
-    const { title, content, link } = req.body
+    const cardId = req.params.cardId
+
+    if(!cardId){
+        throw new ApiError(400, "Card ID is required")
+    }
+
+    const { title, description, link } = req.body
 
     if (!title || !link) {
         throw new ApiError(400, "title and link are required")
     }
 
-    let card;
-    if (content) {
-        card = await Card.findByIdAndUpdate(
-            req.params.cardId,
-            { title, content, link },
-            { new: true }
-        )
-    } else {
-        card = await Card.findByIdAndUpdate(
-            req.params.cardId,
-            { title, link },
-            { new: true }
-        )
-    }
+    const card = await Card.findByIdAndUpdate(
+        cardId,
+        {
+            title,
+            description,
+            link
+        },
+        { new: true }
+    )
+
 
     return res
         .status(200)
@@ -97,13 +104,17 @@ const updateCard = asyncHandler(async (req, res) => {
 
 const deleteCard = asyncHandler(async (req, res) => {
 
-    const { cardId } = await Card.findByIdAndDelete(req.params.cardId)
+    const cardId = req.params.cardId
 
-    if (!cardId) {
+    if(!cardId){
         throw new ApiError(400, "Card ID is required")
     }
 
     const card = await Card.findByIdAndDelete(cardId)
+
+    if (!card) {
+        throw new ApiError(400, "Error deleting Card")
+    }
 
     return res
         .status(200)
@@ -114,4 +125,4 @@ const deleteCard = asyncHandler(async (req, res) => {
         ))
 })
 
-export { createCard, getCards, updateCard, deleteCard }
+export { createCard, getCardsByList, updateCard, deleteCard }
