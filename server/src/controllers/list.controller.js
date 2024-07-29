@@ -4,6 +4,7 @@ import { ApiResponse } from "../utils/ApiResponse.js"
 import { List } from "../models/list.model.js"
 import { uploadOnCloudinary, deleteFromCloudinary } from "../utils/cloudinary.js"
 import getPublicId from "../utils/getPublicId.js"
+import listOwnerVerification from "../utils/listOwnerVerification.js"
 
 const createList = asyncHandler(async (req, res) => {
 
@@ -35,17 +36,6 @@ const createList = asyncHandler(async (req, res) => {
         ))
 })
 
-const areYouOwnerOfThisList = (list, user, res) => {
-    if ((typeof list == 'object' ? list.valueOf() : list) !== (typeof user._id == "object" ? user._id.valueOf() : user._id)) {
-        return res
-            .status(403)
-            .json(new ApiResponse(
-                403,
-                "You are not a owner of this list"
-            ))
-    }
-}
-
 const addCollaborator = asyncHandler(async (req, res) => {
 
     const listId = req.params.listId
@@ -56,7 +46,7 @@ const addCollaborator = asyncHandler(async (req, res) => {
         throw new ApiError(404, "List not found")
     }
 
-    areYouOwnerOfThisList(list.createdBy, req.user, res)
+    listOwnerVerification(list.createdBy, req.user, res)
 
     const { userId } = req.body
 
@@ -94,7 +84,7 @@ const deleteCollaborator = asyncHandler(async (req, res) => {
         throw new ApiError(404, "List not found")
     }
 
-    areYouOwnerOfThisList(list.createdBy, req.user, res)
+    listOwnerVerification(list.createdBy, req.user, res)
 
     const { userId } = req.body
 
@@ -127,46 +117,36 @@ const updateList = asyncHandler(async (req, res) => {
         throw new ApiError(400, "List ID is required")
     }
 
-    const listOnDatabase = await List.findById(listId)
+    const list = await List.findById(listId)
 
-    if (listOnDatabase.createdBy.valueOf() == req.user?._id) {
+    listOwnerVerification(list.createdBy, req.user, res)
 
-        const { title, description, theme = "dark", font = "space-mono" } = req.body
+    const { title, description, theme = "dark", font = "space-mono" } = req.body
 
-        if (!title || !description) {
-            throw new ApiError(400, "At least one field needs to be updated")
-        }
-
-        const updatedList = await List.findByIdAndUpdate(
-            listId,
-            {
-                $set: {
-                    title,
-                    description,
-                    theme,
-                    font
-                }
-            },
-            { new: true }
-        )
-
-        return res
-            .status(200)
-            .json(new ApiResponse(
-                200,
-                updatedList,
-                "List updated successfully"
-            ))
-
-    } else {
-        return res
-            .status(403)
-            .json(new ApiResponse(
-                403,
-                "You are not a owner of this list"
-            ))
+    if (!title || !description) {
+        throw new ApiError(400, "At least one field needs to be updated")
     }
 
+    const updatedList = await List.findByIdAndUpdate(
+        listId,
+        {
+            $set: {
+                title,
+                description,
+                theme,
+                font
+            }
+        },
+        { new: true }
+    )
+
+    return res
+        .status(200)
+        .json(new ApiResponse(
+            200,
+            updatedList,
+            "List updated successfully"
+        ))
 })
 
 const deleteList = asyncHandler(async (req, res) => {
@@ -177,33 +157,25 @@ const deleteList = asyncHandler(async (req, res) => {
         throw new ApiError(400, "List ID is required")
     }
 
-    const listOnDatabase = await List.findById(listId)
+    const list = await List.findById(listId)
 
-    if (listOnDatabase.createdBy.valueOf() == req.user._id) {
+    listOwnerVerification(list.createdBy, req.user, res)
 
-        const deletedList = await List.findByIdAndDelete(listId)
+    const deletedList = await List.findByIdAndDelete(listId)
 
-        if (!deletedList) {
-            throw new ApiError(404, "List not found")
-        }
-
-        return res
-            .status(200)
-            .json(new ApiResponse(
-                200,
-                deletedList,
-                "List deleted successfully"
-            ))
-
-    } else {
-
-        return res
-            .status(403)
-            .json(new ApiResponse(
-                403,
-                "You are not a owner of this list"
-            ))
+    if (!deletedList) {
+        throw new ApiError(404, "List not found")
     }
+
+    return res
+        .status(200)
+        .json(new ApiResponse(
+            200,
+            deletedList,
+            "List deleted successfully"
+        ))
+
+
 })
 
 const getListsByOwner = asyncHandler(async (req, res) => {
@@ -254,14 +226,7 @@ const uploadCoverImage = asyncHandler(async (req, res) => {
         throw new ApiError(404, "List not found")
     }
 
-    if (list.createdBy.toString() !== req.user._id.toString()) {
-        return res
-            .status(403)
-            .json(new ApiResponse(
-                403,
-                "You are not a owner of this list"
-            ))
-    }
+    listOwnerVerification(list.createdBy, req.user, res)
 
     const coverImageLocalPath = req.file?.path
 
@@ -303,11 +268,9 @@ const updateCoverImage = asyncHandler(async (req, res) => {
         throw new ApiError(404, "List not found")
     }
 
-    if (list.createdBy.toString() !== req.user._id.toString()) {
-        return res.status(403).json(new ApiResponse(403, "You are not a owner of this list"))
-    }
+    listOwnerVerification(list.createdBy, req.user, res)
 
-    if(!list.coverImage) {
+    if (!list.coverImage) {
         throw new ApiError(400, "No cover image currently attached to this list")
     }
 
@@ -354,9 +317,7 @@ const deleteCoverImage = asyncHandler(async (req, res) => {
         throw new ApiError(404, "List not found")
     }
 
-    if (list.createdBy.toString() !== req.user._id.toString()) {
-        return res.status(403).json(new ApiResponse(403, "You are not a owner of this list"))
-    }
+    listOwnerVerification(list.createdBy, req.user, res)
 
     if (!list.coverImage) {
         return res.status(400).json(new ApiResponse(400, "No cover image found"))
