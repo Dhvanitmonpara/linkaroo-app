@@ -2,6 +2,8 @@ import { asyncHandler } from "../utils/asyncHandler.js"
 import { ApiError } from "../utils/ApiError.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
 import { List } from "../models/list.model.js"
+import { uploadOnCloudinary, deleteFromCloudinary } from "../utils/cloudinary.js"
+import getPublicId from "../utils/getPublicId.js"
 
 const createList = asyncHandler(async (req, res) => {
 
@@ -89,7 +91,7 @@ const deleteCollaborator = asyncHandler(async (req, res) => {
     const list = await List.findById(listId)
 
     if (!list) {
-        throw new ApiError(404, "List not found")``
+        throw new ApiError(404, "List not found")
     }
 
     areYouOwnerOfThisList(list.createdBy, req.user, res)
@@ -99,13 +101,13 @@ const deleteCollaborator = asyncHandler(async (req, res) => {
     if (!userId) {
         throw new ApiError(400, "User ID is required")
     }
-
     console.log(list.collaborators)
 
-    // FIXME: not working as expected
-    list.collaborators.filter(collaborator => (
+
+    const newCollaborators = list.collaborators.filter(collaborator => (
         (typeof collaborator == "object" ? collaborator.valueOf().toString() : collaborator.toString()) !== userId.toString()
     ))
+    list.collaborators = newCollaborators
     await list.save()
 
     return res
@@ -240,7 +242,7 @@ const getListsByCollaborator = asyncHandler(async (req, res) => {
 })
 
 const uploadCoverImage = asyncHandler(async (req, res) => {
-    const { listId } = req.params.listId
+    const listId = req.params.listId
 
     if (!listId) {
         throw new ApiError(400, "List ID is required")
@@ -289,7 +291,7 @@ const uploadCoverImage = asyncHandler(async (req, res) => {
 })
 
 const updateCoverImage = asyncHandler(async (req, res) => {
-    const { listId } = req.params.listId
+    const listId = req.params.listId
 
     if (!listId) {
         throw new ApiError(400, "List ID is required")
@@ -305,6 +307,16 @@ const updateCoverImage = asyncHandler(async (req, res) => {
         return res.status(403).json(new ApiResponse(403, "You are not a owner of this list"))
     }
 
+    if(!list.coverImage) {
+        throw new ApiError(400, "No cover image currently attached to this list")
+    }
+
+    const coverImageName = getPublicId(list.coverImage);
+
+    if (!coverImageName) {
+        throw new ApiError(500, "Error while extracting image name from image URL")
+    }
+
     const coverImageLocalPath = req.file?.path;
     if (!coverImageLocalPath) {
         throw new ApiError(400, "Cover image file is missing")
@@ -315,12 +327,7 @@ const updateCoverImage = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Error while uploading on cover image")
     }
 
-    const oldImagePath = req.body.oldImagePath;
-    const coverImageName = getPublicId(oldImagePath);
-    if (!coverImageName) {
-        throw new ApiError(500, "Error while extracting image name from image URL")
-    }
-    const cloudinaryRes = deleteFromCloudinary(coverImageName);
+    const cloudinaryRes = await deleteFromCloudinary(coverImageName);
 
     list.coverImage = coverImage.url;
     await list.save();
@@ -335,7 +342,7 @@ const updateCoverImage = asyncHandler(async (req, res) => {
 });
 
 const deleteCoverImage = asyncHandler(async (req, res) => {
-    const { listId } = req.params.listId
+    const listId = req.params.listId
 
     if (!listId) {
         throw new ApiError(400, "List ID is required")
@@ -359,7 +366,7 @@ const deleteCoverImage = asyncHandler(async (req, res) => {
 
     const coverImage = deleteFromCloudinary(coverImageName);
 
-    if (!coverImage.result) {
+    if (!coverImage) {
         throw new ApiError(500, "Error while deleting cover image from Cloudinary")
     }
 
