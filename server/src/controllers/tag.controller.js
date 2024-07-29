@@ -205,9 +205,8 @@ const getTagsByList = asyncHandler(async (req, res) => {
 })
 
 const getTagsByOwner = asyncHandler(async (req, res) => {
-console.log("lol")
+
     const userId = req.user?._id
-console.log(userId)
     const tags = await Tag.find({ owner: userId })
 
     if (!tags) {
@@ -225,38 +224,20 @@ console.log(userId)
 
 const getTagsByCollaborator = asyncHandler(async (req, res) => {
 
-    const tags = await List.aggregate([
-        {
-            $match: {
-                collaborators: req.user?._id
-            }
-        },
-        {
-            $unwind: "$tags"
-        },
-        {
-            $lookup: {
-                from: "tags",
-                localField: "tags",
-                foreignField: "_id",
-                as: "tags"
-            }
-        }
-    ])
+    const lists = await List.find({collaborators: req.user?._id})
+    console.log(lists)
 
-    console.log(tags)
-
-    if (!tags || tags.length === 0) {
+    if (!lists || lists.length === 0) {
         return res
             .status(200)
             .json(new ApiResponse(
                 200,
-                tags,
+                lists,
                 "No tags found for this user"
             ))
     }
 
-    const tagArray = tags.map((tag) => removeUsernameTag(tag.tags.tagname, req.user.username))
+    const tagArray = lists.map((tag) => removeUsernameTag(tag.tags.tagname, req.user.username))
 
     console.log(tagArray)
 

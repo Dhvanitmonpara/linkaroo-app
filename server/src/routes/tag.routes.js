@@ -18,9 +18,9 @@ router.use(verifyJWT)
 // secure routes
 router.route("/").post(createTag)
 
-router.route("/:listId").get(getTagsByList)
-router.route("/o").get(getTagsByOwner)
-router.route("/c").get(getTagsByCollaborator)
+router.route("/get/list/:listId").get(getTagsByList)
+router.route("/get/o").get(getTagsByOwner)
+router.route("/get/c").get(getTagsByCollaborator)
 
 router.route("/:listId/add").patch(addTag)
 router.route("/:listId/remove").patch(removeTag)
