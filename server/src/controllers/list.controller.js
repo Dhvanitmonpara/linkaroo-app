@@ -5,8 +5,6 @@ import { List } from "../models/list.model.js"
 import { uploadOnCloudinary, deleteFromCloudinary } from "../utils/cloudinary.js"
 import getPublicId from "../utils/getPublicId.js"
 import listOwnerVerification from "../utils/listOwnerVerification.js"
-import { addUsernameInTag } from "./tag.controller.js"
-import { Tag } from "../models/tag.model.js"
 
 const createList = asyncHandler(async (req, res) => {
 
