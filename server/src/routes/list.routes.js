@@ -10,7 +10,8 @@ import {
     deleteCollaborator,
     updateCoverImage,
     uploadCoverImage,
-    deleteCoverImage
+    deleteCoverImage,
+    toggleIsPublic
 } from "../controllers/list.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import { upload } from "../middlewares/multer.middleware.js";
@@ -35,6 +36,8 @@ router.route("/o/c/:listId")
     .delete(deleteCollaborator)
 
 router.route("/t/:tagId").get(getListsByTagId)
+
+router.route("/status/:listId").patch(toggleIsPublic)
 
 router.route("/o/:listId/cover-image")
     .delete(deleteCoverImage)

@@ -26,6 +26,10 @@ const listSchema = new Schema({
         type: String,
         default: "space-mono"
     },
+    isPublic: {
+        type: Boolean,
+        default: true
+    },
     tags: [
         {
             type: Schema.Types.ObjectId,

@@ -217,19 +217,19 @@ const getListsByTagId = asyncHandler(async (req, res) => {
 
     const tagId = req.params.tagId
 
-    if(!tagId){
+    if (!tagId) {
         throw new ApiError(404, "Tag id is required")
     }
-    
+
     const lists = await List.find({ tags: tagId })
 
-    if(!lists) {
+    if (!lists) {
         throw new ApiError(404, "No lists found for this tag")
     }
 
     return res
-       .status(200)
-       .json(new ApiResponse(
+        .status(200)
+        .json(new ApiResponse(
             200,
             lists,
             "Lists fetched successfully"
@@ -368,6 +368,33 @@ const deleteCoverImage = asyncHandler(async (req, res) => {
 
 })
 
+const toggleIsPublic = asyncHandler(async (req, res) => {
+
+    const listId = req.params.listId
+
+    if (!listId) {
+        throw new ApiError(400, "List ID is required")
+    }
+
+    const list = await List.findById(listId)
+
+    if (!list) {
+        throw new ApiError(404, "List not found")
+    }
+
+    list.isPublic = !list.isPublic;
+    await list.save()
+
+    return res
+        .status(200)
+        .json(new ApiResponse(
+            200,
+            list,
+            "List visibility toggled successfully"
+        ))
+
+})
+
 export {
     createList,
     getListsByOwner,
@@ -379,5 +406,6 @@ export {
     deleteCollaborator,
     updateCoverImage,
     uploadCoverImage,
-    deleteCoverImage
+    deleteCoverImage,
+    toggleIsPublic
 }
