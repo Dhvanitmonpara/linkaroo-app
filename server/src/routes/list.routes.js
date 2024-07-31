@@ -3,6 +3,7 @@ import {
     createList,
     getListsByOwner,
     getListsByCollaborator,
+    getListsByTagId,
     updateList,
     deleteList,
     addCollaborator,
@@ -32,6 +33,8 @@ router.route("/c").get(getListsByCollaborator)
 router.route("/o/c/:listId")
     .patch(addCollaborator)
     .delete(deleteCollaborator)
+
+router.route("/t/:tagId").get(getListsByTagId)
 
 router.route("/o/:listId/cover-image")
     .delete(deleteCoverImage)

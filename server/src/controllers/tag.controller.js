@@ -187,13 +187,15 @@ const getTagsByList = asyncHandler(async (req, res) => {
         throw new ApiError(404, "List not found")
     }
 
-    const tagsWithUsername = await Tag.find({ _id: { $in: tagIds.tags } })
+    const tags = await Tag.find({ _id: { $in: tagIds.tags } })
 
-    if (!tagsWithUsername) {
+    if (!tags) {
         throw new ApiError(404, "Tags not found")
     }
 
-    const tags = tagsWithUsername.map((tag) => removeUsernameTag(tag.tagname, req.user.username))
+    tags.forEach(tag => {
+        tag.tagname = removeUsernameTag(tag.tagname)
+    })
 
     return res
         .status(200)
@@ -214,6 +216,10 @@ const getTagsByOwner = asyncHandler(async (req, res) => {
         throw new ApiError(404, "No tags found for this user")
     }
 
+    tags.forEach(tag => {
+        tag.tagname = removeUsernameTag(tag.tagname)
+    })
+
     return res
         .status(200)
         .json(new ApiResponse(
@@ -225,7 +231,7 @@ const getTagsByOwner = asyncHandler(async (req, res) => {
 
 const getTagsByCollaborator = asyncHandler(async (req, res) => {
 
-    const tagArray = await List.aggregate([
+    const tags = await List.aggregate([
         {
             $match: { collaborators: req.user?._id }
         },
@@ -256,33 +262,27 @@ const getTagsByCollaborator = asyncHandler(async (req, res) => {
                 _id: 1,
                 listTitle: "$title",
                 collaborators: 1,
-                tags: '$tagname.tagname',
+                tagname: '$tagname.tagname',
+                tagId: '$tagname._id',
                 owner: "$tagOwner.username"
+                
             }
         }
     ])
 
-    if (!tagArray) {
+    if (!tags) {
         throw new ApiError(500, "Error while fetching tags")
     }
 
-    let tags = []
-    await tagArray.forEach(tag => {
-        tags.push(removeUsernameTag(tag.tags, tag.owner))
+    tags.forEach(tag => {
+        tag.tagname = removeUsernameTag(tag.tagname, tag.owner)
     })
-
-    if (!tags.length) {
-        throw new ApiError(404, "Error while removing usernames from tags")
-    }
 
     return res
         .status(200)
         .json(new ApiResponse(
             200,
-            {
-                tags,
-                tagArray
-            },
+            tags,
             "Tags retrieved successfully"
         ))
 
@@ -328,4 +328,9 @@ export {
     getTagsByOwner,
     getTagsByCollaborator,
     renameTag,
+}
+
+export {
+    addUsernameInTag,
+    removeUsernameTag
 }

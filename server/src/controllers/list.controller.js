@@ -5,6 +5,8 @@ import { List } from "../models/list.model.js"
 import { uploadOnCloudinary, deleteFromCloudinary } from "../utils/cloudinary.js"
 import getPublicId from "../utils/getPublicId.js"
 import listOwnerVerification from "../utils/listOwnerVerification.js"
+import { addUsernameInTag } from "./tag.controller.js"
+import { Tag } from "../models/tag.model.js"
 
 const createList = asyncHandler(async (req, res) => {
 
@@ -213,6 +215,30 @@ const getListsByCollaborator = asyncHandler(async (req, res) => {
 
 })
 
+const getListsByTagId = asyncHandler(async (req, res) => {
+
+    const tagId = req.params.tagId
+
+    if(!tagId){
+        throw new ApiError(404, "Tag id is required")
+    }
+    
+    const lists = await List.find({ tags: tagId })
+
+    if(!lists) {
+        throw new ApiError(404, "No lists found for this tag")
+    }
+
+    return res
+       .status(200)
+       .json(new ApiResponse(
+            200,
+            lists,
+            "Lists fetched successfully"
+        ))
+
+})
+
 const uploadCoverImage = asyncHandler(async (req, res) => {
     const listId = req.params.listId
 
@@ -348,6 +374,7 @@ export {
     createList,
     getListsByOwner,
     getListsByCollaborator,
+    getListsByTagId,
     updateList,
     deleteList,
     addCollaborator,
