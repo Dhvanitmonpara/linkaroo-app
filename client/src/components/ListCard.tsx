@@ -1,27 +1,34 @@
 import { Tag } from "@/components/index";
 import { MdModeEdit } from "react-icons/md";
 
-const ListCard: React.FC<{
+type colorOptions =
+  | "bg-emerald-400"
+  | "bg-orange-600"
+  | "bg-red-400"
+  | "bg-purple-400"
+  | "bg-pink-400"
+  | "bg-indigo-400"
+  | "bg-teal-400"
+  | "bg-cyan-400"
+  | "bg-amber-400"
+  | "bg-violet-400"
+  | "bg-yellow-400"
+  | "bg-green-400"
+  | "bg-blue-400"
+  | "bg-rose-400"
+  | "bg-sky-400";
+
+type ListCardProps = {
   tagname: string;
   description: string;
   title: string;
-  color: string;
-}> = ({ tagname, description, title, color }) => {
-    let bgColor = "";
-    if (color === "green") bgColor = `bg-green-400`;
-    if (color === "violet") bgColor = `bg-violet-400`;
-    if (color === "yellow") bgColor = `bg-yellow-400`;
-    if (color === "orange") bgColor = `bg-orange-400`;
-    if (color === "red") bgColor = `bg-red-400`;
-    if (color === "blue") bgColor = `bg-blue-400`;
-    if (color === "purple") bgColor = `bg-purple-400`;
-    if (color === "pink") bgColor = `bg-pink-400`;
-    if (color === "amber") bgColor = `bg-amber-400`;
-    if (color === "gray") bgColor = `bg-gray-400`;
+  color: colorOptions;
+};
 
+const ListCard = ({ tagname, description, title, color }: ListCardProps) => {
   return (
     <div
-      className={`h-52 w-full p-6 rounded-lg flex justify-between flex-col ${bgColor}`}
+      className={`h-52 w-full p-6 rounded-lg flex justify-between flex-col ${color} bg-`}
     >
       <div className="space-y-4 relative">
         <div>
