@@ -14,12 +14,12 @@ const ListCard = ({ tagname, description, title, color }: ListCardProps) => {
     <div
       className={`group transition-all h-64 w-full p-6 rounded-md flex justify-between flex-col ${color} bg-`}
     >
-      <div className="space-y-4 relative">
+      <div className="space-y-3 relative">
         <div>
-          <span className="group-hover:opacity-100 transition-all ease-in-out duration-300 absolute right-3 text-lg opacity-0 hover:bg-[#00000015] cursor-pointer p-1.5 rounded-full">
+          <span className="group-hover:opacity-100 transition-all ease-in-out duration-300 absolute right-3 opacity-0 active:scale-95 hover:bg-[#00000015] text-lg cursor-pointer p-3 rounded-full">
             <MdModeEdit />
           </span>
-          <h1 className="text-2xl font-mono font-bold">{title}</h1>
+          <h1 className="text-2xl py-1 font-mono font-bold">{title}</h1>
         </div>
         <p className="text-sm font-semibold">{description}</p>
       </div>
