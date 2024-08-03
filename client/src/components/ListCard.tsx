@@ -8,6 +8,7 @@ type ListCardProps = {
   description: string;
   title: string;
   color: colorOptions;
+  setIsModalOpen: (isOpen: boolean) => void;
 };
 
 const imgArray = [
@@ -16,8 +17,13 @@ const imgArray = [
   "https://i.pinimg.com/236x/eb/09/69/eb096917cedb8fd3b3363d3dec531baa.jpg",
 ];
 
-const ListCard = ({ tagname, description, title, color }: ListCardProps) => {
-  
+const ListCard = ({ tagname, description, title, color, setIsModalOpen }: ListCardProps) => {
+
+  const openModal = (e:React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+    setIsModalOpen(true);
+    e.stopPropagation();
+  }
+
   return (
     <>
       <div
@@ -25,7 +31,7 @@ const ListCard = ({ tagname, description, title, color }: ListCardProps) => {
       >
         <div className="space-y-3 relative">
           <div>
-            <span
+            <span onClick={(e)=>{openModal(e)}}
               className="group-hover:opacity-100 transition-all ease-in-out duration-300 absolute right-3 opacity-0 active:scale-95 hover:bg-[#00000015] text-lg cursor-pointer p-3 rounded-full"
             >
               <MdModeEdit />
