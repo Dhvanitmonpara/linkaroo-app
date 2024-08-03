@@ -1,11 +1,18 @@
 import "./App.css";
 import { DocCard, ListCard } from "./components";
 import Header from "./components/Header";
+import { useRef } from "react";
 
 function App() {
+  const modalRef = useRef<HTMLDivElement | null>(null);
+
+  const closeModal = (e:React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if(modalRef.current === e.target){
+      // onClose();
+    }
+  }
   return (
     <>
-      {/* <EditList/> */}
       <div className="grid grid-cols-7">
         <div className="col-span-2 py-5 px-7 space-y-3 overflow-y-scroll max-h-screen">
           <ListCard
@@ -153,6 +160,9 @@ function App() {
         <div className="col-span-2 px-5 overflow-y-scroll max-h-screen">
           <div className="min-h-full w-full border-2"></div>
         </div>
+      </div>
+      <div ref={modalRef} onClick={(e)=>closeModal(e)} className="fixed inset-0 bg-black bg-opacity-30 backdrop:blur-sm flex justify-center items-center">
+        <div className="h-3/6 w-5/12 bg-zinc-100 rounded-xl"></div>
       </div>
     </>
   );
