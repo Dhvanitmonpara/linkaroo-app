@@ -10,7 +10,7 @@ type DocCardProps = {
 const DocCard = ({ title, text, color }: DocCardProps) => {
   return (
     <div
-      className={`${color} group p-5 h-44 space-y-5 flex-col transition-all rounded-md flex justify-start items-center`}
+      className={`${color} select-none group p-5 h-44 space-y-5 flex-col transition-all rounded-md flex justify-start items-center`}
     >
       <h2 className="font-semibold group-hover:underline decoration-2 cursor-pointer font-mono text-xl flex justify-between w-full items-center">
         {title}

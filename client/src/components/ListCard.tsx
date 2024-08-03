@@ -32,7 +32,7 @@ const ListCard = ({ tagname, description, title, color, setIsModalOpen }: ListCa
   return (
     <>
       <div
-        className={`group transition-all h-64 w-full p-6 rounded-md flex justify-between flex-col ${color} bg-`}
+        className={`group select-none transition-all h-64 w-full p-6 rounded-md flex justify-between flex-col ${color} bg-`}
       >
         <div className="space-y-3 relative">
           <div>

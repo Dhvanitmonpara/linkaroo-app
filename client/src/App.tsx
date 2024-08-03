@@ -1,21 +1,29 @@
+import { useNavigate } from "react-router-dom";
 import "./App.css";
 import { DocCard, ListCard } from "./components";
 import Header from "./components/Header";
 import { useRef, useState } from "react";
 
 function App() {
+  const navigate = useNavigate()
   const modalRef = useRef<HTMLDivElement | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const closeModal = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (modalRef.current === e.target) {
       setIsModalOpen(false);
+      navigate('/')
     }
   };
   return (
     <>
       <div className="grid grid-cols-7">
         <div className="col-span-2 py-5 px-7 space-y-3 overflow-y-scroll no-scrollbar max-h-screen">
+          <div className="border-2 flex justify-center items-center">
+            <span className="font-mono select-none font-black text-2xl">
+              Linkaroo
+            </span>
+          </div>
           <ListCard
             tagname="Hello"
             description="bruhh can you Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, culpa odit"
@@ -194,7 +202,7 @@ function App() {
             />
           </div>
         </div>
-        <div className="col-span-2 px-5 overflow-y-scroll max-h-screen">
+        <div className="col-span-2 px-5 overflow-y-scroll max-h-screen no-scrollbar">
           <div className="min-h-full w-full border-2"></div>
         </div>
       </div>

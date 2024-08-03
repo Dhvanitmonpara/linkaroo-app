@@ -4,6 +4,7 @@ import { devtools, persist } from "zustand/middleware"
 
 const listStore = (set) => ({
     list: [],
+    setLists: (lists) => set(state => (state.list = lists)),
     addListItem: (item) => {
         set(state => ({ list: [...state.list, item] }))
     },
