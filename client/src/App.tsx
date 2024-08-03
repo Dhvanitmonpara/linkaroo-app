@@ -5,7 +5,7 @@ import { useRef, useState } from "react";
 
 function App() {
   const modalRef = useRef<HTMLDivElement | null>(null);
-  const [isModelOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const closeModal = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (modalRef.current === e.target) {
@@ -24,9 +24,9 @@ function App() {
             setIsModalOpen={setIsModalOpen}
           />
           <ListCard
-            tagname="Hello"
+            tagname="lol"
             description="bruhh can you Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, culpa odit"
-            title="Hellow"
+            title="lol"
             color="bg-emerald-400"
             setIsModalOpen={setIsModalOpen}
           />
@@ -198,7 +198,7 @@ function App() {
           <div className="min-h-full w-full border-2"></div>
         </div>
       </div>
-      {isModelOpen && (
+      {isModalOpen && (
         <div
           ref={modalRef}
           onClick={(e) => closeModal(e)}

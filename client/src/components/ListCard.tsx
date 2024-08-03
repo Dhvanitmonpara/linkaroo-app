@@ -2,6 +2,7 @@ import { MdModeEdit } from "react-icons/md";
 import AvatarGroup from "./ui/avatarGroup";
 import Tag from "./Tag";
 import { colorOptions } from "@/lib/types.ts";
+import { useNavigate } from "react-router-dom";
 
 type ListCardProps = {
   tagname: string;
@@ -19,9 +20,13 @@ const imgArray = [
 
 const ListCard = ({ tagname, description, title, color, setIsModalOpen }: ListCardProps) => {
 
+  const navigate = useNavigate()
+
   const openModal = (e:React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     setIsModalOpen(true);
     e.stopPropagation();
+    navigate(`/list?listid=${title}`, { replace: true });
+    // TODO: open modal with content from props (add e.target.dataset.content into state)
   }
 
   return (
