@@ -18,8 +18,9 @@ const LoginPage = () => {
 
   const { register, handleSubmit } = useForm();
 
-  const emailReg = new RegExp("/^w+([.-]?w+)*@w+([.-]?w+)*(.w{2,3})+$/");
-  const usernameReg = new RegExp("/^(?!.*..)(?!.*.$)[^W][w.]{0,29}$/");
+  const emailReg =
+    /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+  const usernameReg = /[a-zA-Z][a-zA-Z0-9-_]{3,32}/;
 
   const userLogin = async (data: { text: string; password: string }) => {
     try {
@@ -44,31 +45,20 @@ const LoginPage = () => {
 
       const response = await axios.post(
         `${import.meta.env.VITE_SERVER_API_URL}/users/login`,
-        data
+        userCredentials
       );
 
       if (response?.data) {
         addProfile(response.data);
       }
 
-      return response?.data;
+      console.log(response);
     } catch (error) {
       setError(error?.response?.data.message);
+    } finally {
       setLoading(false);
     }
   };
-
-  // useEffect(() => {
-  //   (async () => {
-
-  //     const loggedInUser = await userLogin();
-
-  //     if (loggedInUser) {
-  //       addProfile(loggedInUser);
-  //     }
-
-  //   })();
-  // }, [addProfile]);
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-slate-900 to-zinc-900 flex justify-center items-center">
@@ -88,12 +78,6 @@ const LoginPage = () => {
               className="bg-slate-800"
               {...register("text", {
                 required: true,
-                validate: {
-                  matchPatern: (value) =>
-                    /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
-                    /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$/.test(value) ||
-                    "Email address or username must be a valid",
-                },
               })}
             />
           </div>
@@ -120,9 +104,12 @@ const LoginPage = () => {
             </div>
             <div className="flex justify-between items-center w-full">
               <span>Remember me</span>
-              <span className="hover:underline text-blue-500 cursor-pointer">
+              <Link
+                to="/forget-password/email"
+                className="hover:underline text-blue-500 cursor-pointer"
+              >
                 Forget password
-              </span>
+              </Link>
             </div>
           </div>
           <Button className="bg-slate-800 hover:bg-slate-700 w-full">
