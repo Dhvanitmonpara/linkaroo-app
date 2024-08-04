@@ -8,6 +8,7 @@ import { IoMdEye } from "react-icons/io";
 import { IoMdEyeOff } from "react-icons/io";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import {ApiError} from "@/utils/ApiError.js";
 
 const LoginPage = () => {
   const { addProfile } = useProfileStore();
@@ -16,7 +17,7 @@ const LoginPage = () => {
   const [error, setError] = useState<null | string>(null);
   const [loading, setLoading] = useState(false);
 
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm<LoginFormData>();
 
   const emailReg =
     /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
@@ -51,17 +52,22 @@ const LoginPage = () => {
       if (response?.data) {
         addProfile(response.data);
       }
-
-      console.log(response);
-    } catch (error) {
-      setError(error?.response?.data.message);
+    } catch (err) {
+      if(typeof err === 'object' && "response" in err && err !== null){
+        setError(err.response!.data.message);
+      }
     } finally {
       setLoading(false);
     }
   };
 
+  type LoginFormData = {
+    text: string;
+    password: string;
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-r from-slate-900 to-zinc-900 flex justify-center items-center">
+    <div className="min-h-screen select-none bg-gradient-to-r from-slate-900 to-zinc-900 flex justify-center items-center">
       <div className="text-white bg-[#00000025] flex flex-col space-y-8 justify-center items-center p-8 rounded-xl">
         <h1 className="font-semibold text-4xl">Login to Linkaroo</h1>
         <form
@@ -70,7 +76,7 @@ const LoginPage = () => {
           onSubmit={handleSubmit(userLogin)}
         >
           <div className="w-full space-y-2">
-            <label htmlFor="username-or-email">Username/Email</label>
+            <label htmlFor="username-or-email">Username or Email</label>
             <Input
               id="username-or-email"
               type="text"
@@ -105,7 +111,7 @@ const LoginPage = () => {
             <div className="flex justify-between items-center w-full">
               <span>Remember me</span>
               <Link
-                to="/forget-password/email"
+                to="/password-recovery"
                 className="hover:underline text-blue-500 cursor-pointer"
               >
                 Forget password

@@ -12,6 +12,7 @@ import HomePage from "./pages/HomePage";
 import App from "./App";
 import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
+import PasswordRecoveryPage from "./pages/PasswordRecoveryPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -22,6 +23,7 @@ const router = createBrowserRouter(
       <Route path="/doc" element={<HomePage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
+      <Route path="/password-recovery" element={<PasswordRecoveryPage />} />
     </Route>
   )
 );
