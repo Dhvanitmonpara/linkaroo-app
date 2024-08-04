@@ -1,28 +1,36 @@
-import { create } from "zustand"
+import { create } from "zustand";
+import { devtools, persist } from "zustand/middleware";
 
-import { devtools, persist } from "zustand/middleware"
+type ProfileType = {
+  name?: string;
+  email?: string;
+  avatar?: string;
+};
 
 interface ProfileState {
-    profile: {
-        name: string;
-        email: string;
-        avatar: string;
-    };
+  profile: ProfileType;
+  addProfile: (profile: ProfileType) => void;
+  updateProfile: (updatedProfile: ProfileType) => void;
+  removeProfile: () => void;
 }
 
-const profileStore = (set) => ({
-    profile: {},
-    addProfile: (profile: ProfileState) => set(state => (state.profile = profile)),
-    updateProfile: (updatedProfile: ProfileState) => set(state => (state.profile = {...state.profile,...updatedProfile })),
-    removeProfile: () => set(state => (state.profile = {})),
-})
-
-const useProfileStore = create<ProfileState>(
-    devtools(
-        persist(profileStore, {
-            name: "profile"
-        })
+const useProfileStore = create<ProfileState>()(
+  devtools(
+    persist(
+      (set) => ({
+        profile: { name: "", email: "", avatar: "" },
+        addProfile: (profile) => set({ profile }),
+        updateProfile: (updatedProfile) =>
+          set((state) => ({
+            profile: { ...state.profile, ...updatedProfile },
+          })),
+        removeProfile: () =>
+          set({ profile: { name: "", email: "", avatar: "" } }),
+      }),
+      { name: "profile" }
     )
-)
+  )
+);
 
 export default useProfileStore;
+export type {ProfileType}
