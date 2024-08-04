@@ -7,21 +7,44 @@ import { Link } from "react-router-dom";
 import { IoMdEye } from "react-icons/io";
 import { IoMdEyeOff } from "react-icons/io";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 
 const LoginPage = () => {
   const { addProfile } = useProfileStore();
 
   const [isPasswordShowing, setIsPasswordShowing] = useState(false);
+  const [error, setError] = useState<null | string>(null);
+  const [loading, setLoading] = useState(false);
 
-  const userLogin = async () => {
+  const { register, handleSubmit } = useForm();
+
+  const emailReg = new RegExp("/^w+([.-]?w+)*@w+([.-]?w+)*(.w{2,3})+$/");
+  const usernameReg = new RegExp("/^(?!.*..)(?!.*.$)[^W][w.]{0,29}$/");
+
+  const userLogin = async (data: { text: string; password: string }) => {
     try {
+      setLoading(true);
+      setError(null);
+
+      const userCredentials = {
+        password: data.password,
+        email: "",
+        username: "",
+      };
+
+      if (emailReg.test(data.text)) {
+        userCredentials.email = data.text;
+      } else if (usernameReg.test(data.text)) {
+        userCredentials.username = data.text;
+      } else {
+        setError("Invalid email or username");
+        setLoading(false);
+        return;
+      }
+
       const response = await axios.post(
         `${import.meta.env.VITE_SERVER_API_URL}/users/login`,
-        {
-          username: "dhavnitmonpara",
-          email: "test@test.com",
-          password: "12345678",
-        }
+        data
       );
 
       if (response?.data) {
@@ -30,7 +53,8 @@ const LoginPage = () => {
 
       return response?.data;
     } catch (error) {
-      console.error("Error while logging user: ", error);
+      setError(error?.response?.data.message);
+      setLoading(false);
     }
   };
 
@@ -53,7 +77,7 @@ const LoginPage = () => {
         <form
           action="post"
           className="h-4/5 flex flex-col space-y-6 w-96 justify-center items-center"
-          onSubmit={userLogin}
+          onSubmit={handleSubmit(userLogin)}
         >
           <div className="w-full space-y-2">
             <label htmlFor="username-or-email">Username/Email</label>
@@ -62,6 +86,15 @@ const LoginPage = () => {
               type="text"
               placeholder="Enter Username or Email"
               className="bg-slate-800"
+              {...register("text", {
+                required: true,
+                validate: {
+                  matchPatern: (value) =>
+                    /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
+                    /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{0,29}$/.test(value) ||
+                    "Email address or username must be a valid",
+                },
+              })}
             />
           </div>
           <div className="w-full space-y-2">
@@ -72,6 +105,9 @@ const LoginPage = () => {
                 type={isPasswordShowing ? "text" : "password"}
                 placeholder="Enter Password"
                 className="bg-slate-800"
+                {...register("password", {
+                  required: true,
+                })}
               />
               <div
                 className="w-12 absolute right-0 flex justify-center items-center h-full cursor-pointer"
@@ -90,16 +126,18 @@ const LoginPage = () => {
             </div>
           </div>
           <Button className="bg-slate-800 hover:bg-slate-700 w-full">
-            Login
+            {loading ? "Loading..." : "Login"}
           </Button>
-          <p>
+          <p className="text-center">
             Don&apos;t have an account?{" "}
             <Link
               to="/signup"
               className="hover:underline text-blue-500 cursor-pointer"
             >
-              here
+              Signup
             </Link>
+            <br />
+            {error && <span className="text-red-500">{error}</span>}
           </p>
         </form>
       </div>
