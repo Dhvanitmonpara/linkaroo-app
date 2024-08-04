@@ -241,7 +241,13 @@ const getCurrentUser = asyncHandler(async (req, res) => {
     const profile = await Profile.find({ userId: userId })
 
     if (!profile) {
-        throw new ApiError(404, "Profile not found")
+        return res
+            .status(200)
+            .json(
+                200,
+                profile,
+                "Unauthorized request"
+            )
     }
 
     return res

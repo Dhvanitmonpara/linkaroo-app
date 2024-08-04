@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.tsx";
 import "./index.css";
 import {
   createRoutesFromElements,
@@ -9,14 +8,21 @@ import {
   createBrowserRouter,
 } from "react-router-dom";
 
+import HomePage from "./pages/HomePage";
+import App from "./App";
+import SignupPage from "./pages/SignupPage";
+import LoginPage from "./pages/LoginPage";
+
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <>
+    <Route path="/" element={<App />}>
       {/* FIXME: fix this repeatation */}
-      <Route path="/" element={<App />} />
-      <Route path="/list" element={<App />} />
-      <Route path="/doc" element={<App />} />
-    </>
+      <Route path="" element={<HomePage />} />
+      <Route path="/list" element={<HomePage />} />
+      <Route path="/doc" element={<HomePage />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/signup" element={<SignupPage />} />
+    </Route>
   )
 );
 
