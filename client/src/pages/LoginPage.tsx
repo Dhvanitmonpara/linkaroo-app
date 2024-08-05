@@ -112,7 +112,7 @@ const LoginPage = () => {
                 {isPasswordShowing ? <IoMdEyeOff /> : <IoMdEye />}
               </div>
             </div>
-            <div className="flex justify-between items-center w-full">
+            <div className="flex justify-between pt-1 items-center w-full">
               <div className="space-x-1 flex justify-center items-center">
                 <Checkbox id="remember-me" className="border-white data-[state=checked]:bg-white data-[state=checked]:text-black" />
                 <label htmlFor="remember-me" className="cursor-pointer">Remember me</label>
