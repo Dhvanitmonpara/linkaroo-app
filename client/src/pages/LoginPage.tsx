@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 // import { useEffect } from "react";
 import useProfileStore from "../store/profileStore.js";
 import { Input } from "@/components/ui/input.js";
@@ -8,6 +8,7 @@ import { IoMdEye } from "react-icons/io";
 import { IoMdEyeOff } from "react-icons/io";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import getErrorFromAxios from "@/utils/getErrorFromAxios.js";
 
 const LoginPage = () => {
   const { addProfile } = useProfileStore();
@@ -92,21 +93,10 @@ const LoginPage = () => {
         addProfile(response.data);
       }
     } catch (err) {
-      // FIXME: handle error appropriately
-      console.log(err);
-      // handleError(err);
-      if (
-        typeof err === "object" &&
-        "response" in err &&
-        err !== null &&
-        err instanceof ApiError
-      ) {
-        setError(err.response?.data.message);
+      const errorMsg = getErrorFromAxios(err as AxiosError);
+      if (errorMsg !== undefined) {
+        setError(errorMsg);
       }
-
-      // if (isApiError(err)) {
-      //   setError(err?.response?.data.message);
-      // }
     } finally {
       setLoading(false);
     }
