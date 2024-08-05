@@ -3,12 +3,14 @@ import axios, { AxiosError } from "axios";
 import useProfileStore from "../store/profileStore.js";
 import { Input } from "@/components/ui/input.js";
 import { Button } from "@/components/ui/button.js";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { IoMdEye } from "react-icons/io";
 import { IoMdEyeOff } from "react-icons/io";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import getErrorFromAxios from "@/utils/getErrorFromAxios.js";
+import { Loader2 } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox.js";
 
 const LoginPage = () => {
   const { addProfile } = useProfileStore();
@@ -17,47 +19,7 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const { register, handleSubmit } = useForm<LoginFormData>();
 
-  // class ApiError extends Error {
-  //   response?: { data: { message: string } };
-
-  //   constructor(message: string, response?: { data: { message: string } }) {
-  //     super(message);
-  //     this.response = response;
-  //   }
-  // }
-
-  // function isApiError(err: unknown): err is ApiError {
-  //   return (
-  //     err instanceof ApiError &&
-  //     typeof (err as ApiError).response?.data?.message === "string"
-  //   );
-  // }
-
-  // const handleError = (err: unknown) => {
-  //   if (err instanceof ApiError) {
-  //     setError(err.message);
-  //   } else if (isAxiosError(err)) {
-  //     const axiosError = err as AxiosError;
-  //     const errorMessage =
-  //       axiosError.response?.data?.message || axiosError.message;
-  //     setError(errorMessage);
-  //   } else {
-  //     setError("An unexpected error occurred.");
-  //   }
-  // };
-
-  // Type guard to check if error is an AxiosError
-  // function isAxiosError(err: any): err is AxiosError {
-  //   return err.isAxiosError === true;
-  // }
-
-  // // Replace this with your actual error setting function
-  // function setError(message: string) {
-  //   console.error(message);
-  // }
-
-  // // Assuming you are using Axios
-  // import axios, { AxiosError } from "axios";
+  const navigate = useNavigate();
 
   const emailReg =
     /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
@@ -91,6 +53,7 @@ const LoginPage = () => {
 
       if (response?.data) {
         addProfile(response.data);
+        navigate("/");
       }
     } catch (err) {
       const errorMsg = getErrorFromAxios(err as AxiosError);
@@ -150,7 +113,10 @@ const LoginPage = () => {
               </div>
             </div>
             <div className="flex justify-between items-center w-full">
-              <span>Remember me</span>
+              <div className="space-x-1 flex justify-center items-center">
+                <Checkbox id="remember-me" className="border-white data-[state=checked]:bg-white data-[state=checked]:text-black" />
+                <label htmlFor="remember-me" className="cursor-pointer">Remember me</label>
+              </div>
               <Link
                 to="/password-recovery"
                 className="hover:underline text-blue-500 cursor-pointer"
@@ -159,9 +125,15 @@ const LoginPage = () => {
               </Link>
             </div>
           </div>
-          <Button className="bg-slate-800 hover:bg-slate-700 w-full">
-            {loading ? "Loading..." : "Login"}
-          </Button>
+          {loading ? (
+            <Button disabled className="bg-slate-800 hover:bg-slate-700 w-full cursor-wait">
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
+            </Button>
+          ) : (
+            <Button className="bg-slate-800 hover:bg-slate-700 w-full">
+              Login
+            </Button>
+          )}
           <p className="text-center">
             Don&apos;t have an account?{" "}
             <Link
