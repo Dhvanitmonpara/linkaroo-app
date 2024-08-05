@@ -8,16 +8,55 @@ import { IoMdEye } from "react-icons/io";
 import { IoMdEyeOff } from "react-icons/io";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import {ApiError} from "@/utils/ApiError.js";
 
 const LoginPage = () => {
   const { addProfile } = useProfileStore();
-
   const [isPasswordShowing, setIsPasswordShowing] = useState(false);
   const [error, setError] = useState<null | string>(null);
   const [loading, setLoading] = useState(false);
-
   const { register, handleSubmit } = useForm<LoginFormData>();
+
+  // class ApiError extends Error {
+  //   response?: { data: { message: string } };
+
+  //   constructor(message: string, response?: { data: { message: string } }) {
+  //     super(message);
+  //     this.response = response;
+  //   }
+  // }
+
+  // function isApiError(err: unknown): err is ApiError {
+  //   return (
+  //     err instanceof ApiError &&
+  //     typeof (err as ApiError).response?.data?.message === "string"
+  //   );
+  // }
+
+  // const handleError = (err: unknown) => {
+  //   if (err instanceof ApiError) {
+  //     setError(err.message);
+  //   } else if (isAxiosError(err)) {
+  //     const axiosError = err as AxiosError;
+  //     const errorMessage =
+  //       axiosError.response?.data?.message || axiosError.message;
+  //     setError(errorMessage);
+  //   } else {
+  //     setError("An unexpected error occurred.");
+  //   }
+  // };
+
+  // Type guard to check if error is an AxiosError
+  // function isAxiosError(err: any): err is AxiosError {
+  //   return err.isAxiosError === true;
+  // }
+
+  // // Replace this with your actual error setting function
+  // function setError(message: string) {
+  //   console.error(message);
+  // }
+
+  // // Assuming you are using Axios
+  // import axios, { AxiosError } from "axios";
 
   const emailReg =
     /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
@@ -53,9 +92,21 @@ const LoginPage = () => {
         addProfile(response.data);
       }
     } catch (err) {
-      if(typeof err === 'object' && "response" in err && err !== null){
-        setError(err.response!.data.message);
+      // FIXME: handle error appropriately
+      console.log(err);
+      // handleError(err);
+      if (
+        typeof err === "object" &&
+        "response" in err &&
+        err !== null &&
+        err instanceof ApiError
+      ) {
+        setError(err.response?.data.message);
       }
+
+      // if (isApiError(err)) {
+      //   setError(err?.response?.data.message);
+      // }
     } finally {
       setLoading(false);
     }
