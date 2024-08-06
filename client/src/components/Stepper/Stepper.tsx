@@ -1,10 +1,13 @@
 import { useState } from "react";
 import "./Stepper.css";
 import { TiTick } from "react-icons/ti";
+
 const Stepper = () => {
+
   const steps = ["Email signup", "Profile setup", "Email verification"];
   const [currentStep, setCurrentStep] = useState(1);
   const [complete, setComplete] = useState(false);
+
   return (
     <>
       <div className="flex justify-between">
@@ -38,8 +41,8 @@ const Stepper = () => {
         <button
           className="btn text-white"
           onClick={() => {
-            currentStep === steps.length
-              ? setComplete(true)
+            currentStep === 1
+              ? ""
               : setCurrentStep((prev) => prev - 1);
           }}
         >
