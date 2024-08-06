@@ -36,12 +36,13 @@ const ListCard = ({ tagname, description, title, color, setIsModalOpen }: ListCa
       >
         <div className="space-y-3 relative">
           <div>
+          <p className="text-slate-800 font-semibold w-fit text-sm pb-3 hover:underline">@dhvanitmonpara</p>
             <span onClick={(e)=>{openModal(e)}}
               className="group-hover:opacity-100 transition-all ease-in-out duration-300 absolute right-3 opacity-0 active:scale-95 hover:bg-[#00000015] text-lg cursor-pointer p-3 rounded-full"
             >
               <MdModeEdit />
             </span>
-            <h1 className="text-2xl py-1 font-mono font-bold">{title}</h1>
+            <h1 className="text-2xl py-1 font-mono font-bold hover:underline">{title}</h1>
           </div>
           <p className="text-sm font-semibold">{description}</p>
         </div>
