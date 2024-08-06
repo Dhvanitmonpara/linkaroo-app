@@ -10,6 +10,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import getErrorFromAxios from "@/utils/getErrorFromAxios.js";
 import { Loader2 } from "lucide-react";
+import { Stepper } from "@/components/index.js";
 
 const SignupPage = () => {
   const { addProfile } = useProfileStore();
@@ -79,6 +80,7 @@ const SignupPage = () => {
 
   return (
     <div className="min-h-screen select-none bg-gradient-to-r from-slate-900 to-zinc-900 flex justify-center items-center">
+      <Stepper/>
       <div className="text-white bg-[#00000025] flex flex-col space-y-8 justify-center items-center p-8 rounded-xl">
         <h1 className="font-semibold text-4xl">Signup to Linkaroo</h1>
         <form
