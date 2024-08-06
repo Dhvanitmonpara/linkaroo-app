@@ -28,6 +28,7 @@ const SignupPage = () => {
     username: string;
     email: string;
     password: string;
+    confirmPassword: string
   }) => {
     try {
       setLoading(true);
@@ -73,6 +74,7 @@ const SignupPage = () => {
     username: string;
     email: string;
     password: string;
+    confirmPassword: string
   };
 
   return (
@@ -133,28 +135,6 @@ const SignupPage = () => {
             />
           </div>
           <div className="w-full space-y-2 pb-4">
-            <label htmlFor="confirm-password">Password</label>
-            <div className="w-full flex relative">
-              <Input
-                id="confirm-password"
-                type={isPasswordShowing ? "text" : "password"}
-                placeholder="Enter Password"
-                className="bg-slate-800"
-                {...register("password", {
-                  required: true,
-                })}
-              />
-              <div
-                className="w-12 absolute right-0 flex justify-center items-center h-full cursor-pointer"
-                onClick={() => {
-                  setIsPasswordShowing((prev) => !prev);
-                }}
-              >
-                {isPasswordShowing ? <IoMdEyeOff /> : <IoMdEye />}
-              </div>
-            </div>
-          </div>
-          <div className="w-full space-y-2 pb-4">
             <label htmlFor="password">Password</label>
             <div className="w-full flex relative">
               <Input
@@ -175,6 +155,40 @@ const SignupPage = () => {
                 {isPasswordShowing ? <IoMdEyeOff /> : <IoMdEye />}
               </div>
             </div>
+          </div>
+          <div className="w-full space-y-2 pb-4">
+            <label htmlFor="confirm-password">Confirm password</label>
+            <div className="w-full flex relative">
+              <Input
+                id="confirm-password"
+                type={isPasswordShowing ? "text" : "password"}
+                placeholder="Enter Password"
+                className="bg-slate-800"
+                {...register("confirmPassword", {
+                  required: true,
+                })}
+              />
+              <div
+                className="w-12 absolute right-0 flex justify-center items-center h-full cursor-pointer"
+                onClick={() => {
+                  setIsPasswordShowing((prev) => !prev);
+                }}
+              >
+                {isPasswordShowing ? <IoMdEyeOff /> : <IoMdEye />}
+              </div>
+            </div>
+          </div>
+          <div className="w-full space-y-2">
+            <label htmlFor="avatar">Avatar</label>
+            <Input
+              id="avatar"
+              type="file"
+              placeholder="Enter Username"
+              className="bg-slate-800"
+              {...register("username", {
+                required: true,
+              })}
+            />
           </div>
           {loading ? (
             <Button
