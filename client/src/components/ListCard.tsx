@@ -40,7 +40,7 @@ const ListCard = ({
       <div
         className={`group select-none transition-all h-64 w-full p-6 rounded-md flex justify-between flex-col ${isBlackMode ? "" : color} ${
           isBlackMode
-            ? "!text-white border-zinc-500 border-[1px]"
+            ? "!text-zinc-300 border-zinc-500 !bg-zinc-900 border-[1px]"
             : "text-black"
         }`}
       >
@@ -48,7 +48,7 @@ const ListCard = ({
           <div>
             <p
               className={`${
-                isBlackMode ? "text-white" : "text-slate-800"
+                isBlackMode ? "text-zinc-300" : "text-slate-800"
               } font-semibold w-fit text-sm pb-3 hover:underline`}
             >
               @dhvanitmonpara

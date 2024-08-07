@@ -76,8 +76,8 @@ function App() {
         className={`grid grid-cols-7 dark:bg-zinc-800 black:bg-black ${checkThemeStatus}`}
       >
         <div className="col-span-2 relative py-5 px-7 space-y-3 overflow-y-scroll no-scrollbar max-h-screen">
-          <div className="border-2 top-0 sticky h-12 dark:bg-zinc-800 z-20 dark:border-gray-600 rounded flex justify-center items-center">
-            <span className="font-mono select-none font-black text-2xl dark:text-white">
+          <div className="border-2 top-0 sticky h-12 dark:bg-zinc-800 z-20 dark:border-zinc-700 rounded flex justify-center items-center">
+            <span className="font-mono select-none font-black text-2xl dark:text-zinc-300">
               Linkaroo
             </span>
           </div>
@@ -231,53 +231,52 @@ function App() {
             />
           </div>
         </div>
-        <div className="col-span-2 px-5 overflow-y-scroll max-h-screen no-scrollbar">
-          <div className="min-h-full w-full border-2">
-            <div
-              className={`sticky bottom-0 z-20 border-2 dark:text-white dark:bg-zinc-800 bg-white text-black border-zinc-300 dark:border-zinc-700 rounded-md`}
-            >
-              <button
-                className="w-full dark:text-white py-3 px-6 rounded-md focus:outline-none hover:bg-zinc-200 dark:hover:bg-zinc-700"
-                onClick={() => {
-                  setIsModalOpen(true);
-                  setModalContent(
-                    <div className="flex h-full w-full flex-col justify-center p-5 items-center">
-                      <h1 className="dark:text-white text-4xl pb-11">
-                        Settings
-                      </h1>
-                      <div className="flex justify-between w-full">
-                        <span className="dark:text-white">Themes:</span>
-                        <Select
-                          onValueChange={(value: themeType) => {
-                            themeHandler(value);
-                          }}
+        <div className="col-span-2 relative px-5 pt-5 space-y-3 overflow-y-scroll max-h-screen no-scrollbar">
+          <div
+            className={`sticky top-0 z-20 border-2 dark:text-white dark:bg-zinc-800 bg-white text-black border-zinc-200 dark:border-zinc-700 rounded-md`}
+          >
+            <button
+              className="w-full dark:text-white py-3 px-6 rounded-md focus:outline-none hover:bg-zinc-200 dark:hover:bg-zinc-700"
+              onClick={() => {
+                setIsModalOpen(true);
+                setModalContent(
+                  <div className="flex h-full w-full flex-col justify-center p-5 items-center">
+                    <h1 className="dark:text-white text-4xl pb-11">Settings</h1>
+                    <div className="flex justify-between w-full">
+                      <span className="dark:text-white">Themes:</span>
+                      <Select
+                        onValueChange={(value: themeType) => {
+                          themeHandler(value);
+                        }}
+                      >
+                        <SelectTrigger className="dark:text-white max-w-36">
+                          <SelectValue placeholder="Change theme" />
+                        </SelectTrigger>
+                        <SelectContent
+                          className={
+                            theme != "light"
+                              ? "!bg-black !text-white border-zinc-800"
+                              : ""
+                          }
                         >
-                          <SelectTrigger className="dark:text-white max-w-36">
-                            <SelectValue placeholder="Change theme" />
-                          </SelectTrigger>
-                          <SelectContent
-                            className={
-                              theme != "light"
-                                ? "!bg-black !text-white border-zinc-800"
-                                : ""
-                            }
-                          >
-                            <SelectGroup>
-                              <SelectLabel>Themes</SelectLabel>
-                              <SelectItem value="light">Light</SelectItem>
-                              <SelectItem value="dark">Dark</SelectItem>
-                              <SelectItem value="black">Black</SelectItem>
-                            </SelectGroup>
-                          </SelectContent>
-                        </Select>
-                      </div>
+                          <SelectGroup>
+                            <SelectLabel>Themes</SelectLabel>
+                            <SelectItem value="light">Light</SelectItem>
+                            <SelectItem value="dark">Dark</SelectItem>
+                            <SelectItem value="black">Black</SelectItem>
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
                     </div>
-                  );
-                }}
-              >
-                Dhvanit Monpara
-              </button>
-            </div>
+                  </div>
+                );
+              }}
+            >
+              Dhvanit Monpara
+            </button>
+          </div>
+          <div className="min-h-[calc(100%-4rem)] pb-5 w-full border-2 p-5 dark:border-zinc-600">
+            {/* TODO: add menu here */}
           </div>
         </div>
       </div>
