@@ -2,9 +2,9 @@ import { useNavigate } from "react-router-dom";
 import { DocCard, ListCard, Header } from "../components";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
+import useProfileStore from "@/store/profileStore";
 
 function App() {
-
   const navigate = useNavigate();
   const modalRef = useRef<HTMLDivElement | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -15,6 +15,13 @@ function App() {
       navigate("/");
     }
   };
+
+  // const { profile } = useProfileStore();
+  const { profile, changeTheme } = useProfileStore();
+
+  // changeTheme("black")
+  const { theme } = profile;
+  const checkThemeStatus = theme == "black" ? "!bg-black !text-while" : ""
 
   document.addEventListener("keydown", ({ key }) => {
     if (key == "Escape" && isModalOpen) {
@@ -47,53 +54,56 @@ function App() {
 
   return (
     <>
-      <div className="grid grid-cols-7 dark:bg-zinc-800 black:bg-black">
+      <div className={`grid grid-cols-7 dark:bg-zinc-800 black:bg-black ${checkThemeStatus}`}>
         <div className="col-span-2 py-5 px-7 space-y-3 overflow-y-scroll no-scrollbar max-h-screen">
           <div className="border-2 dark:border-gray-400 rounded flex justify-center items-center">
             <span className="font-mono select-none font-black text-2xl dark:text-white">
               Linkaroo
             </span>
+            <button className="text-white" onClick={()=>{changeTheme("black")}}>
+              change theme
+            </button>
           </div>
           <ListCard
             tagname="Hello"
             description="bruhh can you Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, culpa odit"
             title="Hellow"
-            color="bg-red-400"
+            color={theme == "black" ? "bg-black" : "bg-red-400"}
             setIsModalOpen={setIsModalOpen}
           />
           <ListCard
             tagname="lol"
             description="bruhh can you Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, culpa odit"
             title="lol"
-            color="bg-emerald-400"
+            color={theme == "black" ? "bg-black" : "bg-emerald-400"}
             setIsModalOpen={setIsModalOpen}
           />
           <ListCard
             tagname="Hello"
             description="bruhh can you Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, culpa odit"
             title="Hellow"
-            color="bg-amber-400"
+            color={theme == "black" ? "bg-black" : "bg-amber-400"}
             setIsModalOpen={setIsModalOpen}
           />
           <ListCard
             tagname="Hello"
             description="bruhh can you Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, culpa odit"
             title="Hellow"
-            color="bg-sky-400"
+            color={theme == "black" ? "bg-black" : "bg-sky-400"}
             setIsModalOpen={setIsModalOpen}
           />
           <ListCard
             tagname="Hello"
             description="bruhh can you Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, culpa odit"
             title="Hellow"
-            color="bg-purple-400"
+            color={theme == "black" ? "bg-black" : "bg-purple-400"}
             setIsModalOpen={setIsModalOpen}
           />
           <ListCard
             tagname="Hello"
             description="bruhh can you Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, culpa odit"
             title="Hellow"
-            color="bg-green-400"
+            color={theme == "black" ? "bg-black" : "bg-green-400"}
             setIsModalOpen={setIsModalOpen}
           />
         </div>
@@ -103,116 +113,140 @@ function App() {
             <DocCard
               title="kya hua"
               text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus aliquam corrupti corporis repudiandae magnam sapiente quas saepe vero enim ex, aperiam, quaerat consequuntur quidem! Ullam voluptate nam voluptas error quaerat."
-              color="bg-emerald-400"
-            setIsModalOpen={setIsModalOpen}
+              color={theme == "black" ? "bg-black" : "bg-emerald-400"}
+              setIsModalOpen={setIsModalOpen}
             />
             <DocCard
               title="kya hua"
               text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus aliquam corrupti corporis repudiandae magnam sapiente quas saepe vero enim ex, aperiam, quaerat consequuntur quidem! Ullam voluptate nam voluptas error quaerat."
-              color="bg-emerald-400"
-            setIsModalOpen={setIsModalOpen}
+              color={theme == "black" ? "bg-black" : "bg-emerald-400"}
+              setIsModalOpen={setIsModalOpen}
             />
             <DocCard
               title="kya hua"
               text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus aliquam corrupti corporis repudiandae magnam sapiente quas saepe vero enim ex, aperiam, quaerat consequuntur quidem! Ullam voluptate nam voluptas error quaerat."
-              color="bg-emerald-400"
-            setIsModalOpen={setIsModalOpen}
+              color={theme == "black" ? "bg-black" : "bg-emerald-400"}
+              setIsModalOpen={setIsModalOpen}
             />
             <DocCard
               title="kya hua"
               text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus aliquam corrupti corporis repudiandae magnam sapiente quas saepe vero enim ex, aperiam, quaerat consequuntur quidem! Ullam voluptate nam voluptas error quaerat."
-              color="bg-emerald-400"
-            setIsModalOpen={setIsModalOpen}
+              color={theme == "black" ? "bg-black" : "bg-emerald-400"}
+              setIsModalOpen={setIsModalOpen}
             />
             <DocCard
               title="kya hua"
               text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus aliquam corrupti corporis repudiandae magnam sapiente quas saepe vero enim ex, aperiam, quaerat consequuntur quidem! Ullam voluptate nam voluptas error quaerat."
-              color="bg-emerald-400"
-            setIsModalOpen={setIsModalOpen}
+              color={theme == "black" ? "bg-black" : "bg-emerald-400"}
+              setIsModalOpen={setIsModalOpen}
             />
             <DocCard
               title="kya hua"
               text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus aliquam corrupti corporis repudiandae magnam sapiente quas saepe vero enim ex, aperiam, quaerat consequuntur quidem! Ullam voluptate nam voluptas error quaerat."
-              color="bg-emerald-400"
-            setIsModalOpen={setIsModalOpen}
+              color={theme == "black" ? "bg-black" : "bg-emerald-400"}
+              setIsModalOpen={setIsModalOpen}
             />
             <DocCard
               title="kya hua"
               text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus aliquam corrupti corporis repudiandae magnam sapiente quas saepe vero enim ex, aperiam, quaerat consequuntur quidem! Ullam voluptate nam voluptas error quaerat."
-              color="bg-emerald-400"
-            setIsModalOpen={setIsModalOpen}
+              color={theme == "black" ? "bg-black" : "bg-emerald-400"}
+              setIsModalOpen={setIsModalOpen}
             />
             <DocCard
               title="kya hua"
               text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus aliquam corrupti corporis repudiandae magnam sapiente quas saepe vero enim ex, aperiam, quaerat consequuntur quidem! Ullam voluptate nam voluptas error quaerat."
-              color="bg-emerald-400"
-            setIsModalOpen={setIsModalOpen}
+              color={theme == "black" ? "bg-black" : "bg-emerald-400"}
+              setIsModalOpen={setIsModalOpen}
             />
             <DocCard
               title="kya hua"
               text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus aliquam corrupti corporis repudiandae magnam sapiente quas saepe vero enim ex, aperiam, quaerat consequuntur quidem! Ullam voluptate nam voluptas error quaerat."
-              color="bg-emerald-400"
-            setIsModalOpen={setIsModalOpen}
+              color={theme == "black" ? "bg-black" : "bg-emerald-400"}
+              setIsModalOpen={setIsModalOpen}
             />
             <DocCard
               title="kya hua"
               text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus aliquam corrupti corporis repudiandae magnam sapiente quas saepe vero enim ex, aperiam, quaerat consequuntur quidem! Ullam voluptate nam voluptas error quaerat."
-              color="bg-emerald-400"
-            setIsModalOpen={setIsModalOpen}
+              color={theme == "black" ? "bg-black" : "bg-emerald-400"}
+              setIsModalOpen={setIsModalOpen}
             />
             <DocCard
               title="kya hua"
               text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus aliquam corrupti corporis repudiandae magnam sapiente quas saepe vero enim ex, aperiam, quaerat consequuntur quidem! Ullam voluptate nam voluptas error quaerat."
-              color="bg-emerald-400"
-            setIsModalOpen={setIsModalOpen}
+              color={theme == "black" ? "bg-black" : "bg-emerald-400"}
+              setIsModalOpen={setIsModalOpen}
             />
             <DocCard
               title="kya hua"
               text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus aliquam corrupti corporis repudiandae magnam sapiente quas saepe vero enim ex, aperiam, quaerat consequuntur quidem! Ullam voluptate nam voluptas error quaerat."
-              color="bg-emerald-400"
-            setIsModalOpen={setIsModalOpen}
+              color={theme == "black" ? "bg-black" : "bg-emerald-400"}
+              setIsModalOpen={setIsModalOpen}
             />
             <DocCard
               title="kya hua"
               text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus aliquam corrupti corporis repudiandae magnam sapiente quas saepe vero enim ex, aperiam, quaerat consequuntur quidem! Ullam voluptate nam voluptas error quaerat."
-              color="bg-emerald-400"
-            setIsModalOpen={setIsModalOpen}
+              color={theme == "black" ? "bg-black" : "bg-emerald-400"}
+              setIsModalOpen={setIsModalOpen}
             />
             <DocCard
               title="kya hua"
               text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus aliquam corrupti corporis repudiandae magnam sapiente quas saepe vero enim ex, aperiam, quaerat consequuntur quidem! Ullam voluptate nam voluptas error quaerat."
-              color="bg-emerald-400"
-            setIsModalOpen={setIsModalOpen}
+              color={theme == "black" ? "bg-black" : "bg-emerald-400"}
+              setIsModalOpen={setIsModalOpen}
             />
             <DocCard
               title="kya hua"
               text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus aliquam corrupti corporis repudiandae magnam sapiente quas saepe vero enim ex, aperiam, quaerat consequuntur quidem! Ullam voluptate nam voluptas error quaerat."
-              color="bg-emerald-400"
-            setIsModalOpen={setIsModalOpen}
+              color={theme == "black" ? "bg-black" : "bg-emerald-400"}
+              setIsModalOpen={setIsModalOpen}
             />
             <DocCard
               title="kya hua"
               text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus aliquam corrupti corporis repudiandae magnam sapiente quas saepe vero enim ex, aperiam, quaerat consequuntur quidem! Ullam voluptate nam voluptas error quaerat."
-              color="bg-emerald-400"
-            setIsModalOpen={setIsModalOpen}
+              color={theme == "black" ? "bg-black" : "bg-emerald-400"}
+              setIsModalOpen={setIsModalOpen}
             />
             <DocCard
               title="kya hua"
               text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus aliquam corrupti corporis repudiandae magnam sapiente quas saepe vero enim ex, aperiam, quaerat consequuntur quidem! Ullam voluptate nam voluptas error quaerat."
-              color="bg-emerald-400"
-            setIsModalOpen={setIsModalOpen}
+              color={theme == "black" ? "bg-black" : "bg-emerald-400"}
+              setIsModalOpen={setIsModalOpen}
             />
             <DocCard
               title="kya hua"
               text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus aliquam corrupti corporis repudiandae magnam sapiente quas saepe vero enim ex, aperiam, quaerat consequuntur quidem! Ullam voluptate nam voluptas error quaerat."
-              color="bg-emerald-400"
-            setIsModalOpen={setIsModalOpen}
+              color={theme == "black" ? "bg-black" : "bg-emerald-400"}
+              setIsModalOpen={setIsModalOpen}
             />
             <DocCard
               title="kya hua"
               text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus aliquam corrupti corporis repudiandae magnam sapiente quas saepe vero enim ex, aperiam, quaerat consequuntur quidem! Ullam voluptate nam voluptas error quaerat."
-              color="bg-emerald-400"
-            setIsModalOpen={setIsModalOpen}
+              color={theme == "black" ? "bg-black" : "bg-emerald-400"}
+              setIsModalOpen={setIsModalOpen}
+            />
+            <DocCard
+              title="kya hua"
+              text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus aliquam corrupti corporis repudiandae magnam sapiente quas saepe vero enim ex, aperiam, quaerat consequuntur quidem! Ullam voluptate nam voluptas error quaerat."
+              color={theme == "black" ? "bg-black" : "bg-emerald-400"}
+              setIsModalOpen={setIsModalOpen}
+            />
+            <DocCard
+              title="kya hua"
+              text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus aliquam corrupti corporis repudiandae magnam sapiente quas saepe vero enim ex, aperiam, quaerat consequuntur quidem! Ullam voluptate nam voluptas error quaerat."
+              color={theme == "black" ? "bg-black" : "bg-emerald-400"}
+              setIsModalOpen={setIsModalOpen}
+            />
+            <DocCard
+              title="kya hua"
+              text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus aliquam corrupti corporis repudiandae magnam sapiente quas saepe vero enim ex, aperiam, quaerat consequuntur quidem! Ullam voluptate nam voluptas error quaerat."
+              color={theme == "black" ? "bg-black" : "bg-emerald-400"}
+              setIsModalOpen={setIsModalOpen}
+            />
+            <DocCard
+              title="kya hua"
+              text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus aliquam corrupti corporis repudiandae magnam sapiente quas saepe vero enim ex, aperiam, quaerat consequuntur quidem! Ullam voluptate nam voluptas error quaerat."
+              color={theme == "black" ? "bg-black" : "bg-emerald-400"}
+              setIsModalOpen={setIsModalOpen}
             />
           </div>
         </div>
@@ -226,9 +260,7 @@ function App() {
           onClick={(e) => closeModal(e)}
           className="fixed inset-0 bg-black bg-opacity-30 backdrop:blur-sm flex justify-center items-center"
         >
-          <div className="h-3/6 w-5/12 bg-zinc-100 dark:bg-zinc-800 rounded-xl">
-
-          </div>
+          <div className="h-3/6 w-5/12 bg-zinc-100 dark:bg-zinc-800 rounded-xl"></div>
         </div>
       )}
     </>

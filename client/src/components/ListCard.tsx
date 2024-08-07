@@ -28,15 +28,14 @@ const ListCard = ({ tagname, description, title, color, setIsModalOpen }: ListCa
     navigate(`/list?listid=${title}`, { replace: true });
     // TODO: open modal with content from props (add e.target.dataset.content into state)
   }
-
   return (
     <>
       <div
-        className={`group select-none transition-all h-64 w-full p-6 rounded-md flex justify-between flex-col ${color} bg-`}
+        className={`group select-none transition-all h-64 w-full p-6 rounded-md flex justify-between flex-col ${color} ${color == "bg-black" ? "!text-white border-zinc-500 border-[1px]" : "text-black"}`}
       >
         <div className="space-y-3 relative">
           <div>
-          <p className="text-slate-800 font-semibold w-fit text-sm pb-3 hover:underline">@dhvanitmonpara</p>
+          <p className={`${color == "bg-black" ? "text-white" : "text-slate-800"} font-semibold w-fit text-sm pb-3 hover:underline`}>@dhvanitmonpara</p>
             <span onClick={(e)=>{openModal(e)}}
               className="group-hover:opacity-100 transition-all ease-in-out duration-300 absolute right-3 opacity-0 active:scale-95 hover:bg-[#00000015] text-lg cursor-pointer p-3 rounded-full"
             >
@@ -49,10 +48,10 @@ const ListCard = ({ tagname, description, title, color, setIsModalOpen }: ListCa
         <div className="flex space-x-2">
           <AvatarGroup width="w-7" height="h-7" imgSrcArray={imgArray} />
           {/* TODO: map tags */}
-          <Tag text={tagname} />
-          <Tag text={tagname} />
-          <Tag text={tagname} />
-          <Tag text={tagname} />
+          <Tag isBlackEnable={color == "bg-black" ? true : false} text={tagname} />
+          <Tag isBlackEnable={color == "bg-black" ? true : false} text={tagname} />
+          <Tag isBlackEnable={color == "bg-black" ? true : false} text={tagname} />
+          <Tag isBlackEnable={color == "bg-black" ? true : false} text={tagname} />
         </div>
       </div>
     </>

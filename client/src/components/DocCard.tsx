@@ -20,7 +20,7 @@ const DocCard = ({ title, text, color, setIsModalOpen }: DocCardProps) => {
   };
   return (
     <div
-      className={`${color} select-none group p-5 h-44 space-y-5 flex-col transition-all rounded-md flex justify-start items-center`}
+      className={`${color} ${color == "bg-black" ? "!text-white border-zinc-500 border-[1px]" : "text-black"} select-none group p-5 h-44 space-y-5 flex-col transition-all rounded-md flex justify-start items-center`}
     >
       <h2
         onClick={(e) => {

@@ -14,6 +14,7 @@ interface ProfileState {
   addProfile: (profile: ProfileType) => void;
   updateProfile: (updatedProfile: ProfileType) => void;
   removeProfile: () => void;
+  changeTheme: (theme: themeType) => void;
 }
 
 const useProfileStore = create<ProfileState>()(
@@ -28,6 +29,11 @@ const useProfileStore = create<ProfileState>()(
           })),
         removeProfile: () =>
           set({ profile: { name: "", email: "", avatar: "" } }),
+        changeTheme: (theme: themeType) =>{
+          set((state) => ({
+            profile: {...state.profile, theme },
+          }));
+        }
       }),
       { name: "profile" }
     )

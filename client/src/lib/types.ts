@@ -13,7 +13,8 @@ type colorOptions =
   | "bg-green-400"
   | "bg-blue-400"
   | "bg-rose-400"
-  | "bg-sky-400";
+  | "bg-sky-400"
+  | "bg-black"
 
 type themeType = "light" | "black" | "dark";
 
