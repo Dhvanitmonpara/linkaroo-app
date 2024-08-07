@@ -1,10 +1,12 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
+import { themeType } from "@/lib/types";
 
 type ProfileType = {
   name?: string;
   email?: string;
   avatar?: string;
+  theme?: themeType;
 };
 
 interface ProfileState {

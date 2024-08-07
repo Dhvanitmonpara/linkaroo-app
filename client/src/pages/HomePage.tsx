@@ -47,7 +47,7 @@ function App() {
 
   return (
     <>
-      <div className="grid grid-cols-7 dark:bg-zinc-800">
+      <div className="grid grid-cols-7 dark:bg-zinc-800 black:bg-black">
         <div className="col-span-2 py-5 px-7 space-y-3 overflow-y-scroll no-scrollbar max-h-screen">
           <div className="border-2 dark:border-gray-400 rounded flex justify-center items-center">
             <span className="font-mono select-none font-black text-2xl dark:text-white">

@@ -15,7 +15,6 @@ type colorOptions =
   | "bg-rose-400"
   | "bg-sky-400";
 
+type themeType = "light" | "black" | "dark";
 
-export type {
-    colorOptions
-}
+export type { colorOptions, themeType };
