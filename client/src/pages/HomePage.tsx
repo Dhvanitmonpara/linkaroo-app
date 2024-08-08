@@ -5,6 +5,7 @@ import axios from "axios";
 import useProfileStore from "@/store/profileStore";
 import toggleThemeModeAtRootElem from "@/utils/toggleThemeMode";
 import { themeType } from "@/lib/types";
+import { IoMdAdd } from "react-icons/io";
 import {
   Select,
   SelectItem,
@@ -14,14 +15,13 @@ import {
   SelectLabel,
   SelectValue,
 } from "@/components/ui/select";
-import TagMenu from "@/components/TagMenu/TagMenu";
+import DocScreen from "@/components/DocScreen";
 
 function App() {
   const navigate = useNavigate();
   const modalRef = useRef<HTMLDivElement | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [modalContent, setModalContent] = useState<string | ReactNode>("");
-  const [tagValue, setTagValue] = useState<string>("");
 
   const closeModal = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (modalRef.current === e.target) {
@@ -51,8 +51,6 @@ function App() {
     }
   });
 
-  console.log(tagValue);
-
   useEffect(() => {
     (async () => {
       try {
@@ -80,63 +78,71 @@ function App() {
       <div
         className={`grid grid-cols-7 dark:bg-zinc-800 black:bg-black ${checkThemeStatus}`}
       >
-        <div className="col-span-2 relative py-5 px-7 space-y-3 overflow-y-scroll no-scrollbar max-h-screen">
-          <div className="border-2 top-0 sticky h-12 dark:bg-zinc-800 z-20 dark:border-zinc-700 rounded flex justify-center items-center">
+        <div className="col-span-2 relative py-5 px-7 space-y-3 no-scrollbar max-h-screen">
+          <div className="border-2 top-0 h-12 dark:bg-zinc-800 z-20 dark:border-zinc-700 rounded flex justify-center px-7 items-center">
             <span className="font-mono select-none font-black text-2xl dark:text-zinc-300">
               Linkaroo
             </span>
           </div>
-          <ListCard
-            tagname="Hello"
-            description="bruhh can you Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, culpa odit"
-            title="Hellow"
-            color="bg-red-400"
-            isBlackMode={theme == "black" ? true : false}
-            setIsModalOpen={setIsModalOpen}
-          />
-          <ListCard
-            tagname="lol"
-            description="bruhh can you Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, culpa odit"
-            title="lol"
-            color="bg-emerald-400"
-            isBlackMode={theme == "black" ? true : false}
-            setIsModalOpen={setIsModalOpen}
-          />
-          <ListCard
-            tagname="Hello"
-            description="bruhh can you Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, culpa odit"
-            title="Hellow"
-            color="bg-amber-400"
-            isBlackMode={theme == "black" ? true : false}
-            setIsModalOpen={setIsModalOpen}
-          />
-          <ListCard
-            tagname="Hello"
-            description="bruhh can you Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, culpa odit"
-            title="Hellow"
-            color="bg-sky-400"
-            isBlackMode={theme == "black" ? true : false}
-            setIsModalOpen={setIsModalOpen}
-          />
-          <ListCard
-            tagname="Hello"
-            description="bruhh can you Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, culpa odit"
-            title="Hellow"
-            isBlackMode={theme == "black" ? true : false}
-            color="bg-purple-400"
-            setIsModalOpen={setIsModalOpen}
-          />
-          <ListCard
-            tagname="Hello"
-            description="bruhh can you Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, culpa odit"
-            title="Hellow"
-            isBlackMode={theme == "black" ? true : false}
-            color="bg-green-400"
-            setIsModalOpen={setIsModalOpen}
-          />
+          <div className="col-span-2 relative space-y-3 overflow-y-scroll no-scrollbar h-[calc(100vh-9.5rem)]">
+            <ListCard
+              tagname="Hello"
+              description="bruhh can you Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, culpa odit"
+              title="Hellow"
+              color="bg-red-400"
+              isBlackMode={theme == "black" ? true : false}
+              setIsModalOpen={setIsModalOpen}
+            />
+            <ListCard
+              tagname="lol"
+              description="bruhh can you Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, culpa odit"
+              title="lol"
+              color="bg-emerald-400"
+              isBlackMode={theme == "black" ? true : false}
+              setIsModalOpen={setIsModalOpen}
+            />
+            <ListCard
+              tagname="Hello"
+              description="bruhh can you Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, culpa odit"
+              title="Hellow"
+              color="bg-amber-400"
+              isBlackMode={theme == "black" ? true : false}
+              setIsModalOpen={setIsModalOpen}
+            />
+            <ListCard
+              tagname="Hello"
+              description="bruhh can you Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, culpa odit"
+              title="Hellow"
+              color="bg-sky-400"
+              isBlackMode={theme == "black" ? true : false}
+              setIsModalOpen={setIsModalOpen}
+            />
+            <ListCard
+              tagname="Hello"
+              description="bruhh can you Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, culpa odit"
+              title="Hellow"
+              isBlackMode={theme == "black" ? true : false}
+              color="bg-purple-400"
+              setIsModalOpen={setIsModalOpen}
+            />
+            <ListCard
+              tagname="Hello"
+              description="bruhh can you Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, culpa odit"
+              title="Hellow"
+              isBlackMode={theme == "black" ? true : false}
+              color="bg-green-400"
+              setIsModalOpen={setIsModalOpen}
+            />
+          </div>
+          <div className="border-2 sticky bottom-0 h-12 dark:hover:bg-zinc-700 dark:bg-zinc-800 z-20 dark:border-zinc-700 rounded flex justify-center items-center">
+            <span className="font-mono select-none font-black text-2xl dark:text-zinc-300">
+              <IoMdAdd />
+            </span>
+          </div>
         </div>
         <div className="col-span-3 max-h-screen">
           <Header />
+          {/* <img src="" alt="Banner" /> */}
           <div className="h-[calc(100vh-5rem)] overflow-y-scroll w-full space-y-2 no-scrollbar">
             <DocCard
               title="kya hua"
@@ -280,9 +286,10 @@ function App() {
               Dhvanit Monpara
             </button>
           </div>
-          <div className="min-h-[calc(100%-4rem)] pb-5 w-full border-2 p-5 dark:border-zinc-600">
-            {/* TODO: add menu here */}        
-            <TagMenu setTagValue={setTagValue} tagOptions={["hey", "hello", "hi"]}/>
+          <div className="h-[calc(100%-4rem)] w-full border-2 dark:border-zinc-600">
+            <DocScreen
+              color={theme == "black" ? "bg-black" : "bg-emerald-400"}
+            />
           </div>
         </div>
       </div>
