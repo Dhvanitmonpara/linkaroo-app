@@ -5,7 +5,6 @@ import axios from "axios";
 import useProfileStore from "@/store/profileStore";
 import toggleThemeModeAtRootElem from "@/utils/toggleThemeMode";
 import { themeType } from "@/lib/types";
-import { IoMdAdd } from "react-icons/io";
 import {
   Select,
   SelectItem,
@@ -84,7 +83,7 @@ function App() {
               Linkaroo
             </span>
           </div>
-          <div className="col-span-2 relative space-y-3 overflow-y-scroll no-scrollbar h-[calc(100vh-9.5rem)]">
+          <div className="col-span-2 relative space-y-3 overflow-y-scroll no-scrollbar h-[calc(100vh-5rem)]">
             <ListCard
               tagname="Hello"
               description="bruhh can you Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, culpa odit"
@@ -134,14 +133,9 @@ function App() {
               setIsModalOpen={setIsModalOpen}
             />
           </div>
-          <div className="border-2 sticky bottom-0 h-12 dark:hover:bg-zinc-700 dark:bg-zinc-800 z-20 dark:border-zinc-700 rounded flex justify-center items-center">
-            <span className="font-mono select-none font-black text-2xl dark:text-zinc-300">
-              <IoMdAdd />
-            </span>
-          </div>
         </div>
         <div className="col-span-3 max-h-screen">
-          <Header />
+          <Header theme={theme} setIsModalOpen={setIsModalOpen} setModalContent={setModalContent} />
           {/* <img src="" alt="Banner" /> */}
           <div className="h-[calc(100vh-5rem)] overflow-y-scroll w-full space-y-2 no-scrollbar">
             <DocCard
@@ -279,6 +273,32 @@ function App() {
                         </SelectContent>
                       </Select>
                     </div>
+                    <div className="flex justify-between w-full">
+                      <span className="dark:text-white">Fonts:</span>
+                      <Select
+                        onValueChange={(value: themeType) => {
+                          themeHandler(value);
+                        }}
+                      >
+                        <SelectTrigger className="dark:text-white max-w-36">
+                          <SelectValue placeholder="Change theme" />
+                        </SelectTrigger>
+                        <SelectContent
+                          className={
+                            theme != "light"
+                              ? "!bg-black !text-white border-zinc-800"
+                              : ""
+                          }
+                        >
+                          <SelectGroup>
+                            <SelectLabel>Fonts</SelectLabel>
+                            <SelectItem value="light">sans</SelectItem>
+                            <SelectItem value="dark">Dark</SelectItem>
+                            <SelectItem value="black">Black</SelectItem>
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
                 );
               }}
@@ -286,7 +306,7 @@ function App() {
               Dhvanit Monpara
             </button>
           </div>
-          <div className="h-[calc(100%-4rem)] w-full border-2 dark:border-zinc-600">
+          <div className="h-[calc(100%-4rem)] w-full border-2 dark:border-zinc-600 rounded-md overflow-hidden">
             <DocScreen
               color={theme == "black" ? "bg-black" : "bg-emerald-400"}
             />
