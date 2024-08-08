@@ -11,11 +11,11 @@ import { useForm } from "react-hook-form";
 import getErrorFromAxios from "@/utils/getErrorFromAxios.js";
 import { Loader2 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox.js";
+import toast, { Toaster } from "react-hot-toast";
 
 const LoginPage = () => {
   const { addProfile } = useProfileStore();
   const [isPasswordShowing, setIsPasswordShowing] = useState(false);
-  const [error, setError] = useState<null | string>(null);
   const [loading, setLoading] = useState(false);
   const { register, handleSubmit } = useForm<LoginFormData>();
 
@@ -28,7 +28,6 @@ const LoginPage = () => {
   const userLogin = async (data: { text: string; password: string }) => {
     try {
       setLoading(true);
-      setError(null);
 
       const userCredentials = {
         password: data.password,
@@ -41,7 +40,7 @@ const LoginPage = () => {
       } else if (usernameReg.test(data.text)) {
         userCredentials.username = data.text;
       } else {
-        setError("Invalid email or username");
+        toast.error("Invalid email or username");
         setLoading(false);
         return;
       }
@@ -58,7 +57,7 @@ const LoginPage = () => {
     } catch (err) {
       const errorMsg = getErrorFromAxios(err as AxiosError);
       if (errorMsg !== undefined) {
-        setError(errorMsg);
+        toast.error(errorMsg);
       }
     } finally {
       setLoading(false);
@@ -114,8 +113,13 @@ const LoginPage = () => {
             </div>
             <div className="flex justify-between pt-1 items-center w-full">
               <div className="space-x-1 flex justify-center items-center">
-                <Checkbox id="remember-me" className="border-white data-[state=checked]:bg-white data-[state=checked]:text-black" />
-                <label htmlFor="remember-me" className="cursor-pointer">Remember me</label>
+                <Checkbox
+                  id="remember-me"
+                  className="border-white data-[state=checked]:bg-white data-[state=checked]:text-black"
+                />
+                <label htmlFor="remember-me" className="cursor-pointer">
+                  Remember me
+                </label>
               </div>
               <Link
                 to="/password-recovery"
@@ -126,11 +130,14 @@ const LoginPage = () => {
             </div>
           </div>
           {loading ? (
-            <Button disabled className="bg-slate-800 hover:bg-slate-700 w-full cursor-wait">
+            <Button
+              disabled
+              className="bg-slate-800 hover:bg-slate-700 w-full cursor-wait"
+            >
               <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
             </Button>
           ) : (
-            <Button className="bg-slate-800 hover:bg-slate-700 w-full">
+            <Button className="bg-slate-800 text-white hover:bg-slate-700 w-full">
               Login
             </Button>
           )}
@@ -142,11 +149,12 @@ const LoginPage = () => {
             >
               Signup
             </Link>
-            <br />
-            {error && <span className="text-red-500">{error}</span>}
           </p>
         </form>
       </div>
+      <Toaster
+        position={window.innerWidth >= 1024 ? "bottom-right" : "top-center"}
+      />
     </div>
   );
 };

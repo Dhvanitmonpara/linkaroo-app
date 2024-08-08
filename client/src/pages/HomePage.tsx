@@ -25,6 +25,7 @@ function App() {
     if (modalRef.current === e.target) {
       setIsModalOpen(false);
       navigate("/");
+      setModalContent("")
     }
   };
 
