@@ -1,6 +1,6 @@
 import { colorOptions } from "@/lib/types.tsx";
-import { IoIosArrowForward } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
+import { FiArrowUpRight } from "react-icons/fi";
 
 type DocCardProps = {
   title: string;
@@ -30,7 +30,7 @@ const DocCard = ({ title, text, color, setIsModalOpen }: DocCardProps) => {
       >
         {title}
         <span className="opacity-0 hover:bg-[#00000020] active:scale-95 rounded-full p-2 group-hover:opacity-100 transition-all ease-in-out duration-300">
-          <IoIosArrowForward />
+          <FiArrowUpRight />
         </span>
       </h2>
       <p className="cursor-default">{text}</p>
