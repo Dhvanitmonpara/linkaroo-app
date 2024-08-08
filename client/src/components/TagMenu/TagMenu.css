@@ -1,0 +1,25 @@
+.radio-item {
+  position: absolute;
+  opacity: 0;
+}
+
+.menu-label {
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem; /* rounded-md */
+  display: inline-block;
+  width: 100%;
+  transition: background-color 0.1s;
+}
+
+.dark .menu-label {
+  color: #f8fafc; /* text color for dark mode */
+}
+
+[data-state="checked"] + .menu-label {
+  background-color: rgb(222, 222, 222); /* Active state for light mode */
+}
+
+.dark [data-state="checked"] + .menu-label {
+  background-color: #464646; /* Active state for dark mode */
+}

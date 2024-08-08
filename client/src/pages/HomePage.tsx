@@ -14,18 +14,20 @@ import {
   SelectLabel,
   SelectValue,
 } from "@/components/ui/select";
+import TagMenu from "@/components/TagMenu/TagMenu";
 
 function App() {
   const navigate = useNavigate();
   const modalRef = useRef<HTMLDivElement | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [modalContent, setModalContent] = useState<string | ReactNode>("");
+  const [tagValue, setTagValue] = useState<string>("");
 
   const closeModal = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (modalRef.current === e.target) {
       setIsModalOpen(false);
       navigate("/");
-      setModalContent("")
+      setModalContent("");
     }
   };
 
@@ -48,6 +50,8 @@ function App() {
       navigate("/");
     }
   });
+
+  console.log(tagValue);
 
   useEffect(() => {
     (async () => {
@@ -277,7 +281,8 @@ function App() {
             </button>
           </div>
           <div className="min-h-[calc(100%-4rem)] pb-5 w-full border-2 p-5 dark:border-zinc-600">
-            {/* TODO: add menu here */}
+            {/* TODO: add menu here */}        
+            <TagMenu setTagValue={setTagValue} tagOptions={["hey", "hello", "hi"]}/>
           </div>
         </div>
       </div>
