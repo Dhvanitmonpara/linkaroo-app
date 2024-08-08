@@ -9,6 +9,7 @@
   border-radius: 0.375rem; /* rounded-md */
   display: inline-block;
   width: 100%;
+  size: 18px;
   transition: background-color 0.1s;
 }
 
