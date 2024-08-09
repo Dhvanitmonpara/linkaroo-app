@@ -50,19 +50,6 @@ function App() {
     }
   });
 
-  // const switchTab = (id: string) => {
-  //   const navTabs = document.querySelectorAll(".nav-tab");
-  //   navTabs?.forEach((tab) => {
-  //     tab.classList.remove("dark:text-white");
-  //     tab.classList.remove("text-black");
-  //   });
-
-  //   if (document.getElementById(id)?.tagName == "BUTTON") {
-  //     document.getElementById(id)?.classList.add("dark:text-white");
-  //     document.getElementById(id)?.classList.add("text-black");
-  //   }
-  // };
-
   useEffect(() => {
     (async () => {
       try {
@@ -145,6 +132,7 @@ function App() {
               color="bg-green-400"
               setIsModalOpen={setIsModalOpen}
             />
+            <div className="h-2"></div>
           </div>
         </div>
         <div className="col-span-3 xl:px-0 lg:px-0 lg:pr-5 px-5 md:max-h-screen">
@@ -251,48 +239,11 @@ function App() {
               color={theme == "black" ? "bg-black" : "bg-emerald-400"}
               setIsModalOpen={setIsModalOpen}
             />
+            <div className="h-2"></div>
           </div>
         </div>
         <div className="lg:hidden md:fixed bottom-0 px-0 dark:text-zinc-400 justify-center items-center flex w-screen h-16">
           <HorizontalTabs />
-          {/* <div className="flex justify-between dark:bg-zinc-800 h-full md:px-32 md:w-8/12 rounded-t-xl items-center w-full sm:w-5/12"> */}
-          {/* <button
-                id="listsTab"
-                onClick={() => {
-                  switchTab("listsTab");
-                }}
-                className="navTabs h-full flex justify-center items-center w-16 cursor-pointer text-xl font-semibold dark:hover:text-white"
-              >
-                <IoListSharp />
-              </button>
-              <button
-                id="homeTab"
-                onClick={() => {
-                  switchTab("homeTab");
-                }}
-                className="navTabs h-full flex justify-center items-center w-16 cursor-pointer text-xl font-semibold dark:hover:text-white"
-              >
-                <MdHome />
-              </button>
-              <button
-                id="addTab"
-                onClick={() => {
-                  switchTab("addTab");
-                }}
-                className="navTabs h-full flex justify-center items-center w-16 cursor-pointer text-lg font-semibold dark:hover:text-white"
-              >
-                <FaPlus />
-              </button>
-              <button
-                id="profileTab"
-                onClick={() => {
-                  switchTab("profileTab");
-                }}
-                className="navTabs h-full flex justify-center items-center w-16 cursor-pointer text-lg font-semibold dark:hover:text-white"
-              >
-                <IoPerson />
-              </button> */}
-          {/* </div> */}
         </div>
         <div className="col-span-2 hidden xl:inline-block relative px-5 pt-5 space-y-3 overflow-y-scroll max-h-screen no-scrollbar">
           <div
