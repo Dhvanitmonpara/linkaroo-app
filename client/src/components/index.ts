@@ -6,6 +6,18 @@ import Stepper from "./Stepper/Stepper";
 import HorizontalTabs from "./HorizontalTabs/HorizontalTabs";
 import ProfileCard from "./ProfileCard";
 import DocScreen from "./DocScreen";
+import Lists from "./Lists";
+import Docs from "./Docs";
 
-export { ListCard, Tag, DocCard, Header, Stepper, HorizontalTabs, ProfileCard, DocScreen
- };
+export {
+  ListCard,
+  Tag,
+  DocCard,
+  Header,
+  Stepper,
+  HorizontalTabs,
+  ProfileCard,
+  DocScreen,
+  Lists,
+  Docs
+};

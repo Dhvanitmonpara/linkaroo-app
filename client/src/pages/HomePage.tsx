@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import {
-  DocCard,
-  ListCard,
   Header,
   HorizontalTabs,
   ProfileCard,
-  DocScreen
+  DocScreen,
+  Lists,
+  Docs,
 } from "../components";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import axios from "axios";
@@ -80,57 +80,7 @@ function App() {
               Linkaroo
             </span>
           </div>
-          <div className="col-span-2 relative space-y-3 overflow-y-scroll no-scrollbar h-[calc(100vh-5rem)]">
-            <ListCard
-              tagname="Hello"
-              description="bruhh can you Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, culpa odit"
-              title="Hellow"
-              color="bg-red-400"
-              isBlackMode={theme == "black" ? true : false}
-              setIsModalOpen={setIsModalOpen}
-            />
-            <ListCard
-              tagname="lol"
-              description="bruhh can you Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, culpa odit"
-              title="lol"
-              color="bg-emerald-400"
-              isBlackMode={theme == "black" ? true : false}
-              setIsModalOpen={setIsModalOpen}
-            />
-            <ListCard
-              tagname="Hello"
-              description="bruhh can you Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, culpa odit"
-              title="Hellow"
-              color="bg-amber-400"
-              isBlackMode={theme == "black" ? true : false}
-              setIsModalOpen={setIsModalOpen}
-            />
-            <ListCard
-              tagname="Hello"
-              description="bruhh can you Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, culpa odit"
-              title="Hellow"
-              color="bg-sky-400"
-              isBlackMode={theme == "black" ? true : false}
-              setIsModalOpen={setIsModalOpen}
-            />
-            <ListCard
-              tagname="Hello"
-              description="bruhh can you Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, culpa odit"
-              title="Hellow"
-              isBlackMode={theme == "black" ? true : false}
-              color="bg-purple-400"
-              setIsModalOpen={setIsModalOpen}
-            />
-            <ListCard
-              tagname="Hello"
-              description="bruhh can you Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, culpa odit"
-              title="Hellow"
-              isBlackMode={theme == "black" ? true : false}
-              color="bg-green-400"
-              setIsModalOpen={setIsModalOpen}
-            />
-            <div className="h-2"></div>
-          </div>
+          <Lists theme={theme} setIsModalOpen={setIsModalOpen} />
         </div>
         <div className="col-span-3 xl:px-0 lg:px-0 lg:pr-5 px-5 md:max-h-screen">
           <Header
@@ -139,105 +89,7 @@ function App() {
             setModalContent={setModalContent}
           />
           {/* <img src="" alt="Banner" /> */}
-          <div className="md:h-[calc(100vh-5rem)] h-[calc(100vh-9rem)] overflow-y-scroll w-full space-y-2 no-scrollbar">
-            <DocCard
-              title="kya hua"
-              text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus aliquam corrupti corporis repudiandae magnam sapiente quas saepe vero enim ex, aperiam, quaerat consequuntur quidem! Ullam voluptate nam voluptas error quaerat."
-              color={theme == "black" ? "bg-black" : "bg-emerald-400"}
-              setIsModalOpen={setIsModalOpen}
-            />
-            <DocCard
-              title="kya hua"
-              text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus aliquam corrupti corporis repudiandae magnam sapiente quas saepe vero enim ex, aperiam, quaerat consequuntur quidem! Ullam voluptate nam voluptas error quaerat."
-              color={theme == "black" ? "bg-black" : "bg-emerald-400"}
-              setIsModalOpen={setIsModalOpen}
-            />
-            <DocCard
-              title="kya hua"
-              text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus aliquam corrupti corporis repudiandae magnam sapiente quas saepe vero enim ex, aperiam, quaerat consequuntur quidem! Ullam voluptate nam voluptas error quaerat."
-              color={theme == "black" ? "bg-black" : "bg-emerald-400"}
-              setIsModalOpen={setIsModalOpen}
-            />
-            <DocCard
-              title="kya hua"
-              text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus aliquam corrupti corporis repudiandae magnam sapiente quas saepe vero enim ex, aperiam, quaerat consequuntur quidem! Ullam voluptate nam voluptas error quaerat."
-              color={theme == "black" ? "bg-black" : "bg-emerald-400"}
-              setIsModalOpen={setIsModalOpen}
-            />
-            <DocCard
-              title="kya hua"
-              text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus aliquam corrupti corporis repudiandae magnam sapiente quas saepe vero enim ex, aperiam, quaerat consequuntur quidem! Ullam voluptate nam voluptas error quaerat."
-              color={theme == "black" ? "bg-black" : "bg-emerald-400"}
-              setIsModalOpen={setIsModalOpen}
-            />
-            <DocCard
-              title="kya hua"
-              text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus aliquam corrupti corporis repudiandae magnam sapiente quas saepe vero enim ex, aperiam, quaerat consequuntur quidem! Ullam voluptate nam voluptas error quaerat."
-              color={theme == "black" ? "bg-black" : "bg-emerald-400"}
-              setIsModalOpen={setIsModalOpen}
-            />
-            <DocCard
-              title="kya hua"
-              text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus aliquam corrupti corporis repudiandae magnam sapiente quas saepe vero enim ex, aperiam, quaerat consequuntur quidem! Ullam voluptate nam voluptas error quaerat."
-              color={theme == "black" ? "bg-black" : "bg-emerald-400"}
-              setIsModalOpen={setIsModalOpen}
-            />
-            <DocCard
-              title="kya hua"
-              text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus aliquam corrupti corporis repudiandae magnam sapiente quas saepe vero enim ex, aperiam, quaerat consequuntur quidem! Ullam voluptate nam voluptas error quaerat."
-              color={theme == "black" ? "bg-black" : "bg-emerald-400"}
-              setIsModalOpen={setIsModalOpen}
-            />
-            <DocCard
-              title="kya hua"
-              text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus aliquam corrupti corporis repudiandae magnam sapiente quas saepe vero enim ex, aperiam, quaerat consequuntur quidem! Ullam voluptate nam voluptas error quaerat."
-              color={theme == "black" ? "bg-black" : "bg-emerald-400"}
-              setIsModalOpen={setIsModalOpen}
-            />
-            <DocCard
-              title="kya hua"
-              text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus aliquam corrupti corporis repudiandae magnam sapiente quas saepe vero enim ex, aperiam, quaerat consequuntur quidem! Ullam voluptate nam voluptas error quaerat."
-              color={theme == "black" ? "bg-black" : "bg-emerald-400"}
-              setIsModalOpen={setIsModalOpen}
-            />
-            <DocCard
-              title="kya hua"
-              text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus aliquam corrupti corporis repudiandae magnam sapiente quas saepe vero enim ex, aperiam, quaerat consequuntur quidem! Ullam voluptate nam voluptas error quaerat."
-              color={theme == "black" ? "bg-black" : "bg-emerald-400"}
-              setIsModalOpen={setIsModalOpen}
-            />
-            <DocCard
-              title="kya hua"
-              text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus aliquam corrupti corporis repudiandae magnam sapiente quas saepe vero enim ex, aperiam, quaerat consequuntur quidem! Ullam voluptate nam voluptas error quaerat."
-              color={theme == "black" ? "bg-black" : "bg-emerald-400"}
-              setIsModalOpen={setIsModalOpen}
-            />
-            <DocCard
-              title="kya hua"
-              text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus aliquam corrupti corporis repudiandae magnam sapiente quas saepe vero enim ex, aperiam, quaerat consequuntur quidem! Ullam voluptate nam voluptas error quaerat."
-              color={theme == "black" ? "bg-black" : "bg-emerald-400"}
-              setIsModalOpen={setIsModalOpen}
-            />
-            <DocCard
-              title="kya hua"
-              text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus aliquam corrupti corporis repudiandae magnam sapiente quas saepe vero enim ex, aperiam, quaerat consequuntur quidem! Ullam voluptate nam voluptas error quaerat."
-              color={theme == "black" ? "bg-black" : "bg-emerald-400"}
-              setIsModalOpen={setIsModalOpen}
-            />
-            <DocCard
-              title="kya hua"
-              text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus aliquam corrupti corporis repudiandae magnam sapiente quas saepe vero enim ex, aperiam, quaerat consequuntur quidem! Ullam voluptate nam voluptas error quaerat."
-              color={theme == "black" ? "bg-black" : "bg-emerald-400"}
-              setIsModalOpen={setIsModalOpen}
-            />
-            <DocCard
-              title="kya hua"
-              text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus aliquam corrupti corporis repudiandae magnam sapiente quas saepe vero enim ex, aperiam, quaerat consequuntur quidem! Ullam voluptate nam voluptas error quaerat."
-              color={theme == "black" ? "bg-black" : "bg-emerald-400"}
-              setIsModalOpen={setIsModalOpen}
-            />
-            <div className="h-2"></div>
-          </div>
+          <Docs theme={theme} setIsModalOpen={setIsModalOpen} />
         </div>
         <div className="lg:hidden md:fixed bottom-0 px-0 dark:text-zinc-400 justify-center items-center flex w-screen h-16">
           <HorizontalTabs />
@@ -260,7 +112,6 @@ function App() {
           </div>
         </div>
       </div>
-      {/* TODO: Make a sapretate component */}
       {isModalOpen && (
         <div
           ref={modalRef}
