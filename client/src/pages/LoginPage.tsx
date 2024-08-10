@@ -45,10 +45,15 @@ const LoginPage = () => {
         return;
       }
 
-      const response = await axios.post(
-        `${import.meta.env.VITE_SERVER_API_URL}/users/login`,
-        userCredentials
-      );
+      const response = await axios({
+        method: "POST",
+        url: `${import.meta.env.VITE_SERVER_API_URL}/users/login`,
+        data: userCredentials,
+        headers: {
+          "Access-control-Allow-Origin": "*",
+          'Content-Type': "application/json",
+        },
+      });
 
       if (response?.data?.data?.user) {
         addProfile(response.data.data.user);
@@ -61,6 +66,7 @@ const LoginPage = () => {
       if (errorMsg !== undefined) {
         toast.error(errorMsg);
       }
+      navigate("/");
     } finally {
       setLoading(false);
     }

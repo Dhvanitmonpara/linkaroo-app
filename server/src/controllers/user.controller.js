@@ -8,8 +8,10 @@ import { Profile } from "../models/profile.model.js"
 import getPublicId from "../utils/getPublicId.js"
 
 const options = {
-    httpOnly: true,
-    secure: true
+    httpOnly: false,
+    secure: true,
+    sameSite: "None",
+    path: "/",
 }
 
 const generateAccessAndRefreshToken = async (userId) => {

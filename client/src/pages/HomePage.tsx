@@ -14,6 +14,7 @@ import toggleThemeModeAtRootElem from "@/utils/toggleThemeMode";
 import { themeType } from "@/lib/types";
 import toast, { Toaster } from "react-hot-toast";
 import getErrorFromAxios from "@/utils/getErrorFromAxios";
+import getCookie from "@/utils/getCookie";
 
 function App() {
   const navigate = useNavigate();
@@ -52,11 +53,15 @@ function App() {
   useEffect(() => {
     (async () => {
       try {
-        const currentUser = await axios.get(
-          `${import.meta.env.VITE_SERVER_API_URL}/users/current-user`
-        );
+        const cookie = getCookie("accessToken");
 
-        console.log(currentUser);
+        const currentUser = await axios({
+          method: "GET",
+          url: `${import.meta.env.VITE_SERVER_API_URL}/users/current-user`,
+          headers: {
+            Authorization: `Bearer ${cookie})`,
+          },
+        });
 
         if (currentUser.data == "Unauthorized request") {
           navigate("/login");
@@ -67,6 +72,7 @@ function App() {
         if (errorMsg !== undefined) {
           toast.error(errorMsg);
         }
+        // navigate("/login");
       }
     })();
   });
