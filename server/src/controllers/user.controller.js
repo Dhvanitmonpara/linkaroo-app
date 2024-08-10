@@ -236,9 +236,12 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
 
 const getCurrentUser = asyncHandler(async (req, res) => {
 
-    const userId  = req.user?._id
+    const userId = req.user.id
 
-    const profile = await Profile.find({ userId: userId })
+    console.log(userId)
+
+    // const profile = await Profile.find({ userId: userId })
+    const profile = await User.findById(userId)
 
     if (!profile) {
         return res

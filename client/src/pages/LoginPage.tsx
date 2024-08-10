@@ -50,8 +50,10 @@ const LoginPage = () => {
         userCredentials
       );
 
-      if (response?.data) {
-        addProfile(response.data);
+      if (response?.data?.data?.user) {
+        addProfile(response.data.data.user);
+        document.cookie = `accessToken=${response.data.data.accessToken}`;
+        document.cookie = `refreshToken=${response.data.data.refreshToken}`;
         navigate("/");
       }
     } catch (err) {

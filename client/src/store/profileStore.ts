@@ -3,9 +3,11 @@ import { devtools, persist } from "zustand/middleware";
 import { themeType } from "@/lib/types";
 
 type ProfileType = {
-  name?: string;
-  email?: string;
-  avatar?: string;
+  _id: string;
+  email: string;
+  avatarImage?: string;
+  username: string;
+  fullName?: string;
   theme?: themeType;
 };
 
@@ -21,19 +23,28 @@ const useProfileStore = create<ProfileState>()(
   devtools(
     persist(
       (set) => ({
-        profile: { name: "", email: "", avatar: "" },
+        profile: {
+          _id: "",
+          email: "",
+          avatarImage: "",
+          username: "",
+          fullName: "",
+          theme: undefined,
+        },
         addProfile: (profile) => set({ profile }),
         updateProfile: (updatedProfile) =>
           set((state) => ({
             profile: { ...state.profile, ...updatedProfile },
           })),
         removeProfile: () =>
-          set({ profile: { name: "", email: "", avatar: "" } }),
-        changeTheme: (theme: themeType) =>{
+          set({
+            profile: { _id: "", username: "", email: "", avatarImage: "", fullName: "" },
+          }),
+        changeTheme: (theme: themeType) => {
           set((state) => ({
-            profile: {...state.profile, theme },
+            profile: { ...state.profile, theme },
           }));
-        }
+        },
       }),
       { name: "profile" }
     )
@@ -41,4 +52,4 @@ const useProfileStore = create<ProfileState>()(
 );
 
 export default useProfileStore;
-export type {ProfileType}
+export type { ProfileType };

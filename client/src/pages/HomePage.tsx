@@ -8,10 +8,12 @@ import {
   Docs,
 } from "../components";
 import { ReactNode, useEffect, useRef, useState } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import useProfileStore from "@/store/profileStore";
 import toggleThemeModeAtRootElem from "@/utils/toggleThemeMode";
 import { themeType } from "@/lib/types";
+import toast, { Toaster } from "react-hot-toast";
+import getErrorFromAxios from "@/utils/getErrorFromAxios";
 
 function App() {
   const navigate = useNavigate();
@@ -50,12 +52,9 @@ function App() {
   useEffect(() => {
     (async () => {
       try {
-        console.log(import.meta.env.VITE_SERVER_API_URL);
-
         const currentUser = await axios.get(
           `${import.meta.env.VITE_SERVER_API_URL}/users/current-user`
         );
-        //  const currentUser = await axios.get('http://localhost:8000/api/v1/users/current-user');
 
         console.log(currentUser);
 
@@ -64,7 +63,10 @@ function App() {
           return;
         }
       } catch (error) {
-        console.log(error);
+        const errorMsg = getErrorFromAxios(error as AxiosError);
+        if (errorMsg !== undefined) {
+          toast.error(errorMsg);
+        }
       }
     })();
   });
@@ -112,6 +114,7 @@ function App() {
           </div>
         </div>
       </div>
+      {/* Modal code */}
       {isModalOpen && (
         <div
           ref={modalRef}
@@ -123,6 +126,9 @@ function App() {
           </div>
         </div>
       )}
+      <Toaster
+        position={window.innerWidth >= 1024 ? "bottom-right" : "top-center"}
+      />
     </>
   );
 }
