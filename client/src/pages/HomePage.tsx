@@ -1,20 +1,17 @@
 import { useNavigate } from "react-router-dom";
-import { DocCard, ListCard, Header, HorizontalTabs } from "../components";
+import {
+  DocCard,
+  ListCard,
+  Header,
+  HorizontalTabs,
+  ProfileCard,
+  DocScreen
+} from "../components";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import useProfileStore from "@/store/profileStore";
 import toggleThemeModeAtRootElem from "@/utils/toggleThemeMode";
 import { themeType } from "@/lib/types";
-import {
-  Select,
-  SelectItem,
-  SelectTrigger,
-  SelectContent,
-  SelectGroup,
-  SelectLabel,
-  SelectValue,
-} from "@/components/ui/select";
-import DocScreen from "@/components/DocScreen";
 
 function App() {
   const navigate = useNavigate();
@@ -249,71 +246,12 @@ function App() {
           <div
             className={`sticky top-0 z-20 border-2 dark:text-white dark:bg-zinc-800 bg-white text-black border-zinc-200 dark:border-zinc-700 rounded-md`}
           >
-            <button
-              className="w-full dark:text-white py-3 px-6 rounded-md focus:outline-none hover:bg-zinc-200 dark:hover:bg-zinc-700"
-              onClick={() => {
-                setIsModalOpen(true);
-                setModalContent(
-                  <div className="flex h-full w-full flex-col justify-center p-5 items-center">
-                    <h1 className="dark:text-white text-4xl pb-11">Settings</h1>
-                    <div className="flex justify-between w-full">
-                      <span className="dark:text-white">Themes:</span>
-                      <Select
-                        onValueChange={(value: themeType) => {
-                          themeHandler(value);
-                        }}
-                      >
-                        <SelectTrigger className="dark:text-white max-w-36">
-                          <SelectValue placeholder="Change theme" />
-                        </SelectTrigger>
-                        <SelectContent
-                          className={
-                            theme != "light"
-                              ? "!bg-black !text-white border-zinc-800"
-                              : ""
-                          }
-                        >
-                          <SelectGroup>
-                            <SelectLabel>Themes</SelectLabel>
-                            <SelectItem value="light">Light</SelectItem>
-                            <SelectItem value="dark">Dark</SelectItem>
-                            <SelectItem value="black">Black</SelectItem>
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="flex justify-between w-full">
-                      <span className="dark:text-white">Fonts:</span>
-                      <Select
-                        onValueChange={(value: themeType) => {
-                          themeHandler(value);
-                        }}
-                      >
-                        <SelectTrigger className="dark:text-white max-w-36">
-                          <SelectValue placeholder="Change theme" />
-                        </SelectTrigger>
-                        <SelectContent
-                          className={
-                            theme != "light"
-                              ? "!bg-black !text-white border-zinc-800"
-                              : ""
-                          }
-                        >
-                          <SelectGroup>
-                            <SelectLabel>Fonts</SelectLabel>
-                            <SelectItem value="light">sans</SelectItem>
-                            <SelectItem value="dark">Dark</SelectItem>
-                            <SelectItem value="black">Black</SelectItem>
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                );
-              }}
-            >
-              Dhvanit Monpara
-            </button>
+            <ProfileCard
+              theme={theme}
+              setIsModalOpen={setIsModalOpen}
+              setModalContent={setModalContent}
+              themeHandler={themeHandler}
+            />
           </div>
           <div className="h-[calc(100%-4rem)] w-full border-2 dark:border-zinc-600 rounded-md overflow-hidden">
             <DocScreen
@@ -322,6 +260,7 @@ function App() {
           </div>
         </div>
       </div>
+      {/* TODO: Make a sapretate component */}
       {isModalOpen && (
         <div
           ref={modalRef}

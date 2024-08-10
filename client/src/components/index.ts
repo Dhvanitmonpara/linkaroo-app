@@ -4,5 +4,8 @@ import ListCard from "./ListCard";
 import Header from "./Header";
 import Stepper from "./Stepper/Stepper";
 import HorizontalTabs from "./HorizontalTabs/HorizontalTabs";
+import ProfileCard from "./ProfileCard";
+import DocScreen from "./DocScreen";
 
-export { ListCard, Tag, DocCard, Header, Stepper, HorizontalTabs };
+export { ListCard, Tag, DocCard, Header, Stepper, HorizontalTabs, ProfileCard, DocScreen
+ };

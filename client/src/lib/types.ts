@@ -18,4 +18,6 @@ type colorOptions =
 
 type themeType = "light" | "black" | "dark";
 
-export type { colorOptions, themeType };
+type profileOptions = "profile" | "settings" | "feedback"
+
+export type { colorOptions, themeType, profileOptions };
