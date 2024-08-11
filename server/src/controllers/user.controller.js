@@ -8,6 +8,7 @@ import { Profile } from "../models/profile.model.js"
 import getPublicId from "../utils/getPublicId.js"
 
 const options = {
+    // maxAge: 3600 * 24 * 30, // 3
     httpOnly: false,
     secure: true,
     sameSite: "None",
@@ -238,7 +239,7 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
 
 const getCurrentUser = asyncHandler(async (req, res) => {
 
-    const userId = req.user.id
+    const userId = req.user._id
 
     console.log(userId)
 

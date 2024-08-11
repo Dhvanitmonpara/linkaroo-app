@@ -54,10 +54,11 @@ function App() {
     (async () => {
       try {
         const cookie = getCookie("accessToken");
-
+        console.log(`Bearer ${cookie}`);
         const currentUser = await axios({
           method: "GET",
           url: `${import.meta.env.VITE_SERVER_API_URL}/users/current-user`,
+          // withCredentials: true,
           headers: {
             Authorization: `Bearer ${cookie})`,
           },
@@ -70,9 +71,23 @@ function App() {
       } catch (error) {
         const errorMsg = getErrorFromAxios(error as AxiosError);
         if (errorMsg !== undefined) {
-          toast.error(errorMsg);
+          toast.error(
+            (t) => (
+              <span className="space-x-3">
+                <span>{errorMsg}</span>
+                <button
+                  className="bg-red-500 text-white font-semibold hover:underline h-full w-auto rounded-sm py-1 px-3"
+                  onClick={() => {
+                    toast.dismiss(t.id);
+                    navigate("/login");
+                  }}
+                >
+                  Login again
+                </button>
+              </span>
+            )
+          );
         }
-        // navigate("/login");
       }
     })();
   });

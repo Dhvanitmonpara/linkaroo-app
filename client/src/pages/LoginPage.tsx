@@ -49,9 +49,10 @@ const LoginPage = () => {
         method: "POST",
         url: `${import.meta.env.VITE_SERVER_API_URL}/users/login`,
         data: userCredentials,
+        // withCredentials: true,
         headers: {
-          "Access-control-Allow-Origin": "*",
-          'Content-Type': "application/json",
+          // "Access-control-Allow-Origin": "localhost:3000, localhost:5173",
+          "Content-Type": "application/json",
         },
       });
 
