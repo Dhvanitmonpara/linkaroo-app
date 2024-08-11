@@ -49,17 +49,18 @@ const LoginPage = () => {
         method: "POST",
         url: `${import.meta.env.VITE_SERVER_API_URL}/users/login`,
         data: userCredentials,
-        // withCredentials: true,
+        withCredentials: true,
         headers: {
           // "Access-control-Allow-Origin": "localhost:3000, localhost:5173",
+          // "Access-control-Allow-Origin": "*",
           "Content-Type": "application/json",
         },
       });
 
       if (response?.data?.data?.user) {
         addProfile(response.data.data.user);
-        document.cookie = `accessToken=${response.data.data.accessToken}`;
-        document.cookie = `refreshToken=${response.data.data.refreshToken}`;
+        // document.cookie = `accessToken=${response.data.data.accessToken}`;
+        // document.cookie = `refreshToken=${response.data.data.refreshToken}`;
         navigate("/");
       }
     } catch (err) {
@@ -67,7 +68,6 @@ const LoginPage = () => {
       if (errorMsg !== undefined) {
         toast.error(errorMsg);
       }
-      navigate("/");
     } finally {
       setLoading(false);
     }

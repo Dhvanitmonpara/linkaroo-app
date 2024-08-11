@@ -9,7 +9,7 @@ import getPublicId from "../utils/getPublicId.js"
 
 const options = {
     // maxAge: 3600 * 24 * 30, // 3
-    httpOnly: false,
+    httpOnly: true,
     secure: true,
     sameSite: "None",
     path: "/",
