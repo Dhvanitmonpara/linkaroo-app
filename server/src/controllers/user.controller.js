@@ -8,9 +8,9 @@ import { Profile } from "../models/profile.model.js"
 import getPublicId from "../utils/getPublicId.js"
 
 const options = {
-    // maxAge: 3600 * 24 * 30, // 3
+    maxAge: 3600 * 24 * 30,
     httpOnly: true,
-    secure: true,
+    secure: process.env.HTTP_SECURE_OPTION,
     sameSite: "None",
     path: "/",
 }

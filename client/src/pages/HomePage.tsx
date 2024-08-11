@@ -54,11 +54,10 @@ function App() {
     (async () => {
       try {
         const cookie = getCookie("accessToken");
-        console.log(`Bearer ${cookie}`);
         const currentUser = await axios({
           method: "GET",
           url: `${import.meta.env.VITE_SERVER_API_URL}/users/current-user`,
-          // withCredentials: true,
+          withCredentials: true,
           headers: {
             Authorization: `Bearer ${cookie}`,
           },

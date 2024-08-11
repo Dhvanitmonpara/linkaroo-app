@@ -7,6 +7,9 @@ const verifyJWT = asyncHandler(async (req, res, next) => {
 
     try {
 
+        res.setHeader('Access-Control-Allow-Origin', process.env.ACCESS_CONTROL_ORIGIN);
+        res.setHeader('Access-Control-Allow-Credentials', 'true');
+
         const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "")
 
         if (!token) {
