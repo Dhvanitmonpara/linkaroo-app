@@ -241,8 +241,6 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 
     const userId = req.user._id
 
-    console.log(userId)
-
     // const profile = await Profile.find({ userId: userId })
     const profile = await User.findById(userId)
 

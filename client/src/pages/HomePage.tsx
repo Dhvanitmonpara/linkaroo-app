@@ -14,7 +14,6 @@ import toggleThemeModeAtRootElem from "@/utils/toggleThemeMode";
 import { themeType } from "@/lib/types";
 import toast, { Toaster } from "react-hot-toast";
 import getErrorFromAxios from "@/utils/getErrorFromAxios";
-import getCookie from "@/utils/getCookie";
 
 function App() {
   const navigate = useNavigate();
@@ -53,39 +52,36 @@ function App() {
   useEffect(() => {
     (async () => {
       try {
-        const cookie = getCookie("accessToken");
         const currentUser = await axios({
           method: "GET",
           url: `${import.meta.env.VITE_SERVER_API_URL}/users/current-user`,
           withCredentials: true,
-          headers: {
-            Authorization: `Bearer ${cookie}`,
-          },
         });
 
         if (currentUser.data == "Unauthorized request") {
           navigate("/login");
           return;
         }
+
       } catch (error) {
         const errorMsg = getErrorFromAxios(error as AxiosError);
-        if (errorMsg !== undefined) {
-          toast.error(
-            (t) => (
-              <span className="space-x-3">
-                <span>{errorMsg}</span>
-                <button
-                  className="bg-red-500 text-white font-semibold hover:underline h-full w-auto rounded-sm py-1 px-3"
-                  onClick={() => {
-                    toast.dismiss(t.id);
-                    navigate("/login");
-                  }}
-                >
-                  Login again
-                </button>
-              </span>
-            )
-          );
+        if (errorMsg === "Unauthorized request") {
+          navigate("/login");
+        } else if (errorMsg !== undefined) {
+          toast.error((t) => (
+            <span className="space-x-3">
+              <span>{errorMsg}</span>
+              <button
+                className="bg-red-500 text-white font-semibold hover:underline h-full w-auto rounded-sm py-1 px-3"
+                onClick={() => {
+                  toast.dismiss(t.id);
+                  navigate("/login");
+                }}
+              >
+                Login again
+              </button>
+            </span>
+          ));
         }
       }
     })();
