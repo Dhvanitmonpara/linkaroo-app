@@ -60,7 +60,7 @@ function App() {
           url: `${import.meta.env.VITE_SERVER_API_URL}/users/current-user`,
           // withCredentials: true,
           headers: {
-            Authorization: `Bearer ${cookie})`,
+            Authorization: `Bearer ${cookie}`,
           },
         });
 
