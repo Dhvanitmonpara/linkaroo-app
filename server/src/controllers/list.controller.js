@@ -213,6 +213,84 @@ const getListsByCollaborator = asyncHandler(async (req, res) => {
 
 })
 
+const getListsByUser = asyncHandler(async (req, res) => {
+
+    const lists = await List.aggregate([
+        {
+            $match: {
+                $or: [
+                    { createdBy: req.user?._id },
+                    { collaborators: req.user?._id }
+                ]
+            }
+        },
+        {
+            $lookup: {
+                from: 'tags',
+                localField: 'tags',
+                foreignField: '_id',
+                as: 'tags'
+            }
+        },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'createdBy',
+                foreignField: '_id',
+                as: 'createdBy'
+            }
+        },
+        {
+            $unwind: '$createdBy'
+        },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'collaborators',
+                foreignField: '_id',
+                as: 'collaborators'
+            }
+        },
+        {
+            $project: {
+                title: 1,
+                description: 1,
+                theme: 1,
+                font: 1,
+                createdAt: 1,
+                updatedAt: 1,
+                collaborators: {
+                    _id: 1,
+                    username: 1,
+                    email: 1,
+                    fullName: 1,
+                    avatarImage: 1,
+                },
+                createdBy: {
+                    _id: 1,
+                    username: 1,
+                    email: 1,
+                    fullName: 1,
+                    avatarImage: 1,
+                },
+                tags: 1
+            }
+        }
+    ])
+
+    if (!lists) {
+        throw new ApiError(404, "No lists found")
+    }
+
+    return res
+        .status(200)
+        .json(new ApiResponse(
+            200,
+            lists,
+            "Lists fetched successfully"
+        ))
+})
+
 const getListsByTagId = asyncHandler(async (req, res) => {
 
     const tagId = req.params.tagId
@@ -400,6 +478,7 @@ export {
     getListsByOwner,
     getListsByCollaborator,
     getListsByTagId,
+    getListsByUser,
     updateList,
     deleteList,
     addCollaborator,

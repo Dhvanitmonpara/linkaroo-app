@@ -1,5 +1,5 @@
 import { ListCard } from "@/components";
-import { themeType } from "@/lib/types";
+import { themeType, fetchedListType } from "@/lib/types";
 import getErrorFromAxios from "@/utils/getErrorFromAxios";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
@@ -7,22 +7,6 @@ import { useEffect, useState } from "react";
 type ListsProps = {
   theme: themeType | undefined;
   setIsModalOpen: (isOpen: boolean) => void;
-};
-
-type fetchedListType = {
-  __v: number;
-  _id: string;
-  collaborators: string[];
-  coverImage: string;
-  createdBy: string;
-  description: string;
-  font: string;
-  isPublic: boolean;
-  tags: string[];
-  theme: string;
-  title: string;
-  createdAt: string;
-  updatedAt: string;
 };
 
 const Lists = ({ theme, setIsModalOpen }: ListsProps) => {
@@ -36,37 +20,52 @@ const Lists = ({ theme, setIsModalOpen }: ListsProps) => {
         setLoading(true);
         setError(undefined);
 
-        const ownerResponseData: AxiosResponse = await axios({
+        // const ownerResponseData: AxiosResponse = await axios({
+        //   method: "GET",
+        //   url: `${import.meta.env.VITE_SERVER_API_URL}/lists/o`,
+        //   withCredentials: true,
+        // });
+
+        // if (!ownerResponseData) {
+        //   setError("Failed to fetch user's lists.");
+        //   return;
+        // }
+
+        // const ownerData: fetchedListType[] = ownerResponseData.data.data;
+
+        // const collaboratorResponseData: AxiosResponse = await axios({
+        //   method: "GET",
+        //   url: `${import.meta.env.VITE_SERVER_API_URL}/lists/c`,
+        //   withCredentials: true,
+        // });
+
+        // if (!collaboratorResponseData) {
+        //   setError("Failed to fetch collaborator's lists.");
+        //   return;
+        // }
+
+        // const collaboratorData: fetchedListType[] =
+        //   collaboratorResponseData.data.data;
+
+        // console.log("ownerData:", collaboratorResponseData.data.data);
+        // console.log("collaboratorData:", collaboratorResponseData.data.data);
+
+        // setTotalLists([...ownerData, ...collaboratorData]);
+
+        const response: AxiosResponse = await axios({
           method: "GET",
-          url: `${import.meta.env.VITE_SERVER_API_URL}/lists/o`,
+          url: `${import.meta.env.VITE_SERVER_API_URL}/lists/u`,
           withCredentials: true,
         });
 
-        if (!ownerResponseData) {
+        if (!response) {
           setError("Failed to fetch user's lists.");
           return;
         }
+        console.log(response);
+        const listData: fetchedListType[] = response.data.data;
 
-        const ownerData: fetchedListType[] = ownerResponseData.data.data;
-
-        const collaboratorResponseData: AxiosResponse = await axios({
-          method: "GET",
-          url: `${import.meta.env.VITE_SERVER_API_URL}/lists/c`,
-          withCredentials: true,
-        });
-
-        if (!collaboratorResponseData) {
-          setError("Failed to fetch collaborator's lists.");
-          return;
-        }
-
-        const collaboratorData: fetchedListType[] =
-          collaboratorResponseData.data.data;
-
-        console.log("ownerData:", collaboratorResponseData.data.data);
-        console.log("collaboratorData:", collaboratorResponseData.data.data);
-
-        setTotalLists([...ownerData, ...collaboratorData]);
+        setTotalLists(listData);
 
         setLoading(false);
       } catch (error) {
@@ -88,7 +87,9 @@ const Lists = ({ theme, setIsModalOpen }: ListsProps) => {
           title={list.title}
           description={list.description}
           tagname={list.tags}
-          color="bg-red-400"
+          collaborators={list.collaborators}
+          createdBy={list.createdBy}
+          theme={list.theme}
           isBlackMode={theme == "black" ? true : false}
           setIsModalOpen={setIsModalOpen}
         />

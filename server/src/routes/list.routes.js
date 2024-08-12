@@ -11,7 +11,8 @@ import {
     updateCoverImage,
     uploadCoverImage,
     deleteCoverImage,
-    toggleIsPublic
+    toggleIsPublic,
+    getListsByUser
 } from "../controllers/list.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import { upload } from "../middlewares/multer.middleware.js";
@@ -30,6 +31,8 @@ router.route("/o/:listId")
     .patch(updateList)
 
 router.route("/c").get(getListsByCollaborator)
+
+router.route("/u").all(getListsByUser)
 
 router.route("/o/c/:listId")
     .patch(addCollaborator)

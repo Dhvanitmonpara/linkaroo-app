@@ -20,4 +20,33 @@ type themeType = "light" | "black" | "dark";
 
 type profileOptions = "profile" | "settings" | "feedback"
 
-export type { colorOptions, themeType, profileOptions };
+type Collaborator = {
+  _id: string;
+  username: string;
+  email: string;
+  avatarImage: string;
+  fullName: string;
+};
+
+type TagType = {
+  _id: string;
+  tagname: string;
+  owner: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+type fetchedListType = {
+  _id: string;
+  collaborators: Collaborator[];
+  createdBy: Collaborator;
+  description: string;
+  font: string;
+  tags: TagType[];
+  theme: colorOptions;
+  title: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type { colorOptions, themeType, profileOptions, TagType, fetchedListType, Collaborator };

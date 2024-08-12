@@ -11,7 +11,6 @@ const addUsernameInTag = (tag, username) => {
 }
 
 const removeUsernameTag = (tag, username) => {
-    console.log(tag, username)
     const removedUserTag = tag.replace(username + "/", "")
     return removedUserTag
 }
