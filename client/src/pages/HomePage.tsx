@@ -42,10 +42,18 @@ function App() {
     }
   };
 
-  document.addEventListener("keydown", ({ key }) => {
+  document.addEventListener("keydown", ({key}) => {
     if (key == "Escape" && isModalOpen) {
       setIsModalOpen(false);
       navigate("/");
+      setModalContent("");
+    }
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.ctrlKey && event.key === 'k') {
+      event.preventDefault(); 
+      setIsModalOpen(true);
     }
   });
 
@@ -62,7 +70,6 @@ function App() {
           navigate("/login");
           return;
         }
-
       } catch (error) {
         const errorMsg = getErrorFromAxios(error as AxiosError);
         if (errorMsg === "Unauthorized request") {

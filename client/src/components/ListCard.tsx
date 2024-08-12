@@ -68,7 +68,7 @@ const ListCard = ({
                 isBlackMode ? "text-zinc-300" : "text-slate-800"
               } font-semibold w-fit text-sm pb-3 hover:underline`}
             >
-              {createdBy.username}
+              @{createdBy.username}
             </p>
             <span
               onClick={(e) => {
