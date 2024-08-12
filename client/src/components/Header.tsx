@@ -55,7 +55,7 @@ const Header = ({ theme, setIsModalOpen, setModalContent }: HeaderProps) => {
             onClick={() => {
               setIsModalOpen(true);
               setModalContent(
-                <div className="dark:text-white p-5 flex justify-center items-center space-y-3">
+                <div className="dark:text-white p-5 flex flex-col justify-center items-center space-y-3">
                   <h1 className="text-3xl">Add List</h1>
                   <form
                     action="post"
@@ -69,7 +69,7 @@ const Header = ({ theme, setIsModalOpen, setModalContent }: HeaderProps) => {
                       <Input
                         id="title"
                         type="text"
-                        placeholder="Enter Username or Email"
+                        placeholder="Enter title"
                         className="bg-slate-800"
                         {...register("title", {
                           required: true,
