@@ -1,5 +1,8 @@
 import { ListCard } from "@/components";
 import { themeType } from "@/lib/types";
+import getErrorFromAxios from "@/utils/getErrorFromAxios";
+import axios, { AxiosError, AxiosResponse } from "axios";
+import { useEffect, useState } from "react";
 
 type ListsProps = {
   theme: themeType | undefined;
@@ -7,31 +10,89 @@ type ListsProps = {
 };
 
 type fetchedListType = {
-  tagname: string;
+  __v: number;
+  _id: string;
+  collaborators: string[];
+  coverImage: string;
+  createdBy: string;
   description: string;
+  font: string;
+  isPublic: boolean;
+  tags: string[];
+  theme: string;
   title: string;
-}[];
+  createdAt: string;
+  updatedAt: string;
+};
 
 const Lists = ({ theme, setIsModalOpen }: ListsProps) => {
-  const totalLists: fetchedListType = [];
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | undefined>(undefined);
+  const [totalLists, setTotalLists] = useState<fetchedListType[] | []>([]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        setLoading(true);
+        setError(undefined);
+
+        const ownerResponseData: AxiosResponse = await axios({
+          method: "GET",
+          url: `${import.meta.env.VITE_SERVER_API_URL}/lists/o`,
+          withCredentials: true,
+        });
+
+        if (!ownerResponseData) {
+          setError("Failed to fetch user's lists.");
+          return;
+        }
+
+        const ownerData: fetchedListType[] = ownerResponseData.data.data;
+
+        const collaboratorResponseData: AxiosResponse = await axios({
+          method: "GET",
+          url: `${import.meta.env.VITE_SERVER_API_URL}/lists/c`,
+          withCredentials: true,
+        });
+
+        if (!collaboratorResponseData) {
+          setError("Failed to fetch collaborator's lists.");
+          return;
+        }
+
+        const collaboratorData: fetchedListType[] =
+          collaboratorResponseData.data.data;
+
+        console.log("ownerData:", collaboratorResponseData.data.data);
+        console.log("collaboratorData:", collaboratorResponseData.data.data);
+
+        setTotalLists([...ownerData, ...collaboratorData]);
+
+        setLoading(false);
+      } catch (error) {
+        const errorMsg = getErrorFromAxios(error as AxiosError);
+        setError(errorMsg);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
+
+  console.log(error, loading);
 
   return (
     <div className="col-span-2 relative space-y-3 overflow-y-scroll no-scrollbar h-[calc(100vh-5rem)]">
-      {
-        totalLists.map((list, index) => (
-          <ListCard
-            key={index}
-            tagname={list.tagname}
-            description={list.description}
-            title={list.title}
-            color="bg-red-400"
-            isBlackMode={theme == "black" ? true : false}
-            setIsModalOpen={setIsModalOpen}
-          />
-        ))
-
-        // Add more list cards here as needed. Replace this comment with the actual list rendering code.
-      }
+      {totalLists.map((list, index) => (
+        <ListCard
+          key={index}
+          title={list.title}
+          description={list.description}
+          tagname={list.tags}
+          color="bg-red-400"
+          isBlackMode={theme == "black" ? true : false}
+          setIsModalOpen={setIsModalOpen}
+        />
+      ))}
       <div className="h-2"></div>
     </div>
   );

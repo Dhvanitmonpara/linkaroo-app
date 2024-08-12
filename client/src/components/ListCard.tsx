@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { IoMdAdd } from "react-icons/io";
 
 type ListCardProps = {
-  tagname: string;
+  tagname: string[];
   description: string;
   title: string;
   isBlackMode?: boolean;
@@ -38,7 +38,9 @@ const ListCard = ({
   return (
     <>
       <div
-        className={`group select-none transition-all h-64 w-full p-6 rounded-md flex justify-between flex-col ${isBlackMode ? "" : color} ${
+        className={`group select-none transition-all h-64 w-full p-6 rounded-md flex justify-between flex-col ${
+          isBlackMode ? "" : color
+        } ${
           isBlackMode
             ? "!text-zinc-300 border-zinc-500 !bg-zinc-900 border-[1px]"
             : "text-black"
@@ -74,15 +76,10 @@ const ListCard = ({
           ) : (
             ""
           )}
-          {/* TODO: map tags */}
-          <Tag
-            isBlackEnable={isBlackMode}
-            text={tagname}
-          />
-          <Tag
-            isBlackEnable={isBlackMode}
-            text={tagname}
-          />
+          {tagname.length > 2 &&
+            tagname.map((tag, index) => (
+              <Tag isBlackEnable={isBlackMode} key={index} text={tag} />
+            ))}
         </div>
       </div>
     </>
