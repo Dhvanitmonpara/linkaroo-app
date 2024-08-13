@@ -6,6 +6,7 @@ import {
   DocScreen,
   Lists,
   Docs,
+  Loading,
 } from "../components";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import axios, { AxiosError } from "axios";
@@ -20,6 +21,7 @@ function App() {
   const modalRef = useRef<HTMLDivElement | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [modalContent, setModalContent] = useState<string | ReactNode>("");
+  const [loading, setLoading] = useState<boolean>(true);
 
   const closeModal = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (modalRef.current === e.target) {
@@ -42,7 +44,7 @@ function App() {
     }
   };
 
-  document.addEventListener("keydown", ({key}) => {
+  document.addEventListener("keydown", ({ key }) => {
     if (key == "Escape" && isModalOpen) {
       setIsModalOpen(false);
       navigate("/");
@@ -50,9 +52,9 @@ function App() {
     }
   });
 
-  document.addEventListener('keydown', (event) => {
-    if (event.ctrlKey && event.key === 'k') {
-      event.preventDefault(); 
+  document.addEventListener("keydown", (event) => {
+    if (event.ctrlKey && event.key === "k") {
+      event.preventDefault();
       setIsModalOpen(true);
     }
   });
@@ -90,9 +92,15 @@ function App() {
             </span>
           ));
         }
+      } finally {
+        setLoading(false);
       }
     })();
   });
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <>

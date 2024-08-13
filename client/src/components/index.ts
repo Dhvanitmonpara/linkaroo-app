@@ -8,6 +8,7 @@ import ProfileCard from "./ProfileCard";
 import DocScreen from "./DocScreen";
 import Lists from "./Lists";
 import Docs from "./Docs";
+import Loading from "./Loading";
 
 export {
   ListCard,
@@ -19,5 +20,6 @@ export {
   ProfileCard,
   DocScreen,
   Lists,
-  Docs
+  Docs,
+  Loading
 };
