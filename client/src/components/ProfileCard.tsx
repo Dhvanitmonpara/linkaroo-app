@@ -14,10 +14,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { themeType } from "@/lib/types";
+import { ProfileType } from "@/store/profileStore";
 import { ReactNode } from "react";
 
 type HeaderProps = {
   theme: string | undefined;
+  profile: ProfileType;
   setIsModalOpen: (isOpen: boolean) => void;
   setModalContent: (content: string | ReactNode) => void;
   themeHandler: (theme: themeType) => void;
@@ -28,11 +30,24 @@ const ProfileCard = ({
   setIsModalOpen,
   setModalContent,
   themeHandler,
+  profile,
 }: HeaderProps) => {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="w-full dark:text-white py-3 px-6 rounded-md focus:outline-none dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700">
-        Dhvanit Monpara
+      <DropdownMenuTrigger className="w-full dark:text-white py-2 px-6 rounded-md focus:outline-none dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700">
+        <div className="flex">
+          <img
+            className="rounded-full h-12 w-12 object-cover"
+            src={profile.avatarImage}
+            alt="Profile pic"
+          />
+          <div className="ml-3 text-start">
+            <p className="text-sm dark:text-zinc-200">{profile.fullName}</p>
+            <span className="text-xs text-zinc-400 dark:text-gray-300">
+              {profile.email}
+            </span>
+          </div>
+        </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent
         className={`
