@@ -42,6 +42,8 @@ const Header = ({ theme, setIsModalOpen, setModalContent }: HeaderProps) => {
 
   type handleListCreationType = {
     title: string;
+    description: string;
+    theme: string;
   };
 
   return (
@@ -90,16 +92,19 @@ const Header = ({ theme, setIsModalOpen, setModalContent }: HeaderProps) => {
                         type="text"
                         placeholder="Enter title"
                         className="dark:bg-zinc-700 bg-zinc-200"
-                        {...register("title", {
+                        {...register("description", {
                           required: true,
                         })}
                       />
                     </div>
                     <div className="w-full space-y-2">
-                      <span>
-                        Theme
-                      </span>
-                      <Select onValueChange={() => {}}>
+                      <span>Theme</span>
+                      <Select
+                        {...register("theme")}
+                        onValueChange={(value: string) => {
+                          console.log(value);
+                        }}
+                      >
                         <SelectTrigger className="dark:text-white dark:bg-zinc-700 max-w-96">
                           <SelectValue placeholder="Change theme" />
                         </SelectTrigger>
@@ -112,31 +117,47 @@ const Header = ({ theme, setIsModalOpen, setModalContent }: HeaderProps) => {
                         >
                           <SelectGroup>
                             <SelectLabel>Themes</SelectLabel>
-                            <SelectItem defaultChecked value="default">Default</SelectItem>
-                            <SelectItem value="emerald">Emerald</SelectItem>
-                            <SelectItem value="orange">Orange</SelectItem>
-                            <SelectItem value="red">Red</SelectItem>
-                            <SelectItem value="purple">Purple</SelectItem>
-                            <SelectItem value="pink">Pink</SelectItem>
-                            <SelectItem value="indigo">Indigo</SelectItem>
-                            <SelectItem value="teal">Teal</SelectItem>
-                            <SelectItem value="cyan">Cyan</SelectItem>
-                            <SelectItem value="amber">Amber</SelectItem>
-                            <SelectItem value="violet">Violet</SelectItem>
-                            <SelectItem value="yellow">Yellow</SelectItem>
-                            <SelectItem value="green">Green</SelectItem>
-                            <SelectItem value="blue">Blue</SelectItem>
-                            <SelectItem value="rose">Rose</SelectItem>
-                            <SelectItem value="sky">Sky</SelectItem>
+                            <SelectItem defaultChecked value="default">
+                              Default
+                            </SelectItem>
+                            <SelectItem value="bg-emerald-400">
+                              Emerald
+                            </SelectItem>
+                            <SelectItem value="bg-orange-400">
+                              Orange
+                            </SelectItem>
+                            <SelectItem value="bg-red-400">Red</SelectItem>
+                            <SelectItem value="bg-purple-400">
+                              Purple
+                            </SelectItem>
+                            <SelectItem value="bg-pink-400">Pink</SelectItem>
+                            <SelectItem value="bg-indigo-400">
+                              Indigo
+                            </SelectItem>
+                            <SelectItem value="bg-teal-400">Teal</SelectItem>
+                            <SelectItem value="bg-cyan-400">Cyan</SelectItem>
+                            <SelectItem value="bg-amber-400">Amber</SelectItem>
+                            <SelectItem value="bg-violet-400">
+                              Violet
+                            </SelectItem>
+                            <SelectItem value="bg-yellow-400">
+                              Yellow
+                            </SelectItem>
+                            <SelectItem value="bg-green-400">Green</SelectItem>
+                            <SelectItem value="bg-blue-400">Blue</SelectItem>
+                            <SelectItem value="bg-rose-400">Rose</SelectItem>
+                            <SelectItem value="bg-sky-400">Sky</SelectItem>
                           </SelectGroup>
                         </SelectContent>
                       </Select>
                     </div>
                     <div className="w-full space-y-2">
-                      <span>
-                        Font
-                      </span>
-                      <Select  onValueChange={() => {}}>
+                      <span>Font</span>
+                      <Select
+                        onValueChange={(value: string) => {
+                          console.log(value);
+                        }}
+                      >
                         <SelectTrigger className="dark:text-white dark:bg-zinc-700 max-w-96">
                           <SelectValue placeholder="Space mono" />
                         </SelectTrigger>
@@ -149,7 +170,9 @@ const Header = ({ theme, setIsModalOpen, setModalContent }: HeaderProps) => {
                         >
                           <SelectGroup>
                             <SelectLabel>Fonts</SelectLabel>
-                            <SelectItem defaultChecked value="space-mono">Space mono</SelectItem>
+                            <SelectItem defaultChecked value="space-mono">
+                              Space mono
+                            </SelectItem>
                             <SelectItem value="arial">Arial</SelectItem>
                           </SelectGroup>
                         </SelectContent>
