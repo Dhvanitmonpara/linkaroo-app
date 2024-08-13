@@ -6,6 +6,15 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Select,
+  SelectItem,
+  SelectTrigger,
+  SelectContent,
+  SelectGroup,
+  SelectLabel,
+  SelectValue,
+} from "@/components/ui/select";
 import { ReactNode, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "./ui/button";
@@ -25,7 +34,7 @@ const Header = ({ theme, setIsModalOpen, setModalContent }: HeaderProps) => {
   const handleListCreation = async (data: { title: string }) => {
     try {
       setLoading(true);
-      console.log(data)
+      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -33,7 +42,7 @@ const Header = ({ theme, setIsModalOpen, setModalContent }: HeaderProps) => {
 
   type handleListCreationType = {
     title: string;
-  }
+  };
 
   return (
     <nav className="h-20 py-5 flex space-x-2">
@@ -63,30 +72,100 @@ const Header = ({ theme, setIsModalOpen, setModalContent }: HeaderProps) => {
                     onSubmit={handleSubmit(handleListCreation)}
                   >
                     <div className="w-full space-y-2">
-                      <label htmlFor="username-or-email">
-                        Title
-                      </label>
+                      <label htmlFor="username-or-email">Title</label>
                       <Input
                         id="title"
                         type="text"
                         placeholder="Enter title"
-                        className="bg-slate-800"
+                        className="dark:bg-zinc-700 bg-zinc-200"
                         {...register("title", {
                           required: true,
                         })}
                       />
                     </div>
+                    <div className="w-full space-y-2">
+                      <label htmlFor="username-or-email">Description</label>
+                      <Input
+                        id="title"
+                        type="text"
+                        placeholder="Enter title"
+                        className="dark:bg-zinc-700 bg-zinc-200"
+                        {...register("title", {
+                          required: true,
+                        })}
+                      />
+                    </div>
+                    <div className="w-full space-y-2">
+                      <span>
+                        Theme
+                      </span>
+                      <Select onValueChange={() => {}}>
+                        <SelectTrigger className="dark:text-white dark:bg-zinc-700 max-w-96">
+                          <SelectValue placeholder="Change theme" />
+                        </SelectTrigger>
+                        <SelectContent
+                          className={
+                            theme != "light"
+                              ? "!bg-zinc-900 !text-white border-zinc-800"
+                              : ""
+                          }
+                        >
+                          <SelectGroup>
+                            <SelectLabel>Themes</SelectLabel>
+                            <SelectItem defaultChecked value="default">Default</SelectItem>
+                            <SelectItem value="emerald">Emerald</SelectItem>
+                            <SelectItem value="orange">Orange</SelectItem>
+                            <SelectItem value="red">Red</SelectItem>
+                            <SelectItem value="purple">Purple</SelectItem>
+                            <SelectItem value="pink">Pink</SelectItem>
+                            <SelectItem value="indigo">Indigo</SelectItem>
+                            <SelectItem value="teal">Teal</SelectItem>
+                            <SelectItem value="cyan">Cyan</SelectItem>
+                            <SelectItem value="amber">Amber</SelectItem>
+                            <SelectItem value="violet">Violet</SelectItem>
+                            <SelectItem value="yellow">Yellow</SelectItem>
+                            <SelectItem value="green">Green</SelectItem>
+                            <SelectItem value="blue">Blue</SelectItem>
+                            <SelectItem value="rose">Rose</SelectItem>
+                            <SelectItem value="sky">Sky</SelectItem>
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="w-full space-y-2">
+                      <span>
+                        Font
+                      </span>
+                      <Select  onValueChange={() => {}}>
+                        <SelectTrigger className="dark:text-white dark:bg-zinc-700 max-w-96">
+                          <SelectValue placeholder="Space mono" />
+                        </SelectTrigger>
+                        <SelectContent
+                          className={
+                            theme != "light"
+                              ? "!bg-zinc-900 !text-white border-zinc-800"
+                              : ""
+                          }
+                        >
+                          <SelectGroup>
+                            <SelectLabel>Fonts</SelectLabel>
+                            <SelectItem defaultChecked value="space-mono">Space mono</SelectItem>
+                            <SelectItem value="arial">Arial</SelectItem>
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    </div>
 
                     {loading ? (
                       <Button
                         disabled
-                        className="bg-slate-800 hover:bg-slate-700 w-full cursor-wait"
+                        className="dark:bg-zinc-700 dark:hover:bg-zinc-600 hover:bg-zinc-300 text-zinc-900 bg-zinc-200 w-full dark:text-white cursor-wait"
                       >
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please
-                        wait
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin dark:text-white" />{" "}
+                        Please wait
                       </Button>
                     ) : (
-                      <Button className="bg-slate-800 text-white hover:bg-slate-700 w-full">
+                      <Button className="dark:bg-zinc-700 bg-zinc-200 font-semibold text-zinc-950 dark:text-white hover:bg-zinc-300 dark:hover:bg-zinc-600 w-full">
                         Login
                       </Button>
                     )}

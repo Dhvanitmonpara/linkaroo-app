@@ -8,7 +8,7 @@ import listOwnerVerification from "../utils/listOwnerVerification.js"
 
 const createList = asyncHandler(async (req, res) => {
 
-    const { title, description, theme = "dark", font = "space-mono" } = req.body
+    const { title, description, theme = "", font = "space-mono" } = req.body
 
     if (!title || !description) {
         throw new ApiError(400, "Title and description are required")
