@@ -97,9 +97,10 @@ const CreateListForm: React.FC<createListFormProps> = ({
           <span>Theme</span>
           <Select
             onValueChange={(value: string) => {
-              setValue("theme", value == undefined ? "bg-zinc-200" : value);
+              setValue("theme", value);
             }}
-            {...register("theme", { required: true })}
+            {...register("theme")}
+            defaultValue="bg-zinc-200"
           >
             <SelectTrigger className="dark:text-white dark:bg-zinc-700 max-w-96">
               <SelectValue placeholder="Change theme" />
@@ -139,9 +140,10 @@ const CreateListForm: React.FC<createListFormProps> = ({
           <span>Font</span>
           <Select
             onValueChange={(value: string) => {
-              setValue("font", value == undefined? "space-mono" : value);
+              setValue("font", value);
             }}
-            {...register("font", { required: true })}
+            {...register("font")}
+            defaultValue="space-mono"
           >
             <SelectTrigger className="dark:text-white dark:bg-zinc-700 max-w-96">
               <SelectValue placeholder="Space mono" />

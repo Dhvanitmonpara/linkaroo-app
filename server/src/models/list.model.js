@@ -20,7 +20,7 @@ const listSchema = new Schema({
     },
     theme: {
         type: String,
-        default: "dark"
+        default: "bg-zinc-200"
     },
     font: {
         type: String,
