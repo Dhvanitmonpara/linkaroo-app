@@ -6,6 +6,7 @@ import Tag from "./Tag";
 import { removeUsernameTag } from "@/utils/toggleUsernameInTag";
 
 type ListCardProps = {
+  id: string
   tagname: TagType[];
   description: string;
   title: string;
@@ -18,6 +19,7 @@ type ListCardProps = {
 };
 
 const ListCard = ({
+  id,
   tagname,
   description,
   title,
@@ -52,9 +54,15 @@ const ListCard = ({
     }
   });
 
+  const openList = () => {
+    navigate(`/list?listid=${id}`)
+  }
+
   return (
     <>
       <div
+        onClick={openList}
+        // ref={cardRef}
         className={`group select-none transition-all h-64 w-full p-6 rounded-md flex justify-between flex-col ${
           isBlackMode ? "" : theme
         } ${

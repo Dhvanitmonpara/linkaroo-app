@@ -14,7 +14,6 @@ type ListsProps = {
 
 const Lists = ({ theme, setIsModalOpen }: ListsProps) => {
   const [loading, setLoading] = useState(false);
-
   const { setLists, lists } = useListStore();
 
   useEffect(() => {
@@ -59,6 +58,7 @@ const Lists = ({ theme, setIsModalOpen }: ListsProps) => {
         {lists.map((list, index) => (
           <ListCard
             key={index}
+            id={list._id}
             title={list.title}
             description={list.description}
             tagname={list.tags}

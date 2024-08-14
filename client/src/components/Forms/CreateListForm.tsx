@@ -75,7 +75,6 @@ const CreateListForm: React.FC<CreateListFormProps> = ({
         toast.error("Failed to fetch list details");
         return;
       }
-      console.log(list.data.data);
 
       addListItem(list.data.data);
     } catch (error) {
