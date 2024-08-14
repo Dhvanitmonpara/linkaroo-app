@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
     createList,
     getListsByOwner,
+    getListById,
     getListsByCollaborator,
     getListsByTagId,
     updateList,
@@ -23,6 +24,8 @@ router.use(verifyJWT)
 
 // secure routes
 router.route("/").post(createList)
+
+router.route("/u/:listId").get(getListById)
 
 router.route("/o").get(getListsByOwner)
 

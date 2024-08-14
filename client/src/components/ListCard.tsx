@@ -32,7 +32,7 @@ const ListCard = ({
 
   const collaboratorAvatars: string[] = [];
 
-  collaborators.forEach((collaborator) => {
+  collaborators?.forEach((collaborator) => {
     collaboratorAvatars.push(collaborator.avatarImage);
   });
 
@@ -45,7 +45,7 @@ const ListCard = ({
 
   const tags: string[] = [];
 
-  tagname.forEach((tag) => {
+  tagname?.forEach((tag) => {
     const tagname = removeUsernameTag(tag.tagname);
     if (tagname != undefined) {
       tags.push(tagname);
@@ -70,7 +70,7 @@ const ListCard = ({
                 isBlackMode ? "text-zinc-300" : "text-slate-800"
               } font-semibold w-fit text-sm pb-3 hover:underline`}
             >
-              @{createdBy.username}
+              @{createdBy?.username}
             </p>
             <span
               onClick={(e) => {
@@ -90,7 +90,7 @@ const ListCard = ({
           <AvatarGroup
             width="w-7"
             height="h-7"
-            imgSrcArray={[createdBy.avatarImage, ...collaboratorAvatars]}
+            imgSrcArray={[createdBy?.avatarImage, ...collaboratorAvatars]}
           />
           {isBlackMode ? (
             <div className={`w-7 h-7 ${theme} rounded-full`}></div>

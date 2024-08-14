@@ -58,8 +58,26 @@ const CreateListForm: React.FC<CreateListFormProps> = ({
       if (response.status !== 200) {
         toast.error("Failed to create list");
       }
-      
-      addListItem(response.data.data);
+
+      const listId = response.data.data._id
+
+      if(!listId){
+        toast.error("Failed to create list");
+        return;
+      }
+
+      const list = await axios.get(
+        `${import.meta.env.VITE_SERVER_API_URL}/lists/u/${listId}`,
+        { withCredentials: true }
+      );
+
+      if (!list) {
+        toast.error("Failed to fetch list details");
+        return;
+      }
+      console.log(list.data.data);
+
+      addListItem(list.data.data);
     } catch (error) {
       const errorMsg = getErrorFromAxios(error as AxiosError);
       toast.error(errorMsg || "Failed to create list");

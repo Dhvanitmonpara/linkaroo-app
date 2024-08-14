@@ -5,6 +5,7 @@ import { List } from "../models/list.model.js"
 import { uploadOnCloudinary, deleteFromCloudinary } from "../utils/cloudinary.js"
 import getPublicId from "../utils/getPublicId.js"
 import listOwnerVerification from "../utils/listOwnerVerification.js"
+import { ObjectId } from "mongodb"
 
 const createList = asyncHandler(async (req, res) => {
 
@@ -116,6 +117,87 @@ const deleteCollaborator = asyncHandler(async (req, res) => {
             list,
             "Collaborator deleted successfully"
         ))
+})
+
+const getListById = asyncHandler(async (req, res) => {
+    const listId = req.params.listId
+
+    if (!listId) {
+        throw new ApiError(400, "List ID is required")
+    }
+
+    const listIdObject = new ObjectId(listId);
+
+    const list = await List.aggregate([
+        {
+            $match: { _id: listIdObject }
+        },
+        {
+            $lookup: {
+                from: 'tags',
+                localField: 'tags',
+                foreignField: '_id',
+                as: 'tags'
+            }
+        },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'createdBy',
+                foreignField: '_id',
+                as: 'createdBy'
+            }
+        },
+        {
+            $unwind: '$createdBy'
+        },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'collaborators',
+                foreignField: '_id',
+                as: 'collaborators'
+            }
+        },
+        {
+            $project: {
+                title: 1,
+                description: 1,
+                theme: 1,
+                font: 1,
+                createdAt: 1,
+                updatedAt: 1,
+                collaborators: {
+                    _id: 1,
+                    username: 1,
+                    email: 1,
+                    fullName: 1,
+                    avatarImage: 1,
+                },
+                createdBy: {
+                    _id: 1,
+                    username: 1,
+                    email: 1,
+                    fullName: 1,
+                    avatarImage: 1,
+                },
+                tags: 1
+            }
+        }
+    ])
+
+    if (!list) {
+        throw new ApiError(404, "List not found")
+    }
+
+    return res
+        .status(200)
+        .json(new ApiResponse(
+            200,
+            list[0],
+            "List retrieved successfully"
+        ))
+
 })
 
 const updateList = asyncHandler(async (req, res) => {
@@ -484,6 +566,7 @@ const toggleIsPublic = asyncHandler(async (req, res) => {
 
 export {
     createList,
+    getListById,
     getListsByOwner,
     getListsByCollaborator,
     getListsByTagId,
