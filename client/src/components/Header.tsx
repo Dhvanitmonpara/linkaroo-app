@@ -29,7 +29,8 @@ type HeaderProps = {
 const Header = ({ theme, setIsModalOpen, setModalContent }: HeaderProps) => {
   const [loading, setLoading] = useState(false);
 
-  const { register, handleSubmit } = useForm<handleListCreationType>();
+  const { register, handleSubmit, setValue } =
+    useForm<handleListCreationType>();
 
   const handleListCreation = async (data: { title: string }) => {
     try {
@@ -37,6 +38,8 @@ const Header = ({ theme, setIsModalOpen, setModalContent }: HeaderProps) => {
       console.log(data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -44,6 +47,7 @@ const Header = ({ theme, setIsModalOpen, setModalContent }: HeaderProps) => {
     title: string;
     description: string;
     theme: string;
+    font: string;
   };
 
   return (
@@ -100,10 +104,10 @@ const Header = ({ theme, setIsModalOpen, setModalContent }: HeaderProps) => {
                     <div className="w-full space-y-2">
                       <span>Theme</span>
                       <Select
-                        {...register("theme")}
                         onValueChange={(value: string) => {
-                          console.log(value);
+                          setValue("theme", value);
                         }}
+                        {...register("theme", { required: true })}
                       >
                         <SelectTrigger className="dark:text-white dark:bg-zinc-700 max-w-96">
                           <SelectValue placeholder="Change theme" />
@@ -155,8 +159,9 @@ const Header = ({ theme, setIsModalOpen, setModalContent }: HeaderProps) => {
                       <span>Font</span>
                       <Select
                         onValueChange={(value: string) => {
-                          console.log(value);
+                          setValue("font", value);
                         }}
+                        {...register("font", { required: true })}
                       >
                         <SelectTrigger className="dark:text-white dark:bg-zinc-700 max-w-96">
                           <SelectValue placeholder="Space mono" />
@@ -189,7 +194,7 @@ const Header = ({ theme, setIsModalOpen, setModalContent }: HeaderProps) => {
                       </Button>
                     ) : (
                       <Button className="dark:bg-zinc-700 bg-zinc-200 font-semibold text-zinc-950 dark:text-white hover:bg-zinc-300 dark:hover:bg-zinc-600 w-full">
-                        Login
+                        Create list
                       </Button>
                     )}
                   </form>
