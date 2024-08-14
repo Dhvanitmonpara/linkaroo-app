@@ -12,14 +12,14 @@ export default function HorizontalTabs() {
     <RadioGroup
       onValueChange={(value) => navigate(`/${value}`)}
       defaultValue="home"
-      className="flex justify-between dark:bg-zinc-800 w-full px-14 bg-zinc-200 h-full md:px-24 rounded-t-xl items-center sm:px-10 sm:w-6/12"
+      className="flex justify-between dark:bg-zinc-800 w-full px-14 bg-zinc-200 h-full md:px-24 md:rounded-t-xl items-center sm:px-10 sm:w-6/12"
     >
       <RadioGroupItem value="list" id="r1" className="radio-item" />
       <label htmlFor="r1" className="menu-label text-xl">
         <IoListSharp />
       </label>
 
-      <RadioGroupItem value="docs" id="r2" className="radio-item" />
+      <RadioGroupItem value="" id="r2" className="radio-item" />
       <label htmlFor="r2" className="menu-label text-xl">
         <MdHome />
       </label>

@@ -15,23 +15,21 @@ import PasswordRecoveryPage from "./pages/PasswordRecoveryPage";
 import Lists from "./components/Lists";  // Adjust the import path
 import Docs from "./components/Docs";    // Adjust the import path
 import useProfileStore from "./store/profileStore";
-import useMethodStore from "./store/MethodStore";
 
 const RouterSetup: React.FC = () => {
   const isSmallScreen = useMediaQuery({ query: '(max-width: 768px)' });
   const {profile} = useProfileStore()
-  const {toggleModal} = useMethodStore()
 
   const router = isSmallScreen
     ? createBrowserRouter(
         createRoutesFromElements(
-          <Route>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/list" element={<Lists theme={profile.theme} setIsModalOpen={toggleModal} />} />
-            <Route path="/doc" element={<Docs  theme={profile.theme} setIsModalOpen={toggleModal}  />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<SignupPage />} />
-            <Route path="/password-recovery" element={<PasswordRecoveryPage />} />
+          <Route path="/" element={<App/>}>
+            <Route path="" element={<HomePage />} />
+            <Route path="list" element={<Lists theme={profile.theme}  />} />
+            <Route path="doc" element={<Docs  theme={profile.theme}  />} />
+            <Route path="login" element={<LoginPage />} />
+            <Route path="signup" element={<SignupPage />} />
+            <Route path="password-recovery" element={<PasswordRecoveryPage />} />
           </Route>
         )
       )

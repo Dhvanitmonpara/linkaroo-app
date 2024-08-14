@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import {
   Header,
-  HorizontalTabs,
   ProfileCard,
   DocScreen,
   Lists,
@@ -120,9 +119,6 @@ function App() {
           <Header theme={theme} setModalContent={setModalContent} />
           {/* <img src="" alt="Banner" /> */}
           <Docs theme={theme} />
-        </div>
-        <div className="lg:hidden md:fixed bottom-0 px-0 dark:text-zinc-400 justify-center items-center flex w-screen h-16">
-          <HorizontalTabs />
         </div>
         <div className="col-span-2 hidden xl:inline-block relative px-5 pt-5 space-y-3 overflow-y-scroll max-h-screen no-scrollbar">
           <div
