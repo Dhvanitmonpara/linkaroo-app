@@ -21,7 +21,7 @@ const Header = ({ theme, setIsModalOpen, setModalContent }: HeaderProps) => {
     <nav className="h-20 py-5 flex space-x-2">
       <Input
         className="dark:bg-zinc-800 dark:text-white dark:border-zinc-600"
-        placeholder="Search something..."
+        placeholder="Create or Search something..."
       />
 
       <DropdownMenu>
