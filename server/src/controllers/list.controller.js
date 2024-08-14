@@ -8,10 +8,19 @@ import listOwnerVerification from "../utils/listOwnerVerification.js"
 
 const createList = asyncHandler(async (req, res) => {
 
-    const { title, description, theme = "", font = "space-mono" } = req.body
+    const { title, description, theme = "bg-zinc-200", font = "space-mono" } = req.body
 
     if (!title || !description) {
         throw new ApiError(400, "Title and description are required")
+    }
+
+    const listOnDatabase = await List.findOne({
+        title,
+        createdBy: req.user._id
+    })
+
+    if (listOnDatabase) {
+        throw new ApiError(400, "List with the same title already exists")
     }
 
     const list = await List.create({

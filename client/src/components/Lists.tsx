@@ -2,8 +2,9 @@ import { ListCard } from "@/components";
 import { themeType, fetchedListType } from "@/lib/types";
 import getErrorFromAxios from "@/utils/getErrorFromAxios";
 import axios, { AxiosError, AxiosResponse } from "axios";
+import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 type ListsProps = {
   theme: themeType | undefined;
@@ -46,7 +47,11 @@ const Lists = ({ theme, setIsModalOpen }: ListsProps) => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="dark:text-zinc-200 text-zinc-900 h-full w-full flex justify-center items-center">
+        <Loader2 />
+      </div>
+    );
   }
 
   return (
@@ -67,7 +72,6 @@ const Lists = ({ theme, setIsModalOpen }: ListsProps) => {
         ))}
         <div className="h-2"></div>
       </div>
-      <Toaster />
     </>
   );
 };
