@@ -154,7 +154,7 @@ function App() {
           closeModal={closeModal}
           modalContent={modalContent}
           modalRef={modalRef}
-        />
+        ></Modal>
       )}
       <Toaster
         position={window.innerWidth >= 1024 ? "bottom-right" : "top-center"}
