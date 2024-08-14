@@ -1,6 +1,7 @@
 import { ListCard } from "@/components";
 import { themeType } from "@/lib/types";
 import useListStore from "@/store/listStore";
+import useMethodStore from "@/store/MethodStore";
 import getErrorFromAxios from "@/utils/getErrorFromAxios";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Loader2 } from "lucide-react";
@@ -9,12 +10,12 @@ import toast from "react-hot-toast";
 
 type ListsProps = {
   theme: themeType | undefined;
-  setIsModalOpen: (isOpen: boolean) => void;
 };
 
-const Lists = ({ theme, setIsModalOpen }: ListsProps) => {
+const Lists = ({ theme }: ListsProps) => {
   const [loading, setLoading] = useState(false);
   const { setLists, lists } = useListStore();
+  const {toggleModal} = useMethodStore()
 
   useEffect(() => {
     (async () => {
@@ -67,7 +68,7 @@ const Lists = ({ theme, setIsModalOpen }: ListsProps) => {
             theme={list.theme}
             font={list.font}
             isBlackMode={theme == "black" ? true : false}
-            setIsModalOpen={setIsModalOpen}
+            setIsModalOpen={toggleModal}
           />
         ))}
         <div className="h-2"></div>

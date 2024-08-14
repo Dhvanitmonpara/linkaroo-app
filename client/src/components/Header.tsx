@@ -9,14 +9,15 @@ import {
 import { ReactNode } from "react";
 import { themeType } from "@/lib/types";
 import { CreateListForm } from "./Forms";
+import useMethodStore from "@/store/MethodStore";
 
 type HeaderProps = {
   theme: themeType | undefined;
-  setIsModalOpen: (isOpen: boolean) => void;
   setModalContent: (content: string | ReactNode) => void;
 };
 
-const Header = ({ theme, setIsModalOpen, setModalContent }: HeaderProps) => {
+const Header = ({ theme, setModalContent }: HeaderProps) => {
+  const {toggleModal} = useMethodStore()
   return (
     <nav className="h-20 py-5 flex space-x-2">
       <Input
@@ -35,9 +36,9 @@ const Header = ({ theme, setIsModalOpen, setModalContent }: HeaderProps) => {
         >
           <DropdownMenuItem
             onClick={() => {
-              setIsModalOpen(true);
+              toggleModal(true);
               setModalContent(
-                <CreateListForm setIsModalOpen={setIsModalOpen} theme={theme} />
+                <CreateListForm setIsModalOpen={toggleModal} theme={theme} />
               );
             }}
           >
@@ -45,7 +46,7 @@ const Header = ({ theme, setIsModalOpen, setModalContent }: HeaderProps) => {
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => {
-              setIsModalOpen(true);
+              toggleModal(true);
               setModalContent(
                 <div className="dark:text-white">
                   <h1>Add Card</h1>

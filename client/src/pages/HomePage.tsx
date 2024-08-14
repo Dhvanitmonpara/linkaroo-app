@@ -16,17 +16,18 @@ import toggleThemeModeAtRootElem from "@/utils/toggleThemeMode";
 import { themeType } from "@/lib/types";
 import toast, { Toaster } from "react-hot-toast";
 import getErrorFromAxios from "@/utils/getErrorFromAxios";
+import useMethodStore from "@/store/MethodStore";
 
 function App() {
   const navigate = useNavigate();
   const modalRef = useRef<HTMLDivElement | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [modalContent, setModalContent] = useState<string | ReactNode>("");
   const [loading, setLoading] = useState<boolean>(true);
+  const { isModalOpen, toggleModal } = useMethodStore();
 
   const closeModal = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (modalRef.current === e.target) {
-      setIsModalOpen(false);
+      toggleModal(false);
       navigate("/");
       setModalContent("");
     }
@@ -47,7 +48,7 @@ function App() {
 
   document.addEventListener("keydown", ({ key }) => {
     if (key == "Escape" && isModalOpen) {
-      setIsModalOpen(false);
+      toggleModal(false);
       navigate("/");
       setModalContent("");
     }
@@ -113,16 +114,12 @@ function App() {
               Linkaroo
             </span>
           </div>
-          <Lists theme={theme} setIsModalOpen={setIsModalOpen} />
+          <Lists theme={theme} />
         </div>
         <div className="col-span-3 xl:px-0 lg:px-0 lg:pr-5 px-5 md:max-h-screen">
-          <Header
-            theme={theme}
-            setIsModalOpen={setIsModalOpen}
-            setModalContent={setModalContent}
-          />
+          <Header theme={theme} setModalContent={setModalContent} />
           {/* <img src="" alt="Banner" /> */}
-          <Docs theme={theme} setIsModalOpen={setIsModalOpen} />
+          <Docs theme={theme} />
         </div>
         <div className="lg:hidden md:fixed bottom-0 px-0 dark:text-zinc-400 justify-center items-center flex w-screen h-16">
           <HorizontalTabs />
@@ -133,7 +130,7 @@ function App() {
           >
             <ProfileCard
               theme={theme}
-              setIsModalOpen={setIsModalOpen}
+              setIsModalOpen={toggleModal}
               setModalContent={setModalContent}
               themeHandler={themeHandler}
               profile={profile}
