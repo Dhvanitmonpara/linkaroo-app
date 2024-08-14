@@ -7,6 +7,7 @@ import {
   Lists,
   Docs,
   Loading,
+  Modal,
 } from "../components";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import axios, { AxiosError } from "axios";
@@ -148,15 +149,12 @@ function App() {
       </div>
       {/* Modal code */}
       {isModalOpen && (
-        <div
-          ref={modalRef}
-          onClick={(e) => closeModal(e)}
-          className="fixed inset-0 bg-black bg-opacity-30 backdrop:blur-sm flex justify-end items-end md:justify-center md:items-center"
-        >
-          <div className="xl:h-3/6 xl:w-5/12 lg:w-6/12 md:h-3/6 md:w-8/12 h-4/6 w-screen bg-zinc-100 dark:bg-zinc-800 rounded-xl">
-            {modalContent}
-          </div>
-        </div>
+        <Modal
+          isOpen={isModalOpen}
+          closeModal={closeModal}
+          modalContent={modalContent}
+          modalRef={modalRef}
+        />
       )}
       <Toaster
         position={window.innerWidth >= 1024 ? "bottom-right" : "top-center"}
