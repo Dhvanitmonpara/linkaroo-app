@@ -56,7 +56,6 @@ function App() {
   document.addEventListener("keydown", (event) => {
     if (event.ctrlKey && event.key === "k") {
       event.preventDefault();
-      setIsModalOpen(true);
     }
   });
 
@@ -154,6 +153,7 @@ function App() {
           closeModal={closeModal}
           modalContent={modalContent}
           modalRef={modalRef}
+          className="xl:h-auto w-full max-w-4xl"
         ></Modal>
       )}
       <Toaster

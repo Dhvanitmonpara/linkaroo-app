@@ -5,9 +5,10 @@ interface ModalProps {
   closeModal: (event: React.MouseEvent<HTMLDivElement>) => void;
   modalContent: React.ReactNode;
   modalRef: React.RefObject<HTMLDivElement>;
+  className?: string;
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, closeModal, modalContent, modalRef }) => {
+const Modal: React.FC<ModalProps> = ({ isOpen, closeModal, modalContent, modalRef, className }) => {
   if (!isOpen) return null;
 
   return (
@@ -17,7 +18,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, closeModal, modalContent, modalRe
       className="fixed inset-0 bg-black bg-opacity-30 backdrop:blur-sm flex justify-end items-end md:justify-center md:items-center"
     >
       <div
-        className="xl:h-3/6 xl:w-5/12 lg:w-6/12 md:h-3/6 md:w-8/12 h-4/6 w-screen bg-zinc-100 dark:bg-zinc-800 rounded-xl"
+        className={`xl:min-h-3/6 xl:min-w-5/12 lg:min-w-6/12 md:min-h-3/6 md:min-w-8/12 min-h-4/6 min-w-screen bg-zinc-100 dark:bg-zinc-800 rounded-xl ${className}`}
         onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
       >
         {modalContent}

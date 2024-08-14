@@ -13,33 +13,52 @@ import {
 } from "@/components/ui/select";
 import { useForm } from "react-hook-form";
 import { themeType } from "@/lib/types";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 type createListFormProps = {
   theme: themeType | undefined;
+  setIsModalOpen: (isOpen: boolean) => void;
 };
 
-const CreateListForm: React.FC<createListFormProps> = ({ theme }) => {
+type handleListCreationType = {
+  title: string;
+  description: string;
+  theme: string;
+  font: string;
+};
+
+const CreateListForm: React.FC<createListFormProps> = ({
+  theme,
+  setIsModalOpen,
+}) => {
   const [loading, setLoading] = useState(false);
 
   const { register, handleSubmit, setValue } =
     useForm<handleListCreationType>();
 
-  const handleListCreation = async (data: { title: string }) => {
+  const handleListCreation = async (data: handleListCreationType) => {
     try {
       setLoading(true);
-        console.log(data)
+
+
+
+      const response = await axios({
+        method: "post",
+        url: `${import.meta.env.VITE_SERVER_API_URL}/lists`,
+        withCredentials: true,
+        data: data,
+      });
+
+      if (!response) {
+        toast.error("Failed to create list");
+      }
     } catch (error) {
       console.log(error);
     } finally {
       setLoading(false);
+      setIsModalOpen(false);
     }
-  };
-
-  type handleListCreationType = {
-    title: string;
-    description: string;
-    theme: string;
-    font: string;
   };
 
   return (
@@ -78,7 +97,7 @@ const CreateListForm: React.FC<createListFormProps> = ({ theme }) => {
           <span>Theme</span>
           <Select
             onValueChange={(value: string) => {
-              setValue("theme", value);
+              setValue("theme", value == undefined ? "bg-zinc-200" : value);
             }}
             {...register("theme", { required: true })}
           >
@@ -94,7 +113,7 @@ const CreateListForm: React.FC<createListFormProps> = ({ theme }) => {
             >
               <SelectGroup>
                 <SelectLabel>Themes</SelectLabel>
-                <SelectItem defaultChecked value="default">
+                <SelectItem defaultChecked value="bg-zinc-200">
                   Default
                 </SelectItem>
                 <SelectItem value="bg-emerald-400">Emerald</SelectItem>
@@ -120,7 +139,7 @@ const CreateListForm: React.FC<createListFormProps> = ({ theme }) => {
           <span>Font</span>
           <Select
             onValueChange={(value: string) => {
-              setValue("font", value);
+              setValue("font", value == undefined? "space-mono" : value);
             }}
             {...register("font", { required: true })}
           >

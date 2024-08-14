@@ -37,7 +37,7 @@ const Header = ({ theme, setIsModalOpen, setModalContent }: HeaderProps) => {
             onClick={() => {
               setIsModalOpen(true);
               setModalContent(
-                <CreateListForm theme={theme} />
+                <CreateListForm setIsModalOpen={setIsModalOpen} theme={theme} />
               );
             }}
           >
