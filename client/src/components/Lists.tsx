@@ -1,5 +1,6 @@
 import { ListCard } from "@/components";
-import { themeType, fetchedListType } from "@/lib/types";
+import { themeType } from "@/lib/types";
+import useListStore from "@/store/listStore";
 import getErrorFromAxios from "@/utils/getErrorFromAxios";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Loader2 } from "lucide-react";
@@ -13,7 +14,8 @@ type ListsProps = {
 
 const Lists = ({ theme, setIsModalOpen }: ListsProps) => {
   const [loading, setLoading] = useState(false);
-  const [totalLists, setTotalLists] = useState<fetchedListType[] | []>([]);
+
+  const { setLists, lists } = useListStore();
 
   useEffect(() => {
     (async () => {
@@ -30,11 +32,8 @@ const Lists = ({ theme, setIsModalOpen }: ListsProps) => {
           toast.error("Failed to fetch user's lists.");
           return;
         }
-        const listData: fetchedListType[] = response.data.data;
-
-        setTotalLists(listData);
-
-        setLoading(false);
+        
+        setLists(response.data.data);
       } catch (error) {
         const errorMsg = getErrorFromAxios(error as AxiosError);
         if (errorMsg !== undefined) {
@@ -44,12 +43,12 @@ const Lists = ({ theme, setIsModalOpen }: ListsProps) => {
         setLoading(false);
       }
     })();
-  }, []);
+  }, [setLists]);
 
   if (loading) {
     return (
       <div className="dark:text-zinc-200 text-zinc-900 h-full w-full flex justify-center items-center">
-        <Loader2 />
+        <Loader2 className="animate-spin" />
       </div>
     );
   }
@@ -57,7 +56,7 @@ const Lists = ({ theme, setIsModalOpen }: ListsProps) => {
   return (
     <>
       <div className="col-span-2 relative space-y-3 overflow-y-scroll no-scrollbar h-[calc(100vh-5rem)]">
-        {totalLists.map((list, index) => (
+        {lists.map((list, index) => (
           <ListCard
             key={index}
             title={list.title}
@@ -66,6 +65,7 @@ const Lists = ({ theme, setIsModalOpen }: ListsProps) => {
             collaborators={list.collaborators}
             createdBy={list.createdBy}
             theme={list.theme}
+            font={list.font}
             isBlackMode={theme == "black" ? true : false}
             setIsModalOpen={setIsModalOpen}
           />

@@ -1,4 +1,5 @@
 type colorOptions =
+  | "bg-zinc-200"
   | "bg-emerald-400"
   | "bg-orange-600"
   | "bg-red-400"
@@ -14,11 +15,11 @@ type colorOptions =
   | "bg-blue-400"
   | "bg-rose-400"
   | "bg-sky-400"
-  | "bg-black"
+  | "bg-black";
 
 type themeType = "light" | "black" | "dark";
 
-type profileOptions = "profile" | "settings" | "feedback"
+type profileOptions = "profile" | "settings" | "feedback";
 
 type Collaborator = {
   _id: string;
@@ -36,12 +37,14 @@ type TagType = {
   updatedAt: string;
 };
 
+type fontOptions = "font-mono" | "font-sans" | "font-serif";
+
 type fetchedListType = {
   _id: string;
   collaborators: Collaborator[];
   createdBy: Collaborator;
   description: string;
-  font: string;
+  font: fontOptions;
   tags: TagType[];
   theme: colorOptions;
   title: string;
@@ -49,4 +52,12 @@ type fetchedListType = {
   updatedAt: string;
 };
 
-export type { colorOptions, themeType, profileOptions, TagType, fetchedListType, Collaborator };
+export type {
+  colorOptions,
+  themeType,
+  profileOptions,
+  TagType,
+  fetchedListType,
+  Collaborator,
+  fontOptions,
+};

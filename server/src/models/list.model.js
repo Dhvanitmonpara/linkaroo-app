@@ -23,7 +23,7 @@ const listSchema = new Schema({
     },
     font: {
         type: String,
-        default: "space-mono"
+        default: "font-mono"
     },
     isPublic: {
         type: Boolean,

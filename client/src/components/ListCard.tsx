@@ -1,5 +1,5 @@
 import AvatarGroup from "./ui/avatarGroup";
-import { colorOptions, TagType, Collaborator } from "@/lib/types.ts";
+import { colorOptions, TagType, Collaborator, fontOptions } from "@/lib/types.ts";
 import { useNavigate } from "react-router-dom";
 import { IoMdAdd } from "react-icons/io";
 import Tag from "./Tag";
@@ -12,6 +12,7 @@ type ListCardProps = {
   isBlackMode?: boolean;
   createdBy: Collaborator;
   theme: colorOptions;
+  font: fontOptions;
   collaborators: Collaborator[];
   setIsModalOpen: (isOpen: boolean) => void;
 };
@@ -23,6 +24,7 @@ const ListCard = ({
   isBlackMode = false,
   collaborators,
   theme,
+  font,
   createdBy,
   setIsModalOpen,
 }: ListCardProps) => {
@@ -78,7 +80,7 @@ const ListCard = ({
             >
               <IoMdAdd />
             </span>
-            <h1 className="text-2xl py-1 font-mono font-bold hover:underline">
+            <h1 className={`text-2xl py-1 font-bold hover:underline ${font}`}>
               {title}
             </h1>
           </div>

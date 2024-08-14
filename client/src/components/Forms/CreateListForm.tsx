@@ -12,10 +12,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useForm, Controller } from "react-hook-form";
-import { themeType } from "@/lib/types";
+import { colorOptions, fontOptions, themeType } from "@/lib/types";
 import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import getErrorFromAxios from "@/utils/getErrorFromAxios";
+import useListStore from "@/store/listStore";
 
 type CreateListFormProps = {
   theme: themeType | undefined;
@@ -25,8 +26,8 @@ type CreateListFormProps = {
 type HandleListCreationType = {
   title: string;
   description: string;
-  theme: string;
-  font: string;
+  theme: colorOptions;
+  font: fontOptions;
 };
 
 const CreateListForm: React.FC<CreateListFormProps> = ({
@@ -35,10 +36,12 @@ const CreateListForm: React.FC<CreateListFormProps> = ({
 }) => {
   const [loading, setLoading] = useState(false);
 
+  const { addListItem } = useListStore();
+
   const { control, handleSubmit, register } = useForm<HandleListCreationType>({
     defaultValues: {
       theme: "bg-zinc-200",
-      font: "space-mono",
+      font: "font-mono",
     },
   });
 
@@ -54,9 +57,9 @@ const CreateListForm: React.FC<CreateListFormProps> = ({
 
       if (response.status !== 200) {
         toast.error("Failed to create list");
-      } else {
-        toast.success("List created successfully");
       }
+      
+      addListItem(response.data.data);
     } catch (error) {
       const errorMsg = getErrorFromAxios(error as AxiosError);
       toast.error(errorMsg || "Failed to create list");
@@ -90,7 +93,9 @@ const CreateListForm: React.FC<CreateListFormProps> = ({
             type="text"
             placeholder="Enter description"
             className="dark:bg-zinc-700 bg-zinc-200"
-            {...register("description", { required: "Description is required" })}
+            {...register("description", {
+              required: "Description is required",
+            })}
           />
         </div>
         <div className="w-full space-y-2">
@@ -99,10 +104,7 @@ const CreateListForm: React.FC<CreateListFormProps> = ({
             name="theme"
             control={control}
             render={({ field: { onChange, value } }) => (
-              <Select
-                value={value}
-                onValueChange={onChange}
-              >
+              <Select value={value} onValueChange={onChange}>
                 <SelectTrigger className="dark:text-white dark:bg-zinc-700 max-w-96">
                   <SelectValue placeholder="Change theme" />
                 </SelectTrigger>
@@ -115,7 +117,7 @@ const CreateListForm: React.FC<CreateListFormProps> = ({
                 >
                   <SelectGroup>
                     <SelectLabel>Themes</SelectLabel>
-                    <SelectItem value="bg-zinc-200">Default</SelectItem>
+                    <SelectItem value="bg-zinc-200">Zinc</SelectItem>
                     <SelectItem value="bg-emerald-400">Emerald</SelectItem>
                     <SelectItem value="bg-orange-400">Orange</SelectItem>
                     <SelectItem value="bg-red-400">Red</SelectItem>
@@ -143,10 +145,7 @@ const CreateListForm: React.FC<CreateListFormProps> = ({
             name="font"
             control={control}
             render={({ field: { onChange, value } }) => (
-              <Select
-                value={value}
-                onValueChange={onChange}
-              >
+              <Select value={value} onValueChange={onChange}>
                 <SelectTrigger className="dark:text-white dark:bg-zinc-700 max-w-96">
                   <SelectValue placeholder="Select font" />
                 </SelectTrigger>
@@ -159,8 +158,9 @@ const CreateListForm: React.FC<CreateListFormProps> = ({
                 >
                   <SelectGroup>
                     <SelectLabel>Fonts</SelectLabel>
-                    <SelectItem value="space-mono">Space mono</SelectItem>
-                    <SelectItem value="arial">Arial</SelectItem>
+                    <SelectItem value="font-mono">Mono</SelectItem>
+                    <SelectItem value="font-serif">Serif</SelectItem>
+                    <SelectItem value="font-sand">Sans</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
