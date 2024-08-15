@@ -10,13 +10,7 @@ type DocCardProps = {
   setIsModalOpen: (isOpen: boolean) => void;
 };
 
-const DocCard = ({
-  title,
-  text,
-  color,
-  link,
-  setIsModalOpen,
-}: DocCardProps) => {
+const DocCard = ({ title, text, color, link, setIsModalOpen }: DocCardProps) => {
   const navigate = useNavigate();
 
   const openModal = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
@@ -26,23 +20,21 @@ const DocCard = ({
     // TODO: open modal with content from props (add e.target.dataset.content into state)
   };
 
-  const openLink = () => {
-    // window.location.href = link;
-    navigate(link);
+  const openLink = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+    e.stopPropagation(); // Prevent the modal from opening
+    window.open(link, "_blank");
   };
 
+  const cardClass = `${color} ${
+    color === "bg-black"
+      ? "!text-zinc-300 border-zinc-500 !bg-zinc-900 border-[1px]"
+      : "text-black"
+  } select-none group p-5 h-44 space-y-5 flex-col transition-all rounded-md flex justify-start items-center`;
+
   return (
-    <div
-      className={`${color} ${
-        color == "bg-black"
-          ? "!text-zinc-300 border-zinc-500 !bg-zinc-900 border-[1px]"
-          : "text-black"
-      } select-none group p-5 h-44 space-y-5 flex-col transition-all rounded-md flex justify-start items-center`}
-    >
+    <div className={cardClass}>
       <h2
-        onClick={(e) => {
-          openModal(e);
-        }}
+        onClick={openModal}
         className="font-semibold group-hover:underline decoration-2 cursor-pointer font-mono text-xl flex justify-between w-full items-center"
       >
         {title}
