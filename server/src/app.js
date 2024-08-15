@@ -10,6 +10,7 @@ const corsOptions = {
     optionsSuccessStatus: 200
 }
 
+// cors middleware
 app.use(cors(corsOptions))
 
 app.use(express.json({limit: "16kb"}))
