@@ -1,12 +1,17 @@
 import AvatarGroup from "./ui/avatarGroup";
-import { colorOptions, TagType, Collaborator, fontOptions } from "@/lib/types.ts";
+import {
+  colorOptions,
+  TagType,
+  Collaborator,
+  fontOptions,
+} from "@/lib/types.ts";
 import { useNavigate } from "react-router-dom";
 import { IoMdAdd } from "react-icons/io";
 import Tag from "./Tag";
 import { removeUsernameTag } from "@/utils/toggleUsernameInTag";
 
 type ListCardProps = {
-  id: string
+  id: string;
   tagname: TagType[];
   description: string;
   title: string;
@@ -55,8 +60,8 @@ const ListCard = ({
   });
 
   const openList = () => {
-    navigate(`/list?listid=${id}`)
-  }
+    navigate(`/lists/${id}`);
+  };
 
   return (
     <>

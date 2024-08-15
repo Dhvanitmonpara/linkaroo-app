@@ -39,6 +39,19 @@ type TagType = {
 
 type fontOptions = "font-mono" | "font-sans" | "font-serif";
 
+type fetchedDocType = {
+  _id: string;
+  title: string;
+  description: string;
+  link: string;
+  userId: string;
+  listId: string;
+  createdAt: string; 
+  updatedAt: string; 
+  __v: number;
+};
+
+
 type fetchedListType = {
   _id: string;
   collaborators: Collaborator[];
@@ -60,4 +73,5 @@ export type {
   fetchedListType,
   Collaborator,
   fontOptions,
+  fetchedDocType,
 };

@@ -26,6 +26,7 @@ const RouterSetup: React.FC = () => {
           <Route path="/" element={<App />}>
             <Route path="" element={<HomePage />} />
             <Route path="/list" element={<Lists theme={profile.theme} />} />
+            <Route path="/lists/:listId" element={<Lists theme={profile.theme} />} />
             <Route path="/doc" element={<Docs theme={profile.theme} />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
@@ -48,6 +49,7 @@ const RouterSetup: React.FC = () => {
               element={<PasswordRecoveryPage />}
             />
             <Route path="/list" element={<HomePage />} />
+            <Route path="/lists/:listId" element={<HomePage />} />
             <Route path="/doc" element={<HomePage />} />
           </Route>
         )
