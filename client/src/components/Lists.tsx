@@ -53,6 +53,14 @@ const Lists = ({ theme }: ListsProps) => {
     );
   }
 
+  if(lists.length == 0) {
+    return (
+      <div className="dark:text-zinc-200 select-none text-zinc-900 h-full w-full flex justify-center items-center">
+        No lists found. Please create a new one.
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="col-span-2 relative pt-5 md:pt-0 space-y-3 overflow-y-scroll no-scrollbar h-[calc(100vh-5rem)]">

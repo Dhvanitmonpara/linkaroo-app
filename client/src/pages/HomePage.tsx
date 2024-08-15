@@ -32,7 +32,7 @@ function App() {
     }
   };
 
-  const { profile, changeTheme } = useProfileStore();
+  const { profile, changeTheme, addProfile } = useProfileStore();
   const { theme } = profile;
   const checkThemeStatus = theme == "black" ? "!bg-black !text-while" : "";
   const isSmallScreen = useMediaQuery({ query: "(max-width: 768px)" });
@@ -73,6 +73,8 @@ function App() {
           navigate("/login");
           return;
         }
+
+        addProfile(currentUser.data.data);
 
         if (isSmallScreen) {
           navigate("/list");
