@@ -15,7 +15,7 @@ type DocsProps = {
 
 const Docs = ({ theme }: DocsProps) => {
   const { toggleModal } = useMethodStore();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const location = useLocation();
   const { docs, setDocs } = useDocStore();
 

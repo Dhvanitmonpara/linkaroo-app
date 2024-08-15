@@ -11,26 +11,26 @@ export default function HorizontalTabs() {
   return (
     <RadioGroup
       onValueChange={(value) => navigate(`/${value}`)}
-      defaultValue="home"
+      defaultValue="list"
       className="flex justify-between dark:bg-zinc-800 w-full px-14 bg-zinc-200 h-full md:px-24 md:rounded-t-xl items-center sm:px-10 sm:w-6/12"
     >
-      <RadioGroupItem value="list" id="r1" className="radio-item" />
-      <label htmlFor="r1" className="menu-label text-xl">
+      <RadioGroupItem defaultChecked={true} value="list" id="list-tab" className="radio-item" />
+      <label htmlFor="list-tab" className="menu-label text-xl">
         <IoListSharp />
       </label>
 
-      <RadioGroupItem value="" id="r2" className="radio-item" />
-      <label htmlFor="r2" className="menu-label text-xl">
+      <RadioGroupItem value="" id="home-tab" className="radio-item" />
+      <label htmlFor="home-tab" className="menu-label text-xl">
         <MdHome />
       </label>
 
-      <RadioGroupItem value="create" id="r3" className="radio-item" />
-      <label htmlFor="r3" className="menu-label text-lg">
+      <RadioGroupItem value="create" id="create-tab" className="radio-item" />
+      <label htmlFor="create-tab" className="menu-label text-lg">
         <FaPlus />
       </label>
 
-      <RadioGroupItem value="profile" id="r4" className="radio-item" />
-      <label htmlFor="r4" className="menu-label text-lg">
+      <RadioGroupItem value="profile" id="profile-tab" className="radio-item" />
+      <label htmlFor="profile-tab" className="menu-label text-lg">
         <IoPerson />
       </label>
     </RadioGroup>

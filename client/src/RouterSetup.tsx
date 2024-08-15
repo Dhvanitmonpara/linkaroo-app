@@ -12,7 +12,7 @@ import App from "./App";
 import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
 import PasswordRecoveryPage from "./pages/PasswordRecoveryPage";
-import { Lists, Docs } from "@/components";
+import { Docs, Lists } from "@/components";
 import useProfileStore from "./store/profileStore";
 
 const RouterSetup: React.FC = () => {
@@ -25,9 +25,8 @@ const RouterSetup: React.FC = () => {
         createRoutesFromElements(
           <Route path="/" element={<App />}>
             <Route path="" element={<HomePage />} />
+            <Route path="/lists/:listId" element={<Docs theme={profile.theme} />} />
             <Route path="/list" element={<Lists theme={profile.theme} />} />
-            <Route path="/lists/:listId" element={<Lists theme={profile.theme} />} />
-            <Route path="/doc" element={<Docs theme={profile.theme} />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
             <Route

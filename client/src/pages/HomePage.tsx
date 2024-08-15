@@ -16,6 +16,7 @@ import { themeType } from "@/lib/types";
 import toast, { Toaster } from "react-hot-toast";
 import getErrorFromAxios from "@/utils/getErrorFromAxios";
 import useMethodStore from "@/store/MethodStore";
+import { useMediaQuery } from "react-responsive";
 
 function App() {
   const navigate = useNavigate();
@@ -35,6 +36,7 @@ function App() {
   const { profile, changeTheme } = useProfileStore();
   const { theme } = profile;
   const checkThemeStatus = theme == "black" ? "!bg-black !text-while" : "";
+  const isSmallScreen = useMediaQuery({ query: "(max-width: 768px)" });
 
   const themeHandler = (theme: themeType) => {
     changeTheme(theme);
@@ -71,6 +73,10 @@ function App() {
         if (currentUser.data == "Unauthorized request") {
           navigate("/login");
           return;
+        }
+
+        if (isSmallScreen) {
+          navigate("/list");
         }
       } catch (error) {
         const errorMsg = getErrorFromAxios(error as AxiosError);
