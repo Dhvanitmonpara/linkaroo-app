@@ -11,14 +11,14 @@ const createCard = asyncHandler(async (req, res) => {
         throw new ApiError(400, "List ID is required")
     }
 
-    const { title, description, link } = req.body
+    const { title, description, link, theme, font } = req.body
 
     if (!title || !link) {
         throw new ApiError(400, "title and link are required")
     }
 
     const cards = await Card.find({ userId: req.user.id, listId: listId })
-
+    
     if (cards.some(card => card.title == title)) {
         throw new ApiError(400, "Card with the same title already exists")
     }
@@ -27,6 +27,8 @@ const createCard = asyncHandler(async (req, res) => {
         title,
         description: description ? description : "",
         link,
+        theme,
+        font,
         userId: req.user?._id,
         listId: listId
     })

@@ -81,7 +81,8 @@ const Docs = ({ theme }: DocsProps) => {
           key={doc._id}
           title={doc.title}
           text={doc.description}
-          color={theme == "black" ? "bg-black" : "bg-emerald-400"}
+          color={theme == "black" ? "bg-black" : doc.theme}
+          link={doc.link}
           setIsModalOpen={toggleModal}
         />
       ))}

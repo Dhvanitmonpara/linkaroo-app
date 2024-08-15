@@ -9,6 +9,9 @@ import { useNavigate } from "react-router-dom";
 import { IoMdAdd } from "react-icons/io";
 import Tag from "./Tag";
 import { removeUsernameTag } from "@/utils/toggleUsernameInTag";
+import useMethodStore from "@/store/MethodStore";
+import { CreateDocForm } from "./Forms";
+import useProfileStore from "@/store/profileStore";
 
 type ListCardProps = {
   id: string;
@@ -38,6 +41,8 @@ const ListCard = ({
   const navigate = useNavigate();
 
   const collaboratorAvatars: string[] = [];
+  const { setModalContent } = useMethodStore();
+  const { profile } = useProfileStore();
 
   collaborators?.forEach((collaborator) => {
     collaboratorAvatars.push(collaborator.avatarImage);
@@ -47,7 +52,9 @@ const ListCard = ({
     setIsModalOpen(true);
     e.stopPropagation();
     navigate(`/list?listid=${title}`, { replace: true });
-    // TODO: open modal with content from props (add e.target.dataset.content into state)
+    setModalContent(
+      <CreateDocForm theme={profile.theme} setIsModalOpen={setIsModalOpen} />
+    );
   };
 
   const tags: string[] = [];

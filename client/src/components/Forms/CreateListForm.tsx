@@ -59,9 +59,9 @@ const CreateListForm: React.FC<CreateListFormProps> = ({
         toast.error("Failed to create list");
       }
 
-      const listId = response.data.data._id
+      const listId = response.data.data._id;
 
-      if(!listId){
+      if (!listId) {
         toast.error("Failed to create list");
         return;
       }
@@ -79,7 +79,9 @@ const CreateListForm: React.FC<CreateListFormProps> = ({
       addListItem(list.data.data);
     } catch (error) {
       const errorMsg = getErrorFromAxios(error as AxiosError);
-      toast.error(errorMsg || "Failed to create list");
+      if (errorMsg != undefined) {
+        toast.error(errorMsg);
+      }
     } finally {
       setLoading(false);
       setIsModalOpen(false);

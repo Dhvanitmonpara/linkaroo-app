@@ -5,7 +5,6 @@ const cardSchema = new Schema({
     title: {
         type: String,
         required: true,
-        unique: true,
     },
     description: {
         type: String,
@@ -13,6 +12,14 @@ const cardSchema = new Schema({
     link: {
         type: String,
         required: true,
+    },
+    theme: {
+        type: String,
+        default: "bg-zinc-200"
+    },
+    font: {
+        type: String,
+        default: "font-mono"
     },
     userId: {
         type: Schema.Types.ObjectId,

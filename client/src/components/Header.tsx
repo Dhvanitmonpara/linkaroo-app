@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ReactNode } from "react";
 import { themeType } from "@/lib/types";
-import { CreateListForm } from "./Forms";
+import { CreateDocForm, CreateListForm } from "./Forms";
 import useMethodStore from "@/store/MethodStore";
 
 type HeaderProps = {
@@ -48,14 +48,11 @@ const Header = ({ theme, setModalContent }: HeaderProps) => {
             onClick={() => {
               toggleModal(true);
               setModalContent(
-                <div className="dark:text-white">
-                  <h1>Add Card</h1>
-                  {/* Add form fields here */}
-                </div>
+                <CreateDocForm setIsModalOpen={toggleModal} theme={theme} />
               );
             }}
           >
-            Card
+            Doc
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

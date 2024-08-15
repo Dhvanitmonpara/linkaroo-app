@@ -44,6 +44,7 @@ type fetchedDocType = {
   title: string;
   description: string;
   link: string;
+  theme: colorOptions
   userId: string;
   listId: string;
   createdAt: string; 

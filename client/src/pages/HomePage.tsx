@@ -8,7 +8,7 @@ import {
   Loading,
   Modal,
 } from "../components";
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios, { AxiosError } from "axios";
 import useProfileStore from "@/store/profileStore";
 import toggleThemeModeAtRootElem from "@/utils/toggleThemeMode";
@@ -21,9 +21,8 @@ import { useMediaQuery } from "react-responsive";
 function App() {
   const navigate = useNavigate();
   const modalRef = useRef<HTMLDivElement | null>(null);
-  const [modalContent, setModalContent] = useState<string | ReactNode>("");
   const [loading, setLoading] = useState<boolean>(true);
-  const { isModalOpen, toggleModal } = useMethodStore();
+  const { isModalOpen, toggleModal, modalContent, setModalContent } = useMethodStore();
 
   const closeModal = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (modalRef.current === e.target) {
