@@ -13,7 +13,7 @@ type ListsProps = {
 };
 
 const Lists = ({ theme }: ListsProps) => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const { setLists, lists } = useListStore();
   const {toggleModal} = useMethodStore()
 
