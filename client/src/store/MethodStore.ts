@@ -5,8 +5,8 @@ import { devtools, persist } from "zustand/middleware";
 interface MethodState {
   isModalOpen: boolean;
   toggleModal: (value?: boolean) => void;
-  modalContent: string | ReactNode;
-  setModalContent: (content: string | ReactNode) => void;
+  modalContent: string | ReactNode | null;
+  setModalContent: (content: string | ReactNode | null) => void;
 }
 
 const useMethodStore = create<MethodState>()(
@@ -14,7 +14,7 @@ const useMethodStore = create<MethodState>()(
     persist(
       (set) => ({
         isModalOpen: false,
-        modalContent: "",
+        modalContent: null, 
         toggleModal: (value) => set({ isModalOpen: value ?? false }),
         setModalContent: (content) => set({ modalContent: content }),
       }),

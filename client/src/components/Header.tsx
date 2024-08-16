@@ -11,11 +11,10 @@ import useMethodStore from "@/store/MethodStore";
 import useProfileStore from "@/store/profileStore";
 
 const Header = () => {
-  const { toggleModal } = useMethodStore();
-  const { setModalContent } = useMethodStore();
+  const { toggleModal, setModalContent } = useMethodStore();
   const { profile } = useProfileStore();
   const { theme } = profile;
-  
+
   return (
     <nav className="h-20 py-5 flex space-x-2 md:px-0 px-4">
       <Input
@@ -29,7 +28,7 @@ const Header = () => {
         </DropdownMenuTrigger>
         <DropdownMenuContent
           className={
-            theme != "light" ? "!bg-black !text-white border-zinc-800" : ""
+            theme !== "light" ? "!bg-black !text-white border-zinc-800" : ""
           }
         >
           <DropdownMenuItem

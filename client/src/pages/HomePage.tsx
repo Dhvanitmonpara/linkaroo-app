@@ -6,31 +6,21 @@ import {
   Lists,
   Docs,
   Loading,
-  Modal,
 } from "../components";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import axios, { AxiosError } from "axios";
 import useProfileStore from "@/store/profileStore";
 import toggleThemeModeAtRootElem from "@/utils/toggleThemeMode";
 import { themeType } from "@/lib/types";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import getErrorFromAxios from "@/utils/getErrorFromAxios";
 import useMethodStore from "@/store/MethodStore";
 import { useMediaQuery } from "react-responsive";
 
 function App() {
   const navigate = useNavigate();
-  const modalRef = useRef<HTMLDivElement | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const { isModalOpen, toggleModal, modalContent, setModalContent } = useMethodStore();
-
-  const closeModal = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    if (modalRef.current === e.target) {
-      toggleModal(false);
-      navigate("/");
-      setModalContent("");
-    }
-  };
+  const { isModalOpen, toggleModal, setModalContent } = useMethodStore();
 
   const { profile, changeTheme, addProfile } = useProfileStore();
   const { theme } = profile;
@@ -146,19 +136,6 @@ function App() {
           </div>
         </div>
       </div>
-      {/* Modal code */}
-      {isModalOpen && (
-        <Modal
-          isOpen={isModalOpen}
-          closeModal={closeModal}
-          modalContent={modalContent}
-          modalRef={modalRef}
-          className="xl:h-auto w-full max-w-4xl"
-        ></Modal>
-      )}
-      <Toaster
-        position={window.innerWidth >= 1024 ? "bottom-right" : "top-center"}
-      />
     </>
   );
 }

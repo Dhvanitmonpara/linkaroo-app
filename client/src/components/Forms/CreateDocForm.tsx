@@ -150,7 +150,7 @@ const CreateDocForm: React.FC<CreateDocFormProps> = ({
                   <SelectGroup>
                     <SelectLabel>Lists</SelectLabel>
                     {lists.map((list) => (
-                      <SelectItem value={list._id}>{list.title}</SelectItem>
+                      <SelectItem key={list._id} value={list._id}>{list.title}</SelectItem>
                     ))}
                   </SelectGroup>
                 </SelectContent>

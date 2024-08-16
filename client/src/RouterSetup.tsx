@@ -16,7 +16,7 @@ import { Docs, Lists } from "@/components";
 import useProfileStore from "./store/profileStore";
 
 const RouterSetup: React.FC = () => {
-  const isSmallScreen = useMediaQuery({ query: "(max-width: 1024px)" });
+  const isSmallScreen = useMediaQuery({ query: "(max-width: 768px)" });
   const { profile } = useProfileStore();
 
   const router = isSmallScreen
