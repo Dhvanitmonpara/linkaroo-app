@@ -74,7 +74,7 @@ function App() {
           return;
         }
 
-        addProfile(currentUser.data.data);
+        addProfile(currentUser.data.data.profile);
 
         if (isSmallScreen) {
           navigate("/list");
@@ -103,7 +103,7 @@ function App() {
         setLoading(false);
       }
     })();
-  });
+  }, []);
 
   if (loading) {
     return <Loading />;
