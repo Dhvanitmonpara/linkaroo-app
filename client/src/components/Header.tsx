@@ -6,20 +6,18 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ReactNode } from "react";
-import { themeType } from "@/lib/types";
 import { CreateDocForm, CreateListForm } from "./Forms";
 import useMethodStore from "@/store/MethodStore";
+import useProfileStore from "@/store/profileStore";
 
-type HeaderProps = {
-  theme: themeType | undefined;
-  setModalContent: (content: string | ReactNode) => void;
-};
-
-const Header = ({ theme, setModalContent }: HeaderProps) => {
-  const {toggleModal} = useMethodStore()
+const Header = () => {
+  const { toggleModal } = useMethodStore();
+  const { setModalContent } = useMethodStore();
+  const { profile } = useProfileStore();
+  const { theme } = profile;
+  
   return (
-    <nav className="h-20 py-5 flex space-x-2">
+    <nav className="h-20 py-5 flex space-x-2 md:px-0 px-4">
       <Input
         className="dark:bg-zinc-800 dark:text-white dark:border-zinc-600"
         placeholder="Create or Search something..."

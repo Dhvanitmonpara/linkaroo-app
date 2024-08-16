@@ -35,7 +35,7 @@ function App() {
   const { profile, changeTheme, addProfile } = useProfileStore();
   const { theme } = profile;
   const checkThemeStatus = theme == "black" ? "!bg-black !text-while" : "";
-  const isSmallScreen = useMediaQuery({ query: "(max-width: 768px)" });
+  const isSmallScreen = useMediaQuery({ query: "(max-width: 1024px)" });
 
   const themeHandler = (theme: themeType) => {
     changeTheme(theme);
@@ -123,7 +123,7 @@ function App() {
           <Lists theme={theme} />
         </div>
         <div className="col-span-3 xl:px-0 lg:px-0 lg:pr-5 px-5 md:max-h-screen">
-          <Header theme={theme} setModalContent={setModalContent} />
+          <Header/>
           {/* <img src="" alt="Banner" /> */}
           <Docs theme={theme} />
         </div>

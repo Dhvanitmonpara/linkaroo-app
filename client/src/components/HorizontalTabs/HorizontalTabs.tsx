@@ -11,7 +11,7 @@ export default function HorizontalTabs() {
     <RadioGroup
       onValueChange={(value) => navigate(`/${value}`)}
       defaultValue="list"
-      className="flex sm:justify-between justify-evenly dark:bg-zinc-800 w-full px-28 bg-zinc-200 h-full md:px-24 md:rounded-t-xl items-center sm:px-16 sm:w-6/12"
+      className="flex md:justify-between justify-evenly dark:bg-zinc-800 w-full px-14 bg-zinc-200 h-full md:px-24 sm:px-16 md:rounded-t-xl items-center sm:w-6/12"
     >
       <RadioGroupItem defaultChecked={true} value="list" id="list-tab" className="radio-item" />
       <label htmlFor="list-tab" className="menu-label text-xl !w-auto">
