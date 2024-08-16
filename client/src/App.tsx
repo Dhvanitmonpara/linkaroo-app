@@ -6,7 +6,7 @@ const App = () => {
   return (
     <div className="h-screen w-screen">
       <div className="p-0 w-full h-full dark:bg-zinc-800">
-        <div className="lg:hidden">
+        <div className="lg:hidden fixed top-0">
           <Header />
         </div>
         <Outlet />
