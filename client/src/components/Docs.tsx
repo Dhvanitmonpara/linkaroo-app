@@ -75,7 +75,7 @@ const Docs = ({ theme }: DocsProps) => {
   }
 
   return (
-    <div className="md:h-[calc(100vh-5rem)] h-[calc(100vh-9rem)] overflow-y-scroll w-full space-y-2 no-scrollbar">
+    <div className="md:h-[calc(100vh-5rem)] md:px-0 px-4 h-[calc(100vh-9rem)] overflow-y-scroll w-full space-y-2 no-scrollbar">
       {docs?.map((doc) => (
         <DocCard
           key={doc._id}

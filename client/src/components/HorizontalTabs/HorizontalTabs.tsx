@@ -36,12 +36,12 @@ export default function HorizontalTabs() {
         id="list-tab"
         className="radio-item"
       />
-      <label htmlFor="list-tab" className="menu-label text-xl !w-auto">
+      <label htmlFor="list-tab" className="menu-label !text-3xl !w-auto">
         <MdHome />
       </label>
 
       {/* <RadioGroupItem value="create" id="create-tab" className="radio-item" /> */}
-      <label htmlFor="create-tab" className="menu-label text-lg !w-auto">
+      <label htmlFor="create-tab" className="menu-label !text-2xl !w-auto">
         <DropdownMenu>
           <DropdownMenuTrigger>
             <FaPlus />
@@ -76,7 +76,7 @@ export default function HorizontalTabs() {
       </label>
 
       {/* <RadioGroupItem value="profile" id="profile-tab" className="radio-item" /> */}
-      <label htmlFor="profile-tab" className="menu-label !text-base !w-auto">
+      <label htmlFor="profile-tab" className="menu-label !text-xl !w-auto">
         <IoPerson />
       </label>
     </RadioGroup>
