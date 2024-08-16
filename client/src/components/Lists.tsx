@@ -63,7 +63,7 @@ const Lists = ({ theme }: ListsProps) => {
 
   return (
     <>
-      <div className="col-span-2 relative lg:pt-0 pt-20 md:px-0 px-4 space-y-3 overflow-y-scroll no-scrollbar h-[calc(100vh-5rem)]">
+      <div className="col-span-2 relative md:px-0 px-4 space-y-3 overflow-y-scroll no-scrollbar h-[calc(100vh-5rem)]">
         {lists.map((list, index) => (
           <ListCard
             key={index}

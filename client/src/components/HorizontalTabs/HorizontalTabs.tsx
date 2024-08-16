@@ -75,7 +75,7 @@ export default function HorizontalTabs() {
         </DropdownMenu>
       </label>
 
-      <RadioGroupItem value="profile" id="profile-tab" className="radio-item" />
+      {/* <RadioGroupItem value="profile" id="profile-tab" className="radio-item" /> */}
       <label htmlFor="profile-tab" className="menu-label !text-base !w-auto">
         <IoPerson />
       </label>

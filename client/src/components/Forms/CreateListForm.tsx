@@ -92,7 +92,7 @@ const CreateListForm: React.FC<CreateListFormProps> = ({
     <div className="dark:text-white p-5 flex flex-col justify-center items-center space-y-3">
       <h1 className="text-3xl">Add List</h1>
       <form
-        className="h-4/5 flex flex-col space-y-6 w-96 justify-center items-center"
+        className="h-4/5 flex flex-col space-y-6 sm:w-96 w-72 justify-center items-center"
         onSubmit={handleSubmit(handleListCreation)}
       >
         <div className="w-full space-y-2">

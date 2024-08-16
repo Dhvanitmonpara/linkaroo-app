@@ -76,11 +76,11 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-screen select-none bg-gradient-to-r from-slate-900 to-zinc-900 flex justify-center items-center">
-      <div className="text-white bg-[#00000025] flex flex-col space-y-8 justify-center items-center p-8 rounded-xl">
+      <div className="text-white bg-[#00000025] flex flex-col space-y-8 justify-center items-center sm:p-8 p-0 rounded-xl">
         <h1 className="font-semibold text-4xl">Login to Linkaroo</h1>
         <form
           action="post"
-          className="h-4/5 flex flex-col space-y-6 w-96 justify-center items-center"
+          className="h-4/5 flex flex-col space-y-6 sm:w-96 w-72 justify-center items-center"
           onSubmit={handleSubmit(userLogin)}
         >
           <div className="w-full space-y-2">
