@@ -1,21 +1,19 @@
 import { ListCard } from "@/components";
-import { themeType } from "@/lib/types";
 import useListStore from "@/store/listStore";
 import useMethodStore from "@/store/MethodStore";
+import useProfileStore from "@/store/profileStore";
 import getErrorFromAxios from "@/utils/getErrorFromAxios";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
-type ListsProps = {
-  theme: themeType | undefined;
-};
-
-const Lists = ({ theme }: ListsProps) => {
+const Lists = () => {
   const [loading, setLoading] = useState(true);
   const { setLists, lists } = useListStore();
   const {toggleModal} = useMethodStore()
+  const {profile} = useProfileStore()
+  const theme = profile.profile.theme
 
   useEffect(() => {
     (async () => {
@@ -63,7 +61,7 @@ const Lists = ({ theme }: ListsProps) => {
 
   return (
     <>
-      <div className="col-span-2 relative md:px-0 px-4 space-y-3 overflow-y-scroll no-scrollbar h-[calc(100vh-5rem)]">
+      <div className="col-span-2 relative lg:px-0 px-4 space-y-3 overflow-y-scroll no-scrollbar h-[calc(100vh-5rem)]">
         {lists.map((list, index) => (
           <ListCard
             key={index}
@@ -79,7 +77,7 @@ const Lists = ({ theme }: ListsProps) => {
             toggleModal={toggleModal}
           />
         ))}
-        <div className="h-2"></div>
+        <div className="lg:h-2 h-16"></div>
       </div>
     </>
   );

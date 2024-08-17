@@ -50,13 +50,14 @@ const LoginPage = () => {
         data: userCredentials,
         withCredentials: true,
         headers: {
-          "Access-control-Allow-Origin": import.meta.env.VITE_ACCESS_CONTROL_ORIGIN,
+          "Access-control-Allow-Origin": import.meta.env
+            .VITE_ACCESS_CONTROL_ORIGIN,
           "Content-Type": "application/json",
         },
       });
 
       if (response?.data?.data?.user) {
-        addProfile(response.data.data.user);
+        addProfile({ ...response.data.data.user, profile: { theme: "dark" } });
         navigate("/");
       }
     } catch (err) {

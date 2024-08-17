@@ -1,7 +1,7 @@
 import { DocCard } from "@/components";
-import { themeType } from "@/lib/types";
 import useDocStore from "@/store/docStore";
 import useMethodStore from "@/store/MethodStore";
+import useProfileStore from "@/store/profileStore";
 import getErrorFromAxios from "@/utils/getErrorFromAxios";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Loader2 } from "lucide-react";
@@ -9,15 +9,13 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useLocation } from "react-router-dom";
 
-type DocsProps = {
-  theme: themeType | undefined;
-};
-
-const Docs = ({ theme }: DocsProps) => {
+const Docs = () => {
   const { toggleModal } = useMethodStore();
   const [loading, setLoading] = useState(false);
   const location = useLocation();
   const { docs, setDocs } = useDocStore();
+  const {profile} = useProfileStore();
+  const { theme } = profile.profile;
 
   useEffect(() => {
     (async () => {
@@ -86,7 +84,7 @@ const Docs = ({ theme }: DocsProps) => {
           toggleModal={toggleModal}
         />
       ))}
-      <div className="h-2"></div>
+      <div className="lg:h-2 h-16"></div>
     </div>
   );
 };

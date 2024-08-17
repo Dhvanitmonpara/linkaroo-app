@@ -13,21 +13,18 @@ import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
 import PasswordRecoveryPage from "./pages/PasswordRecoveryPage";
 import { Docs, Lists } from "@/components";
-import useProfileStore from "./store/profileStore";
 
 const RouterSetup: React.FC = () => {
-  const isSmallScreen = useMediaQuery({ query: "(max-width: 768px)" });
-  const { profile } = useProfileStore();
-  const theme = profile.profile.theme;
-
+  const isSmallScreen = useMediaQuery({ query: "(max-width: 1024px)" });
+  
   const router = isSmallScreen
     ? createBrowserRouter(
         // Small screen
         createRoutesFromElements(
           <Route path="/" element={<App />}>
             <Route path="" element={<HomePage />} />
-            <Route path="/lists/:listId" element={<Docs theme={theme} />} />
-            <Route path="/list" element={<Lists theme={theme} />} />
+            <Route path="/lists/:listId" element={<Docs />} />
+            <Route path="/list" element={<Lists />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
             <Route

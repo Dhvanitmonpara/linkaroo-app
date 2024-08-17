@@ -4,11 +4,11 @@ import { Header, HorizontalTabs, Loading, Modal } from "./components";
 import { useEffect, useRef, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import useMethodStore from "./store/MethodStore";
-import toggleThemeModeAtRootElem from "./utils/toggleThemeMode";
 import useProfileStore from "./store/profileStore";
 import { useMediaQuery } from "react-responsive";
 import axios, { AxiosError } from "axios";
 import getErrorFromAxios from "./utils/getErrorFromAxios";
+import toggleThemeModeAtRootElem from "./utils/toggleThemeMode";
 
 const App = () => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -17,16 +17,18 @@ const App = () => {
   const navigate = useNavigate();
   const { isModalOpen, setModalContent, toggleModal, modalContent } =
     useMethodStore();
+  const { addProfile, profile } = useProfileStore();
 
   const isSmallScreen = useMediaQuery({ query: "(max-width: 1024px)" });
-
-  const { profile, addProfile } = useProfileStore();
-  const { theme } = profile.profile;
 
   const closeModal = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (modalRef.current === e.target) {
       toggleModal(false);
-      navigate("/");
+      if (isSmallScreen) {
+        navigate("/list");
+      } else {
+        navigate("/");
+      }
       setModalContent(null);
     }
   };
@@ -76,6 +78,8 @@ const App = () => {
     })();
   }, []);
 
+  const theme = profile.profile.theme;
+
   useEffect(() => {
     if (theme == "black") {
       toggleThemeModeAtRootElem("dark");
@@ -95,9 +99,9 @@ const App = () => {
   }
 
   return (
-    <div className="h-screen w-screen">
+    <div className="max-h-screen w-screen">
       <div
-        className={`md:hidden sticky top-0 z-40 w-full bg-zinc-800 ${
+        className={`lg:hidden sticky top-0 z-40 w-full dark:bg-zinc-800 ${
           showBars ? "hidden" : ""
         }`}
       >
