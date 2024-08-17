@@ -78,7 +78,6 @@ const Docs = () => {
         <DocCard
           key={doc._id}
           title={doc.title}
-          text={doc.description}
           color={theme == "black" ? "bg-black" : doc.theme}
           link={doc.link}
           toggleModal={toggleModal}

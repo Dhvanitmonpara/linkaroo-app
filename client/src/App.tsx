@@ -78,7 +78,7 @@ const App = () => {
     })();
   }, []);
 
-  const theme = profile.profile.theme;
+  const theme = profile?.profile?.theme;
 
   useEffect(() => {
     if (theme == "black") {
