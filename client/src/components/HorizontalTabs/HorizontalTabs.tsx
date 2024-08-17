@@ -41,44 +41,74 @@ export default function HorizontalTabs() {
       </label>
 
       {/* <RadioGroupItem value="create" id="create-tab" className="radio-item" /> */}
-      <label htmlFor="create-tab" className="menu-label !text-2xl !w-auto">
-        <DropdownMenu>
-          <DropdownMenuTrigger>
+      <DropdownMenu>
+        <DropdownMenuTrigger>
+          <label htmlFor="create-tab" className="menu-label !text-2xl !w-auto">
             <FaPlus />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            className={
-              theme !== "light" ? "!bg-black !text-white border-zinc-800" : ""
-            }
+          </label>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent
+          className={
+            theme !== "light" ? "!bg-black !text-white border-zinc-800" : ""
+          }
+        >
+          <DropdownMenuItem
+            onClick={() => {
+              toggleModal(true);
+              setModalContent(
+                <CreateListForm setIsModalOpen={toggleModal} theme={theme} />
+              );
+            }}
           >
-            <DropdownMenuItem
-              onClick={() => {
-                toggleModal(true);
-                setModalContent(
-                  <CreateListForm setIsModalOpen={toggleModal} theme={theme} />
-                );
-              }}
-            >
-              List
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => {
-                toggleModal(true);
-                setModalContent(
-                  <CreateDocForm setIsModalOpen={toggleModal} theme={theme} />
-                );
-              }}
-            >
-              Doc
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </label>
+            List
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => {
+              toggleModal(true);
+              setModalContent(
+                <CreateDocForm setIsModalOpen={toggleModal} theme={theme} />
+              );
+            }}
+          >
+            Doc
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
 
       {/* <RadioGroupItem value="profile" id="profile-tab" className="radio-item" /> */}
-      <label htmlFor="profile-tab" className="menu-label !text-xl !w-auto">
-        <IoPerson />
-      </label>
+      <DropdownMenu>
+        <DropdownMenuTrigger>
+          <label htmlFor="profile-tab" className="menu-label !text-xl !w-auto h-auto m-0 p-0">
+            <IoPerson />
+          </label>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent
+          className={
+            theme !== "light" ? "!bg-black !text-white border-zinc-800" : ""
+          }
+        >
+          <DropdownMenuItem
+            onClick={() => {
+              toggleModal(true);
+              setModalContent(
+                <CreateListForm setIsModalOpen={toggleModal} theme={theme} />
+              );
+            }}
+          >
+            List
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => {
+              toggleModal(true);
+              setModalContent(
+                <CreateDocForm setIsModalOpen={toggleModal} theme={theme} />
+              );
+            }}
+          >
+            Doc
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </RadioGroup>
   );
 }

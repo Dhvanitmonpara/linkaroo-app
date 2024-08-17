@@ -10,8 +10,6 @@ import {
 import { useEffect, useState } from "react";
 import axios, { AxiosError } from "axios";
 import useProfileStore from "@/store/profileStore";
-import toggleThemeModeAtRootElem from "@/utils/toggleThemeMode";
-import { themeType } from "@/lib/types";
 import toast from "react-hot-toast";
 import getErrorFromAxios from "@/utils/getErrorFromAxios";
 import useMethodStore from "@/store/MethodStore";
@@ -22,19 +20,10 @@ function App() {
   const [loading, setLoading] = useState<boolean>(true);
   const { isModalOpen, toggleModal, setModalContent } = useMethodStore();
 
-  const { profile, changeTheme, addProfile } = useProfileStore();
+  const { profile, addProfile } = useProfileStore();
   const { theme } = profile;
   const checkThemeStatus = theme == "black" ? "!bg-black !text-while" : "";
   const isSmallScreen = useMediaQuery({ query: "(max-width: 1024px)" });
-
-  const themeHandler = (theme: themeType) => {
-    changeTheme(theme);
-    if (theme == "black") {
-      toggleThemeModeAtRootElem("dark");
-    } else {
-      toggleThemeModeAtRootElem(theme);
-    }
-  };
 
   document.addEventListener("keydown", ({ key }) => {
     if (key == "Escape" && isModalOpen) {
@@ -125,7 +114,6 @@ function App() {
               theme={theme}
               setIsModalOpen={toggleModal}
               setModalContent={setModalContent}
-              themeHandler={themeHandler}
               profile={profile}
             />
           </div>
