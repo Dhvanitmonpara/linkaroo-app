@@ -13,7 +13,7 @@ import useProfileStore from "@/store/profileStore";
 const Header = () => {
   const { toggleModal, setModalContent } = useMethodStore();
   const { profile } = useProfileStore();
-  const { theme } = profile;
+  const { theme } = profile.profile;
 
   return (
     <nav className="h-20 md:py-5 py-4 flex space-x-2 md:px-0 px-4">

@@ -18,6 +18,7 @@ import useProfileStore from "./store/profileStore";
 const RouterSetup: React.FC = () => {
   const isSmallScreen = useMediaQuery({ query: "(max-width: 768px)" });
   const { profile } = useProfileStore();
+  const theme = profile.profile.theme;
 
   const router = isSmallScreen
     ? createBrowserRouter(
@@ -25,8 +26,8 @@ const RouterSetup: React.FC = () => {
         createRoutesFromElements(
           <Route path="/" element={<App />}>
             <Route path="" element={<HomePage />} />
-            <Route path="/lists/:listId" element={<Docs theme={profile.theme} />} />
-            <Route path="/list" element={<Lists theme={profile.theme} />} />
+            <Route path="/lists/:listId" element={<Docs theme={theme} />} />
+            <Route path="/list" element={<Lists theme={theme} />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
             <Route

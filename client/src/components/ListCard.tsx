@@ -53,7 +53,7 @@ const ListCard = ({
     e.stopPropagation();
     navigate(`/list?listid=${title}`, { replace: true });
     setModalContent(
-      <CreateDocForm theme={profile.theme} toggleModal={toggleModal} />
+      <CreateDocForm theme={profile.profile.theme} toggleModal={toggleModal} />
     );
   };
 
