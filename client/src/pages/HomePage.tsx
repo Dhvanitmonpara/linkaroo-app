@@ -5,25 +5,17 @@ import {
   DocScreen,
   Lists,
   Docs,
-  Loading,
 } from "../components";
-import { useEffect, useState } from "react";
-import axios, { AxiosError } from "axios";
 import useProfileStore from "@/store/profileStore";
-import toast from "react-hot-toast";
-import getErrorFromAxios from "@/utils/getErrorFromAxios";
 import useMethodStore from "@/store/MethodStore";
-import { useMediaQuery } from "react-responsive";
 
 function App() {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState<boolean>(true);
   const { isModalOpen, toggleModal, setModalContent } = useMethodStore();
 
-  const { profile, addProfile } = useProfileStore();
+  const { profile } = useProfileStore();
   const { theme } = profile.profile;
   const checkThemeStatus = theme == "black" ? "!bg-black !text-while" : "";
-  const isSmallScreen = useMediaQuery({ query: "(max-width: 1024px)" });
 
   document.addEventListener("keydown", ({ key }) => {
     if (key == "Escape" && isModalOpen) {
@@ -38,55 +30,6 @@ function App() {
       event.preventDefault();
     }
   });
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const currentUser = await axios({
-          method: "GET",
-          url: `${import.meta.env.VITE_SERVER_API_URL}/users/current-user`,
-          withCredentials: true,
-        });
-
-        if (currentUser.data == "Unauthorized request") {
-          navigate("/login");
-          return;
-        }
-
-        addProfile(currentUser.data.data);
-
-        if (isSmallScreen) {
-          navigate("/list");
-        }
-      } catch (error) {
-        const errorMsg = getErrorFromAxios(error as AxiosError);
-        if (errorMsg === "Unauthorized request") {
-          navigate("/login");
-        } else if (errorMsg !== undefined) {
-          toast.error((t) => (
-            <span className="space-x-3">
-              <span>{errorMsg}</span>
-              <button
-                className="bg-red-500 text-white font-semibold hover:underline h-full w-auto rounded-sm py-1 px-3"
-                onClick={() => {
-                  toast.dismiss(t.id);
-                  navigate("/login");
-                }}
-              >
-                Login again
-              </button>
-            </span>
-          ));
-        }
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, []);
-
-  if (loading) {
-    return <Loading />;
-  }
 
   return (
     <>

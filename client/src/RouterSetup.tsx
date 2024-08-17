@@ -18,6 +18,7 @@ import useProfileStore from "./store/profileStore";
 const RouterSetup: React.FC = () => {
   const isSmallScreen = useMediaQuery({ query: "(max-width: 768px)" });
   const { profile } = useProfileStore();
+  console.log(profile)
   const theme = profile.profile.theme;
 
   const router = isSmallScreen
