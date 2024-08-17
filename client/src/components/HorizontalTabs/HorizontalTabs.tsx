@@ -16,7 +16,7 @@ import { CreateDocForm, CreateListForm, SettingsForm } from "../Forms";
 
 export default function HorizontalTabs() {
   const { profile } = useProfileStore();
-  const { theme } = profile;
+  const { theme } = profile.profile;
   const { toggleModal, setModalContent } = useMethodStore();
 
   const navigate = useNavigate();

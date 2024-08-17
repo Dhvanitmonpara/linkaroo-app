@@ -4,14 +4,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ProfileType } from "@/store/profileStore";
+import { User } from "@/store/profileStore";
 import { ReactNode } from "react";
 import { SettingsForm } from "./Forms";
 import { themeType } from "@/lib/types";
 
 type HeaderProps = {
   theme: themeType | undefined;
-  profile: ProfileType;
+  profile: User;
   toggleModal: (isOpen: boolean) => void;
   setModalContent: (content: string | ReactNode) => void;
 };

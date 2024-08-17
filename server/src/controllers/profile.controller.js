@@ -129,6 +129,37 @@ const uploadUserCoverImage = asyncHandler(async (req, res) => {
         ))
 })
 
+const updateProfileSettings = asyncHandler(async (req, res) => {
+    const { font = "font-mono", theme = "dark" } = req.body    
+
+    const userId = req.user?._id
+
+    const profile = await Profile.findOneAndUpdate(
+        { userId: userId },
+        {
+            $set: {
+                font,
+                theme
+            }
+        },
+        {
+            new: true
+        }
+    ).select("-coverImage -bio")
+
+    if(!profile) {
+        throw new ApiError(500, "Failed to update profile settings")
+    }
+
+    return res
+       .status(200)
+       .json(new ApiResponse(
+            200,
+            profile,
+            "Profile settings updated successfully"
+        ))
+})
+
 const toggleTheme = asyncHandler(async (req, res) => {
 
     const { theme } = req.body
@@ -161,5 +192,6 @@ export {
     updateBio,
     updateUserCoverImage,
     uploadUserCoverImage,
-    toggleTheme
+    toggleTheme,
+    updateProfileSettings,
 }

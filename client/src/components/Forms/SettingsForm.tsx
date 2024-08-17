@@ -33,7 +33,7 @@ const SettingsForm: React.FC<SettingsFormProps> = ({
   toggleModal,
 }) => {
   const [loading, setLoading] = useState(false);
-  const { changeTheme } = useProfileStore();
+  const { changeTheme, updateProfile } = useProfileStore();
 
   const themeHandler = (theme: themeType) => {
     changeTheme(theme);
@@ -55,36 +55,20 @@ const SettingsForm: React.FC<SettingsFormProps> = ({
 
   const handleListCreation = async () => {
     try {
+
       setLoading(true);
 
       const response = await axios.post(
-        `${import.meta.env.VITE_SERVER_API_URL}/lists`,
+        `${import.meta.env.VITE_SERVER_API_URL}/profiles/settings/update`,
         profile,
         { withCredentials: true }
       );
 
       if (response.status !== 200) {
-        toast.error("Failed to create list");
+        toast.error("Failed to update settings");
       }
 
-      const listId = response.data.data._id;
-
-      if (!listId) {
-        toast.error("Failed to create list");
-        return;
-      }
-
-      const list = await axios.get(
-        `${import.meta.env.VITE_SERVER_API_URL}/lists/u/${listId}`,
-        { withCredentials: true }
-      );
-
-      if (!list) {
-        toast.error("Failed to fetch list details");
-        return;
-      }
-
-      //   addListItem(list.data.data);
+      updateProfile(response.data);
     } catch (error) {
       const errorMsg = getErrorFromAxios(error as AxiosError);
       if (errorMsg != undefined) {

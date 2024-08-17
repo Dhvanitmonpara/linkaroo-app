@@ -15,7 +15,7 @@ const profileSchema = new Schema({
     },
     font: {
         type: String,
-        default: "font-mono"
+        
     },
     bio: {
         type: String,

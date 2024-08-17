@@ -21,7 +21,7 @@ function App() {
   const { isModalOpen, toggleModal, setModalContent } = useMethodStore();
 
   const { profile, addProfile } = useProfileStore();
-  const { theme } = profile;
+  const { theme } = profile.profile;
   const checkThemeStatus = theme == "black" ? "!bg-black !text-while" : "";
   const isSmallScreen = useMediaQuery({ query: "(max-width: 1024px)" });
 
