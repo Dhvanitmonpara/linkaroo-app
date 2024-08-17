@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useForm, Controller } from "react-hook-form";
-import { colorOptions, fontOptions, themeType } from "@/lib/types";
+import { fontOptions, themeType } from "@/lib/types";
 import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import getErrorFromAxios from "@/utils/getErrorFromAxios";
@@ -23,7 +23,7 @@ type SettingsFormProps = {
 };
 
 type HandleSettingsType = {
-  theme: colorOptions;
+  theme: themeType;
   font: fontOptions;
 };
 
@@ -32,32 +32,29 @@ const SettingsForm: React.FC<SettingsFormProps> = ({
   toggleModal,
 }) => {
   const [loading, setLoading] = useState(false);
-  const { changeTheme, updateProfile } = useProfileStore();
+  const { changeTheme, updateProfile, profile } = useProfileStore();
 
   const { control, handleSubmit } = useForm<HandleSettingsType>({
     defaultValues: {
-      theme: "bg-zinc-200",
-      font: "font-mono",
+      theme: profile.profile.theme,
+      font: profile.profile.font,
     },
   });
 
-  const { profile } = useProfileStore();
-
-  const handleListCreation = async () => {
+  const handleListCreation = async (data: HandleSettingsType) => {
     try {
 
       setLoading(true);
 
       const response = await axios.post(
         `${import.meta.env.VITE_SERVER_API_URL}/profiles/settings/update`,
-        profile,
+        data,
         { withCredentials: true }
       );
 
       if (response.status !== 200) {
         toast.error("Failed to update settings");
       }
-
       updateProfile(response.data);
     } catch (error) {
       const errorMsg = getErrorFromAxios(error as AxiosError);

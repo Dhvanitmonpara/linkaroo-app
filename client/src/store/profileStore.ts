@@ -25,7 +25,7 @@ type User = {
 interface ProfileState {
   profile: User;
   addProfile: (profile: User) => void;
-  updateProfile: (updatedProfile: User) => void;
+  updateProfile: (updatedProfile: ProfileType) => void;
   removeProfile: () => void;
   changeTheme: (theme: themeType) => void;
 }
@@ -54,7 +54,7 @@ const useProfileStore = create<ProfileState>()(
         addProfile: (profile) => set({ profile }),
         updateProfile: (updatedProfile) =>
           set((state) => ({
-            profile: { ...state.profile, ...updatedProfile },
+            profile: { ...state.profile, profile: {...state.profile.profile, ...updatedProfile} },
           })),
         removeProfile: () =>
           set({
