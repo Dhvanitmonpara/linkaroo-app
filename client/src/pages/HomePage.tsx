@@ -53,7 +53,7 @@ function App() {
           return;
         }
 
-        addProfile(currentUser.data.data.profile);
+        addProfile(currentUser.data.data);
 
         if (isSmallScreen) {
           navigate("/list");
@@ -112,7 +112,7 @@ function App() {
           >
             <ProfileCard
               theme={theme}
-              setIsModalOpen={toggleModal}
+              toggleModal={toggleModal}
               setModalContent={setModalContent}
               profile={profile}
             />

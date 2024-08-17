@@ -9,7 +9,7 @@ import { ObjectId } from "mongodb"
 
 const createList = asyncHandler(async (req, res) => {
 
-    const { title, description, theme = "bg-zinc-200", font = "space-mono" } = req.body
+    const { title, description, theme = "bg-zinc-200" } = req.body
 
     if (!title || !description) {
         throw new ApiError(400, "Title and description are required")
@@ -29,7 +29,6 @@ const createList = asyncHandler(async (req, res) => {
         title,
         description,
         theme,
-        font,
         collaborators: []
     })
 
@@ -212,7 +211,7 @@ const updateList = asyncHandler(async (req, res) => {
 
     listOwnerVerification(list.createdBy, req.user, res)
 
-    const { title, description, theme = "dark", font = "space-mono" } = req.body
+    const { title, description, theme = "dark" } = req.body
 
     if (!title || !description) {
         throw new ApiError(400, "At least one field needs to be updated")
@@ -225,7 +224,6 @@ const updateList = asyncHandler(async (req, res) => {
                 title,
                 description,
                 theme,
-                font
             }
         },
         { new: true }

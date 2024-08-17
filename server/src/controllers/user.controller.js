@@ -241,10 +241,33 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 
     const userId = req.user._id
 
-    // const profile = await Profile.find({ userId: userId })
-    const profile = await User.findById(userId)
+    const user = await User.aggregate([
+        {
+            $match: { _id: userId }
+        },
+        {
+            $lookup: {
+                from: "profiles",
+                localField: "_id",
+                foreignField: "userId",
+                as: "profile"
+            }
+        },
+        {
+            $unwind: "$profile"
+        },
+        {
+            $project: {
+                fullName: 1,
+                email: 1,
+                username: 1,
+                avatarImage: 1,
+                profile: 1
+            }
+        }
+    ])
 
-    if (!profile) {
+    if (!user) {
         return res
             .status(200)
             .json(
@@ -258,10 +281,7 @@ const getCurrentUser = asyncHandler(async (req, res) => {
         .status(200)
         .json(new ApiResponse(
             200,
-            {
-                profile,
-                user: req.user?.id,
-            },
+            user[0],
             "Current user fetched successfully"
         ))
 })

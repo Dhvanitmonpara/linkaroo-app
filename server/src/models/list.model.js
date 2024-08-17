@@ -21,10 +21,6 @@ const listSchema = new Schema({
         type: String,
         default: "bg-zinc-200"
     },
-    font: {
-        type: String,
-        default: "font-mono"
-    },
     isPublic: {
         type: Boolean,
         default: true

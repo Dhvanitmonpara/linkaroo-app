@@ -76,7 +76,7 @@ const Lists = ({ theme }: ListsProps) => {
             theme={list.theme}
             font={list.font}
             isBlackMode={theme == "black" ? true : false}
-            setIsModalOpen={toggleModal}
+            toggleModal={toggleModal}
           />
         ))}
         <div className="h-2"></div>

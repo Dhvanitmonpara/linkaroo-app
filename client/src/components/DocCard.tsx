@@ -7,14 +7,14 @@ type DocCardProps = {
   text: string;
   color: colorOptions;
   link: string;
-  setIsModalOpen: (isOpen: boolean) => void;
+  toggleModal: (isOpen: boolean) => void;
 };
 
-const DocCard = ({ title, text, color, link, setIsModalOpen }: DocCardProps) => {
+const DocCard = ({ title, text, color, link, toggleModal }: DocCardProps) => {
   const navigate = useNavigate();
 
   const openModal = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
-    setIsModalOpen(true);
+    toggleModal(true);
     e.stopPropagation();
     navigate(`/doc?docid=${title}`, { replace: true });
     // TODO: open modal with content from props (add e.target.dataset.content into state)

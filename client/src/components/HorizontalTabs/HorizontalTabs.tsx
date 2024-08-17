@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import useProfileStore from "@/store/profileStore";
 import useMethodStore from "@/store/MethodStore";
-import { CreateDocForm, CreateListForm } from "../Forms";
+import { CreateDocForm, CreateListForm, SettingsForm } from "../Forms";
 
 export default function HorizontalTabs() {
   const { profile } = useProfileStore();
@@ -56,7 +56,7 @@ export default function HorizontalTabs() {
             onClick={() => {
               toggleModal(true);
               setModalContent(
-                <CreateListForm setIsModalOpen={toggleModal} theme={theme} />
+                <CreateListForm toggleModal={toggleModal} theme={theme} />
               );
             }}
           >
@@ -66,7 +66,7 @@ export default function HorizontalTabs() {
             onClick={() => {
               toggleModal(true);
               setModalContent(
-                <CreateDocForm setIsModalOpen={toggleModal} theme={theme} />
+                <CreateDocForm toggleModal={toggleModal} theme={theme} />
               );
             }}
           >
@@ -83,31 +83,52 @@ export default function HorizontalTabs() {
           </label>
         </DropdownMenuTrigger>
         <DropdownMenuContent
-          className={
-            theme !== "light" ? "!bg-black !text-white border-zinc-800" : ""
-          }
+        className={`
+          ${
+            theme != "light" ? "!bg-black !text-white border-zinc-800" : ""
+          } !w-[26vw] mt-1
+        `}
+      >
+        <DropdownMenuItem
+          className="py-2"
+          onClick={() => {
+            toggleModal(true);
+            setModalContent(
+              <div className="dark:text-white p-5 flex justify-center items-center space-y-3">
+                <h1 className="text-3xl">Profile</h1>
+                {/* Add form fields here */}
+              </div>
+            );
+          }}
         >
-          <DropdownMenuItem
-            onClick={() => {
-              toggleModal(true);
-              setModalContent(
-                <CreateListForm setIsModalOpen={toggleModal} theme={theme} />
-              );
-            }}
-          >
-            List
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => {
-              toggleModal(true);
-              setModalContent(
-                <CreateDocForm setIsModalOpen={toggleModal} theme={theme} />
-              );
-            }}
-          >
-            Doc
-          </DropdownMenuItem>
-        </DropdownMenuContent>
+          Profile
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          className="py-2"
+          onClick={() => {
+            toggleModal(true);
+            setModalContent(
+              <SettingsForm theme={theme} toggleModal={toggleModal} />
+            );
+          }}
+        >
+          Settings
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          className="py-2"
+          onClick={() => {
+            toggleModal(true);
+            setModalContent(
+              <div className="dark:text-white p-5 flex justify-center items-center space-y-3">
+                <h1 className="text-3xl">Feedback</h1>
+                {/* Add form fields here */}
+              </div>
+            );
+          }}
+        >
+          Feedback
+        </DropdownMenuItem>
+      </DropdownMenuContent>
       </DropdownMenu>
     </RadioGroup>
   );

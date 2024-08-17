@@ -12,7 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useForm, Controller } from "react-hook-form";
-import { colorOptions, fontOptions, themeType } from "@/lib/types";
+import { colorOptions, themeType } from "@/lib/types";
 import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import getErrorFromAxios from "@/utils/getErrorFromAxios";
@@ -20,19 +20,18 @@ import useListStore from "@/store/listStore";
 
 type CreateListFormProps = {
   theme: themeType | undefined;
-  setIsModalOpen: (isOpen: boolean) => void;
+  toggleModal: (isOpen: boolean) => void;
 };
 
 type HandleListCreationType = {
   title: string;
   description: string;
   theme: colorOptions;
-  font: fontOptions;
 };
 
 const CreateListForm: React.FC<CreateListFormProps> = ({
   theme,
-  setIsModalOpen,
+  toggleModal,
 }) => {
   const [loading, setLoading] = useState(false);
 
@@ -41,7 +40,6 @@ const CreateListForm: React.FC<CreateListFormProps> = ({
   const { control, handleSubmit, register } = useForm<HandleListCreationType>({
     defaultValues: {
       theme: "bg-zinc-200",
-      font: "font-mono",
     },
   });
 
@@ -84,7 +82,7 @@ const CreateListForm: React.FC<CreateListFormProps> = ({
       }
     } finally {
       setLoading(false);
-      setIsModalOpen(false);
+      toggleModal(false);
     }
   };
 
@@ -152,34 +150,6 @@ const CreateListForm: React.FC<CreateListFormProps> = ({
                     <SelectItem value="bg-blue-400">Blue</SelectItem>
                     <SelectItem value="bg-rose-400">Rose</SelectItem>
                     <SelectItem value="bg-sky-400">Sky</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            )}
-          />
-        </div>
-        <div className="w-full space-y-2">
-          <span>Font</span>
-          <Controller
-            name="font"
-            control={control}
-            render={({ field: { onChange, value } }) => (
-              <Select value={value} onValueChange={onChange}>
-                <SelectTrigger className="dark:text-white dark:bg-zinc-700 max-w-96">
-                  <SelectValue placeholder="Select font" />
-                </SelectTrigger>
-                <SelectContent
-                  className={
-                    theme !== "light"
-                      ? "!bg-zinc-900 !text-white border-zinc-800"
-                      : ""
-                  }
-                >
-                  <SelectGroup>
-                    <SelectLabel>Fonts</SelectLabel>
-                    <SelectItem value="font-mono">Mono</SelectItem>
-                    <SelectItem value="font-serif">Serif</SelectItem>
-                    <SelectItem value="font-sand">Sans</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>

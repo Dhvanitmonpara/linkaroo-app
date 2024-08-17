@@ -13,6 +13,10 @@ const profileSchema = new Schema({
         type: String,
         default: "dark"
     },
+    font: {
+        type: String,
+        default: "font-mono"
+    },
     bio: {
         type: String,
         trim: true

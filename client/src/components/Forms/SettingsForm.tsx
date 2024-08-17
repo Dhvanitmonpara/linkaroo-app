@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Input } from "../ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import {
@@ -19,21 +18,19 @@ import getErrorFromAxios from "@/utils/getErrorFromAxios";
 import useProfileStore from "@/store/profileStore";
 import toggleThemeModeAtRootElem from "@/utils/toggleThemeMode";
 
-type CreateListFormProps = {
+type SettingsFormProps = {
   theme: themeType | undefined;
-  setIsModalOpen: (isOpen: boolean) => void;
+  toggleModal: (isOpen: boolean) => void;
 };
 
-type HandleListCreationType = {
-  title: string;
-  description: string;
+type HandleSettingsType = {
   theme: colorOptions;
   font: fontOptions;
 };
 
-const CreateListForm: React.FC<CreateListFormProps> = ({
+const SettingsForm: React.FC<SettingsFormProps> = ({
   theme,
-  setIsModalOpen,
+  toggleModal,
 }) => {
   const [loading, setLoading] = useState(false);
   const { changeTheme } = useProfileStore();
@@ -47,20 +44,22 @@ const CreateListForm: React.FC<CreateListFormProps> = ({
     }
   };
 
-  const { control, handleSubmit, register } = useForm<HandleListCreationType>({
+  const { control, handleSubmit } = useForm<HandleSettingsType>({
     defaultValues: {
       theme: "bg-zinc-200",
       font: "font-mono",
     },
   });
 
-  const handleListCreation = async (data: HandleListCreationType) => {
+  const { profile } = useProfileStore();
+
+  const handleListCreation = async () => {
     try {
       setLoading(true);
 
       const response = await axios.post(
         `${import.meta.env.VITE_SERVER_API_URL}/lists`,
-        data,
+        profile,
         { withCredentials: true }
       );
 
@@ -93,40 +92,18 @@ const CreateListForm: React.FC<CreateListFormProps> = ({
       }
     } finally {
       setLoading(false);
-      setIsModalOpen(false);
+      toggleModal(false);
     }
   };
 
   return (
     <div className="dark:text-white p-5 flex flex-col justify-center items-center space-y-3">
-      <h1 className="text-3xl">Add List</h1>
+      <h1 className="text-3xl">Settings</h1>
       <form
         className="h-4/5 flex flex-col space-y-6 sm:w-96 w-72 justify-center items-center"
         onSubmit={handleSubmit(handleListCreation)}
       >
         <div className="w-full space-y-2">
-          <label htmlFor="title">Title</label>
-          <Input
-            id="title"
-            type="text"
-            placeholder="Enter title"
-            className="dark:bg-zinc-700 bg-zinc-200"
-            {...register("title", { required: "Title is required" })}
-          />
-        </div>
-        <div className="w-full space-y-2">
-          <label htmlFor="description">Description</label>
-          <Input
-            id="description"
-            type="text"
-            placeholder="Enter description"
-            className="dark:bg-zinc-700 bg-zinc-200"
-            {...register("description", {
-              required: "Description is required",
-            })}
-          />
-        </div>
-        <div className="flex justify-between w-full">
           <span>Theme</span>
           <Controller
             name="theme"
@@ -139,18 +116,18 @@ const CreateListForm: React.FC<CreateListFormProps> = ({
                   onChange(value);
                 }}
               >
-                <SelectTrigger className="dark:text-white max-w-36">
+                <SelectTrigger className="dark:text-white dark:bg-zinc-700 max-w-96">
                   <SelectValue placeholder="Change theme" />
                 </SelectTrigger>
                 <SelectContent
-                  className={
-                    theme !== "light"
-                      ? "!bg-zinc-900 !text-white border-zinc-800"
-                      : ""
-                  }
+                className={
+                  theme !== "light"
+                    ? "!bg-zinc-900 !text-white border-zinc-800"
+                    : ""
+                }
                 >
                   <SelectGroup>
-                    <SelectLabel>Themes:</SelectLabel>
+                    <SelectLabel>Themes</SelectLabel>
                     <SelectItem value="light">Light</SelectItem>
                     <SelectItem value="dark">Dark</SelectItem>
                     <SelectItem value="black">Black</SelectItem>
@@ -200,7 +177,7 @@ const CreateListForm: React.FC<CreateListFormProps> = ({
           </Button>
         ) : (
           <Button className="dark:bg-zinc-700 bg-zinc-200 font-semibold text-zinc-950 dark:text-white hover:bg-zinc-300 dark:hover:bg-zinc-600 w-full">
-            Create list
+            Save changes
           </Button>
         )}
       </form>
@@ -208,56 +185,4 @@ const CreateListForm: React.FC<CreateListFormProps> = ({
   );
 };
 
-export default CreateListForm;
-
-// <div className="flex h-full w-full flex-col justify-center p-5 items-center">
-//   <h1 className="dark:text-white text-4xl pb-11">Settings</h1>
-//   <div className="flex justify-between w-full">
-//     <span className="dark:text-white">Themes:</span>
-//     <Select
-//       onValueChange={(value: themeType) => {
-//         themeHandler(value);
-//       }}
-//     >
-//       <SelectTrigger className="dark:text-white max-w-36">
-//         <SelectValue placeholder="Change theme" />
-//       </SelectTrigger>
-//       <SelectContent
-//         className={
-//           theme != "light" ? "!bg-black !text-white border-zinc-800" : ""
-//         }
-//       >
-//         <SelectGroup>
-//           <SelectLabel>Themes</SelectLabel>
-//           <SelectItem value="light">Light</SelectItem>
-//           <SelectItem value="dark">Dark</SelectItem>
-//           <SelectItem value="black">Black</SelectItem>
-//         </SelectGroup>
-//       </SelectContent>
-//     </Select>
-//   </div>
-//   <div className="flex justify-between w-full">
-//     <span className="dark:text-white">Fonts:</span>
-//     <Select
-//       onValueChange={(value: themeType) => {
-//         themeHandler(value);
-//       }}
-//     >
-//       <SelectTrigger className="dark:text-white max-w-36">
-//         <SelectValue placeholder="Change theme" />
-//       </SelectTrigger>
-//       <SelectContent
-//         className={
-//           theme != "light" ? "!bg-black !text-white border-zinc-800" : ""
-//         }
-//       >
-//         <SelectGroup>
-//           <SelectLabel>Fonts</SelectLabel>
-//           <SelectItem value="light">sans</SelectItem>
-//           <SelectItem value="dark">Dark</SelectItem>
-//           <SelectItem value="black">Black</SelectItem>
-//         </SelectGroup>
-//       </SelectContent>
-//     </Select>
-//   </div>
-// </div>;
+export default SettingsForm;

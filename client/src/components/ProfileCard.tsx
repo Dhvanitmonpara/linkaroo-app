@@ -6,17 +6,19 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ProfileType } from "@/store/profileStore";
 import { ReactNode } from "react";
+import { SettingsForm } from "./Forms";
+import { themeType } from "@/lib/types";
 
 type HeaderProps = {
-  theme: string | undefined;
+  theme: themeType | undefined;
   profile: ProfileType;
-  setIsModalOpen: (isOpen: boolean) => void;
+  toggleModal: (isOpen: boolean) => void;
   setModalContent: (content: string | ReactNode) => void;
 };
 
 const ProfileCard = ({
   theme,
-  setIsModalOpen,
+  toggleModal,
   setModalContent,
   profile,
 }: HeaderProps) => {
@@ -47,7 +49,7 @@ const ProfileCard = ({
         <DropdownMenuItem
           className="py-2"
           onClick={() => {
-            setIsModalOpen(true);
+            toggleModal(true);
             setModalContent(
               <div className="dark:text-white p-5 flex justify-center items-center space-y-3">
                 <h1 className="text-3xl">Profile</h1>
@@ -61,9 +63,9 @@ const ProfileCard = ({
         <DropdownMenuItem
           className="py-2"
           onClick={() => {
-            setIsModalOpen(true);
+            toggleModal(true);
             setModalContent(
-              
+              <SettingsForm theme={theme} toggleModal={toggleModal} />
             );
           }}
         >
@@ -72,7 +74,7 @@ const ProfileCard = ({
         <DropdownMenuItem
           className="py-2"
           onClick={() => {
-            setIsModalOpen(true);
+            toggleModal(true);
             setModalContent(
               <div className="dark:text-white p-5 flex justify-center items-center space-y-3">
                 <h1 className="text-3xl">Feedback</h1>

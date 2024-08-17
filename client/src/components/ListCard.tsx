@@ -23,7 +23,7 @@ type ListCardProps = {
   theme: colorOptions;
   font: fontOptions;
   collaborators: Collaborator[];
-  setIsModalOpen: (isOpen: boolean) => void;
+  toggleModal: (isOpen: boolean) => void;
 };
 
 const ListCard = ({
@@ -36,7 +36,7 @@ const ListCard = ({
   theme,
   font,
   createdBy,
-  setIsModalOpen,
+  toggleModal,
 }: ListCardProps) => {
   const navigate = useNavigate();
 
@@ -49,11 +49,11 @@ const ListCard = ({
   });
 
   const openModal = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
-    setIsModalOpen(true);
+    toggleModal(true);
     e.stopPropagation();
     navigate(`/list?listid=${title}`, { replace: true });
     setModalContent(
-      <CreateDocForm theme={profile.theme} setIsModalOpen={setIsModalOpen} />
+      <CreateDocForm theme={profile.theme} toggleModal={toggleModal} />
     );
   };
 

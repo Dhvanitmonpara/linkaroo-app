@@ -83,7 +83,7 @@ const Docs = ({ theme }: DocsProps) => {
           text={doc.description}
           color={theme == "black" ? "bg-black" : doc.theme}
           link={doc.link}
-          setIsModalOpen={toggleModal}
+          toggleModal={toggleModal}
         />
       ))}
       <div className="h-2"></div>

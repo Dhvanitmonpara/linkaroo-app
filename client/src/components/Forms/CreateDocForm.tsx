@@ -21,7 +21,7 @@ import useDocStore from "@/store/docStore";
 
 type CreateDocFormProps = {
   theme: themeType | undefined;
-  setIsModalOpen: (isOpen: boolean) => void;
+  toggleModal: (isOpen: boolean) => void;
 };
 
 type HandleDocCreationType = {
@@ -33,7 +33,7 @@ type HandleDocCreationType = {
 
 const CreateDocForm: React.FC<CreateDocFormProps> = ({
   theme,
-  setIsModalOpen,
+  toggleModal,
 }) => {
   const [loading, setLoading] = useState(false);
 
@@ -84,7 +84,7 @@ const CreateDocForm: React.FC<CreateDocFormProps> = ({
       }
     } finally {
       setLoading(false);
-      setIsModalOpen(false);
+      toggleModal(false);
     }
   };
 

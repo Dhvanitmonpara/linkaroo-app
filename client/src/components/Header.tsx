@@ -35,7 +35,7 @@ const Header = () => {
             onClick={() => {
               toggleModal(true);
               setModalContent(
-                <CreateListForm setIsModalOpen={toggleModal} theme={theme} />
+                <CreateListForm toggleModal={toggleModal} theme={theme} />
               );
             }}
           >
@@ -45,7 +45,7 @@ const Header = () => {
             onClick={() => {
               toggleModal(true);
               setModalContent(
-                <CreateDocForm setIsModalOpen={toggleModal} theme={theme} />
+                <CreateDocForm toggleModal={toggleModal} theme={theme} />
               );
             }}
           >
