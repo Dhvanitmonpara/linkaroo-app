@@ -16,7 +16,6 @@ import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import getErrorFromAxios from "@/utils/getErrorFromAxios";
 import useProfileStore from "@/store/profileStore";
-import toggleThemeModeAtRootElem from "@/utils/toggleThemeMode";
 
 type SettingsFormProps = {
   theme: themeType | undefined;
@@ -34,15 +33,6 @@ const SettingsForm: React.FC<SettingsFormProps> = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const { changeTheme, updateProfile } = useProfileStore();
-
-  const themeHandler = (theme: themeType) => {
-    changeTheme(theme);
-    if (theme == "black") {
-      toggleThemeModeAtRootElem("dark");
-    } else {
-      toggleThemeModeAtRootElem(theme);
-    }
-  };
 
   const { control, handleSubmit } = useForm<HandleSettingsType>({
     defaultValues: {
@@ -96,7 +86,7 @@ const SettingsForm: React.FC<SettingsFormProps> = ({
               <Select
                 value={value}
                 onValueChange={(value: themeType) => {
-                  themeHandler(value);
+                  changeTheme(value);
                   onChange(value);
                 }}
               >

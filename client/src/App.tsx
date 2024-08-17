@@ -1,15 +1,20 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import "./App.css";
 import { Header, HorizontalTabs, Modal } from "./components";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Toaster } from "react-hot-toast";
 import useMethodStore from "./store/MethodStore";
+import toggleThemeModeAtRootElem from "./utils/toggleThemeMode";
+import useProfileStore from "./store/profileStore";
 
 const App = () => {
   const modalRef = useRef<HTMLDivElement | null>(null);
   const navigate = useNavigate();
   const { isModalOpen, setModalContent, toggleModal, modalContent } =
     useMethodStore();
+
+  const { profile } = useProfileStore();
+  const { theme } = profile.profile;
 
   const closeModal = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (modalRef.current === e.target) {
@@ -18,6 +23,14 @@ const App = () => {
       setModalContent(null);
     }
   };
+
+  useEffect(() => {
+    if (theme == "black") {
+      toggleThemeModeAtRootElem("dark");
+    } else {
+      toggleThemeModeAtRootElem(theme);
+    }
+  }, [theme]);
 
   const location = useLocation().pathname;
   const showBars =

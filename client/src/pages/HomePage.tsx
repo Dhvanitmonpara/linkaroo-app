@@ -95,14 +95,17 @@ function App() {
       >
         <div className="col-span-2 lg:inline-block hidden relative py-5 px-7 space-y-3 no-scrollbar max-h-screen">
           <div className="border-2 top-0 h-12 dark:bg-zinc-800 z-20 dark:border-zinc-700 rounded flex justify-center px-7 items-center">
-            <Link to="/" className="font-mono select-none font-black text-2xl dark:text-zinc-300">
+            <Link
+              to="/"
+              className="font-mono select-none font-black text-2xl dark:text-zinc-300"
+            >
               Linkaroo
             </Link>
           </div>
           <Lists theme={theme} />
         </div>
         <div className="col-span-3 xl:px-0 lg:px-0 lg:pr-5 px-5 md:max-h-screen">
-          <Header/>
+          <Header />
           {/* <img src="" alt="Banner" /> */}
           <Docs theme={theme} />
         </div>
