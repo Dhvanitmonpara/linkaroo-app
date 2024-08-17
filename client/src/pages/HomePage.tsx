@@ -45,12 +45,12 @@ function App() {
               Linkaroo
             </Link>
           </div>
-          <Lists theme={theme} />
+          <Lists />
         </div>
         <div className="col-span-3 xl:px-0 lg:px-0 lg:pr-5 px-5 md:max-h-screen">
           <Header />
           {/* <img src="" alt="Banner" /> */}
-          <Docs theme={theme} />
+          <Docs  />
         </div>
         <div className="col-span-2 hidden xl:inline-block relative px-5 pt-5 space-y-3 overflow-y-scroll max-h-screen no-scrollbar">
           <div
