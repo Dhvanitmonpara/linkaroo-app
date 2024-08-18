@@ -15,7 +15,7 @@ const DocCard = ({ title, color, link, toggleModal }: DocCardProps) => {
   const openModal = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     toggleModal(true);
     e.stopPropagation();
-    navigate(`/doc?docid=${title}`, { replace: true });
+    navigate(`doc?docid=${title}`);
     // TODO: open modal with content from props (add e.target.dataset.content into state)
   };
 

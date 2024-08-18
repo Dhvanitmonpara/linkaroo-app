@@ -10,6 +10,7 @@ import Lists from "./Lists";
 import Docs from "./Docs";
 import Loading from "./Loading";
 import Modal from "./Modal";
+import CommandMenu from "./CommandMenu";
 
 export {
   ListCard,
@@ -23,5 +24,6 @@ export {
   Lists,
   Docs,
   Loading,
-  Modal
+  Modal,
+  CommandMenu
 };

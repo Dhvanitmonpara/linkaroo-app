@@ -19,12 +19,6 @@ function App() {
     }
   });
 
-  document.addEventListener("keydown", (event) => {
-    if (event.ctrlKey && event.key === "k") {
-      event.preventDefault();
-    }
-  });
-
   return (
     <>
       <div
