@@ -41,7 +41,7 @@ const ListCard = ({
   const navigate = useNavigate();
 
   const collaboratorAvatars: string[] = [];
-  const { setModalContent } = useMethodStore();
+  const { setModalContent, setCurrentCardColor } = useMethodStore();
   const { profile } = useProfileStore();
 
   collaborators?.forEach((collaborator) => {
@@ -67,6 +67,7 @@ const ListCard = ({
   });
 
   const openList = () => {
+    setCurrentCardColor(theme);
     navigate(`/lists/${id}`);
   };
 

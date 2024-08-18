@@ -14,8 +14,9 @@ const Docs = () => {
   const [loading, setLoading] = useState(false);
   const location = useLocation();
   const { docs, setDocs } = useDocStore();
-  const {profile} = useProfileStore();
+  const { profile } = useProfileStore();
   const { theme } = profile.profile;
+  const { currentCardColor } = useMethodStore();
 
   useEffect(() => {
     (async () => {
@@ -78,7 +79,7 @@ const Docs = () => {
         <DocCard
           key={doc._id}
           title={doc.title}
-          color={theme == "black" ? "bg-black" : doc.theme}
+          color={theme == "black" ? "bg-black" : currentCardColor}
           link={doc.link}
           toggleModal={toggleModal}
         />

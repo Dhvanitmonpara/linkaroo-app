@@ -11,7 +11,7 @@ const createCard = asyncHandler(async (req, res) => {
         throw new ApiError(400, "List ID is required")
     }
 
-    const { title, description, link, theme, font } = req.body
+    const { title, description, link } = req.body
 
     if (!title || !link) {
         throw new ApiError(400, "title and link are required")
@@ -27,8 +27,6 @@ const createCard = asyncHandler(async (req, res) => {
         title,
         description: description ? description : "",
         link,
-        theme,
-        font,
         userId: req.user?._id,
         listId: listId
     })
