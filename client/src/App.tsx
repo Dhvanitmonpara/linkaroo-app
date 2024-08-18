@@ -99,9 +99,9 @@ const App = () => {
   }
 
   return (
-    <div className="min-h-[100dvh] w-screen">
+    <div className="min-h-sc w-screen">
       <div
-        className={`p-0 w-full min-h-[calc(100dvh-env(safe-area-inset-top))] ${
+        className={`p-0 w-full min-h-[calc(100vh-env(safe-area-inset-top))] ${
           theme === "black" ? "bg-black" : "dark:bg-zinc-800"
         }`}
       >
@@ -113,9 +113,7 @@ const App = () => {
         >
           <Header />
         </div>
-        <div className="min-h-[calc(100dvh-env(safe-area-inset-top))]">
-          <Outlet />
-        </div>
+        <Outlet />
       </div>
       <div
         className={`lg:hidden fixed z-30 md:fixed bottom-0 px-0 dark:text-zinc-400 ${
