@@ -52,7 +52,6 @@ const App = () => {
         if (isSmallScreen) {
           navigate("/list");
         }
-
       } catch (error) {
         const errorMsg = getErrorFromAxios(error as AxiosError);
         if (errorMsg === "Unauthorized request") {
@@ -100,19 +99,27 @@ const App = () => {
   }
 
   return (
-    <div className="h-screen w-screen">
-      <div
-        className={`lg:hidden block sticky top-0 z-40 w-full ${theme == "black" ? "bg-black" : "dark:bg-zinc-800"} ${
-          showBars ? "hidden" : ""
-        }`}
-      >
-        <Header />
+    <div className="h-screen w-screen no-scrollbar">
+      <div className="min-h-screen no-scrollbar">
+        <div
+          className={`lg:hidden block sticky top-0 z-40 w-full ${
+            theme == "black" ? "bg-black" : "dark:bg-zinc-800"
+          } ${showBars ? "hidden" : ""}`}
+        >
+          <Header />
+        </div>
+        <div
+          className={`p-0 w-full h-full ${
+            theme == "black" ? "bg-black" : "dark:bg-zinc-800"
+          }`}
+        >
+          <Outlet />
+        </div>
       </div>
-      <div className={`p-0 w-full h-full ${theme == "black" ? "bg-black" : "dark:bg-zinc-800"}`}>
-        <Outlet />
-      </div>
       <div
-        className={`lg:hidden fixed z-30 md:fixed bottom-0 px-0 dark:text-zinc-400 ${theme == "black" ? "bg-black" : "dark:bg-zinc-800"} sm:!bg-transparent justify-center items-center flex w-screen h-16 ${
+        className={`lg:hidden fixed z-30 md:fixed bottom-0 px-0 dark:text-zinc-400 ${
+          theme == "black" ? "bg-black" : "dark:bg-zinc-800"
+        } sm:!bg-transparent justify-center items-center flex w-screen h-16 ${
           showBars ? "hidden" : ""
         }`}
       >
