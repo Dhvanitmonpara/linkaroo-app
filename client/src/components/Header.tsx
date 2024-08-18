@@ -1,5 +1,6 @@
 import { Input } from "./ui/input";
 import { IoMdAdd } from "react-icons/io";
+import { IoFilterOutline } from "react-icons/io5";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,7 +17,7 @@ const Header = () => {
   const { theme } = profile.profile;
 
   return (
-    <nav className="h-20 lg:py-5 py-4 flex space-x-2 lg:px-0 px-4">
+    <nav className="lg:h-20 h-[4.5rem] lg:py-5 pt-4 pb-[1rem] flex space-x-2 lg:px-0 px-4">
       <Input
         className="dark:bg-zinc-800 dark:text-white dark:border-zinc-600"
         placeholder="Create or Search something..."
@@ -53,6 +54,9 @@ const Header = () => {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+      <div className="w-12 flex justify-center items-center dark:bg-zinc-800 dark:hover:bg-zinc-600 dark:text-white rounded-sm border-2 border-zinc-700">
+      <IoFilterOutline />
+      </div>
     </nav>
   );
 };
