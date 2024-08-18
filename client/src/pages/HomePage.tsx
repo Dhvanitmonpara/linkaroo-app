@@ -1,11 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import {
-  Header,
-  ProfileCard,
-  DocScreen,
-  Lists,
-  Docs,
-} from "../components";
+import { Header, ProfileCard, DocScreen, Lists, Docs } from "../components";
 import useProfileStore from "@/store/profileStore";
 import useMethodStore from "@/store/MethodStore";
 
@@ -48,9 +42,11 @@ function App() {
           <Lists />
         </div>
         <div className="col-span-3 xl:px-0 lg:px-0 lg:pr-5 px-5 md:max-h-screen">
-          <Header />
+          <div className="hidden md:block">
+            <Header />
+          </div>
           {/* <img src="" alt="Banner" /> */}
-          <Docs  />
+          <Docs />
         </div>
         <div className="col-span-2 hidden xl:inline-block relative px-5 pt-5 space-y-3 overflow-y-scroll max-h-screen no-scrollbar">
           <div

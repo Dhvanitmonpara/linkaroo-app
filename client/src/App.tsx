@@ -52,6 +52,7 @@ const App = () => {
         if (isSmallScreen) {
           navigate("/list");
         }
+
       } catch (error) {
         const errorMsg = getErrorFromAxios(error as AxiosError);
         if (errorMsg === "Unauthorized request") {
@@ -101,7 +102,7 @@ const App = () => {
   return (
     <div className="max-h-screen w-screen">
       <div
-        className={`lg:hidden sticky top-0 z-40 w-full dark:bg-zinc-800 ${
+        className={`lg:hidden block sticky top-0 z-40 w-full dark:bg-zinc-800 ${
           showBars ? "hidden" : ""
         }`}
       >
