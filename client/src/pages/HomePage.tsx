@@ -42,7 +42,7 @@ function App() {
           <Lists />
         </div>
         <div className="col-span-3 xl:px-0 lg:px-0 lg:pr-5 px-5 md:max-h-screen">
-          <div className="hidden md:block">
+          <div className="hidden lg:block">
             <Header />
           </div>
           {/* <img src="" alt="Banner" /> */}
