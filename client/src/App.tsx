@@ -100,7 +100,7 @@ const App = () => {
   }
 
   return (
-    <div className="max-h-screen w-screen">
+    <div className="h-screen w-screen">
       <div
         className={`lg:hidden block sticky top-0 z-40 w-full ${theme == "black" ? "bg-black" : "dark:bg-zinc-800"} ${
           showBars ? "hidden" : ""
@@ -112,7 +112,7 @@ const App = () => {
         <Outlet />
       </div>
       <div
-        className={`lg:hidden fixed z-30 md:fixed bottom-0 px-0 dark:text-zinc-400 ${theme == "black" ? "bg-black" : "dark:bg-zinc-800"} sm:bg-transparent justify-center items-center flex w-screen h-16 ${
+        className={`lg:hidden fixed z-30 md:fixed bottom-0 px-0 dark:text-zinc-400 ${theme == "black" ? "bg-black" : "dark:bg-zinc-800"} sm:!bg-transparent justify-center items-center flex w-screen h-16 ${
           showBars ? "hidden" : ""
         }`}
       >
