@@ -99,17 +99,17 @@ const App = () => {
   }
 
   return (
-    <div className="h-screen w-screen">
+    <div className="min-h-[100vh] w-screen">
       <div
-        className={`p-0 w-full h-full ${
+        className={`p-0 w-full min-h-[calc(100vh-env(safe-area-inset-top))] ${
           theme === "black" ? "bg-black" : "dark:bg-zinc-800"
         }`}
-        style={{ paddingTop: "env(safe-area-inset-top)" }}
       >
         <div
           className={`lg:hidden block sticky top-0 z-40 w-full ${
             theme === "black" ? "bg-black" : "dark:bg-zinc-800"
           } ${showBars ? "hidden" : ""}`}
+          style={{ paddingTop: "env(safe-area-inset-top)" }}
         >
           <Header />
         </div>
