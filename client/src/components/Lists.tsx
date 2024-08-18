@@ -45,7 +45,7 @@ const Lists = () => {
 
   if (loading) {
     return (
-      <div className="dark:text-zinc-200 text-zinc-900 h-full w-full flex justify-center items-center">
+      <div className="dark:text-zinc-200 text-zinc-900 h-[calc(100vh-5rem)] w-full flex justify-center items-center">
         <Loader2 className="animate-spin" />
       </div>
     );
@@ -53,7 +53,7 @@ const Lists = () => {
 
   if(lists.length == 0) {
     return (
-      <div className="dark:text-zinc-200 select-none text-zinc-900 h-full w-full flex justify-center items-center">
+      <div className="dark:text-zinc-200 select-none text-zinc-900 h-[calc(100vh-5rem)] w-full flex justify-center items-center">
         No lists found. Please create a new one.
       </div>
     );

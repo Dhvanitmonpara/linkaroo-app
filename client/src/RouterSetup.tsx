@@ -13,6 +13,7 @@ import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
 import PasswordRecoveryPage from "./pages/PasswordRecoveryPage";
 import { Docs, Lists } from "@/components";
+import NotFound from "@/pages/NotFound"; // Import your NotFound component
 
 const RouterSetup: React.FC = () => {
   const isSmallScreen = useMediaQuery({ query: "(max-width: 1024px)" });
@@ -31,6 +32,7 @@ const RouterSetup: React.FC = () => {
               path="/password-recovery"
               element={<PasswordRecoveryPage />}
             />
+            <Route path="*" element={<NotFound />} />
           </Route>
         )
       )
@@ -48,6 +50,7 @@ const RouterSetup: React.FC = () => {
             <Route path="/list" element={<HomePage />} />
             <Route path="/lists/:listId" element={<HomePage />} />
             <Route path="/doc" element={<HomePage />} />
+            <Route path="*" element={<NotFound />} />
           </Route>
         )
       );
