@@ -17,6 +17,7 @@ import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import getErrorFromAxios from "@/utils/getErrorFromAxios";
 import useListStore from "@/store/listStore";
+import { Textarea } from "../ui/textarea";
 
 type CreateListFormProps = {
   theme: themeType | undefined;
@@ -105,9 +106,8 @@ const CreateListForm: React.FC<CreateListFormProps> = ({
         </div>
         <div className="w-full space-y-2">
           <label htmlFor="description">Description</label>
-          <Input
+          <Textarea
             id="description"
-            type="text"
             placeholder="Enter description"
             className="dark:bg-zinc-700 bg-zinc-200"
             {...register("description", {

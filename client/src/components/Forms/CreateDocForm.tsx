@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Input } from "../ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea"
 import {
   Select,
   SelectItem,
@@ -119,9 +120,8 @@ const CreateDocForm: React.FC<CreateDocFormProps> = ({
         </div>
         <div className="w-full space-y-2">
           <label htmlFor="description">Description</label>
-          <Input
+          <Textarea
             id="description"
-            type="text"
             placeholder="Enter description"
             className="dark:bg-zinc-700 bg-zinc-200"
             {...register("description", {
