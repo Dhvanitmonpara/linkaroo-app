@@ -48,7 +48,7 @@ const Docs = () => {
 
   if (loading) {
     return (
-      <div className="md:h-[calc(100vh-5rem)] h-[calc(100vh-9rem)] overflow-y-scroll w-full space-y-2 no-scrollbar">
+      <div className="md:h-[calc(100vh-5rem)] h-[calc(100vh-8.5rem)] lg:h-[calc(100vh-9rem)] overflow-y-scroll w-full space-y-2 no-scrollbar">
         <div className="dark:text-white h-full flex justify-center items-center">
           <Loader2 className="animate-spin" />
         </div>
@@ -59,7 +59,7 @@ const Docs = () => {
 
   if (docs.length == 0) {
     return (
-      <div className="md:h-[calc(100vh-5rem)] select-none h-[calc(100vh-9rem)] overflow-y-scroll w-full space-y-2 no-scrollbar">
+      <div className="md:h-[calc(100vh-5rem)] select-none h-[calc(100vh-8.5rem)] lg:h-[calc(100vh-9rem)] overflow-y-scroll w-full space-y-2 no-scrollbar">
         <div className="dark:text-zinc-200 h-full flex justify-center items-center flex-col space-y-2">
           <h1 className="text-2xl text-center">
             {docs.length == 0
@@ -73,7 +73,7 @@ const Docs = () => {
   }
 
   return (
-    <div className="md:h-[calc(100vh-5rem)] md:px-0 px-4 h-[calc(100vh-9rem)] overflow-y-scroll w-full space-y-2 no-scrollbar">
+    <div className="md:h-[calc(100vh-5rem)] md:px-0 px-4 h-[calc(100vh-8.5rem)] lg:h-[calc(100vh-9rem)] overflow-y-scroll w-full space-y-2 no-scrollbar">
       {docs?.map((doc) => (
         <DocCard
           key={doc._id}

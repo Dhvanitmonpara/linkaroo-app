@@ -45,7 +45,7 @@ const Lists = () => {
 
   if (loading) {
     return (
-      <div className="dark:text-zinc-200 text-zinc-900 h-[calc(100vh-5rem)] w-full flex justify-center items-center">
+      <div className="dark:text-zinc-200 text-zinc-900 h-[calc(100vh-4.5rem)] lg:h-[calc(100vh-5rem)] w-full flex justify-center items-center">
         <Loader2 className="animate-spin" />
       </div>
     );
@@ -53,7 +53,7 @@ const Lists = () => {
 
   if(lists.length == 0) {
     return (
-      <div className="dark:text-zinc-200 select-none text-zinc-900 h-[calc(100vh-5rem)] w-full flex justify-center items-center">
+      <div className="dark:text-zinc-200 select-none text-zinc-900 h-[calc(100vh-4.5rem)] lg:h-[calc(100vh-5rem)] w-full flex justify-center items-center">
         No lists found. Please create a new one.
       </div>
     );
@@ -61,7 +61,7 @@ const Lists = () => {
 
   return (
     <>
-      <div className="col-span-2 relative lg:px-0 px-4 space-y-3 overflow-y-scroll no-scrollbar h-[calc(100vh-5rem)]">
+      <div className="col-span-2 relative lg:px-0 px-4 space-y-3 overflow-y-scroll no-scrollbar h-[calc(100vh-4.5rem)] lg:h-[calc(100vh-5rem)]">
         {lists.map((list, index) => (
           <ListCard
             key={index}
