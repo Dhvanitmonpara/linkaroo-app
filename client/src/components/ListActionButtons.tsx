@@ -62,10 +62,6 @@ const ListActionButtons = () => {
 
         setTags(userTagResponse.data.data);
 
-        // const intersection: checkedTagsType[] = listTagResponse.data.data.map(
-        //   (tag: checkedTagsType) => ({ ...tag, isChecked: true })
-        // );
-
         const intersection: checkedTagsType[] = listTagResponse.data.data.map(
           (tag: checkedTagsType) => ({
             ...tag,
@@ -75,7 +71,7 @@ const ListActionButtons = () => {
           })
         );
 
-        console.log(intersection)
+        console.log(intersection);
 
         setCheckedTags(intersection);
       } catch (error) {
@@ -141,7 +137,16 @@ const ListActionButtons = () => {
                 <DropdownMenuCheckboxItem
                   key={index}
                   checked={tag.isChecked}
-                  onCheckedChange={(checked) => console.log(checked)}
+                  onCheckedChange={(checked) => {
+                    setCheckedTags((state) =>
+                      state.map((t) => {
+                        if (t.tagname === tag.tagname) {
+                          return { ...t, isChecked: !checked };
+                        }
+                        return t;
+                      })
+                    );
+                  }}
                 >
                   {tag.tagname}
                 </DropdownMenuCheckboxItem>
