@@ -48,7 +48,9 @@ const ListActionButtons = () => {
         }
 
         const listTagResponse: AxiosResponse = await axios.get(
-          `${import.meta.env.VITE_SERVER_API_URL}/tags/get/list/66be0acb50d560b6994114b0`,
+          `${
+            import.meta.env.VITE_SERVER_API_URL
+          }/tags/get/list/66be0acb50d560b6994114b0`,
           { withCredentials: true }
         );
 
@@ -164,7 +166,11 @@ const ListActionButtons = () => {
                 />
                 <Button
                   onClick={handleSaveChanges}
-                  className="mt-2 w-full bg-zinc-200 hover:bg-zinc-300 text-zinc-950 dark:text-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700"
+                  className={`mt-2 w-full ${
+                    theme !== "light"
+                      ? "text-zinc-200 bg-zinc-800 hover:bg-zinc-700"
+                      : "bg-zinc-100 hover:bg-zinc-200 text-zinc-950"
+                  }`}
                   disabled={loading}
                 >
                   Save Changes
