@@ -11,6 +11,7 @@ import Docs from "./Docs";
 import Loading from "./Loading";
 import Modal from "./Modal";
 import CommandMenu from "./CommandMenu";
+import ListActionButtons from "./ListActionButtons";
 
 export {
   ListCard,
@@ -25,5 +26,6 @@ export {
   Docs,
   Loading,
   Modal,
-  CommandMenu
+  CommandMenu,
+  ListActionButtons
 };

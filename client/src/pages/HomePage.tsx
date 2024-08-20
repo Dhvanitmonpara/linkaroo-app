@@ -1,5 +1,12 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Header, ProfileCard, DocScreen, Lists, Docs } from "../components";
+import {
+  Header,
+  ProfileCard,
+  DocScreen,
+  Lists,
+  Docs,
+  ListActionButtons,
+} from "../components";
 import useProfileStore from "@/store/profileStore";
 import useMethodStore from "@/store/MethodStore";
 
@@ -35,11 +42,21 @@ function App() {
           </div>
           <Lists />
         </div>
-        <div className="col-span-3 xl:px-0 lg:px-0 lg:pr-5 px-5 md:max-h-screen">
+        <div className="col-span-3 xl:px-0 lg:px-0 lg:pr-5 px-5 md:max-h-screen select-none">
           <div className="hidden lg:block">
             <Header />
           </div>
           {/* <img src="" alt="Banner" /> */}
+          <div className="h-32 w-full py-2">
+            <div className="bg-green-400 h-full w-full relative p-4">
+              <div className="flex justify-between items-center w-full h-10 absolute bottom-5 left-0 px-4">
+                <h1 className="text-2xl font-semibold">
+                  Development
+                </h1>
+                <ListActionButtons />
+              </div>
+            </div>
+          </div>
           <Docs />
         </div>
         <div className="col-span-2 hidden xl:inline-block relative px-5 pt-5 space-y-3 overflow-y-scroll max-h-screen no-scrollbar">
