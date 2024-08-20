@@ -17,32 +17,67 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import getErrorFromAxios from "@/utils/getErrorFromAxios";
 import toast from "react-hot-toast";
 import { Loader2 } from "lucide-react";
+import { fetchedTagType } from "@/lib/types";
 
 type Checked = DropdownMenuCheckboxItemProps["checked"];
 
+type checkedTagsType = fetchedTagType & {
+  isChecked?: Checked;
+};
+
 const ListActionButtons = () => {
   const { toggleModal, setModalContent } = useMethodStore();
-  const { profile, tags, setTags } = useProfileStore();
+  const { profile, setTags } = useProfileStore();
   const theme = profile.profile.theme;
   const [loading, setLoading] = useState(false);
-  const [showStatusBar, setShowStatusBar] = useState<Checked>(true);
+  // const [showStatusBar, setShowStatusBar] = useState<Checked>(true);
+  const [checkedTags, setCheckedTags] = useState<checkedTagsType[]>([]);
 
   useEffect(() => {
     (async () => {
       try {
         setLoading(true);
 
-        const response: AxiosResponse = await axios.get(
+        const userTagResponse: AxiosResponse = await axios.get(
           `${import.meta.env.VITE_SERVER_API_URL}/tags/get/o`,
           { withCredentials: true }
         );
 
-        if (!response.data) {
-          toast.error("Failed to fetch tags");
+        if (!userTagResponse.data.data) {
+          toast.error("Failed to fetch user tags");
           return;
         }
 
-        setTags(response.data);
+        const listTagResponse: AxiosResponse = await axios.get(
+          `${
+            import.meta.env.VITE_SERVER_API_URL
+          }/tags/get/list/66be0acb50d560b6994114b0`,
+          { withCredentials: true }
+        );
+
+        if (!listTagResponse.data.data) {
+          toast.error("Failed to fetch list tags");
+          return;
+        }
+
+        setTags(userTagResponse.data.data);
+
+        // const intersection: checkedTagsType[] = listTagResponse.data.data.map(
+        //   (tag: checkedTagsType) => ({ ...tag, isChecked: true })
+        // );
+
+        const intersection: checkedTagsType[] = listTagResponse.data.data.map(
+          (tag: checkedTagsType) => ({
+            ...tag,
+            isChecked: userTagResponse.data.data.some(
+              (userTag: fetchedTagType) => userTag.tagname === tag.tagname
+            ),
+          })
+        );
+
+        console.log(intersection)
+
+        setCheckedTags(intersection);
       } catch (error) {
         const errorMsg = getErrorFromAxios(error as AxiosError);
         if (errorMsg != undefined) {
@@ -59,18 +94,18 @@ const ListActionButtons = () => {
     setModalContent(<h1>helo</h1>);
   };
 
-  const handleTagChange = (
-    tagName: string,
-    checked: boolean | "indeterminate"
-  ) => {
-    switch (tagName) {
-      case "Status Bar":
-        setShowStatusBar(checked);
-        break;
-      default:
-        break;
-    }
-  };
+  // const handleTagChange = (
+  //   tagName: string,
+  //   checked: boolean | "indeterminate"
+  // ) => {
+  //   switch (tagName) {
+  //     case "Status Bar":
+  //       setShowStatusBar(checked);
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // };
 
   const actionButtons = [
     {
@@ -102,16 +137,15 @@ const ListActionButtons = () => {
             {loading ? (
               <Loader2 className="animate-spin" size={16} />
             ) : (
-            //   tags?.map((tag, index) => (
-            //     <DropdownMenuCheckboxItem
-            //       key={index}
-            //       checked={showStatusBar === tag}
-            //       onChange={(checked) => handleTagChange(tag, checked)}
-            //     >
-            //       {tag}
-            //     </DropdownMenuCheckboxItem>
-            //   ))
-            <h1>Hello</h1>
+              checkedTags?.map((tag, index) => (
+                <DropdownMenuCheckboxItem
+                  key={index}
+                  checked={tag.isChecked}
+                  onCheckedChange={(checked) => console.log(checked)}
+                >
+                  {tag.tagname}
+                </DropdownMenuCheckboxItem>
+              ))
             )}
           </DropdownMenuContent>
         </DropdownMenu>

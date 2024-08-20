@@ -39,6 +39,16 @@ type TagType = {
 
 type fontOptions = "font-mono" | "font-sans" | "font-serif";
 
+type fetchedTagType = {
+  __v: number;
+  _id: string;
+  createdAt: string;
+  owner: string;
+  tagname: string;
+  updatedAt: string;
+};
+
+
 type fetchedDocType = {
   _id: string;
   title: string;
@@ -75,4 +85,5 @@ export type {
   Collaborator,
   fontOptions,
   fetchedDocType,
+  fetchedTagType
 };

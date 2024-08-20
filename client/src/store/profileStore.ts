@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import { fontOptions, themeType } from "@/lib/types";
+import { fetchedTagType } from "@/lib/types";
 
 type ProfileType = {
   _id: string;
@@ -28,8 +29,8 @@ interface ProfileState {
   updateProfile: (updatedProfile: ProfileType) => void;
   removeProfile: () => void;
   changeTheme: (theme: themeType) => void;
-  tags: string[];
-  setTags: (tags: string[]) => void;
+  tags: fetchedTagType[] | null;
+  setTags: (tags: fetchedTagType[]) => void;
 }
 
 const useProfileStore = create<ProfileState>()(
@@ -86,8 +87,8 @@ const useProfileStore = create<ProfileState>()(
             },
           }));
         },
-        tags: [],
-        setTags: (tags: string[]) => set({ tags }),
+        tags: null,
+        setTags: (tags) => set({ tags }),
       }),
       { name: "profile" }
     )
