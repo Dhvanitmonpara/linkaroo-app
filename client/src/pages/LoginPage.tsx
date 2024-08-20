@@ -61,6 +61,7 @@ const LoginPage = () => {
       if (response?.data?.data?.user) {
         addProfile({ ...response.data.data.user, profile: { theme: "dark" } });
       }
+      isSmallScreen ? navigate("/list") : navigate("/");
     } catch (err) {
       const errorMsg = getErrorFromAxios(err as AxiosError);
       if (errorMsg !== undefined) {
@@ -68,7 +69,6 @@ const LoginPage = () => {
       }
     } finally {
       setLoading(false);
-      isSmallScreen ? navigate("/list") : navigate("/");
     }
   };
 

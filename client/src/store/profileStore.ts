@@ -28,6 +28,8 @@ interface ProfileState {
   updateProfile: (updatedProfile: ProfileType) => void;
   removeProfile: () => void;
   changeTheme: (theme: themeType) => void;
+  tags: string[];
+  setTags: (tags: string[]) => void;
 }
 
 const useProfileStore = create<ProfileState>()(
@@ -84,6 +86,8 @@ const useProfileStore = create<ProfileState>()(
             },
           }));
         },
+        tags: [],
+        setTags: (tags: string[]) => set({ tags }),
       }),
       { name: "profile" }
     )
