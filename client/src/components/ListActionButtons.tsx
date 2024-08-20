@@ -164,7 +164,7 @@ const ListActionButtons = () => {
                 />
                 <Button
                   onClick={handleSaveChanges}
-                  className="mt-2 w-full"
+                  className="mt-2 w-full bg-zinc-200 hover:bg-zinc-300 text-zinc-950 dark:text-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700"
                   disabled={loading}
                 >
                   Save Changes
