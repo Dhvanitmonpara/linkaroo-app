@@ -11,15 +11,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
-import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
-import useProfileStore from "@/store/profileStore";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import getErrorFromAxios from "@/utils/getErrorFromAxios";
 import toast from "react-hot-toast";
 import { Loader2 } from "lucide-react";
 import { fetchedTagType } from "@/lib/types";
+import useProfileStore from "@/store/profileStore";
+import { removeUsernameTag } from "@/utils/toggleUsernameInTag";
 
-type Checked = DropdownMenuCheckboxItemProps["checked"];
+type Checked = boolean;
 
 type checkedTagsType = fetchedTagType & {
   isChecked?: Checked;
@@ -30,11 +30,10 @@ const ListActionButtons = () => {
   const { profile, setTags } = useProfileStore();
   const theme = profile.profile.theme;
   const [loading, setLoading] = useState(false);
-  // const [showStatusBar, setShowStatusBar] = useState<Checked>(true);
   const [checkedTags, setCheckedTags] = useState<checkedTagsType[]>([]);
 
   useEffect(() => {
-    (async () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
 
@@ -49,9 +48,7 @@ const ListActionButtons = () => {
         }
 
         const listTagResponse: AxiosResponse = await axios.get(
-          `${
-            import.meta.env.VITE_SERVER_API_URL
-          }/tags/get/list/66be0acb50d560b6994114b0`,
+          `${import.meta.env.VITE_SERVER_API_URL}/tags/get/list/66be0acb50d560b6994114b0`,
           { withCredentials: true }
         );
 
@@ -71,8 +68,6 @@ const ListActionButtons = () => {
           })
         );
 
-        console.log(intersection);
-
         setCheckedTags(intersection);
       } catch (error) {
         const errorMsg = getErrorFromAxios(error as AxiosError);
@@ -82,26 +77,40 @@ const ListActionButtons = () => {
       } finally {
         setLoading(false);
       }
-    })();
+    };
+
+    fetchData();
   }, []);
 
   const handleEditList = () => {
     toggleModal(true);
-    setModalContent(<h1>helo</h1>);
+    setModalContent(<h1>Hello</h1>);
   };
 
-  // const handleTagChange = (
-  //   tagName: string,
-  //   checked: boolean | "indeterminate"
-  // ) => {
-  //   switch (tagName) {
-  //     case "Status Bar":
-  //       setShowStatusBar(checked);
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  // };
+  const handleSaveChanges = async () => {
+    try {
+      setLoading(true);
+
+      const saveResponse: AxiosResponse = await axios.post(
+        `${import.meta.env.VITE_SERVER_API_URL}/tags/update/list`,
+        checkedTags,
+        { withCredentials: true }
+      );
+
+      if (saveResponse.data.success) {
+        toast.success("Changes saved successfully");
+      } else {
+        toast.error("Failed to save changes");
+      }
+    } catch (error) {
+      const errorMsg = getErrorFromAxios(error as AxiosError);
+      if (errorMsg != undefined) {
+        toast.error(errorMsg);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const actionButtons = [
     {
@@ -120,11 +129,9 @@ const ListActionButtons = () => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            className={`w-56
-              ${
-                theme !== "light" ? "!bg-black !text-white border-zinc-800" : ""
-              }
-            `}
+            className={`w-56 ${
+              theme !== "light" ? "!bg-black !text-white border-zinc-800" : ""
+            }`}
           >
             <DropdownMenuLabel>Tags</DropdownMenuLabel>
             <DropdownMenuSeparator
@@ -133,24 +140,36 @@ const ListActionButtons = () => {
             {loading ? (
               <Loader2 className="animate-spin" size={16} />
             ) : (
-              checkedTags?.map((tag, index) => (
-                <DropdownMenuCheckboxItem
-                  key={index}
-                  checked={tag.isChecked}
-                  onCheckedChange={(checked) => {
-                    setCheckedTags((state) =>
-                      state.map((t) => {
-                        if (t.tagname === tag.tagname) {
-                          return { ...t, isChecked: !checked };
-                        }
-                        return t;
-                      })
-                    );
-                  }}
+              <>
+                {checkedTags.map((tag, index) => (
+                  <DropdownMenuCheckboxItem
+                    key={index}
+                    checked={tag.isChecked}
+                    onCheckedChange={(checked) => {
+                      setCheckedTags((state) =>
+                        state.map((t) => {
+                          if (t.tagname === tag.tagname) {
+                            return { ...t, isChecked: checked };
+                          }
+                          return t;
+                        })
+                      );
+                    }}
+                  >
+                    {removeUsernameTag(tag.tagname)}
+                  </DropdownMenuCheckboxItem>
+                ))}
+                <DropdownMenuSeparator
+                  className={theme !== "light" ? "bg-zinc-800" : ""}
+                />
+                <Button
+                  onClick={handleSaveChanges}
+                  className="mt-2 w-full"
+                  disabled={loading}
                 >
-                  {tag.tagname}
-                </DropdownMenuCheckboxItem>
-              ))
+                  Save Changes
+                </Button>
+              </>
             )}
           </DropdownMenuContent>
         </DropdownMenu>
@@ -160,13 +179,13 @@ const ListActionButtons = () => {
 
   return (
     <div className="flex justify-center items-center space-x-3">
-      {actionButtons?.map((actionButtons, index) => (
+      {actionButtons.map((actionButton, index) => (
         <button
           key={index}
-          onClick={actionButtons?.action ? actionButtons.action : () => null}
+          onClick={actionButton.action ? actionButton.action : () => null}
           className="h-12 w-12 bg-[#00000010] hover:bg-[#00000025] transition-colors flex justify-center items-center rounded-full text-xl"
         >
-          {actionButtons.element}
+          {actionButton.element}
         </button>
       ))}
     </div>
