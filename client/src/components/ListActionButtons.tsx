@@ -33,29 +33,24 @@ const ListActionButtons = () => {
   const [checkedTags, setCheckedTags] = useState<checkedTagsType[]>([]);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchTags = async () => {
       try {
         setLoading(true);
 
-        const userTagResponse: AxiosResponse = await axios.get(
-          `${import.meta.env.VITE_SERVER_API_URL}/tags/get/o`,
-          { withCredentials: true }
-        );
+        const [userTagResponse, listTagResponse] = await Promise.all([
+          axios.get(`${import.meta.env.VITE_SERVER_API_URL}/tags/get/o`, {
+            withCredentials: true,
+          }),
+          axios.get(
+            `${
+              import.meta.env.VITE_SERVER_API_URL
+            }/tags/get/list/66be0acb50d560b6994114b0`,
+            { withCredentials: true }
+          ),
+        ]);
 
-        if (!userTagResponse.data.data) {
-          toast.error("Failed to fetch user tags");
-          return;
-        }
-
-        const listTagResponse: AxiosResponse = await axios.get(
-          `${
-            import.meta.env.VITE_SERVER_API_URL
-          }/tags/get/list/66be0acb50d560b6994114b0`,
-          { withCredentials: true }
-        );
-
-        if (!listTagResponse.data.data) {
-          toast.error("Failed to fetch list tags");
+        if (!userTagResponse.data.data || !listTagResponse.data.data) {
+          toast.error("Failed to fetch tags");
           return;
         }
 
@@ -73,16 +68,14 @@ const ListActionButtons = () => {
         setCheckedTags(intersection);
       } catch (error) {
         const errorMsg = getErrorFromAxios(error as AxiosError);
-        if (errorMsg != undefined) {
-          toast.error(errorMsg);
-        }
+        toast.error(errorMsg || "An error occurred");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchData();
-  }, []);
+    fetchTags();
+  }, [setTags]);
 
   const handleEditList = () => {
     toggleModal(true);
@@ -93,13 +86,17 @@ const ListActionButtons = () => {
     try {
       setLoading(true);
 
-      const tagIds = checkedTags.filter((tag) => tag.isChecked).map(tag => tag._id);
+      const tagIds = checkedTags
+        .filter((tag) => tag.isChecked)
+        .map((tag) => tag._id);
 
-      console.log(tagIds)
+        console.log(tagIds)
 
-      const saveResponse: AxiosResponse = await axios.post(
-        `${import.meta.env.VITE_SERVER_API_URL}/tags/${"66be0acb50d560b6994114b0"}/customize`,
-        tagIds,
+      const saveResponse: AxiosResponse = await axios.patch(
+        `${
+          import.meta.env.VITE_SERVER_API_URL
+        }/tags/66be0acb50d560b6994114b0/customize`,
+        { tagArray: tagIds },
         { withCredentials: true }
       );
 
@@ -127,12 +124,12 @@ const ListActionButtons = () => {
       element: (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              className="bg-transparent hover:bg-transparent hover:text-black border-none"
+            <div
+              className="h-12 w-12 bg-transparent hover:bg-transparent border-none flex justify-center items-center rounded-full text-xl"
+              aria-label="Tag Options"
             >
               <FaTag />
-            </Button>
+            </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent
             className={`w-56 ${
@@ -144,7 +141,9 @@ const ListActionButtons = () => {
               className={theme !== "light" ? "bg-zinc-800" : ""}
             />
             {loading ? (
-              <Loader2 className="animate-spin" size={16} />
+              <div className="w-full h-28 flex justify-center items-center">
+                <Loader2 className="animate-spin" size={16} />
+              </div>
             ) : (
               <>
                 {checkedTags.map((tag, index) => (
@@ -192,7 +191,7 @@ const ListActionButtons = () => {
       {actionButtons.map((actionButton, index) => (
         <button
           key={index}
-          onClick={actionButton.action ? actionButton.action : () => null}
+          onClick={actionButton.action}
           className="h-12 w-12 bg-[#00000010] hover:bg-[#00000025] transition-colors flex justify-center items-center rounded-full text-xl"
         >
           {actionButton.element}
