@@ -93,9 +93,13 @@ const ListActionButtons = () => {
     try {
       setLoading(true);
 
+      const tagIds = checkedTags.filter((tag) => tag.isChecked).map(tag => tag._id);
+
+      console.log(tagIds)
+
       const saveResponse: AxiosResponse = await axios.post(
-        `${import.meta.env.VITE_SERVER_API_URL}/tags/update/list`,
-        checkedTags,
+        `${import.meta.env.VITE_SERVER_API_URL}/tags/${"66be0acb50d560b6994114b0"}/customize`,
+        tagIds,
         { withCredentials: true }
       );
 

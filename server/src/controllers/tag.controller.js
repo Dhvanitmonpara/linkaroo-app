@@ -264,7 +264,7 @@ const getTagsByCollaborator = asyncHandler(async (req, res) => {
                 tagname: '$tagname.tagname',
                 tagId: '$tagname._id',
                 owner: "$tagOwner.username"
-                
+
             }
         }
     ])
@@ -318,6 +318,34 @@ const renameTag = asyncHandler(async (req, res) => {
 
 })
 
+const customizeListTag = asyncHandler(async (req, res) => {
+    const listId = req.params.listId
+    const tagArray = req.body.tagArray
+
+    if (!listId || !tagArray) {
+        throw new ApiError(400, "List ID and tag array are required")
+    }
+
+    const list = await List.findByIdAndUpdate(
+        listId,
+        { tags: tagArray },
+        { new: true }
+    )
+
+    if (!list) {
+        throw new ApiError(404, "List not found")
+    }
+
+    return res
+        .status(200)
+        .json(new ApiResponse(
+            200,
+            list,
+            "Tags updated successfully"
+        ))
+
+})
+
 export {
     createTag,
     deleteTag,
@@ -327,9 +355,7 @@ export {
     getTagsByOwner,
     getTagsByCollaborator,
     renameTag,
-}
-
-export {
+    customizeListTag,
+    removeUsernameTag,
     addUsernameInTag,
-    removeUsernameTag
 }
