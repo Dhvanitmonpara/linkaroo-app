@@ -8,6 +8,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuGroup, // Import this
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
@@ -31,6 +32,7 @@ const ListActionButtons = () => {
   const theme = profile.profile.theme;
   const [loading, setLoading] = useState(false);
   const [checkedTags, setCheckedTags] = useState<checkedTagsType[]>([]);
+  const [menuOpen, setMenuOpen] = useState(false); // State to manage dropdown open state
 
   useEffect(() => {
     const fetchTags = async () => {
@@ -56,10 +58,10 @@ const ListActionButtons = () => {
 
         setTags(userTagResponse.data.data);
 
-        const intersection: checkedTagsType[] = listTagResponse.data.data.map(
+        const intersection: checkedTagsType[] = userTagResponse.data.data.map(
           (tag: checkedTagsType) => ({
             ...tag,
-            isChecked: userTagResponse.data.data.some(
+            isChecked: listTagResponse.data.data.some(
               (userTag: fetchedTagType) => userTag.tagname === tag.tagname
             ),
           })
@@ -90,7 +92,7 @@ const ListActionButtons = () => {
         .filter((tag) => tag.isChecked)
         .map((tag) => tag._id);
 
-        console.log(tagIds)
+      console.log(tagIds);
 
       const saveResponse: AxiosResponse = await axios.patch(
         `${
@@ -112,6 +114,7 @@ const ListActionButtons = () => {
       }
     } finally {
       setLoading(false);
+      setMenuOpen(false); // Close the menu after saving changes
     }
   };
 
@@ -122,7 +125,7 @@ const ListActionButtons = () => {
     },
     {
       element: (
-        <DropdownMenu>
+        <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
           <DropdownMenuTrigger asChild>
             <div
               className="h-12 w-12 bg-transparent hover:bg-transparent border-none flex justify-center items-center rounded-full text-xl"
@@ -146,24 +149,27 @@ const ListActionButtons = () => {
               </div>
             ) : (
               <>
-                {checkedTags.map((tag, index) => (
-                  <DropdownMenuCheckboxItem
-                    key={index}
-                    checked={tag.isChecked}
-                    onCheckedChange={(checked) => {
-                      setCheckedTags((state) =>
-                        state.map((t) => {
-                          if (t.tagname === tag.tagname) {
-                            return { ...t, isChecked: checked };
-                          }
-                          return t;
-                        })
-                      );
-                    }}
-                  >
-                    {removeUsernameTag(tag.tagname)}
-                  </DropdownMenuCheckboxItem>
-                ))}
+                <DropdownMenuGroup> {/* Wrap checkboxes in DropdownMenuGroup */}
+                  {checkedTags.map((tag, index) => (
+                    <DropdownMenuCheckboxItem
+                      key={index}
+                      checked={tag.isChecked}
+                      onCheckedChange={(checked) => {
+                        setCheckedTags((state) =>
+                          state.map((t) => {
+                            if (t.tagname === tag.tagname) {
+                              return { ...t, isChecked: checked };
+                            }
+                            return t;
+                          })
+                        );
+                        setMenuOpen(true); // Keep menu open when changing the checked state
+                      }}
+                    >
+                      {removeUsernameTag(tag.tagname)}
+                    </DropdownMenuCheckboxItem>
+                  ))}
+                </DropdownMenuGroup>
                 <DropdownMenuSeparator
                   className={theme !== "light" ? "bg-zinc-800" : ""}
                 />
