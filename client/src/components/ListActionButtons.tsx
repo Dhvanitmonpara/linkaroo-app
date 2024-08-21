@@ -31,8 +31,9 @@ const ListActionButtons = () => {
   const { profile, setTags } = useProfileStore();
   const theme = profile.profile.theme;
   const [loading, setLoading] = useState(false);
+  const [saveChangesLoading, setSaveChangesLoading] = useState(false);
   const [checkedTags, setCheckedTags] = useState<checkedTagsType[]>([]);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   useEffect(() => {
     const fetchTags = async () => {
@@ -88,7 +89,7 @@ const ListActionButtons = () => {
 
   const handleSaveChanges = async () => {
     try {
-      setLoading(true);
+      setSaveChangesLoading(true);
 
       const tagIds = checkedTags
         .filter((tag) => tag.isChecked)
@@ -104,6 +105,7 @@ const ListActionButtons = () => {
 
       if (saveResponse.data.success) {
         toast.success("Changes saved successfully");
+        setDropdownOpen(false); // Close dropdown on save
       } else {
         toast.error("Failed to save changes");
       }
@@ -113,9 +115,19 @@ const ListActionButtons = () => {
         toast.error(errorMsg);
       }
     } finally {
-      setLoading(false);
-      setMenuOpen(false); // Close the menu after saving changes
+      setSaveChangesLoading(false);
     }
+  };
+
+  const handleCheckboxChange = (tag: checkedTagsType, checked: boolean) => {
+    setCheckedTags((state) =>
+      state.map((t) => {
+        if (t.tagname === tag.tagname) {
+          return { ...t, isChecked: checked };
+        }
+        return t;
+      })
+    );
   };
 
   const actionButtons = [
@@ -125,11 +137,7 @@ const ListActionButtons = () => {
     },
     {
       element: (
-        <DropdownMenu
-          open={menuOpen}
-          onOpenChange={setMenuOpen}
-          modal={true} // Ensure the menu acts as a modal, trapping focus
-        >
+        <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
           <DropdownMenuTrigger asChild>
             <div
               className="h-12 w-12 bg-transparent hover:bg-transparent border-none flex justify-center items-center rounded-full text-xl"
@@ -158,19 +166,10 @@ const ListActionButtons = () => {
                     <DropdownMenuCheckboxItem
                       key={index}
                       checked={tag.isChecked}
-                      onCheckedChange={(checked) => {
-                        // Manually keep the dropdown open
-                        setMenuOpen(true);
-
-                        setCheckedTags((state) =>
-                          state.map((t) => {
-                            if (t.tagname === tag.tagname) {
-                              return { ...t, isChecked: checked };
-                            }
-                            return t;
-                          })
-                        );
-                      }}
+                      onSelect={(e) => e.preventDefault()} // Prevent dropdown from closing
+                      onCheckedChange={(checked) =>
+                        handleCheckboxChange(tag, checked)
+                      }
                     >
                       {removeUsernameTag(tag.tagname)}
                     </DropdownMenuCheckboxItem>
@@ -186,9 +185,13 @@ const ListActionButtons = () => {
                       ? "text-zinc-200 bg-zinc-800 hover:bg-zinc-700"
                       : "bg-zinc-100 hover:bg-zinc-200 text-zinc-950"
                   }`}
-                  disabled={loading}
+                  disabled={saveChangesLoading}
                 >
-                  Save Changes
+                  {saveChangesLoading ? (
+                    <Loader2 className="animate-spin" />
+                  ) : (
+                    "Save Changes"
+                  )}
                 </Button>
               </>
             )}
