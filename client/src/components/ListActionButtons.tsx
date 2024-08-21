@@ -8,7 +8,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-  DropdownMenuGroup, // Import this
+  DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
@@ -32,7 +32,7 @@ const ListActionButtons = () => {
   const theme = profile.profile.theme;
   const [loading, setLoading] = useState(false);
   const [checkedTags, setCheckedTags] = useState<checkedTagsType[]>([]);
-  const [menuOpen, setMenuOpen] = useState(false); // State to manage dropdown open state
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const fetchTags = async () => {
@@ -70,7 +70,9 @@ const ListActionButtons = () => {
         setCheckedTags(intersection);
       } catch (error) {
         const errorMsg = getErrorFromAxios(error as AxiosError);
-        toast.error(errorMsg || "An error occurred");
+        if (errorMsg != undefined) {
+          toast.error(errorMsg);
+        }
       } finally {
         setLoading(false);
       }
@@ -91,8 +93,6 @@ const ListActionButtons = () => {
       const tagIds = checkedTags
         .filter((tag) => tag.isChecked)
         .map((tag) => tag._id);
-
-      console.log(tagIds);
 
       const saveResponse: AxiosResponse = await axios.patch(
         `${
@@ -125,7 +125,11 @@ const ListActionButtons = () => {
     },
     {
       element: (
-        <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
+        <DropdownMenu
+          open={menuOpen}
+          onOpenChange={setMenuOpen}
+          modal={true} // Ensure the menu acts as a modal, trapping focus
+        >
           <DropdownMenuTrigger asChild>
             <div
               className="h-12 w-12 bg-transparent hover:bg-transparent border-none flex justify-center items-center rounded-full text-xl"
@@ -149,12 +153,15 @@ const ListActionButtons = () => {
               </div>
             ) : (
               <>
-                <DropdownMenuGroup> {/* Wrap checkboxes in DropdownMenuGroup */}
+                <DropdownMenuGroup>
                   {checkedTags.map((tag, index) => (
                     <DropdownMenuCheckboxItem
                       key={index}
                       checked={tag.isChecked}
                       onCheckedChange={(checked) => {
+                        // Manually keep the dropdown open
+                        setMenuOpen(true);
+
                         setCheckedTags((state) =>
                           state.map((t) => {
                             if (t.tagname === tag.tagname) {
@@ -163,7 +170,6 @@ const ListActionButtons = () => {
                             return t;
                           })
                         );
-                        setMenuOpen(true); // Keep menu open when changing the checked state
                       }}
                     >
                       {removeUsernameTag(tag.tagname)}
