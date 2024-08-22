@@ -1,5 +1,6 @@
-import { MdModeEditOutline } from "react-icons/md";
+import { BiSolidPencil } from "react-icons/bi";
 import { FaTag } from "react-icons/fa6";
+import { RiDeleteBinFill } from "react-icons/ri";
 import useMethodStore from "@/store/MethodStore";
 import {
   DropdownMenu,
@@ -10,11 +11,17 @@ import {
   DropdownMenuTrigger,
   DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu";
+// import {
+//   Tooltip,
+//   TooltipContent,
+//   TooltipProvider,
+//   TooltipTrigger,
+// } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import getErrorFromAxios from "@/utils/getErrorFromAxios";
-import toast from "react-hot-toast";
+import toast, { Toast } from "react-hot-toast";
 import { Loader2 } from "lucide-react";
 import { fetchedTagType } from "@/lib/types";
 import useProfileStore from "@/store/profileStore";
@@ -34,6 +41,7 @@ const ListActionButtons = () => {
   const [saveChangesLoading, setSaveChangesLoading] = useState(false);
   const [checkedTags, setCheckedTags] = useState<checkedTagsType[]>([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [deleteListLoading, setDeleteListLoading] = useState(false);
 
   useEffect(() => {
     const fetchTags = async () => {
@@ -130,10 +138,40 @@ const ListActionButtons = () => {
     );
   };
 
+  const handleDeleteList = async (toastId: string) => {
+    try {
+      setDeleteListLoading(true);
+      const deleteResponse: AxiosResponse = await axios.delete(
+        `${
+          import.meta.env.VITE_SERVER_API_URL
+        }/lists/o/${"66be0acb50d560b6994114b0"}`,
+        { withCredentials: true }
+      );
+
+      if (deleteResponse) {
+        toast.success("List deleted successfully");
+        setLoading(false);
+      }
+    } catch (error) {
+      const errorMsg = getErrorFromAxios(error as AxiosError);
+      if (errorMsg != undefined) {
+        toast.error(errorMsg);
+      }
+    } finally {
+      setDeleteListLoading(false);
+      toast.dismiss(toastId);
+    }
+  };
+
   const actionButtons = [
     {
-      element: <MdModeEditOutline />,
+      element: (
+        <div className="flex justify-center items-center !text-xl">
+          <BiSolidPencil />
+        </div>
+      ),
       action: handleEditList,
+      tooltip: "Edit List",
     },
     {
       element: (
@@ -198,6 +236,42 @@ const ListActionButtons = () => {
           </DropdownMenuContent>
         </DropdownMenu>
       ),
+      tooltip: "Edit tags",
+    },
+    {
+      element: <RiDeleteBinFill />,
+      action: () => {
+        toast((t: Toast) => {
+          return (
+            <div>
+              <h1>Are you sure you want to delete this list?</h1>
+              <div className="flex justify-center mt-4">
+                <Button
+                  onClick={() => {
+                    handleDeleteList(t.id);
+                  }}
+                  className="w-24 text-zinc-50 font-semibold bg-red-500 hover:bg-red-600"
+                >
+                  {deleteListLoading ? (
+                    <Loader2 className="animate-spin" />
+                  ) : (
+                    "Yes"
+                  )}
+                </Button>
+                <Button
+                  onClick={() => {
+                    toast.dismiss(t.id);
+                  }}
+                  className="ml-4 w-24 font-semibold bg-zinc-200 hover:bg-zinc-300"
+                >
+                  No
+                </Button>
+              </div>
+            </div>
+          );
+        });
+      },
+      tooltip: "Delete Tag",
     },
   ];
 
@@ -211,6 +285,22 @@ const ListActionButtons = () => {
         >
           {actionButton.element}
         </button>
+        // <TooltipProvider key={index}>
+        //   <Tooltip>
+        //     <TooltipTrigger asChild>
+        //       <button
+        //         onClick={actionButton.action}
+        //         className="h-12 w-12 bg-[#00000010] hover:bg-[#00000025] transition-colors flex justify-center items-center rounded-full text-xl"
+        //         // variant="outline"
+        //       >
+        //         {actionButton.element}
+        //       </button>
+        //     </TooltipTrigger>
+        //     <TooltipContent>
+        //       <p>{actionButton.tooltip}</p>
+        //     </TooltipContent>
+        //   </Tooltip>
+        // </TooltipProvider>
       ))}
     </div>
   );
