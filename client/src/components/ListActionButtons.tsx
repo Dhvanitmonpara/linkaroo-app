@@ -26,6 +26,7 @@ import { Loader2 } from "lucide-react";
 import { fetchedTagType } from "@/lib/types";
 import useProfileStore from "@/store/profileStore";
 import { removeUsernameTag } from "@/utils/toggleUsernameInTag";
+import { useParams } from "react-router-dom";
 
 type Checked = boolean;
 
@@ -41,7 +42,8 @@ const ListActionButtons = () => {
   const [saveChangesLoading, setSaveChangesLoading] = useState(false);
   const [checkedTags, setCheckedTags] = useState<checkedTagsType[]>([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [deleteListLoading, setDeleteListLoading] = useState(false);
+
+  const { listId } = useParams();
 
   useEffect(() => {
     const fetchTags = async () => {
@@ -53,9 +55,7 @@ const ListActionButtons = () => {
             withCredentials: true,
           }),
           axios.get(
-            `${
-              import.meta.env.VITE_SERVER_API_URL
-            }/tags/get/list/66be0acb50d560b6994114b0`,
+            `${import.meta.env.VITE_SERVER_API_URL}/tags/get/list/${listId}`,
             { withCredentials: true }
           ),
         ]);
@@ -104,9 +104,7 @@ const ListActionButtons = () => {
         .map((tag) => tag._id);
 
       const saveResponse: AxiosResponse = await axios.patch(
-        `${
-          import.meta.env.VITE_SERVER_API_URL
-        }/tags/66be0acb50d560b6994114b0/customize`,
+        `${import.meta.env.VITE_SERVER_API_URL}/tags/${listId}/customize`,
         { tagArray: tagIds },
         { withCredentials: true }
       );
@@ -139,12 +137,15 @@ const ListActionButtons = () => {
   };
 
   const handleDeleteList = async (toastId: string) => {
+    const loadingId = Date.now().toString();
     try {
-      setDeleteListLoading(true);
+      toast.dismiss(toastId);
+      toast.loading("Deleting list...", {
+        id: loadingId,
+      });
+
       const deleteResponse: AxiosResponse = await axios.delete(
-        `${
-          import.meta.env.VITE_SERVER_API_URL
-        }/lists/o/${"66be0acb50d560b6994114b0"}`,
+        `${import.meta.env.VITE_SERVER_API_URL}/lists/o/${listId}`,
         { withCredentials: true }
       );
 
@@ -158,8 +159,7 @@ const ListActionButtons = () => {
         toast.error(errorMsg);
       }
     } finally {
-      setDeleteListLoading(false);
-      toast.dismiss(toastId);
+      toast.dismiss(loadingId);
     }
   };
 
@@ -252,11 +252,7 @@ const ListActionButtons = () => {
                   }}
                   className="w-24 text-zinc-50 font-semibold bg-red-500 hover:bg-red-600"
                 >
-                  {deleteListLoading ? (
-                    <Loader2 className="animate-spin" />
-                  ) : (
-                    "Yes"
-                  )}
+                  Yes
                 </Button>
                 <Button
                   onClick={() => {

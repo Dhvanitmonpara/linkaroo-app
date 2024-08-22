@@ -6,6 +6,7 @@ import { uploadOnCloudinary, deleteFromCloudinary } from "../utils/cloudinary.js
 import getPublicId from "../utils/getPublicId.js"
 import listOwnerVerification from "../utils/listOwnerVerification.js"
 import { ObjectId } from "mongodb"
+import {Card} from "../models/card.model.js"
 
 const createList = asyncHandler(async (req, res) => {
 
@@ -248,19 +249,25 @@ const deleteList = asyncHandler(async (req, res) => {
 
     const list = await List.findById(listId)
 
-    listOwnerVerification(list.createdBy, req.user, res)
-
-    const deletedList = await List.findByIdAndDelete(listId)
-
-    if (!deletedList) {
+    if (!list) {
         throw new ApiError(404, "List not found")
     }
+
+    listOwnerVerification(list.createdBy, req.user, res)
+
+    const listCards = Card.deleteMany({ listId })
+
+    if(!listCards) {
+        throw new ApiError(500, "Failed to delete list cards")
+    }
+
+    await list.deleteOne()
 
     return res
         .status(200)
         .json(new ApiResponse(
             200,
-            deletedList,
+            list,
             "List deleted successfully"
         ))
 
