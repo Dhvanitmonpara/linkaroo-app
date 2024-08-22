@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Input } from "../ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
-import { Textarea } from "@/components/ui/textarea"
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectItem,
@@ -23,6 +23,7 @@ import useDocStore from "@/store/docStore";
 type CreateDocFormProps = {
   theme: themeType | undefined;
   toggleModal: (isOpen: boolean) => void;
+  listTitle?: string;
 };
 
 type HandleDocCreationType = {
@@ -35,13 +36,20 @@ type HandleDocCreationType = {
 const CreateDocForm: React.FC<CreateDocFormProps> = ({
   theme,
   toggleModal,
+  listTitle,
 }) => {
   const [loading, setLoading] = useState(false);
 
   const { lists } = useListStore();
   const { addDocItem, docs } = useDocStore();
 
-  const { control, handleSubmit, register } = useForm<HandleDocCreationType>();
+  const { control, handleSubmit, register } = useForm<HandleDocCreationType>({
+    defaultValues: {
+      list: listTitle
+        ? lists.find((list) => list.title === listTitle)?._id
+        : "",
+    },
+  });
 
   const handleListCreation = async (data: HandleDocCreationType) => {
     try {
@@ -150,7 +158,9 @@ const CreateDocForm: React.FC<CreateDocFormProps> = ({
                   <SelectGroup>
                     <SelectLabel>Lists</SelectLabel>
                     {lists.map((list) => (
-                      <SelectItem key={list._id} value={list._id}>{list.title}</SelectItem>
+                      <SelectItem key={list._id} value={list._id}>
+                        {list.title}
+                      </SelectItem>
                     ))}
                   </SelectGroup>
                 </SelectContent>

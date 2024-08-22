@@ -1,4 +1,4 @@
-import { DocCard } from "@/components";
+import { DocCard, ListActionButtons } from "@/components";
 import useDocStore from "@/store/docStore";
 import useMethodStore from "@/store/MethodStore";
 import useProfileStore from "@/store/profileStore";
@@ -75,6 +75,14 @@ const Docs = () => {
 
   return (
     <div className="md:h-[calc(100vh-5rem)] md:px-0 px-4 h-[calc(100vh-8.5rem)] lg:h-[calc(100vh-9rem)] overflow-y-scroll w-full space-y-2 no-scrollbar">
+      <div className="h-32 w-full py-2">
+        <div className="bg-green-400 h-full w-full relative p-4">
+          <div className="flex justify-between items-center w-full h-10 absolute bottom-5 left-0 px-4">
+            <h1 className="text-2xl font-semibold">Development</h1>
+            <ListActionButtons />
+          </div>
+        </div>
+      </div>
       {docs?.map((doc) => (
         <DocCard
           key={doc._id}

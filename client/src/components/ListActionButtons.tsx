@@ -46,49 +46,49 @@ const ListActionButtons = () => {
   const { listId } = useParams();
 
   useEffect(() => {
-    const fetchTags = async () => {
-      try {
-        setLoading(true);
+    (async () => {
+      if (listId !== undefined) {
+        try {
+          setLoading(true);
 
-        const [userTagResponse, listTagResponse] = await Promise.all([
-          axios.get(`${import.meta.env.VITE_SERVER_API_URL}/tags/get/o`, {
-            withCredentials: true,
-          }),
-          axios.get(
-            `${import.meta.env.VITE_SERVER_API_URL}/tags/get/list/${listId}`,
-            { withCredentials: true }
-          ),
-        ]);
-
-        if (!userTagResponse.data.data || !listTagResponse.data.data) {
-          toast.error("Failed to fetch tags");
-          return;
-        }
-
-        setTags(userTagResponse.data.data);
-
-        const intersection: checkedTagsType[] = userTagResponse.data.data.map(
-          (tag: checkedTagsType) => ({
-            ...tag,
-            isChecked: listTagResponse.data.data.some(
-              (userTag: fetchedTagType) => userTag.tagname === tag.tagname
+          const [userTagResponse, listTagResponse] = await Promise.all([
+            axios.get(`${import.meta.env.VITE_SERVER_API_URL}/tags/get/o`, {
+              withCredentials: true,
+            }),
+            axios.get(
+              `${import.meta.env.VITE_SERVER_API_URL}/tags/get/list/${listId}`,
+              { withCredentials: true }
             ),
-          })
-        );
+          ]);
 
-        setCheckedTags(intersection);
-      } catch (error) {
-        const errorMsg = getErrorFromAxios(error as AxiosError);
-        if (errorMsg != undefined) {
-          toast.error(errorMsg);
+          if (!userTagResponse.data.data || !listTagResponse.data.data) {
+            toast.error("Failed to fetch tags");
+            return;
+          }
+
+          setTags(userTagResponse.data.data);
+
+          const intersection: checkedTagsType[] = userTagResponse.data.data.map(
+            (tag: checkedTagsType) => ({
+              ...tag,
+              isChecked: listTagResponse.data.data.some(
+                (userTag: fetchedTagType) => userTag.tagname === tag.tagname
+              ),
+            })
+          );
+
+          setCheckedTags(intersection);
+        } catch (error) {
+          const errorMsg = getErrorFromAxios(error as AxiosError);
+          if (errorMsg != undefined) {
+            toast.error(errorMsg);
+          }
+        } finally {
+          setLoading(false);
         }
-      } finally {
-        setLoading(false);
       }
-    };
-
-    fetchTags();
-  }, [setTags]);
+    })();
+  }, [setTags, listId]);
 
   const handleEditList = () => {
     toggleModal(true);
