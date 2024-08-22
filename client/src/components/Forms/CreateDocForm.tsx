@@ -13,12 +13,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useForm, Controller } from "react-hook-form";
-import { colorOptions, fontOptions, themeType } from "@/lib/types";
+import { themeType } from "@/lib/types";
 import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import getErrorFromAxios from "@/utils/getErrorFromAxios";
 import useListStore from "@/store/listStore";
 import useDocStore from "@/store/docStore";
+import { useNavigate } from "react-router-dom";
 
 type CreateDocFormProps = {
   theme: themeType | undefined;
@@ -39,6 +40,7 @@ const CreateDocForm: React.FC<CreateDocFormProps> = ({
   listTitle,
 }) => {
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const { lists } = useListStore();
   const { addDocItem, docs } = useDocStore();
@@ -62,15 +64,10 @@ const CreateDocForm: React.FC<CreateDocFormProps> = ({
         return;
       }
 
-      const themeColor = parentList?.theme;
-      const font = parentList?.font;
-
       const newData = {
         title: data.title,
         description: data.description,
         link: data.link,
-        theme: themeColor as colorOptions,
-        font: font as fontOptions,
       };
 
       const doc = await axios.post(
@@ -94,6 +91,7 @@ const CreateDocForm: React.FC<CreateDocFormProps> = ({
     } finally {
       setLoading(false);
       toggleModal(false);
+      navigate(`/lists/${data.list}`);
     }
   };
 

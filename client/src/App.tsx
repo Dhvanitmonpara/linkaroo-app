@@ -1,6 +1,4 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import "./App.css";
-import { Header, HorizontalTabs, Loading, Modal } from "./components";
 import { useEffect, useRef, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import useMethodStore from "./store/MethodStore";
@@ -9,27 +7,31 @@ import { useMediaQuery } from "react-responsive";
 import axios, { AxiosError } from "axios";
 import getErrorFromAxios from "./utils/getErrorFromAxios";
 import toggleThemeModeAtRootElem from "./utils/toggleThemeMode";
+import { Header, HorizontalTabs, Loading, Modal } from "./components";
 
 const App = () => {
   const [loading, setLoading] = useState<boolean>(true);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const modalRef = useRef<HTMLDivElement | null>(null);
-  const navigate = useNavigate();
-  const { isModalOpen, setModalContent, toggleModal, modalContent } =
-    useMethodStore();
+  const previousPath = useRef(location.pathname + location.search); // Store the full path including query parameters
+
+  const { isModalOpen, setModalContent, toggleModal, modalContent } = useMethodStore();
   const { addProfile, profile } = useProfileStore();
 
   const isSmallScreen = useMediaQuery({ query: "(max-width: 1024px)" });
 
+  // Store the current path with query parameters before navigating
+  useEffect(() => {
+    previousPath.current = location.pathname + location.search;
+  }, [location]);
+
   const closeModal = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (modalRef.current === e.target) {
       toggleModal(false);
-      if (isSmallScreen) {
-        navigate("/list");
-      } else {
-        navigate("/");
-      }
       setModalContent(null);
+      navigate(previousPath.current); // Navigate to the stored full path with query parameters
     }
   };
 
@@ -42,7 +44,7 @@ const App = () => {
           withCredentials: true,
         });
 
-        if (currentUser.data == "Unauthorized request") {
+        if (currentUser.data === "Unauthorized request") {
           navigate("/login");
           return;
         }
@@ -81,18 +83,17 @@ const App = () => {
   const theme = profile?.profile?.theme;
 
   useEffect(() => {
-    if (theme == "black") {
+    if (theme === "black") {
       toggleThemeModeAtRootElem("dark");
     } else {
       toggleThemeModeAtRootElem(theme);
     }
   }, [theme]);
 
-  const location = useLocation().pathname;
   const showBars =
-    location.includes("/login") ||
-    location.includes("/signup") ||
-    location.includes("/forgot-password");
+    location.pathname.includes("/login") ||
+    location.pathname.includes("/signup") ||
+    location.pathname.includes("/forgot-password");
 
   if (loading) {
     return <Loading />;

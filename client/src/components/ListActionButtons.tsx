@@ -28,6 +28,7 @@ import useProfileStore from "@/store/profileStore";
 import { removeUsernameTag } from "@/utils/toggleUsernameInTag";
 import { useParams } from "react-router-dom";
 import useListStore from "@/store/listStore";
+import useDocStore from "@/store/docStore";
 
 type Checked = boolean;
 
@@ -39,6 +40,7 @@ const ListActionButtons = () => {
   const { toggleModal, setModalContent } = useMethodStore();
   const { profile, setTags } = useProfileStore();
   const { removeListItem } = useListStore();
+  const {setDocs} = useDocStore()
   const theme = profile.profile.theme;
   const [loading, setLoading] = useState(false);
   const [saveChangesLoading, setSaveChangesLoading] = useState(false);
@@ -165,6 +167,7 @@ const ListActionButtons = () => {
         return;
       }
 
+      setDocs([])
       toast.success("List deleted successfully");
       setLoading(false);
     } catch (error) {
