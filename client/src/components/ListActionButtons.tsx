@@ -27,6 +27,7 @@ import { fetchedTagType } from "@/lib/types";
 import useProfileStore from "@/store/profileStore";
 import { removeUsernameTag } from "@/utils/toggleUsernameInTag";
 import { useParams } from "react-router-dom";
+import useListStore from "@/store/listStore";
 
 type Checked = boolean;
 
@@ -37,6 +38,7 @@ type checkedTagsType = fetchedTagType & {
 const ListActionButtons = () => {
   const { toggleModal, setModalContent } = useMethodStore();
   const { profile, setTags } = useProfileStore();
+  const { removeListItem } = useListStore();
   const theme = profile.profile.theme;
   const [loading, setLoading] = useState(false);
   const [saveChangesLoading, setSaveChangesLoading] = useState(false);
@@ -109,12 +111,14 @@ const ListActionButtons = () => {
         { withCredentials: true }
       );
 
-      if (saveResponse.data.success) {
-        toast.success("Changes saved successfully");
-        setDropdownOpen(false); // Close dropdown on save
-      } else {
+      if (!saveResponse.data.success) {
         toast.error("Failed to save changes");
-      }
+      } 
+
+      // TODO: update state when changes are persisted
+
+      setDropdownOpen(false);
+      toast.success("Changes saved successfully");
     } catch (error) {
       const errorMsg = getErrorFromAxios(error as AxiosError);
       if (errorMsg != undefined) {
@@ -144,15 +148,25 @@ const ListActionButtons = () => {
         id: loadingId,
       });
 
-      const deleteResponse: AxiosResponse = await axios.delete(
+      const deleteDBResponse: AxiosResponse = await axios.delete(
         `${import.meta.env.VITE_SERVER_API_URL}/lists/o/${listId}`,
         { withCredentials: true }
       );
 
-      if (deleteResponse) {
-        toast.success("List deleted successfully");
-        setLoading(false);
+      if (!deleteDBResponse) {
+        toast.error("Failed to delete list");
+        return;
       }
+
+      if (listId !== undefined) {
+        removeListItem(listId);
+      } else {
+        toast.error("List id not found");
+        return;
+      }
+
+      toast.success("List deleted successfully");
+      setLoading(false);
     } catch (error) {
       const errorMsg = getErrorFromAxios(error as AxiosError);
       if (errorMsg != undefined) {
