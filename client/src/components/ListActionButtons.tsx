@@ -29,6 +29,7 @@ import { removeUsernameTag } from "@/utils/toggleUsernameInTag";
 import { useParams } from "react-router-dom";
 import useListStore from "@/store/listStore";
 import useDocStore from "@/store/docStore";
+import { EditListForm } from "./Forms";
 
 type Checked = boolean;
 
@@ -40,7 +41,7 @@ const ListActionButtons = () => {
   const { toggleModal, setModalContent } = useMethodStore();
   const { profile, setTags } = useProfileStore();
   const { removeListItem, updateListTags } = useListStore();
-  const {setDocs} = useDocStore()
+  const { setDocs } = useDocStore();
   const theme = profile.profile.theme;
   const [loading, setLoading] = useState(false);
   const [saveChangesLoading, setSaveChangesLoading] = useState(false);
@@ -96,7 +97,7 @@ const ListActionButtons = () => {
 
   const handleEditList = () => {
     toggleModal(true);
-    setModalContent(<h1>Hello</h1>);
+    setModalContent(<EditListForm theme={theme} toggleModal={toggleModal} />);
   };
 
   const handleSaveChanges = async () => {
@@ -115,12 +116,12 @@ const ListActionButtons = () => {
 
       if (!saveResponse.data.success) {
         toast.error("Failed to save changes");
-      } 
+      }
 
-      const listTags = checkedTags.filter(tag => tag.isChecked === true)
-      const updatedList = {...saveResponse.data.data, tags: listTags}
+      const listTags = checkedTags.filter((tag) => tag.isChecked === true);
+      const updatedList = { ...saveResponse.data.data, tags: listTags };
 
-      updateListTags(updatedList)
+      updateListTags(updatedList);
 
       setDropdownOpen(false);
       toast.success("Changes saved successfully");
@@ -170,7 +171,7 @@ const ListActionButtons = () => {
         return;
       }
 
-      setDocs([])
+      setDocs([]);
       toast.success("List deleted successfully");
       setLoading(false);
     } catch (error) {
