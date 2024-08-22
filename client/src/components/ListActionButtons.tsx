@@ -39,7 +39,7 @@ type checkedTagsType = fetchedTagType & {
 const ListActionButtons = () => {
   const { toggleModal, setModalContent } = useMethodStore();
   const { profile, setTags } = useProfileStore();
-  const { removeListItem } = useListStore();
+  const { removeListItem, updateListTags } = useListStore();
   const {setDocs} = useDocStore()
   const theme = profile.profile.theme;
   const [loading, setLoading] = useState(false);
@@ -117,7 +117,10 @@ const ListActionButtons = () => {
         toast.error("Failed to save changes");
       } 
 
-      // TODO: update state when changes are persisted
+      const listTags = checkedTags.filter(tag => tag.isChecked === true)
+      const updatedList = {...saveResponse.data.data, tags: listTags}
+
+      updateListTags(updatedList)
 
       setDropdownOpen(false);
       toast.success("Changes saved successfully");
