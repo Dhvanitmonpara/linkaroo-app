@@ -1,5 +1,6 @@
 import { BiSolidPencil } from "react-icons/bi";
 import { FaTag } from "react-icons/fa6";
+import { FaPlus } from "react-icons/fa6";
 import { RiDeleteBinFill } from "react-icons/ri";
 import useMethodStore from "@/store/MethodStore";
 import {
@@ -18,7 +19,7 @@ import {
 //   TooltipTrigger,
 // } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { FormEventHandler, useEffect, useState } from "react";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import getErrorFromAxios from "@/utils/getErrorFromAxios";
 import toast, { Toast } from "react-hot-toast";
@@ -30,6 +31,7 @@ import { useParams } from "react-router-dom";
 import useListStore from "@/store/listStore";
 import useDocStore from "@/store/docStore";
 import { EditListForm } from "./Forms";
+import { Input } from "./ui/input";
 
 type Checked = boolean;
 
@@ -47,6 +49,7 @@ const ListActionButtons = () => {
   const [saveChangesLoading, setSaveChangesLoading] = useState(false);
   const [checkedTags, setCheckedTags] = useState<checkedTagsType[]>([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [newTagInput, setNewTagInput] = useState(false);
 
   const { listId } = useParams();
 
@@ -98,6 +101,49 @@ const ListActionButtons = () => {
   const handleEditList = () => {
     toggleModal(true);
     setModalContent(<EditListForm theme={theme} toggleModal={toggleModal} />);
+  };
+
+  const HandleAddNewTag: FormEventHandler<HTMLFormElement> = async (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const newTagName = formData.get("title")?.toString().trim();
+
+    if (!newTagName) {
+      toast.error("Tag name cannot be empty");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const createTagResponse: AxiosResponse = await axios.post(
+        `${import.meta.env.VITE_SERVER_API_URL}/tags/create`,
+        { tagname: newTagName },
+        { withCredentials: true }
+      );
+
+      if (!createTagResponse.data.success) {
+        toast.error("Failed to create new tag");
+        return;
+      }
+
+      const newTag = createTagResponse.data.data;
+      setCheckedTags((prevTags) => [
+        ...prevTags,
+        { ...newTag, isChecked: true },
+      ]);
+
+      setNewTagInput(false);
+      toast.success("Tag created successfully");
+    } catch (error) {
+      const errorMsg = getErrorFromAxios(error as AxiosError);
+      if (errorMsg != undefined) {
+        toast.error(errorMsg);
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSaveChanges = async () => {
@@ -196,7 +242,10 @@ const ListActionButtons = () => {
     },
     {
       element: (
-        <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
+        <DropdownMenu open={dropdownOpen} onOpenChange={() => {
+          setDropdownOpen(!dropdownOpen);
+          setNewTagInput(false)
+        }}>
           <DropdownMenuTrigger asChild>
             <div
               className="h-12 w-12 bg-transparent hover:bg-transparent border-none flex justify-center items-center rounded-full text-xl"
@@ -220,6 +269,45 @@ const ListActionButtons = () => {
               </div>
             ) : (
               <>
+                {newTagInput ? (
+                  <form className="flex justify-center items-center space-x-1" onSubmit={HandleAddNewTag}>
+                    <Input
+                      id="title"
+                      name="title"
+                      type="text"
+                      placeholder="Enter title"
+                      className={`${
+                        theme !== "light" ? "bg-zinc-800" : "bg-zinc-200"
+                      } border-none border-spacing-0`}
+                    />
+                    <Button
+                      type="submit"
+                      className={`w-12 px-2 ${
+                        theme !== "light"
+                          ? "text-zinc-200 bg-zinc-800 hover:bg-zinc-700"
+                          : "bg-zinc-100 hover:bg-zinc-200 text-zinc-950"
+                      }`}
+                    >
+                      <FaPlus/>
+                    </Button>
+                  </form>
+                ) : (
+                  <Button
+                    onClick={() => setNewTagInput(true)}
+                    className={`mt-2 w-full px-2 ${
+                      theme !== "light"
+                        ? "text-zinc-200 bg-zinc-950 hover:bg-zinc-800"
+                        : "bg-zinc-100 hover:bg-zinc-200 text-zinc-950"
+                    }`}
+                  >
+                    <span className="flex w-full justify-start items-center space-x-[0.65rem]">
+                      <FaPlus /> <span>Create a new tag</span>
+                    </span>
+                  </Button>
+                )}
+                <DropdownMenuSeparator
+                  className={theme !== "light" ? "bg-zinc-800" : ""}
+                />
                 <DropdownMenuGroup>
                   {checkedTags.map((tag, index) => (
                     <DropdownMenuCheckboxItem

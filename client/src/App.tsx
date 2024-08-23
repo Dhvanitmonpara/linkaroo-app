@@ -8,6 +8,8 @@ import axios, { AxiosError } from "axios";
 import getErrorFromAxios from "./utils/getErrorFromAxios";
 import toggleThemeModeAtRootElem from "./utils/toggleThemeMode";
 import { Header, HorizontalTabs, Loading, Modal } from "./components";
+import useListStore from "./store/listStore";
+import useDocStore from "./store/docStore";
 
 const App = () => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -15,29 +17,33 @@ const App = () => {
   const navigate = useNavigate();
 
   const modalRef = useRef<HTMLDivElement | null>(null);
-  const previousPath = useRef(location.pathname + location.search); // Store the full path including query parameters
 
   const { isModalOpen, setModalContent, toggleModal, modalContent } = useMethodStore();
   const { addProfile, profile } = useProfileStore();
+  const {setLists} = useListStore()
+  const {setDocs} = useDocStore()
 
   const isSmallScreen = useMediaQuery({ query: "(max-width: 1024px)" });
-
-  // Store the current path with query parameters before navigating
-  useEffect(() => {
-    previousPath.current = location.pathname + location.search;
-  }, [location]);
 
   const closeModal = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (modalRef.current === e.target) {
       toggleModal(false);
       setModalContent(null);
-      navigate(previousPath.current); // Navigate to the stored full path with query parameters
+      if(isSmallScreen){
+        navigate("/list");
+      } else {
+        navigate(`/`);
+      }
     }
   };
 
   useEffect(() => {
     (async () => {
       try {
+
+        setLists([])
+        setDocs([])
+
         const currentUser = await axios({
           method: "GET",
           url: `${import.meta.env.VITE_SERVER_API_URL}/users/current-user`,
