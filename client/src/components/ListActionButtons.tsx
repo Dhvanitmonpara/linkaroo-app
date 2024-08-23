@@ -50,6 +50,7 @@ const ListActionButtons = () => {
   const [checkedTags, setCheckedTags] = useState<checkedTagsType[]>([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [newTagInput, setNewTagInput] = useState(false);
+  const [newTagSubmitLoading, setNewTagSubmitLoading] = useState(false);
 
   const { listId } = useParams();
 
@@ -107,7 +108,7 @@ const ListActionButtons = () => {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
-    const newTagName = formData.get("title")?.toString().trim();
+    const newTagName = formData.get("title")?.toString();
 
     if (!newTagName) {
       toast.error("Tag name cannot be empty");
@@ -115,11 +116,11 @@ const ListActionButtons = () => {
     }
 
     try {
-      setLoading(true);
+      setNewTagSubmitLoading(true);
 
       const createTagResponse: AxiosResponse = await axios.post(
-        `${import.meta.env.VITE_SERVER_API_URL}/tags/create`,
-        { tagname: newTagName },
+        `${import.meta.env.VITE_SERVER_API_URL}/tags`,
+        { tag: newTagName },
         { withCredentials: true }
       );
 
@@ -142,7 +143,7 @@ const ListActionButtons = () => {
         toast.error(errorMsg);
       }
     } finally {
-      setLoading(false);
+      setNewTagSubmitLoading(false);
     }
   };
 
@@ -242,10 +243,14 @@ const ListActionButtons = () => {
     },
     {
       element: (
-        <DropdownMenu open={dropdownOpen} onOpenChange={() => {
-          setDropdownOpen(!dropdownOpen);
-          setNewTagInput(false)
-        }}>
+        <DropdownMenu
+          open={dropdownOpen}
+          onOpenChange={() => {
+            setDropdownOpen(!dropdownOpen);
+            setNewTagInput(false);
+          }}
+          modal={false} // Keeps dropdown within the context of the parent
+        >
           <DropdownMenuTrigger asChild>
             <div
               className="h-12 w-12 bg-transparent hover:bg-transparent border-none flex justify-center items-center rounded-full text-xl"
@@ -258,6 +263,17 @@ const ListActionButtons = () => {
             className={`w-56 ${
               theme !== "light" ? "!bg-black !text-white border-zinc-800" : ""
             }`}
+            onCloseAutoFocus={(event) => {
+              event.preventDefault(); // Prevents auto focus when closing the dropdown
+            }}
+            onPointerDownOutside={(event) => {
+              if (
+                event.target instanceof HTMLElement &&
+                !event.target.closest("input")
+              ) {
+                setDropdownOpen(false);
+              }
+            }}
           >
             <DropdownMenuLabel>Tags</DropdownMenuLabel>
             <DropdownMenuSeparator
@@ -270,7 +286,11 @@ const ListActionButtons = () => {
             ) : (
               <>
                 {newTagInput ? (
-                  <form className="flex justify-center items-center space-x-1" onSubmit={HandleAddNewTag}>
+                  <form
+                    className="flex justify-center items-center space-x-1"
+                    onSubmit={HandleAddNewTag}
+                    onKeyDown={(event) => event.stopPropagation()} // Stop event propagation when typing
+                  >
                     <Input
                       id="title"
                       name="title"
@@ -279,29 +299,37 @@ const ListActionButtons = () => {
                       className={`${
                         theme !== "light" ? "bg-zinc-800" : "bg-zinc-200"
                       } border-none border-spacing-0`}
+                      onFocus={(event) => event.stopPropagation()} // Ensure focus stays on the input
                     />
-                    <Button
-                      type="submit"
-                      className={`w-12 px-2 ${
-                        theme !== "light"
-                          ? "text-zinc-200 bg-zinc-800 hover:bg-zinc-700"
-                          : "bg-zinc-100 hover:bg-zinc-200 text-zinc-950"
-                      }`}
-                    >
-                      <FaPlus/>
-                    </Button>
+                    {newTagSubmitLoading ? (
+                      <div className="flex justify-center items-center h-full w-12">
+                        <Loader2 className="animate-spin" size={16} />
+                      </div>
+                    ) : (
+                      <Button
+                        type="submit"
+                        className={`w-12 px-2 ${
+                          theme !== "light"
+                            ? "text-zinc-200 bg-zinc-800 hover:bg-zinc-700"
+                            : "bg-zinc-100 hover:bg-zinc-200 text-zinc-950"
+                        }`}
+                      >
+                        <FaPlus />
+                      </Button>
+                    )}
                   </form>
                 ) : (
                   <Button
                     onClick={() => setNewTagInput(true)}
-                    className={`mt-2 w-full px-2 ${
+                    className={`w-full px-2 ${
                       theme !== "light"
                         ? "text-zinc-200 bg-zinc-950 hover:bg-zinc-800"
                         : "bg-zinc-100 hover:bg-zinc-200 text-zinc-950"
                     }`}
                   >
                     <span className="flex w-full justify-start items-center space-x-[0.65rem]">
-                      <FaPlus /> <span>Create a new tag</span>
+                      <FaPlus />{" "}
+                      <span className="font-semibold">Create a new tag</span>
                     </span>
                   </Button>
                 )}
