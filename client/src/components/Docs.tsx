@@ -1,5 +1,4 @@
 import { DocCard, ListActionButtons } from "@/components";
-import { fetchedListType } from "@/lib/types";
 import useDocStore from "@/store/docStore";
 import useListStore from "@/store/listStore";
 import useMethodStore from "@/store/MethodStore";
@@ -15,12 +14,11 @@ const Docs = () => {
   const { toggleModal } = useMethodStore();
   const [loading, setLoading] = useState(false);
   const location = useLocation();
-  const { docs, setDocs } = useDocStore();
+  const { docs, setDocs, currentListItem, setCurrentListItem } = useDocStore();
   const {lists} = useListStore()
   const { profile } = useProfileStore();
   const { theme } = profile.profile;
   const { currentCardColor } = useMethodStore();
-  const [currentList, setCurrentList] = useState<fetchedListType>()
 
   useEffect(() => {
     (async () => {
@@ -40,7 +38,7 @@ const Docs = () => {
           }
           
           const currentListRes = await lists.filter(list => list._id === listId)[0]
-          setCurrentList(currentListRes);
+          setCurrentListItem(currentListRes);
 
           setDocs(response.data.data);
         } catch (error) {
@@ -71,11 +69,11 @@ const Docs = () => {
       <div className="md:h-[calc(100vh-5rem)] select-none h-[calc(100vh-8.5rem)] lg:h-[calc(100vh-9rem)] overflow-y-hidden w-full space-y-2 no-scrollbar">
         <div className="bg-green-400 h-48 w-full relative p-4 rounded-md">
           <div className="flex justify-between items-center w-full h-10 absolute bottom-5 left-0 px-4">
-            <h1 className="text-2xl font-semibold">{currentList?.title}</h1>
-            <ListActionButtons listTitle={currentList?.title} />
+            <h1 className="text-2xl font-semibold">{currentListItem?.title}</h1>
+            <ListActionButtons listTitle={currentListItem?.title} />
           </div>
           <div>
-            {currentList?.description}
+            {currentListItem?.description}
           </div>
         </div>
         <div className="dark:text-zinc-200 h-[30rem] flex justify-center items-center flex-col space-y-2">
@@ -95,11 +93,11 @@ const Docs = () => {
       <div className="h-48 w-full py-2">
         <div className="bg-green-400 h-full w-full relative p-4 rounded-md">
           <div className="flex justify-between items-center w-full h-10 absolute bottom-5 left-0 px-4">
-            <h1 className="text-2xl font-semibold">{currentList?.title}</h1>
-            <ListActionButtons listTitle={currentList?.title} />
+            <h1 className="text-2xl font-semibold">{currentListItem?.title}</h1>
+            <ListActionButtons listTitle={currentListItem?.title} />
           </div>
           <div>
-            {currentList?.description}
+            {currentListItem?.description}
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { fetchedDocType } from "@/lib/types";
+import { fetchedDocType, fetchedListType } from "@/lib/types";
 import { create } from "zustand";
 
 import { devtools, persist } from "zustand/middleware";
@@ -8,6 +8,8 @@ interface DocState {
   setDocs: (lists: fetchedDocType[]) => void;
   addDocItem: (item: fetchedDocType) => void;
   removeDocItem: (itemId: string) => void;
+  currentListItem: fetchedListType | null;
+  setCurrentListItem: (listItem: fetchedListType) => void;
 }
 
 const useDocStore = create<DocState>()(
@@ -24,6 +26,8 @@ const useDocStore = create<DocState>()(
             docs: state.docs.filter((doc) => doc._id !== docId),
           }));
         },
+        currentListItem: null,
+        setCurrentListItem: (listItem) => set(({ currentListItem: listItem })),
       }),
       {
         name: "lists",
