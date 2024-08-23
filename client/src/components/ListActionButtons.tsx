@@ -30,7 +30,7 @@ import { removeUsernameTag } from "@/utils/toggleUsernameInTag";
 import { useParams } from "react-router-dom";
 import useListStore from "@/store/listStore";
 import useDocStore from "@/store/docStore";
-import { EditListForm } from "./Forms";
+import { CreateDocForm, EditListForm } from "./Forms";
 import { Input } from "./ui/input";
 
 type Checked = boolean;
@@ -39,7 +39,11 @@ type checkedTagsType = fetchedTagType & {
   isChecked?: Checked;
 };
 
-const ListActionButtons = () => {
+type ListActionButtonsProps = {
+  listTitle: string | undefined;
+};
+
+const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
   const { toggleModal, setModalContent } = useMethodStore();
   const { profile, setTags } = useProfileStore();
   const { removeListItem, updateListTags } = useListStore();
@@ -232,6 +236,24 @@ const ListActionButtons = () => {
   };
 
   const actionButtons = [
+    {
+      element: (
+        <div className="flex justify-center items-center !text-xl">
+          <FaPlus />
+        </div>
+      ),
+      action: () => {
+        toggleModal(true);
+        setModalContent(
+          <CreateDocForm
+            theme={theme}
+            toggleModal={toggleModal}
+            listTitle={listTitle}
+          />
+        );
+      },
+      tooltip: "Add New Doc",
+    },
     {
       element: (
         <div className="flex justify-center items-center !text-xl">
