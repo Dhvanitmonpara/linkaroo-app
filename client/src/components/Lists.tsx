@@ -13,8 +13,7 @@ const Lists = () => {
   const { setLists, lists } = useListStore();
   const {toggleModal} = useMethodStore()
   const {profile} = useProfileStore()
-  const theme = profile.profile.theme
-  const font = profile.profile.font
+  const {theme, font} = profile.profile
 
   useEffect(() => {
     (async () => {

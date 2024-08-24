@@ -17,7 +17,7 @@ const Docs = () => {
   const { docs, setDocs, currentListItem, setCurrentListItem } = useDocStore();
   const {lists} = useListStore()
   const { profile } = useProfileStore();
-  const { theme } = profile.profile;
+  const { theme, font } = profile.profile;
   const { currentCardColor } = useMethodStore();
 
   useEffect(() => {
@@ -66,7 +66,7 @@ const Docs = () => {
 
   if (docs.length == 0) {
     return (
-      <div className="md:h-[calc(100vh-5rem)] select-none h-[calc(100vh-8.5rem)] lg:h-[calc(100vh-9rem)] overflow-y-hidden w-full space-y-2 no-scrollbar">
+      <div className={`md:h-[calc(100vh-5rem)] select-none h-[calc(100vh-8.5rem)] lg:h-[calc(100vh-9rem)] overflow-y-hidden w-full space-y-2 no-scrollbar ${font}`}>
         <div className="bg-green-400 h-48 w-full relative p-4 rounded-md">
           <div className="flex justify-between items-center w-full h-10 absolute bottom-5 left-0 px-4">
             <h1 className="text-2xl font-semibold">{currentListItem?.title}</h1>
