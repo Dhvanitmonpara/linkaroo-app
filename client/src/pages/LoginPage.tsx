@@ -58,10 +58,20 @@ const LoginPage = () => {
         },
       });
 
-      if (response?.data?.data?.user) {
-        addProfile({ ...response.data.data.user, profile: { theme: "dark" } });
+      if(!response.data.success) {
+        toast.error("Failed to login");
+        return;
       }
+
+      const currentUser = await axios({
+        method: "GET",
+        url: `${import.meta.env.VITE_SERVER_API_URL}/users/current-user`,
+        withCredentials: true,
+      });
+
+      addProfile(currentUser.data.data);
       isSmallScreen ? navigate("/list") : navigate("/");
+
     } catch (err) {
       const errorMsg = getErrorFromAxios(err as AxiosError);
       if (errorMsg !== undefined) {
