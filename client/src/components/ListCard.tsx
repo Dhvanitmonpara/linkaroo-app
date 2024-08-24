@@ -75,7 +75,6 @@ const ListCard = ({
     <>
       <div
         onClick={openList}
-        // ref={cardRef}
         className={`group select-none transition-all h-64 w-full p-6 rounded-md flex justify-between flex-col ${
           isBlackMode ? "" : theme
         } ${
@@ -105,7 +104,7 @@ const ListCard = ({
               {title}
             </h1>
           </div>
-          <p className="text-sm font-semibold">{description}</p>
+          <p className={`text-sm font-semibold ${font}`}>{description}</p>
         </div>
         <div className="flex space-x-2 overflow-x-scroll">
           <AvatarGroup

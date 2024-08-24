@@ -29,6 +29,7 @@ interface ProfileState {
   updateProfile: (updatedProfile: ProfileType) => void;
   removeProfile: () => void;
   changeTheme: (theme: themeType) => void;
+  changeFont: (font: fontOptions) => void;
   tags: fetchedTagType[] | null;
   setTags: (tags: fetchedTagType[]) => void;
 }
@@ -86,6 +87,14 @@ const useProfileStore = create<ProfileState>()(
               profile: { ...state.profile.profile, theme },
             },
           }));
+        },
+        changeFont: (font: fontOptions) => {
+          set(state => ({
+            profile: {
+              ...state.profile,
+              profile: {...state.profile.profile, font },
+            }
+          }))
         },
         tags: null,
         setTags: (tags) => set({ tags }),

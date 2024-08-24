@@ -22,6 +22,9 @@ export default {
         "2xl": "1400px",
       },
     },
+    fontFamily: {
+      'helvetica': ['Helvetica', 'Garnet Typeface', 'Gill Sans', 'Swansea Typography', 'Aeonik Typeface', 'Radio Grotesk', 'Greed Typeface', 'Neue Montreal'],
+    },
     extend: {
       colors: {
         border: "hsl(var(--border))",

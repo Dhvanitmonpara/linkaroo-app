@@ -32,7 +32,7 @@ const SettingsForm: React.FC<SettingsFormProps> = ({
   toggleModal,
 }) => {
   const [loading, setLoading] = useState(false);
-  const { changeTheme, updateProfile, profile } = useProfileStore();
+  const { changeTheme, updateProfile, profile, changeFont } = useProfileStore();
 
   const { control, handleSubmit } = useForm<HandleSettingsType>({
     defaultValues: {
@@ -115,7 +115,10 @@ const SettingsForm: React.FC<SettingsFormProps> = ({
             name="font"
             control={control}
             render={({ field: { onChange, value } }) => (
-              <Select value={value} onValueChange={onChange}>
+              <Select value={value} onValueChange={(value: fontOptions) => {
+                onChange(value)
+                changeFont(value)
+              }}>
                 <SelectTrigger className="dark:text-white dark:bg-zinc-700 max-w-96">
                   <SelectValue placeholder="Select font" />
                 </SelectTrigger>
@@ -130,7 +133,8 @@ const SettingsForm: React.FC<SettingsFormProps> = ({
                     <SelectLabel>Fonts</SelectLabel>
                     <SelectItem value="font-mono">Mono</SelectItem>
                     <SelectItem value="font-serif">Serif</SelectItem>
-                    <SelectItem value="font-sand">Sans</SelectItem>
+                    <SelectItem value="font-sans">Sans</SelectItem>
+                    <SelectItem value="font-helvetica">Helvetica</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>

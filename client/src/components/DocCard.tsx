@@ -1,6 +1,7 @@
 import { colorOptions } from "@/lib/types.tsx";
 import { useNavigate } from "react-router-dom";
 import { FiArrowUpRight } from "react-icons/fi";
+import useMethodStore from "@/store/MethodStore";
 
 type DocCardProps = {
   title: string;
@@ -12,11 +13,15 @@ type DocCardProps = {
 const DocCard = ({ title, color, link, toggleModal }: DocCardProps) => {
   const navigate = useNavigate();
 
+  const {setModalContent} = useMethodStore()
+
   const openModal = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     toggleModal(true);
     e.stopPropagation();
     navigate(`doc?docid=${title}`);
-    // TODO: open modal with content from props (add e.target.dataset.content into state)
+    setModalContent(
+      <div className="text-5xl text-white">Hello</div>
+    )
   };
 
   const openLink = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {

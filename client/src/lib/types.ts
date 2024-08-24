@@ -37,7 +37,7 @@ type TagType = {
   updatedAt: string;
 };
 
-type fontOptions = "font-mono" | "font-sans" | "font-serif";
+type fontOptions = "font-mono" | "font-sans" | "font-serif" | "font-helvetica";
 
 type fetchedTagType = {
   __v: number;
@@ -54,7 +54,6 @@ type fetchedDocType = {
   title: string;
   description: string;
   link: string;
-  theme: colorOptions
   userId: string;
   listId: string;
   createdAt: string; 
@@ -68,7 +67,6 @@ type fetchedListType = {
   collaborators: Collaborator[];
   createdBy: Collaborator;
   description: string;
-  font: fontOptions;
   tags: TagType[];
   theme: colorOptions;
   title: string;

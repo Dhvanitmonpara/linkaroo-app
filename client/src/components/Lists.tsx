@@ -14,6 +14,7 @@ const Lists = () => {
   const {toggleModal} = useMethodStore()
   const {profile} = useProfileStore()
   const theme = profile.profile.theme
+  const font = profile.profile.font
 
   useEffect(() => {
     (async () => {
@@ -72,7 +73,7 @@ const Lists = () => {
             collaborators={list.collaborators}
             createdBy={list.createdBy}
             theme={list.theme}
-            font={list.font}
+            font={font}
             isBlackMode={theme == "black" ? true : false}
             toggleModal={toggleModal}
           />
