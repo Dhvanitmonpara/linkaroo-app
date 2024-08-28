@@ -12,6 +12,11 @@ import { removeUsernameTag } from "@/utils/toggleUsernameInTag";
 import useMethodStore from "@/store/MethodStore";
 import { CreateDocForm } from "./Forms";
 import useProfileStore from "@/store/profileStore";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 
 type ListCardProps = {
   id: string;
@@ -53,7 +58,11 @@ const ListCard = ({
     e.stopPropagation();
     navigate(`/list?listid=${title}`, { replace: true });
     setModalContent(
-      <CreateDocForm theme={profile.profile.theme} toggleModal={toggleModal} listTitle={title} />
+      <CreateDocForm
+        theme={profile.profile.theme}
+        toggleModal={toggleModal}
+        listTitle={title}
+      />
     );
   };
 
@@ -85,13 +94,29 @@ const ListCard = ({
       >
         <div className="space-y-3 relative">
           <div>
-            <p
-              className={`${
-                isBlackMode ? "text-zinc-300" : "text-slate-800"
-              } font-semibold w-fit text-sm pb-3 hover:underline`}
-            >
-              @{createdBy?.username}
-            </p>
+            <HoverCard>
+              <HoverCardTrigger>
+                <p
+                  className={`${
+                    isBlackMode ? "text-zinc-300" : "text-slate-800"
+                  } font-semibold w-fit text-sm pb-3 hover:underline`}
+                >
+                  @{createdBy?.username}
+                </p>
+              </HoverCardTrigger>
+              <HoverCardContent>
+                <div className="w-full h-full flex justify-center items-center space-x-4">
+                  <div>
+                    <img className="rounded-full h-12 w-12 object-cover" src={createdBy.avatarImage} alt="avatar" />
+                  </div>
+                  <div>
+                    <h3>{createdBy.fullName}</h3>
+                    <p className="text-sm text-gray-400">@{createdBy.username}</p>
+                  </div>
+                </div>
+              </HoverCardContent>
+            </HoverCard>
+
             <span
               onClick={(e) => {
                 openModal(e);
