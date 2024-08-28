@@ -32,6 +32,7 @@ import useListStore from "@/store/listStore";
 import useDocStore from "@/store/docStore";
 import { CreateDocForm, EditListForm } from "./Forms";
 import { Input } from "./ui/input";
+import { IoMdPersonAdd } from "react-icons/io";
 
 type Checked = boolean;
 
@@ -236,6 +237,11 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
   };
 
   const actionButtons = [
+    {
+      element: <IoMdPersonAdd/>,
+      action: () => {},
+      tooltip: "Add User",
+    },
     {
       element: (
         <div className="flex justify-center items-center !text-xl">
