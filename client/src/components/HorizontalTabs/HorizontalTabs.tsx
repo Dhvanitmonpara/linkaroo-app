@@ -1,6 +1,7 @@
 import { MdHome } from "react-icons/md";
 import { FaPlus } from "react-icons/fa6";
 import { IoPerson } from "react-icons/io5";
+import { IoMdNotifications  } from "react-icons/io";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import "./HorizontalTabs.css";
 import { useNavigate } from "react-router-dom";
@@ -42,8 +43,8 @@ export default function HorizontalTabs() {
 
       {/* <RadioGroupItem value="create" id="create-tab" className="radio-item" /> */}
       <DropdownMenu>
-        <DropdownMenuTrigger>
-          <label htmlFor="create-tab" className="menu-label !text-2xl !w-auto">
+        <DropdownMenuTrigger className="flex justify-center items-center">
+          <label htmlFor="create-tab" className="menu-label !text-3xl !w-auto">
             <FaPlus />
           </label>
         </DropdownMenuTrigger>
@@ -75,60 +76,67 @@ export default function HorizontalTabs() {
         </DropdownMenuContent>
       </DropdownMenu>
 
+      <label htmlFor="list-tab" className="menu-label !text-3xl !w-auto">
+        <IoMdNotifications  />
+      </label>
+
       {/* <RadioGroupItem value="profile" id="profile-tab" className="radio-item" /> */}
       <DropdownMenu>
         <DropdownMenuTrigger>
-          <label htmlFor="profile-tab" className="menu-label !text-xl !w-auto h-auto m-0 p-0">
+          <label
+            htmlFor="profile-tab"
+            className="menu-label !text-2xl !w-auto h-auto m-0 p-0"
+          >
             <IoPerson />
           </label>
         </DropdownMenuTrigger>
         <DropdownMenuContent
-        className={`
+          className={`
           ${
             theme != "light" ? "!bg-black !text-white border-zinc-800" : ""
           } !w-[26vw] mt-1
         `}
-      >
-        <DropdownMenuItem
-          className="py-2"
-          onClick={() => {
-            toggleModal(true);
-            setModalContent(
-              <div className="dark:text-white p-5 flex justify-center items-center space-y-3">
-                <h1 className="text-3xl">Profile</h1>
-                {/* Add form fields here */}
-              </div>
-            );
-          }}
         >
-          Profile
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          className="py-2"
-          onClick={() => {
-            toggleModal(true);
-            setModalContent(
-              <SettingsForm theme={theme} toggleModal={toggleModal} />
-            );
-          }}
-        >
-          Settings
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          className="py-2"
-          onClick={() => {
-            toggleModal(true);
-            setModalContent(
-              <div className="dark:text-white p-5 flex justify-center items-center space-y-3">
-                <h1 className="text-3xl">Feedback</h1>
-                {/* Add form fields here */}
-              </div>
-            );
-          }}
-        >
-          Feedback
-        </DropdownMenuItem>
-      </DropdownMenuContent>
+          <DropdownMenuItem
+            className="py-2"
+            onClick={() => {
+              toggleModal(true);
+              setModalContent(
+                <div className="dark:text-white p-5 flex justify-center items-center space-y-3">
+                  <h1 className="text-3xl">Profile</h1>
+                  {/* Add form fields here */}
+                </div>
+              );
+            }}
+          >
+            Profile
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            className="py-2"
+            onClick={() => {
+              toggleModal(true);
+              setModalContent(
+                <SettingsForm theme={theme} toggleModal={toggleModal} />
+              );
+            }}
+          >
+            Settings
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            className="py-2"
+            onClick={() => {
+              toggleModal(true);
+              setModalContent(
+                <div className="dark:text-white p-5 flex justify-center items-center space-y-3">
+                  <h1 className="text-3xl">Feedback</h1>
+                  {/* Add form fields here */}
+                </div>
+              );
+            }}
+          >
+            Feedback
+          </DropdownMenuItem>
+        </DropdownMenuContent>
       </DropdownMenu>
     </RadioGroup>
   );

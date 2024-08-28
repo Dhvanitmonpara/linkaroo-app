@@ -1,6 +1,7 @@
 import { Input } from "./ui/input";
 import { IoMdAdd } from "react-icons/io";
 import { IoFilterOutline } from "react-icons/io5";
+import { IoMdNotificationsOutline } from "react-icons/io";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -35,7 +36,7 @@ const Header = () => {
     <>
       <nav className="lg:h-20 h-[4.5rem] lg:py-5 pt-4 pb-[1rem] flex space-x-2 lg:px-0 px-4">
         <Input
-          onClick={()=>setOpen(true)}
+          onClick={() => setOpen(true)}
           className="dark:bg-zinc-800 dark:text-white dark:border-zinc-600"
           placeholder="Create or Search something..."
         />
@@ -74,8 +75,11 @@ const Header = () => {
         <div className="w-12 flex justify-center items-center dark:bg-zinc-800 dark:hover:bg-zinc-600 dark:text-white rounded-sm border-2 dark:border-zinc-700 border-zinc-200 hover:bg-zinc-200">
           <IoFilterOutline />
         </div>
+        <div className="w-12 lg:flex hidden justify-center items-center dark:bg-zinc-800 dark:hover:bg-zinc-600 dark:text-white rounded-sm border-2 dark:border-zinc-700 border-zinc-200 hover:bg-zinc-200">
+          <IoMdNotificationsOutline />
+        </div>
       </nav>
-      <CommandMenu open={open} setOpen={setOpen}/>
+      <CommandMenu open={open} setOpen={setOpen} />
     </>
   );
 };
