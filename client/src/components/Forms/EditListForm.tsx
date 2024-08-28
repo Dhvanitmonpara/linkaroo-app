@@ -159,7 +159,7 @@ const EditListForm: React.FC<EditListFormProps> = ({ theme, toggleModal }) => {
                       theme !== "light"
                         ? "!bg-zinc-900 !text-white border-zinc-800"
                         : "",
-                      "[&_[role=option]]:p-0" // Remove padding from all options
+                      "[&_[role=option]]:p-0"
                     )}
                   >
                     <SelectGroup>
