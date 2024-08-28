@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import { Input } from "../ui/input";
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
+import { Loader2, Check } from "lucide-react"; // Import Check icon
 import {
   Select,
   SelectItem,
   SelectTrigger,
   SelectContent,
   SelectGroup,
-  SelectLabel,
   SelectValue,
 } from "@/components/ui/select";
 import { useForm, Controller } from "react-hook-form";
@@ -18,50 +17,75 @@ import toast from "react-hot-toast";
 import getErrorFromAxios from "@/utils/getErrorFromAxios";
 import useListStore from "@/store/listStore";
 import { Textarea } from "../ui/textarea";
+import useDocStore from "@/store/docStore";
+import useMethodStore from "@/store/MethodStore";
 
 type EditListFormProps = {
   theme: themeType | undefined;
   toggleModal: (isOpen: boolean) => void;
 };
 
-type HandleListCreationType = {
+type HandleListEditType = {
   title: string;
   description: string;
   theme: colorOptions;
 };
 
-const EditListForm: React.FC<EditListFormProps> = ({
-  theme,
-  toggleModal,
-}) => {
+const EditListForm: React.FC<EditListFormProps> = ({ theme, toggleModal }) => {
   const [loading, setLoading] = useState(false);
 
-  const { addListItem } = useListStore();
+  const { updateListItem } = useListStore();
+  const { currentListItem, setCurrentListItem } = useDocStore();
+  const { setCurrentCardColor } = useMethodStore();
 
-  const { control, handleSubmit, register } = useForm<HandleListCreationType>({
+  const { control, handleSubmit, register } = useForm<HandleListEditType>({
     defaultValues: {
-      theme: "bg-zinc-200",
+      theme: currentListItem?.theme,
+      title: currentListItem?.title,
+      description: currentListItem?.description,
     },
   });
 
-  const handleListCreation = async (data: HandleListCreationType) => {
+  const themeOptionsArray = [
+    { value: "bg-zinc-200", label: "Zinc" },
+    { value: "bg-emerald-400", label: "Emerald" },
+    { value: "bg-amber-400", label: "Amber" },
+    { value: "bg-orange-400", label: "Orange" },
+    { value: "bg-red-400", label: "Red" },
+    { value: "bg-purple-400", label: "Purple" },
+    { value: "bg-pink-400", label: "Pink" },
+    { value: "bg-indigo-400", label: "Indigo" },
+    { value: "bg-teal-400", label: "Teal" },
+    { value: "bg-cyan-400", label: "Cyan" },
+    { value: "bg-violet-400", label: "Violet" },
+    { value: "bg-yellow-400", label: "Yellow" },
+    { value: "bg-green-400", label: "Green" },
+    { value: "bg-blue-400", label: "Blue" },
+    { value: "bg-rose-400", label: "Rose" },
+    { value: "bg-sky-400", label: "Sky" },
+  ];
+
+  const handleListCreation = async (data: HandleListEditType) => {
     try {
       setLoading(true);
 
-      const response = await axios.post(
-        `${import.meta.env.VITE_SERVER_API_URL}/lists`,
+      const response = await axios.patch(
+        `${import.meta.env.VITE_SERVER_API_URL}/lists/o/${
+          currentListItem?._id
+        }`,
         data,
         { withCredentials: true }
       );
 
       if (response.status !== 200) {
-        toast.error("Failed to create list");
+        toast.error("Failed to update list");
+        return;
       }
 
       const listId = response.data.data._id;
 
       if (!listId) {
-        toast.error("Failed to create list");
+        toast.error("Failed to update list");
         return;
       }
 
@@ -75,10 +99,12 @@ const EditListForm: React.FC<EditListFormProps> = ({
         return;
       }
 
-      addListItem(list.data.data);
+      updateListItem(list.data.data);
+      setCurrentListItem(list.data.data);
+      setCurrentCardColor(list.data.data.theme);
     } catch (error) {
       const errorMsg = getErrorFromAxios(error as AxiosError);
-      if (errorMsg != undefined) {
+      if (errorMsg) {
         toast.error(errorMsg);
       }
     } finally {
@@ -89,7 +115,7 @@ const EditListForm: React.FC<EditListFormProps> = ({
 
   return (
     <div className="dark:text-white p-5 flex flex-col justify-center items-center space-y-3">
-      <h1 className="text-3xl">Add List</h1>
+      <h1 className="text-3xl">Edit List</h1>
       <form
         className="h-4/5 flex flex-col space-y-6 sm:w-96 w-72 justify-center items-center"
         onSubmit={handleSubmit(handleListCreation)}
@@ -133,23 +159,21 @@ const EditListForm: React.FC<EditListFormProps> = ({
                   }
                 >
                   <SelectGroup>
-                    <SelectLabel>Themes</SelectLabel>
-                    <SelectItem value="bg-zinc-200">Zinc</SelectItem>
-                    <SelectItem value="bg-emerald-400">Emerald</SelectItem>
-                    <SelectItem value="bg-orange-400">Orange</SelectItem>
-                    <SelectItem value="bg-red-400">Red</SelectItem>
-                    <SelectItem value="bg-purple-400">Purple</SelectItem>
-                    <SelectItem value="bg-pink-400">Pink</SelectItem>
-                    <SelectItem value="bg-indigo-400">Indigo</SelectItem>
-                    <SelectItem value="bg-teal-400">Teal</SelectItem>
-                    <SelectItem value="bg-cyan-400">Cyan</SelectItem>
-                    <SelectItem value="bg-amber-400">Amber</SelectItem>
-                    <SelectItem value="bg-violet-400">Violet</SelectItem>
-                    <SelectItem value="bg-yellow-400">Yellow</SelectItem>
-                    <SelectItem value="bg-green-400">Green</SelectItem>
-                    <SelectItem value="bg-blue-400">Blue</SelectItem>
-                    <SelectItem value="bg-rose-400">Rose</SelectItem>
-                    <SelectItem value="bg-sky-400">Sky</SelectItem>
+                    <div className="grid grid-cols-4 gap-1 p-2">
+                      {themeOptionsArray.map((themeOption) => (
+                        <SelectItem
+                          key={themeOption.value}
+                          value={themeOption.value}
+                          className={`${themeOption.value} text-zinc-900 p-4 text-center rounded border border-transparent hover:border-zinc-500 dark:hover:border-zinc-400 active:border-zinc-800 focus:outline-none`}
+                        >
+                          {/* Hidden checkmark indicator */}
+                          <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center invisible">
+                            <Check className="h-4 w-4" />
+                          </span>
+                          {themeOption.label}
+                        </SelectItem>
+                      ))}
+                    </div>
                   </SelectGroup>
                 </SelectContent>
               </Select>
@@ -167,7 +191,7 @@ const EditListForm: React.FC<EditListFormProps> = ({
           </Button>
         ) : (
           <Button className="dark:bg-zinc-700 bg-zinc-200 font-semibold text-zinc-950 dark:text-white hover:bg-zinc-300 dark:hover:bg-zinc-600 w-full">
-            Create list
+            Save changes
           </Button>
         )}
       </form>
