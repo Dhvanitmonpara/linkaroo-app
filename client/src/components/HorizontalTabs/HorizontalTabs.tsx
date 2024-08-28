@@ -76,7 +76,8 @@ export default function HorizontalTabs() {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <label htmlFor="list-tab" className="menu-label !text-3xl !w-auto">
+      <RadioGroupItem value="notifications" id="notification-tab" className="radio-item" />
+      <label htmlFor="notification-tab" className="menu-label !text-3xl !w-auto">
         <IoMdNotifications  />
       </label>
 
