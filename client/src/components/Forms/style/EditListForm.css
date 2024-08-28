@@ -1,0 +1,10 @@
+.select-content .select-item {
+  padding-left: 8px;
+}
+.select-content .select-item[data-state="checked"] {
+  background-image: none;
+}
+
+.select-content .select-item[data-highlighted] {
+  background-image: none;
+}
