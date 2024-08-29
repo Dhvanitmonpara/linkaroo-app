@@ -8,11 +8,17 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { CreateDocForm, CreateListForm } from "./Forms";
 import useMethodStore from "@/store/MethodStore";
 import useProfileStore from "@/store/profileStore";
 import { useEffect, useState } from "react";
 import CommandMenu from "./CommandMenu";
+import NotificationCard from "./NotificationCard";
 
 const Header = () => {
   const { toggleModal, setModalContent } = useMethodStore();
@@ -75,9 +81,22 @@ const Header = () => {
         <div className="w-12 flex justify-center items-center dark:bg-zinc-800 dark:hover:bg-zinc-600 dark:text-white rounded-sm border-2 dark:border-zinc-700 border-zinc-200 hover:bg-zinc-200">
           <IoFilterOutline />
         </div>
-        <div className="w-12 lg:flex hidden justify-center items-center dark:bg-zinc-800 dark:hover:bg-zinc-600 dark:text-white rounded-sm border-2 dark:border-zinc-700 border-zinc-200 hover:bg-zinc-200">
-          <IoMdNotificationsOutline />
-        </div>
+        <Popover>
+          <PopoverTrigger className="w-12 h-full">
+            <div className="w-full h-full lg:flex hidden justify-center items-center dark:bg-zinc-800 dark:hover:bg-zinc-600 dark:text-white rounded-sm border-2 dark:border-zinc-700 border-zinc-200 hover:bg-zinc-200">
+              <IoMdNotificationsOutline />
+            </div>
+          </PopoverTrigger>
+          <PopoverContent
+            className={`${
+              theme == "dark"
+                ? "bg-zinc-900 border-zinc-700 text-zinc-100"
+                : "bg-zinc-200 border-zinc-300 text-zinc-950"
+            } space-y-2 overflow-y-scroll h-[32rem]`}
+          >
+            <NotificationCard buttonMethods={{onAccept: () => {}, onDismiss: () => {}}} notification={{title: "Connection req", description: "@tanishka sent you conection req", time: "27 sep saturday"}}/>
+          </PopoverContent>
+        </Popover>
       </nav>
       <CommandMenu open={open} setOpen={setOpen} />
     </>

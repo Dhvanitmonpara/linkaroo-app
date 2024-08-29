@@ -12,6 +12,7 @@ import Loading from "./Loading";
 import Modal from "./Modal";
 import CommandMenu from "./CommandMenu";
 import ListActionButtons from "./ListActionButtons";
+import NotificationCard from "./NotificationCard";
 
 export {
   ListCard,
@@ -27,5 +28,6 @@ export {
   Loading,
   Modal,
   CommandMenu,
-  ListActionButtons
+  ListActionButtons,
+  NotificationCard
 };
