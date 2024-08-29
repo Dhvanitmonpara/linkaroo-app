@@ -355,6 +355,7 @@ const getListsByUser = asyncHandler(async (req, res) => {
                 font: 1,
                 createdAt: 1,
                 updatedAt: 1,
+                coverImage:1,
                 collaborators: {
                     _id: 1,
                     username: 1,

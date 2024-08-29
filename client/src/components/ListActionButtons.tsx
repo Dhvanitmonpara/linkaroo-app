@@ -442,7 +442,7 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
         <button
           key={index}
           onClick={actionButton.action}
-          className="h-12 w-12 bg-[#00000010] hover:bg-[#00000025] transition-colors flex justify-center items-center rounded-full text-xl"
+          className="h-12 w-12 bg-[#00000030] hover:bg-[#00000060] transition-colors flex justify-center items-center rounded-full text-xl"
         >
           {actionButton.element}
         </button>

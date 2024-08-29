@@ -70,6 +70,7 @@ type fetchedListType = {
   tags: TagType[];
   theme: colorOptions;
   title: string;
+  coverImage: string;
   createdAt: string;
   updatedAt: string;
 };
