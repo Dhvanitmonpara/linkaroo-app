@@ -8,7 +8,6 @@ import {
   SelectTrigger,
   SelectContent,
   SelectGroup,
-  SelectLabel,
   SelectValue,
 } from "@/components/ui/select";
 import { useForm, Controller } from "react-hook-form";
@@ -18,6 +17,8 @@ import toast from "react-hot-toast";
 import getErrorFromAxios from "@/utils/getErrorFromAxios";
 import useListStore from "@/store/listStore";
 import { Textarea } from "../ui/textarea";
+import { cn } from "@/lib/utils";
+import { themeOptionsArray } from "@/lib/constants";
 
 type CreateListFormProps = {
   theme: themeType | undefined;
@@ -126,30 +127,31 @@ const CreateListForm: React.FC<CreateListFormProps> = ({
                   <SelectValue placeholder="Change theme" />
                 </SelectTrigger>
                 <SelectContent
-                  className={
+                  className={cn(
                     theme !== "light"
                       ? "!bg-zinc-900 !text-white border-zinc-800"
-                      : ""
-                  }
+                      : "",
+                    "[&_[role=option]]:p-0"
+                  )}
                 >
                   <SelectGroup>
-                    <SelectLabel>Themes</SelectLabel>
-                    <SelectItem value="bg-zinc-200">Zinc</SelectItem>
-                    <SelectItem value="bg-emerald-400">Emerald</SelectItem>
-                    <SelectItem value="bg-orange-400">Orange</SelectItem>
-                    <SelectItem value="bg-red-400">Red</SelectItem>
-                    <SelectItem value="bg-purple-400">Purple</SelectItem>
-                    <SelectItem value="bg-pink-400">Pink</SelectItem>
-                    <SelectItem value="bg-indigo-400">Indigo</SelectItem>
-                    <SelectItem value="bg-teal-400">Teal</SelectItem>
-                    <SelectItem value="bg-cyan-400">Cyan</SelectItem>
-                    <SelectItem value="bg-amber-400">Amber</SelectItem>
-                    <SelectItem value="bg-violet-400">Violet</SelectItem>
-                    <SelectItem value="bg-yellow-400">Yellow</SelectItem>
-                    <SelectItem value="bg-green-400">Green</SelectItem>
-                    <SelectItem value="bg-blue-400">Blue</SelectItem>
-                    <SelectItem value="bg-rose-400">Rose</SelectItem>
-                    <SelectItem value="bg-sky-400">Sky</SelectItem>
+                    <div className="grid grid-cols-4 gap-1 p-2">
+                      {themeOptionsArray.map((themeOption) => (
+                        <SelectItem
+                          key={themeOption.value}
+                          value={themeOption.value}
+                          className={cn(
+                            themeOption.value,
+                            "text-transparent p-4 h-16 text-center flex justify-center items-center rounded border border-none hover:text-black dark:hover:text-black active:text-black focus:outline-none",
+                            "data-[state=checked]:font-semibold data-[state=checked]:!text-zinc-900",
+                            "[&>span>span]:hidden",
+                            `focus:${themeOption.value} focus:brightness-110 transition-colors duration-75`
+                          )}
+                        >
+                          {themeOption.label}
+                        </SelectItem>
+                      ))}
+                    </div>
                   </SelectGroup>
                 </SelectContent>
               </Select>
