@@ -82,8 +82,8 @@ const Header = () => {
           <IoFilterOutline />
         </div>
         <Popover>
-          <PopoverTrigger className="w-12 h-full">
-            <div className="w-full h-full lg:flex hidden justify-center items-center dark:bg-zinc-800 dark:hover:bg-zinc-600 dark:text-white rounded-sm border-2 dark:border-zinc-700 border-zinc-200 hover:bg-zinc-200">
+          <PopoverTrigger className="w-12 h-full lg:flex hidden">
+            <div className="w-full h-full justify-center items-center dark:bg-zinc-800 dark:hover:bg-zinc-600 dark:text-white rounded-sm border-2 dark:border-zinc-700 border-zinc-200 hover:bg-zinc-200">
               <IoMdNotificationsOutline />
             </div>
           </PopoverTrigger>

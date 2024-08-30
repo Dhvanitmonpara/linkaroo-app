@@ -21,6 +21,7 @@ const Docs = () => {
   const { theme, font } = profile.profile;
   const { currentCardColor } = useMethodStore();
 
+  // TODO: create a dropdown along with images and custom image functionality
   const handleEditCoverImage = () => {};
 
   useEffect(() => {
