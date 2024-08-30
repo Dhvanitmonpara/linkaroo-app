@@ -14,7 +14,6 @@ import { useForm, Controller } from "react-hook-form";
 import { colorOptions, themeType } from "@/lib/types";
 import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
-import getErrorFromAxios from "@/utils/getErrorFromAxios";
 import useListStore from "@/store/listStore";
 import { Textarea } from "../ui/textarea";
 import useDocStore from "@/store/docStore";
@@ -22,6 +21,8 @@ import useMethodStore from "@/store/MethodStore";
 import "./style/EditListForm.css";
 import { cn } from "@/lib/utils";
 import { themeOptionsArray } from "@/lib/constants";
+import { useNavigate } from "react-router-dom";
+import { handleAxiosError } from "@/utils/handlerAxiosError";
 
 type EditListFormProps = {
   theme: themeType | undefined;
@@ -35,11 +36,12 @@ type HandleListEditType = {
 };
 
 const EditListForm: React.FC<EditListFormProps> = ({ theme, toggleModal }) => {
-  const [loading, setLoading] = useState(false);
 
+  const [loading, setLoading] = useState(false);
   const { updateListItem } = useListStore();
   const { currentListItem, setCurrentListItem } = useDocStore();
   const { setCurrentCardColor } = useMethodStore();
+  const navigate = useNavigate()
 
   const { control, handleSubmit, register } = useForm<HandleListEditType>({
     defaultValues: {
@@ -87,10 +89,7 @@ const EditListForm: React.FC<EditListFormProps> = ({ theme, toggleModal }) => {
       setCurrentListItem(list.data.data);
       setCurrentCardColor(list.data.data.theme);
     } catch (error) {
-      const errorMsg = getErrorFromAxios(error as AxiosError);
-      if (errorMsg) {
-        toast.error(errorMsg);
-      }
+      handleAxiosError(error as AxiosError, navigate);
     } finally {
       setLoading(false);
       toggleModal(false);

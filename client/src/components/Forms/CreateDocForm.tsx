@@ -16,10 +16,10 @@ import { useForm, Controller } from "react-hook-form";
 import { themeType } from "@/lib/types";
 import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
-import getErrorFromAxios from "@/utils/getErrorFromAxios";
 import useListStore from "@/store/listStore";
 import useDocStore from "@/store/docStore";
 import { useNavigate } from "react-router-dom";
+import { handleAxiosError } from "@/utils/handlerAxiosError";
 
 type CreateDocFormProps = {
   theme: themeType | undefined;
@@ -84,10 +84,7 @@ const CreateDocForm: React.FC<CreateDocFormProps> = ({
         addDocItem(doc.data.data);
       }
     } catch (error) {
-      const errorMsg = getErrorFromAxios(error as AxiosError);
-      if (errorMsg != undefined) {
-        toast.error(errorMsg);
-      }
+      handleAxiosError(error as AxiosError, navigate);
     } finally {
       setLoading(false);
       toggleModal(false);

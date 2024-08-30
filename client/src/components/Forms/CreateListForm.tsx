@@ -14,11 +14,12 @@ import { useForm, Controller } from "react-hook-form";
 import { colorOptions, themeType } from "@/lib/types";
 import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
-import getErrorFromAxios from "@/utils/getErrorFromAxios";
 import useListStore from "@/store/listStore";
 import { Textarea } from "../ui/textarea";
 import { cn } from "@/lib/utils";
 import { backgroundImageUrls, themeOptionsArray } from "@/lib/constants";
+import { useNavigate } from "react-router-dom";
+import { handleAxiosError } from "@/utils/handlerAxiosError";
 
 type CreateListFormProps = {
   theme: themeType | undefined;
@@ -36,8 +37,8 @@ const CreateListForm: React.FC<CreateListFormProps> = ({
   toggleModal,
 }) => {
   const [loading, setLoading] = useState(false);
-
   const { addListItem } = useListStore();
+  const navigate = useNavigate()
 
   const { control, handleSubmit, register } = useForm<HandleListCreationType>({
     defaultValues: {
@@ -84,10 +85,7 @@ const CreateListForm: React.FC<CreateListFormProps> = ({
 
       addListItem(list.data.data);
     } catch (error) {
-      const errorMsg = getErrorFromAxios(error as AxiosError);
-      if (errorMsg != undefined) {
-        toast.error(errorMsg);
-      }
+      handleAxiosError(error as AxiosError, navigate);
     } finally {
       setLoading(false);
       toggleModal(false);

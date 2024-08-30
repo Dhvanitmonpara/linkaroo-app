@@ -14,8 +14,9 @@ import { useForm, Controller } from "react-hook-form";
 import { fontOptions, themeType } from "@/lib/types";
 import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
-import getErrorFromAxios from "@/utils/getErrorFromAxios";
 import useProfileStore from "@/store/profileStore";
+import { useNavigate } from "react-router-dom";
+import { handleAxiosError } from "@/utils/handlerAxiosError";
 
 type SettingsFormProps = {
   theme: themeType | undefined;
@@ -31,8 +32,10 @@ const SettingsForm: React.FC<SettingsFormProps> = ({
   theme,
   toggleModal,
 }) => {
+
   const [loading, setLoading] = useState(false);
   const { changeTheme, updateProfile, profile, changeFont } = useProfileStore();
+  const navigate = useNavigate()
 
   const { control, handleSubmit } = useForm<HandleSettingsType>({
     defaultValues: {
@@ -57,10 +60,7 @@ const SettingsForm: React.FC<SettingsFormProps> = ({
       }
       updateProfile(response.data);
     } catch (error) {
-      const errorMsg = getErrorFromAxios(error as AxiosError);
-      if (errorMsg != undefined) {
-        toast.error(errorMsg);
-      }
+      handleAxiosError(error as AxiosError, navigate);
     } finally {
       setLoading(false);
       toggleModal(false);

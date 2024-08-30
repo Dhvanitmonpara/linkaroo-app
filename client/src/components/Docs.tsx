@@ -3,13 +3,13 @@ import useDocStore from "@/store/docStore";
 import useListStore from "@/store/listStore";
 import useMethodStore from "@/store/MethodStore";
 import useProfileStore from "@/store/profileStore";
-import getErrorFromAxios from "@/utils/getErrorFromAxios";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { BiSolidPencil } from "react-icons/bi";
+import { handleAxiosError } from "@/utils/handlerAxiosError";
 
 const Docs = () => {
   const { toggleModal } = useMethodStore();
@@ -20,8 +20,9 @@ const Docs = () => {
   const { profile } = useProfileStore();
   const { theme, font } = profile.profile;
   const { currentCardColor } = useMethodStore();
+  const navigate = useNavigate()
 
-  // TODO: create a dropdown along with images and custom image functionality
+  // TODO: create a dropdown along with images and custom image function
   const handleEditCoverImage = () => {};
 
   useEffect(() => {
@@ -48,16 +49,13 @@ const Docs = () => {
 
           setDocs(response.data.data);
         } catch (error) {
-          const errorMsg = getErrorFromAxios(error as AxiosError);
-          if (errorMsg != undefined) {
-            toast.error(errorMsg);
-          }
+          handleAxiosError(error as AxiosError, navigate);
         } finally {
           setLoading(false);
         }
       }
     })();
-  }, [location, setDocs]);
+  }, [location, setDocs, setCurrentListItem, navigate]);
 
   if (loading) {
     return (

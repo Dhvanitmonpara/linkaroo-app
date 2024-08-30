@@ -21,18 +21,18 @@ import {
 import { Button } from "@/components/ui/button";
 import { FormEventHandler, useEffect, useState } from "react";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import getErrorFromAxios from "@/utils/getErrorFromAxios";
 import toast, { Toast } from "react-hot-toast";
 import { Loader2 } from "lucide-react";
 import { fetchedTagType } from "@/lib/types";
 import useProfileStore from "@/store/profileStore";
 import { removeUsernameTag } from "@/utils/toggleUsernameInTag";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useListStore from "@/store/listStore";
 import useDocStore from "@/store/docStore";
 import { CreateDocForm, EditListForm } from "./Forms";
 import { Input } from "./ui/input";
 import { IoMdPersonAdd } from "react-icons/io";
+import { handleAxiosError } from "@/utils/handlerAxiosError";
 
 type Checked = boolean;
 
@@ -56,6 +56,8 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [newTagInput, setNewTagInput] = useState(false);
   const [newTagSubmitLoading, setNewTagSubmitLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const { listId } = useParams();
 
@@ -93,16 +95,13 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
 
           setCheckedTags(intersection);
         } catch (error) {
-          const errorMsg = getErrorFromAxios(error as AxiosError);
-          if (errorMsg != undefined) {
-            toast.error(errorMsg);
-          }
+          handleAxiosError(error as AxiosError, navigate);
         } finally {
           setLoading(false);
         }
       }
     })();
-  }, [setTags, listId]);
+  }, [setTags, listId, navigate]);
 
   const handleEditList = () => {
     toggleModal(true);
@@ -143,10 +142,7 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
       setNewTagInput(false);
       toast.success("Tag created successfully");
     } catch (error) {
-      const errorMsg = getErrorFromAxios(error as AxiosError);
-      if (errorMsg != undefined) {
-        toast.error(errorMsg);
-      }
+      handleAxiosError(error as AxiosError, navigate);
     } finally {
       setNewTagSubmitLoading(false);
     }
@@ -178,10 +174,7 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
       setDropdownOpen(false);
       toast.success("Changes saved successfully");
     } catch (error) {
-      const errorMsg = getErrorFromAxios(error as AxiosError);
-      if (errorMsg != undefined) {
-        toast.error(errorMsg);
-      }
+      handleAxiosError(error as AxiosError, navigate);
     } finally {
       setSaveChangesLoading(false);
     }
@@ -227,10 +220,7 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
       toast.success("List deleted successfully");
       setLoading(false);
     } catch (error) {
-      const errorMsg = getErrorFromAxios(error as AxiosError);
-      if (errorMsg != undefined) {
-        toast.error(errorMsg);
-      }
+      handleAxiosError(error as AxiosError, navigate);
     } finally {
       toast.dismiss(loadingId);
     }
@@ -238,7 +228,7 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
 
   const actionButtons = [
     {
-      element: <IoMdPersonAdd/>,
+      element: <IoMdPersonAdd />,
       action: () => {},
       tooltip: "Add User",
     },

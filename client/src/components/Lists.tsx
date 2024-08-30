@@ -2,18 +2,20 @@ import { ListCard } from "@/components";
 import useListStore from "@/store/listStore";
 import useMethodStore from "@/store/MethodStore";
 import useProfileStore from "@/store/profileStore";
-import getErrorFromAxios from "@/utils/getErrorFromAxios";
+import { handleAxiosError } from "@/utils/handlerAxiosError";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const Lists = () => {
   const [loading, setLoading] = useState(true);
   const { setLists, lists } = useListStore();
-  const {toggleModal} = useMethodStore()
-  const {profile} = useProfileStore()
-  const {theme, font} = profile.profile
+  const { toggleModal } = useMethodStore();
+  const { profile } = useProfileStore();
+  const { theme, font } = profile.profile;
+  const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
@@ -30,18 +32,15 @@ const Lists = () => {
           toast.error("Failed to fetch user's lists.");
           return;
         }
-        
+
         setLists(response.data.data);
       } catch (error) {
-        const errorMsg = getErrorFromAxios(error as AxiosError);
-        if (errorMsg !== undefined) {
-          toast.error(errorMsg);
-        }
+        handleAxiosError(error as AxiosError, navigate);
       } finally {
         setLoading(false);
       }
     })();
-  }, [setLists]);
+  }, [setLists, navigate]);
 
   if (loading) {
     return (
@@ -51,7 +50,7 @@ const Lists = () => {
     );
   }
 
-  if(lists.length == 0) {
+  if (lists.length == 0) {
     return (
       <div className="dark:text-zinc-200 select-none text-zinc-900 h-[calc(100vh-4.5rem)] lg:h-[calc(100vh-5rem)] w-full flex justify-center items-center">
         No lists found. Please create a new one.
