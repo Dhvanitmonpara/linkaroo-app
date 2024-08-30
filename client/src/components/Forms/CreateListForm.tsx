@@ -18,7 +18,7 @@ import getErrorFromAxios from "@/utils/getErrorFromAxios";
 import useListStore from "@/store/listStore";
 import { Textarea } from "../ui/textarea";
 import { cn } from "@/lib/utils";
-import { themeOptionsArray } from "@/lib/constants";
+import { backgroundImageUrls, themeOptionsArray } from "@/lib/constants";
 
 type CreateListFormProps = {
   theme: themeType | undefined;
@@ -49,9 +49,15 @@ const CreateListForm: React.FC<CreateListFormProps> = ({
     try {
       setLoading(true);
 
+      const randomIndex = Math.floor(
+        Math.random() * backgroundImageUrls.length
+      );
+
+      const newData = { ...data, coverImage: backgroundImageUrls[randomIndex] };
+
       const response = await axios.post(
         `${import.meta.env.VITE_SERVER_API_URL}/lists`,
-        data,
+        newData,
         { withCredentials: true }
       );
 

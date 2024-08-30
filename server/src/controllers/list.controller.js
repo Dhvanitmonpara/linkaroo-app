@@ -6,11 +6,11 @@ import { uploadOnCloudinary, deleteFromCloudinary } from "../utils/cloudinary.js
 import getPublicId from "../utils/getPublicId.js"
 import listOwnerVerification from "../utils/listOwnerVerification.js"
 import { ObjectId } from "mongodb"
-import {Card} from "../models/card.model.js"
+import { Card } from "../models/card.model.js"
 
 const createList = asyncHandler(async (req, res) => {
 
-    const { title, description, theme = "bg-zinc-200" } = req.body
+    const { title, description, theme = "bg-zinc-200", coverImage } = req.body
 
     if (!title || !description) {
         throw new ApiError(400, "Title and description are required")
@@ -30,6 +30,7 @@ const createList = asyncHandler(async (req, res) => {
         title,
         description,
         theme,
+        coverImage,
         collaborators: []
     })
 
@@ -257,7 +258,7 @@ const deleteList = asyncHandler(async (req, res) => {
 
     const listCards = Card.deleteMany({ listId })
 
-    if(!listCards) {
+    if (!listCards) {
         throw new ApiError(500, "Failed to delete list cards")
     }
 
@@ -355,7 +356,7 @@ const getListsByUser = asyncHandler(async (req, res) => {
                 font: 1,
                 createdAt: 1,
                 updatedAt: 1,
-                coverImage:1,
+                coverImage: 1,
                 collaborators: {
                     _id: 1,
                     username: 1,
