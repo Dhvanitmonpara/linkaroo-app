@@ -45,7 +45,7 @@ type ListActionButtonsProps = {
 };
 
 const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
-  const { toggleModal, setModalContent } = useMethodStore();
+  const { toggleModal, setModalContent, setPrevPath } = useMethodStore();
   const { profile, setTags } = useProfileStore();
   const { removeListItem, updateListTags } = useListStore();
   const { setDocs } = useDocStore();
@@ -104,6 +104,7 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
   }, [setTags, listId]);
 
   const handleEditList = () => {
+    setPrevPath(location.pathname);
     toggleModal(true);
     setModalContent(<EditListForm theme={theme} toggleModal={toggleModal} />);
   };
@@ -239,6 +240,7 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
         </div>
       ),
       action: () => {
+        setPrevPath(location.pathname);
         toggleModal(true);
         setModalContent(
           <CreateDocForm

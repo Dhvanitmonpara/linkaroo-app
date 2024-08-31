@@ -84,6 +84,7 @@ const CreateListForm: React.FC<CreateListFormProps> = ({
       }
 
       addListItem(list.data.data);
+      navigate(`/lists/${list.data.data._id}`);
     } catch (error) {
       handleAxiosError(error as AxiosError, navigate);
     } finally {

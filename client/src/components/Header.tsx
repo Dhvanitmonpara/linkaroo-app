@@ -21,7 +21,7 @@ import CommandMenu from "./CommandMenu";
 import NotificationCard from "./NotificationCard";
 
 const Header = () => {
-  const { toggleModal, setModalContent } = useMethodStore();
+  const { toggleModal, setModalContent, setPrevPath } = useMethodStore();
   const { profile } = useProfileStore();
   const { theme } = profile.profile;
 
@@ -58,6 +58,7 @@ const Header = () => {
           >
             <DropdownMenuItem
               onClick={() => {
+                setPrevPath(location.pathname);
                 toggleModal(true);
                 setModalContent(
                   <CreateListForm toggleModal={toggleModal} theme={theme} />
@@ -69,6 +70,7 @@ const Header = () => {
             <DropdownMenuItem
               onClick={() => {
                 toggleModal(true);
+                setPrevPath(location.pathname);
                 setModalContent(
                   <CreateDocForm toggleModal={toggleModal} theme={theme} />
                 );

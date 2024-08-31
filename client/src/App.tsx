@@ -30,7 +30,6 @@ const App = () => {
     if (modalRef.current === e.target) {
       toggleModal(false);
       setModalContent(null);
-      console.log(prevPath);
       if (prevPath !== null) {
         navigate(prevPath);
       }

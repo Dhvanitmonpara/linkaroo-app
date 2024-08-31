@@ -18,7 +18,7 @@ import { CreateDocForm, CreateListForm, SettingsForm } from "../Forms";
 export default function HorizontalTabs() {
   const { profile } = useProfileStore();
   const { theme } = profile.profile;
-  const { toggleModal, setModalContent } = useMethodStore();
+  const { toggleModal, setModalContent, setPrevPath } = useMethodStore();
 
   const navigate = useNavigate();
   return (
@@ -55,6 +55,7 @@ export default function HorizontalTabs() {
         >
           <DropdownMenuItem
             onClick={() => {
+              setPrevPath(location.pathname);
               toggleModal(true);
               setModalContent(
                 <CreateListForm toggleModal={toggleModal} theme={theme} />
@@ -65,6 +66,7 @@ export default function HorizontalTabs() {
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => {
+              setPrevPath(location.pathname);
               toggleModal(true);
               setModalContent(
                 <CreateDocForm toggleModal={toggleModal} theme={theme} />
@@ -101,6 +103,7 @@ export default function HorizontalTabs() {
           <DropdownMenuItem
             className="py-2"
             onClick={() => {
+              setPrevPath(location.pathname);
               toggleModal(true);
               setModalContent(
                 <div className="dark:text-white p-5 flex justify-center items-center space-y-3">
@@ -115,6 +118,7 @@ export default function HorizontalTabs() {
           <DropdownMenuItem
             className="py-2"
             onClick={() => {
+              setPrevPath(location.pathname);
               toggleModal(true);
               setModalContent(
                 <SettingsForm theme={theme} toggleModal={toggleModal} />
@@ -126,6 +130,7 @@ export default function HorizontalTabs() {
           <DropdownMenuItem
             className="py-2"
             onClick={() => {
+              setPrevPath(location.pathname);
               toggleModal(true);
               setModalContent(
                 <div className="dark:text-white p-5 flex justify-center items-center space-y-3">

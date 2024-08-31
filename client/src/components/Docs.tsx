@@ -27,6 +27,7 @@ const Docs = () => {
 
   useEffect(() => {
     (async () => {
+      // if (location.pathname.includes("/lists") && prevPath !== location.pathname) {
       if (location.pathname.includes("/lists")) {
         try {
           setLoading(true);

@@ -8,6 +8,7 @@ import { User } from "@/store/profileStore";
 import { ReactNode } from "react";
 import { SettingsForm } from "./Forms";
 import { themeType } from "@/lib/types";
+import useMethodStore from "@/store/MethodStore";
 
 type HeaderProps = {
   theme: themeType | undefined;
@@ -22,6 +23,7 @@ const ProfileCard = ({
   setModalContent,
   profile,
 }: HeaderProps) => {
+  const { setPrevPath } = useMethodStore();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="w-full dark:text-white py-2 px-6 rounded-md focus:outline-none dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700">
@@ -49,6 +51,7 @@ const ProfileCard = ({
         <DropdownMenuItem
           className="py-2"
           onClick={() => {
+            setPrevPath(location.pathname);
             toggleModal(true);
             setModalContent(
               <div className="dark:text-white p-5 flex justify-center items-center space-y-3">
@@ -63,6 +66,7 @@ const ProfileCard = ({
         <DropdownMenuItem
           className="py-2"
           onClick={() => {
+            setPrevPath(location.pathname);
             toggleModal(true);
             setModalContent(
               <SettingsForm theme={theme} toggleModal={toggleModal} />
@@ -74,6 +78,7 @@ const ProfileCard = ({
         <DropdownMenuItem
           className="py-2"
           onClick={() => {
+            setPrevPath(location.pathname);
             toggleModal(true);
             setModalContent(
               <div className="dark:text-white p-5 flex justify-center items-center space-y-3">

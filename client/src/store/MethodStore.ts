@@ -11,7 +11,7 @@ interface MethodState {
   currentCardColor: colorOptions;
   setCurrentCardColor: (color: colorOptions) => void;
   prevPath: string | null;
-  setPrevPath: (path: string) => void;
+  setPrevPath: (path: string | null) => void;
 }
 
 const useMethodStore = create<MethodState>()(

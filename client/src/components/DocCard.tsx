@@ -13,11 +13,12 @@ type DocCardProps = {
 const DocCard = ({ title, color, link, toggleModal }: DocCardProps) => {
   const navigate = useNavigate();
 
-  const {setModalContent} = useMethodStore()
+  const {setModalContent, setPrevPath} = useMethodStore()
 
   const openModal = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     toggleModal(true);
     e.stopPropagation();
+    setPrevPath(location.pathname);
     navigate(`doc?docid=${title}`);
     setModalContent(
       <div className="text-5xl text-white">Hello</div>
