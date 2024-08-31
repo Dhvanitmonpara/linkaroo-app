@@ -31,8 +31,8 @@ import useListStore from "@/store/listStore";
 import useDocStore from "@/store/docStore";
 import { CreateDocForm, EditListForm } from "./Forms";
 import { Input } from "./ui/input";
-import { IoMdPersonAdd } from "react-icons/io";
 import { handleAxiosError } from "@/utils/handlerAxiosError";
+import { AddCollaborator } from "./ActionButtons";
 
 type Checked = boolean;
 
@@ -229,7 +229,7 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
 
   const actionButtons = [
     {
-      element: <IoMdPersonAdd />,
+      element: <AddCollaborator />,
       action: () => {},
       tooltip: "Add User",
     },

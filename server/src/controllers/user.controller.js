@@ -82,7 +82,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
     const profile = await Profile.create({ userId: user?.id })
 
-    if(!profile) {
+    if (!profile) {
         throw new ApiError(500, "Failed to create profile")
     }
 
@@ -215,7 +215,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 })
 
 const changeCurrentPassword = asyncHandler(async (req, res) => {
-    
+
     const { oldPassword, newPassword } = req.body
 
     const user = await User.findById(req.user._id)
@@ -359,6 +359,26 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
         ))
 })
 
+const searchUser = asyncHandler(async (req, res) => {
+    const { user } = req.body
+
+    const users = await User
+        .find({ $or: [{ username: user }, { email: user }] })
+        .select("-password -refreshToken")
+
+    if (!users.length) {
+        throw new ApiError(404, "No users found matching the given input")
+    }
+
+    return res
+        .status(200)
+        .json(new ApiResponse(
+            200,
+            users,
+            "Users fetched successfully"
+        ))
+})
+
 export {
     registerUser,
     loginUser,
@@ -368,4 +388,5 @@ export {
     getCurrentUser,
     updateAccountDetails,
     updateUserAvatar,
+    searchUser,
 }
