@@ -10,6 +10,8 @@ interface MethodState {
   setModalContent: (content: string | ReactNode | null) => void;
   currentCardColor: colorOptions;
   setCurrentCardColor: (color: colorOptions) => void;
+  prevPath: string | null;
+  setPrevPath: (path: string) => void;
 }
 
 const useMethodStore = create<MethodState>()(
@@ -17,11 +19,13 @@ const useMethodStore = create<MethodState>()(
     persist(
       (set) => ({
         isModalOpen: false,
-        modalContent: null, 
+        modalContent: null,
         currentCardColor: "bg-zinc-200",
+        prevPath: null,
         toggleModal: (value) => set({ isModalOpen: value ?? false }),
         setModalContent: (content) => set({ modalContent: content }),
-        setCurrentCardColor: (color) => set({currentCardColor: color})
+        setCurrentCardColor: (color) => set({ currentCardColor: color }),
+        setPrevPath: (path) => set({ prevPath: path }),
       }),
       {
         name: "methods",

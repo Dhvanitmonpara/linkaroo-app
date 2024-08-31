@@ -40,7 +40,7 @@ const Lists = () => {
         setLoading(false);
       }
     })();
-  }, [setLists, navigate]);
+  }, [setLists]);
 
   if (loading) {
     return (

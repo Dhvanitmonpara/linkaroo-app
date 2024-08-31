@@ -18,10 +18,11 @@ const App = () => {
 
   const modalRef = useRef<HTMLDivElement | null>(null);
 
-  const { isModalOpen, setModalContent, toggleModal, modalContent } = useMethodStore();
+  const { isModalOpen, setModalContent, toggleModal, modalContent, prevPath } =
+    useMethodStore();
   const { addProfile, profile } = useProfileStore();
-  const {setLists} = useListStore()
-  const {setDocs} = useDocStore()
+  const { setLists } = useListStore();
+  const { setDocs } = useDocStore();
 
   const isSmallScreen = useMediaQuery({ query: "(max-width: 1024px)" });
 
@@ -29,20 +30,28 @@ const App = () => {
     if (modalRef.current === e.target) {
       toggleModal(false);
       setModalContent(null);
-      if(isSmallScreen){
-        navigate("/list");
-      } else {
-        navigate(`/`);
+      console.log(prevPath);
+      if (prevPath !== null) {
+        navigate(prevPath);
       }
     }
   };
 
+  document.addEventListener("keydown", ({ key }) => {
+    if (key == "Escape" && isModalOpen) {
+      toggleModal(false);
+      setModalContent("");
+      if (prevPath != null) {
+        navigate(prevPath);
+      }
+    }
+  });
+
   useEffect(() => {
     (async () => {
       try {
-
-        setLists([])
-        setDocs([])
+        setLists([]);
+        setDocs([]);
 
         const currentUser = await axios({
           method: "GET",

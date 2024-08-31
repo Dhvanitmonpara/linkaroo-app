@@ -46,7 +46,7 @@ const ListCard = ({
   const navigate = useNavigate();
 
   const collaboratorAvatars: string[] = [];
-  const { setModalContent, setCurrentCardColor } = useMethodStore();
+  const { setModalContent, setCurrentCardColor, setPrevPath } = useMethodStore();
   const { profile } = useProfileStore();
 
   collaborators?.forEach((collaborator) => {
@@ -56,6 +56,7 @@ const ListCard = ({
   const openModal = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     toggleModal(true);
     e.stopPropagation();
+    setPrevPath(location.pathname);
     navigate(`/list?listid=${title}`, { replace: true });
     setModalContent(
       <CreateDocForm

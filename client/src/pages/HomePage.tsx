@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   Header,
   ProfileCard,
@@ -10,20 +10,11 @@ import useProfileStore from "@/store/profileStore";
 import useMethodStore from "@/store/MethodStore";
 
 function App() {
-  const navigate = useNavigate();
-  const { isModalOpen, toggleModal, setModalContent } = useMethodStore();
+  const { toggleModal, setModalContent } = useMethodStore();
 
   const { profile } = useProfileStore();
   const { theme } = profile.profile;
   const checkThemeStatus = theme == "black" ? "!bg-black !text-while" : "";
-
-  document.addEventListener("keydown", ({ key }) => {
-    if (key == "Escape" && isModalOpen) {
-      toggleModal(false);
-      navigate("/");
-      setModalContent("");
-    }
-  });
 
   return (
     <>

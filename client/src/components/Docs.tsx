@@ -31,7 +31,6 @@ const Docs = () => {
         try {
           setLoading(true);
           const listId = location.pathname.split("/")[2];
-
           const response: AxiosResponse = await axios.get(
             `${import.meta.env.VITE_SERVER_API_URL}/cards/${listId}`,
             { withCredentials: true }
@@ -55,7 +54,7 @@ const Docs = () => {
         }
       }
     })();
-  }, [location, setDocs, setCurrentListItem, navigate]);
+  }, [location, setDocs, setCurrentListItem]);
 
   if (loading) {
     return (

@@ -101,7 +101,7 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
         }
       }
     })();
-  }, [setTags, listId, navigate]);
+  }, [setTags, listId]);
 
   const handleEditList = () => {
     toggleModal(true);
