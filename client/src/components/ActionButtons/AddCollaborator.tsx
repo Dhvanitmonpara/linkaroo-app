@@ -13,6 +13,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { FaPlus } from "react-icons/fa6";
 import { IoMdPersonAdd } from "react-icons/io";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { handleAxiosError } from "@/utils/handlerAxiosError";
@@ -21,6 +22,7 @@ import { Collaborator } from "@/lib/types";
 import toast from "react-hot-toast";
 import debounce from "lodash/debounce";
 import useProfileStore from "@/store/profileStore";
+import useDocStore from "@/store/docStore";
 
 const AddCollaborator = () => {
   const [userInput, setUserInput] = useState<null | string>(null);
@@ -33,6 +35,7 @@ const AddCollaborator = () => {
   const { profile } = useProfileStore();
   const theme = profile.profile.theme;
   const navigate = useNavigate();
+  const { currentListItem } = useDocStore();
 
   useEffect(() => {
     if (userInput !== null) {
@@ -104,7 +107,7 @@ const AddCollaborator = () => {
         </div>
       </PopoverTrigger>
       <PopoverContent
-        className={`w-56 ${
+        className={`w-56 p-2 ${
           theme !== "light" ? "!bg-black !text-white border-zinc-800" : ""
         }`}
       >
@@ -150,10 +153,33 @@ const AddCollaborator = () => {
             </Command>
           </>
         ) : (
-          <Button onClick={() => setIsAddNewFunctionActive(true)}>
-            Add New User
+          <Button
+            onClick={() => setIsAddNewFunctionActive(true)}
+            className={`w-full px-2 ${
+              theme !== "light"
+                ? "text-zinc-200 bg-zinc-950 hover:bg-zinc-800"
+                : "bg-zinc-100 hover:bg-zinc-200 text-zinc-950"
+            }`}
+          >
+            <span className="flex w-full justify-start items-center space-x-[0.65rem]">
+              <FaPlus /> <span className="font-semibold">Add Collaborator</span>
+            </span>
           </Button>
         )}
+        <hr className="my-1 border-t-[0.5px] !border-gray-800" />
+        <div className="space-x-2">
+          {currentListItem && currentListItem.collaborators.length > 0 ? (
+            currentListItem.collaborators.map((collaborator) => (
+              <div className="flex justify-normal items-center w-full h-11 hover:bg-zinc-200 hover:text-zinc-900 p-2 rounded-sm">
+                {collaborator.username}
+              </div>
+            ))
+          ) : (
+            <div className="text-sm text-gray-200 flex justify-center items-center w-full h-16">
+              No collaborators found
+            </div>
+          )}
+        </div>
       </PopoverContent>
     </Popover>
   );
