@@ -18,6 +18,8 @@ import debounce from "lodash/debounce"; // Import debounce directly
 const AddCollaborator = () => {
   const [userInput, setUserInput] = useState<null | string>(null);
   const [userList, setUserList] = useState<Collaborator[]>([]);
+  const [selectedUser, setSelectedUser] = useState<null | Collaborator>(null);
+  const [focusedIndex, setFocusedIndex] = useState<number>(-1); // -1 means no item is focused
 
   const { profile } = useProfileStore();
   const theme = profile.profile.theme;
@@ -57,6 +59,41 @@ const AddCollaborator = () => {
     }
   }, [userInput, navigate]);
 
+  const collaboratorSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (selectedUser) {
+      console.log('Selected user:', selectedUser);
+      // Handle the selected user submission here
+    } else {
+      toast.error("Please select a user before submitting.");
+    }
+  };
+
+  const handleUserSelect = (user: Collaborator) => {
+    setSelectedUser(user);
+    console.log(`Selected user: ${user.username} (${user.email})`);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'ArrowDown') {
+      setFocusedIndex((prevIndex) =>
+        prevIndex < userList.length - 1 ? prevIndex + 1 : 0
+      );
+    } else if (e.key === 'ArrowUp') {
+      setFocusedIndex((prevIndex) =>
+        prevIndex > 0 ? prevIndex - 1 : userList.length - 1
+      );
+    } else if (e.key === 'Enter' && focusedIndex !== -1) {
+      handleUserSelect(userList[focusedIndex]);
+    }
+  };
+
+  useEffect(() => {
+    if (focusedIndex !== -1 && userList[focusedIndex]) {
+      setSelectedUser(userList[focusedIndex]);
+    }
+  }, [focusedIndex, userList]);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -72,28 +109,35 @@ const AddCollaborator = () => {
           event.preventDefault(); // Prevents auto focus when closing the dropdown
         }}
       >
-        <form>
+        <form onSubmit={collaboratorSubmitHandler}>
           <Input
             id="user"
             name="user"
             type="text"
+            autoComplete="off"
             placeholder="Enter username or email"
             className={`${
               theme !== "light" ? "bg-zinc-800" : "bg-zinc-200"
             } border-none border-spacing-0`}
             onFocus={(event) => event.stopPropagation()}
             onChange={(e) => setUserInput(e.target.value)}
+            onKeyDown={handleKeyDown} // Add this to handle arrow keys and Enter
           />
+          {userList.length > 0 &&
+            userList.map((user, index) => (
+              <DropdownMenuItem key={user._id} asChild>
+                <div
+                  className={`flex flex-col !items-start justify-start cursor-pointer ${
+                    index === focusedIndex ? 'bg-gray-200 text-zinc-950' : ''
+                  }`}
+                  onClick={() => handleUserSelect(user)}
+                >
+                  <span>@{user.username}</span>
+                  <span className="text-gray-400">{user.email}</span>
+                </div>
+              </DropdownMenuItem>
+            ))}
         </form>
-        {userList.length > 0 &&
-          userList.map((user) => (
-            <DropdownMenuItem key={user._id}>
-              <div className="flex flex-col">
-                <span>@{user.username}</span>
-                <span className="text-gray-400">{user.email}</span>
-              </div>
-            </DropdownMenuItem>
-          ))}
       </DropdownMenuContent>
     </DropdownMenu>
   );
