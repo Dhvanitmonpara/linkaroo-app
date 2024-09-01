@@ -8,6 +8,7 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuLabel,
+  DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
   DropdownMenuGroup,
@@ -18,6 +19,7 @@ import {
 //   TooltipProvider,
 //   TooltipTrigger,
 // } from "@/components/ui/tooltip";
+import { PiDotsThreeOutlineFill } from "react-icons/pi";
 import { Button } from "@/components/ui/button";
 import { FormEventHandler, useEffect, useState } from "react";
 import axios, { AxiosError, AxiosResponse } from "axios";
@@ -429,32 +431,53 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
   ];
 
   return (
-    <div className="flex justify-center items-center space-x-3">
-      {actionButtons.map((actionButton, index) => (
-        <button
-          key={index}
-          onClick={actionButton.action}
-          className="h-12 w-12 bg-[#6d6d6d20] hover:bg-[#6d6d6d50] transition-colors flex justify-center items-center rounded-full text-xl"
-        >
-          {actionButton.element}
-        </button>
-        // <TooltipProvider key={index}>
-        //   <Tooltip>
-        //     <TooltipTrigger asChild>
-        //       <button
-        //         onClick={actionButton.action}
-        //         className="h-12 w-12 bg-[#00000010] hover:bg-[#00000025] transition-colors flex justify-center items-center rounded-full text-xl"
-        //         // variant="outline"
-        //       >
-        //         {actionButton.element}
-        //       </button>
-        //     </TooltipTrigger>
-        //     <TooltipContent>
-        //       <p>{actionButton.tooltip}</p>
-        //     </TooltipContent>
-        //   </Tooltip>
-        // </TooltipProvider>
-      ))}
+    <div className="flex justify-center items-center">
+      <div className="hidden md:flex justify-center items-center space-x-3">
+        {actionButtons.map((actionButton, index) => (
+          <button
+            key={index}
+            onClick={actionButton.action}
+            className="h-12 w-12 bg-[#6d6d6d20] hover:bg-[#6d6d6d50] transition-colors flex justify-center items-center rounded-full text-xl"
+          >
+            {actionButton.element}
+          </button>
+          // <TooltipProvider key={index}>
+          //   <Tooltip>
+          //     <TooltipTrigger asChild>
+          //       <button
+          //         onClick={actionButton.action}
+          //         className="h-12 w-12 bg-[#00000010] hover:bg-[#00000025] transition-colors flex justify-center items-center rounded-full text-xl"
+          //         // variant="outline"
+          //       >
+          //         {actionButton.element}
+          //       </button>
+          //     </TooltipTrigger>
+          //     <TooltipContent>
+          //       <p>{actionButton.tooltip}</p>
+          //     </TooltipContent>
+          //   </Tooltip>
+          // </TooltipProvider>
+        ))}
+      </div>
+      <div>
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <button className="md:hidden h-12 w-12 bg-[#6d6d6d20] hover:bg-[#6d6d6d50] transition-colors flex justify-center items-center rounded-full text-xl">
+              <PiDotsThreeOutlineFill />
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            {actionButtons?.map((actionButton) => (
+              <DropdownMenuItem className="flex justify-start items-center space-x-2">
+                {/* <span className="!text-md">{actionButton.element}</span> */}
+                <span>{actionButton.tooltip}</span>
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
     </div>
   );
 };
