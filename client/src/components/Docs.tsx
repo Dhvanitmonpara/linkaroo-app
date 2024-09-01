@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import { BiSolidPencil } from "react-icons/bi";
 import { handleAxiosError } from "@/utils/handlerAxiosError";
+import convertMongoDBDate from "@/utils/convertMongoDBDate";
 
 const Docs = () => {
   const { toggleModal } = useMethodStore();
@@ -20,7 +21,7 @@ const Docs = () => {
   const { profile } = useProfileStore();
   const { theme, font } = profile.profile;
   const { currentCardColor } = useMethodStore();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   // TODO: create a dropdown along with images and custom image function
   const handleEditCoverImage = () => {};
@@ -116,27 +117,40 @@ const Docs = () => {
 
   return (
     <div className="md:h-[calc(100vh-5rem)] md:px-0 px-4 h-[calc(100vh-8.5rem)] lg:h-[calc(100vh-9rem)] overflow-y-scroll w-full space-y-2 no-scrollbar">
-      <div className="h-48 w-full py-2">
+      <div className="h-96 w-full py-2">
         <div
-          className="h-full w-full relative overflow-hidden rounded-md"
+          className="group h-3/6 w-full relative overflow-hidden rounded-t-md"
           style={coverImageStyle}
         >
           <div className="h-full w-full bg-black bg-opacity-40 text-zinc-200 p-4">
-            <div className="flex justify-between items-center w-full h-10 absolute bottom-5 left-0 px-4">
+            <div className="flex justify-end items-center">
+              <button
+                onClick={handleEditCoverImage}
+                className="h-12 w-12 opacity-0 group-hover:opacity-100 bg-[#00000030] hover:bg-[#00000060] transition-all flex justify-center items-center rounded-full text-xl"
+              >
+                <BiSolidPencil />
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className="w-full h-3/6 rounded-b-md dark:text-zinc-300 p-4 dark:bg-neutral-800">
+          <div className="h-20 flex flex-col justify-start">
+            <div className="flex justify-between items-center w-full">
               <h1 className="text-2xl font-semibold">
                 {currentListItem?.title}
               </h1>
               <ListActionButtons listTitle={currentListItem?.title} />
             </div>
-            <div className="flex justify-between items-center">
-              <div>{currentListItem?.description}</div>
-              <button
-                onClick={handleEditCoverImage}
-                className="h-12 w-12 bg-[#00000030] hover:bg-[#00000060] transition-colors flex justify-center items-center rounded-full text-xl"
-              >
-                <BiSolidPencil />
-              </button>
+            <div className="text-xs space-x-2">
+              <span>@{currentListItem?.createdBy?.username}</span>
+              <span>
+                {currentListItem?.createdAt &&
+                  convertMongoDBDate(currentListItem?.createdAt)}
+              </span>
             </div>
+          </div>
+          <div className="pt-4">
+            <p>{currentListItem?.description}</p>
           </div>
         </div>
       </div>
