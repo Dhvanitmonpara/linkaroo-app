@@ -20,6 +20,7 @@ import { useEffect, useState } from "react";
 import CommandMenu from "./CommandMenu";
 import NotificationCard from "./NotificationCard";
 import { Link } from "react-router-dom";
+import ProfileCard from "./ProfileCard";
 
 const Header = () => {
   const { toggleModal, setModalContent, setPrevPath } = useMethodStore();
@@ -45,6 +46,20 @@ const Header = () => {
         <div className="text-zinc-300 transition-colors cursor-pointer text-2xl font-helvetica font-semibold hover:text-white flex space-x-2 justify-center items-center">
           <img src="/linkaroo.png" alt="Linkaroo-logo" width="24px" className="h-[24px]"/>
           <Link to={"/"}>Linkaroo</Link>
+        </div>
+        <div className="text-zinc-400 flex space-x-7 font-semibold">
+          <span className="hover:text-zinc-100 cursor-pointer transition-colors">
+            Home
+          </span>
+          <span className="hover:text-zinc-100 cursor-pointer transition-colors">
+            Menu
+          </span>
+          <span className="hover:text-zinc-100 cursor-pointer transition-colors">
+            Pinned
+          </span>
+          <span className="hover:text-zinc-100 cursor-pointer transition-colors">
+            Docs
+          </span>
         </div>
         <div className="lg:h-20 h-[4.5rem] lg:py-5 pt-4 pb-[1rem] flex space-x-2 w-2/5">
           <Input
@@ -113,7 +128,9 @@ const Header = () => {
             </PopoverContent>
           </Popover>
         </div>
-        <div></div>
+        <div>
+          <ProfileCard/>
+        </div>
       </nav>
       <CommandMenu open={open} setOpen={setOpen} />
     </>
