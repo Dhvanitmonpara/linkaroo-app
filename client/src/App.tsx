@@ -17,6 +17,7 @@ const App = () => {
   const navigate = useNavigate();
 
   const modalRef = useRef<HTMLDivElement | null>(null);
+  const [progress, setProgress] = useState<number>(0);
 
   const { isModalOpen, setModalContent, toggleModal, modalContent, prevPath } =
     useMethodStore();
@@ -52,11 +53,15 @@ const App = () => {
         setLists([]);
         setDocs([]);
 
+        setProgress(10)
+
         const currentUser = await axios({
           method: "GET",
           url: `${import.meta.env.VITE_SERVER_API_URL}/users/current-user`,
           withCredentials: true,
         });
+
+        setProgress(65)
 
         if (currentUser.data === "Unauthorized request") {
           navigate("/login");
@@ -64,6 +69,8 @@ const App = () => {
         }
 
         addProfile(currentUser.data.data);
+
+        setProgress(98);
 
         if (isSmallScreen) {
           navigate("/list");
@@ -89,6 +96,7 @@ const App = () => {
           ));
         }
       } finally {
+        setProgress(100);
         setLoading(false);
       }
     })();
@@ -110,20 +118,20 @@ const App = () => {
     location.pathname.includes("/forgot-password");
 
   if (loading) {
-    return <Loading />;
+    return <Loading progress={progress} />;
   }
 
   return (
-    <div className="min-h-sc w-screen">
+    <div className="min-h-screen w-screen">
       <div
         className={`p-0 w-full min-h-[calc(100vh-env(safe-area-inset-top))] ${
           theme === "black" ? "bg-black" : "dark:bg-zinc-800"
         }`}
       >
         <div
-          className={`sticky top-0 z-40 w-full ${
+          className={`w-full ${
             theme === "black" ? "bg-black" : "dark:bg-zinc-800"
-          } ${showBars ? "hidden" : ""} lg:!hidden`}
+          } ${showBars ? "hidden" : ""}`}
           style={{ paddingTop: "env(safe-area-inset-top)" }}
         >
           <Header />

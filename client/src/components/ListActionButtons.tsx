@@ -469,8 +469,8 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
           <DropdownMenuContent>
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            {actionButtons?.map((actionButton) => (
-              <DropdownMenuItem className="flex justify-start items-center space-x-2">
+            {actionButtons?.map((actionButton, index) => (
+              <DropdownMenuItem key={index} className="flex justify-start items-center space-x-2">
                 {/* <span className="!text-md">{actionButton.element}</span> */}
                 <span>{actionButton.tooltip}</span>
               </DropdownMenuItem>

@@ -61,6 +61,7 @@ const Lists = () => {
   return (
     <>
       <div className="col-span-2 relative lg:px-0 px-4 space-y-3 overflow-y-scroll no-scrollbar h-[calc(100vh-4.5rem)] lg:h-[calc(100vh-5rem)]">
+        <div className="lg:h-2 h-16"></div>
         {lists.map((list, index) => (
           <ListCard
             key={index}
