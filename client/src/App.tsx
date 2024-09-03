@@ -125,12 +125,12 @@ const App = () => {
     <div className="min-h-screen w-screen">
       <div
         className={`p-0 w-full min-h-[calc(100vh-env(safe-area-inset-top))] ${
-          theme === "black" ? "bg-black" : "dark:bg-zinc-800"
+          theme === "black" ? "bg-black" : "dark:bg-[#1e1e22]"
         }`}
       >
         <div
           className={`w-full ${
-            theme === "black" ? "bg-black" : "dark:bg-zinc-800"
+            theme === "black" ? "bg-black" : "dark:bg-[#1e1e22]"
           } ${showBars ? "hidden" : ""}`}
           style={{ paddingTop: "env(safe-area-inset-top)" }}
         >

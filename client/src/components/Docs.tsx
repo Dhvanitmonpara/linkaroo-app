@@ -15,7 +15,7 @@ import convertMongoDBDate from "@/utils/convertMongoDBDate";
 const Docs = () => {
   const { toggleModal } = useMethodStore();
   const [loading, setLoading] = useState(false);
-  const location = useLocation();
+  const location = useLocation().pathname;
   const { docs, setDocs, currentListItem, setCurrentListItem } = useDocStore();
   const { lists } = useListStore();
   const { profile } = useProfileStore();
@@ -29,10 +29,10 @@ const Docs = () => {
   useEffect(() => {
     (async () => {
       // if (location.pathname.includes("/lists") && prevPath !== location.pathname) {
-      if (location.pathname.includes("/lists")) {
+      if (location.includes("/lists")) {
         try {
           setLoading(true);
-          const listId = location.pathname.split("/")[2];
+          const listId = location.split("/")[2];
           const response: AxiosResponse = await axios.get(
             `${import.meta.env.VITE_SERVER_API_URL}/cards/${listId}`,
             { withCredentials: true }
@@ -154,15 +154,18 @@ const Docs = () => {
           </div>
         </div>
       </div>
-      {docs?.map((doc) => (
-        <DocCard
-          key={doc._id}
-          title={doc.title}
-          color={theme == "black" ? "bg-black" : currentCardColor}
-          link={doc.link}
-          toggleModal={toggleModal}
-        />
-      ))}
+      <div className={`grid grid-cols-1 gap-2 ${location.includes("/doc") ? "" : "lg:grid-cols-2"}`}>
+        {docs?.map((doc) => (
+          <DocCard
+            key={doc._id}
+            title={doc.title}
+            color={theme == "black" ? "bg-black" : currentCardColor}
+            link={doc.link}
+            currentListId={currentListItem?._id}
+            toggleModal={toggleModal}
+          />
+        ))}
+      </div>
       <div className="lg:h-2 h-16"></div>
     </div>
   );

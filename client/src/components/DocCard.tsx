@@ -2,27 +2,31 @@ import { colorOptions } from "@/lib/types.tsx";
 import { useNavigate } from "react-router-dom";
 import { FiArrowUpRight } from "react-icons/fi";
 import useMethodStore from "@/store/MethodStore";
+import { useMediaQuery } from "react-responsive";
 
 type DocCardProps = {
   title: string;
   color: colorOptions;
   link: string;
+  currentListId: string | undefined;
   toggleModal: (isOpen: boolean) => void;
 };
 
-const DocCard = ({ title, color, link, toggleModal }: DocCardProps) => {
+const DocCard = ({ title, color, link, currentListId, toggleModal }: DocCardProps) => {
   const navigate = useNavigate();
-
-  const {setModalContent, setPrevPath} = useMethodStore()
+  const { setModalContent, setPrevPath } = useMethodStore();
+  const isSmallScreen = useMediaQuery({ query: "(max-width: 1024px)" });
 
   const openModal = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     toggleModal(true);
     e.stopPropagation();
     setPrevPath(location.pathname);
-    navigate(`doc?docid=${title}`);
-    setModalContent(
-      <div className="text-5xl text-white">Hello</div>
-    )
+    if (location.pathname.includes("/doc")) {
+      navigate(`/lists/${currentListId}/doc?docid=${title}`);
+    } else {
+      navigate(`doc?docid=${title}`);
+    }
+    setModalContent(<div className="text-5xl text-white">Hello</div>);
   };
 
   const openLink = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
@@ -39,7 +43,17 @@ const DocCard = ({ title, color, link, toggleModal }: DocCardProps) => {
   return (
     <div className={cardClass}>
       <h2
-        onClick={openModal}
+        onClick={(e) => {
+          if (isSmallScreen) {
+            openModal(e);
+          } else {
+            if (location.pathname.includes("/doc")) {
+              navigate(`/lists/${currentListId}/doc?docid=${title}`);
+            } else {
+              navigate(`doc?docid=${title}`);
+            }
+          }
+        }}
         className={`font-semibold group-hover:underline decoration-2 cursor-pointer text-lg flex justify-between w-full items-center ${""}`}
       >
         <span onClick={openLink}>{title}</span>

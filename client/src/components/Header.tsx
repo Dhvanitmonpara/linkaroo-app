@@ -59,12 +59,12 @@ const Header = () => {
         <div className="lg:h-20 h-[4.5rem] lg:py-5 pt-4 pb-[1rem] flex space-x-2 md:w-2/5">
           <Input
             onClick={() => setOpen(true)}
-            className="dark:bg-zinc-800 dark:text-white hidden md:inline-block dark:border-zinc-600"
+            className="dark:bg-zinc-900 dark:text-white hidden md:inline-block dark:border-zinc-600"
             placeholder="Create or Search something..."
           />
 
           <DropdownMenu>
-            <DropdownMenuTrigger className="w-12 lg:flex hidden justify-center items-center dark:bg-zinc-800 dark:hover:bg-zinc-600 dark:text-white rounded-sm border-2 dark:border-zinc-700 border-zinc-200 hover:bg-zinc-200">
+            <DropdownMenuTrigger className="w-12 lg:flex hidden justify-center items-center dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-white rounded-sm border-2 dark:border-zinc-700 border-zinc-200 hover:bg-zinc-200">
               <IoMdAdd />
             </DropdownMenuTrigger>
             <DropdownMenuContent
@@ -99,16 +99,16 @@ const Header = () => {
           </DropdownMenu>
           <div
             onClick={() => setOpen(true)}
-            className="md:w-12 w-10 text-xl md:text-base md:hidden flex justify-center items-center md:dark:bg-zinc-800 dark:hover:bg-zinc-600 dark:text-zinc-300 rounded-sm md:border-2 md:dark:border-zinc-700 md:border-zinc-200 hover:bg-zinc-200"
+            className="md:w-12 w-10 text-xl md:text-base md:hidden flex justify-center items-center md:dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-zinc-300 rounded-sm md:border-2 md:dark:border-zinc-700 md:border-zinc-200 hover:bg-zinc-200"
           >
             <IoSearchSharp />
           </div>
-          <div className="md:w-12 w-10 text-xl md:text-base flex justify-center items-center md:dark:bg-zinc-800 dark:hover:bg-zinc-600 dark:text-white rounded-sm md:border-2 md:dark:border-zinc-700 md:border-zinc-200 hover:bg-zinc-200">
+          <div className="md:w-12 w-10 text-xl md:text-base flex justify-center items-center md:dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-white rounded-sm md:border-2 md:dark:border-zinc-700 md:border-zinc-200 hover:bg-zinc-200">
             <IoFilterOutline />
           </div>
           <Popover>
             <PopoverTrigger className="md:w-12 w-10 text-xl md:text-base">
-              <div className="w-full h-full flex justify-center items-center text-zinc-300 md:text-zinc-400 md:dark:bg-zinc-800 dark:hover:bg-zinc-600 dark:text-white rounded-sm md:border-2 md:dark:border-zinc-700 md:border-zinc-200 hover:bg-zinc-200">
+              <div className="w-full h-full flex justify-center items-center text-zinc-300 md:text-zinc-400 md:dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-white rounded-sm md:border-2 md:dark:border-zinc-700 md:border-zinc-200 hover:bg-zinc-200">
                 <IoMdNotificationsOutline />
               </div>
             </PopoverTrigger>
