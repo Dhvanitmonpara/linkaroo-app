@@ -17,13 +17,13 @@ const App = () => {
   const navigate = useNavigate();
 
   const modalRef = useRef<HTMLDivElement | null>(null);
-  const [progress, setProgress] = useState<number>(0);
+  const [progress, setProgress] = useState<number>(33);
 
   const { isModalOpen, setModalContent, toggleModal, modalContent, prevPath } =
     useMethodStore();
   const { addProfile, profile } = useProfileStore();
   const { setLists } = useListStore();
-  const { setDocs } = useDocStore();
+  const { setDocs, setCurrentListItem } = useDocStore();
 
   const isSmallScreen = useMediaQuery({ query: "(max-width: 1024px)" });
 
@@ -52,8 +52,7 @@ const App = () => {
       try {
         setLists([]);
         setDocs([]);
-
-        setProgress(10)
+        setCurrentListItem(null)
 
         const currentUser = await axios({
           method: "GET",
@@ -61,7 +60,7 @@ const App = () => {
           withCredentials: true,
         });
 
-        setProgress(65)
+        setProgress(78)
 
         if (currentUser.data === "Unauthorized request") {
           navigate("/login");
@@ -69,8 +68,6 @@ const App = () => {
         }
 
         addProfile(currentUser.data.data);
-
-        setProgress(98);
 
         if (isSmallScreen) {
           navigate("/list");
@@ -96,7 +93,6 @@ const App = () => {
           ));
         }
       } finally {
-        setProgress(100);
         setLoading(false);
       }
     })();

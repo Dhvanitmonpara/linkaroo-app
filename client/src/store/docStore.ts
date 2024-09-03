@@ -9,7 +9,7 @@ interface DocState {
   addDocItem: (item: fetchedDocType) => void;
   removeDocItem: (itemId: string) => void;
   currentListItem: fetchedListType | null;
-  setCurrentListItem: (listItem: fetchedListType) => void;
+  setCurrentListItem: (listItem: fetchedListType | null) => void;
 }
 
 const useDocStore = create<DocState>()(
