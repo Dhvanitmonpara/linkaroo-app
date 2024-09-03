@@ -10,7 +10,7 @@ const Stepper = ({ stepIndex, className }: StepperProps) => {
   const step = steps[stepIndex];
   return (
     <div className={`w-full h-1 ${className}`}>
-      <div className={`${step} h-full bg-green-400`}></div>
+      <div className={`${step} h-full bg-blue-800`}></div>
     </div>
   );
 };

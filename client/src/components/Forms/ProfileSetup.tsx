@@ -16,7 +16,7 @@ const ProfileSetup = ({
   updateFields,
 }: ProfileSetupProps) => {
   return (
-    <div className="h-4/5 flex flex-col space-y-6 w-96 justify-center items-center">
+    <div className="h-full flex flex-col space-y-6 w-96 justify-center items-center">
       <div className="flex space-x-2">
         <div className="w-full space-y-2">
           <label htmlFor="first-name">First name</label>

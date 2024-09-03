@@ -6,7 +6,7 @@ import { FormEvent, useState } from "react";
 import getErrorFromAxios from "@/utils/getErrorFromAxios.js";
 import { Loader2 } from "lucide-react";
 import { Stepper } from "@/components/index.js";
-import { IoMdArrowRoundBack } from "react-icons/io";
+import { IoArrowBack } from "react-icons/io5";
 import { useMultistepForm } from "@/Hooks/useMultistepForm.js";
 import EmailSignup from "@/components/Forms/EmailSignup.js";
 import ProfileSetup from "@/components/Forms/ProfileSetup.js";
@@ -112,12 +112,15 @@ const SignupPage = () => {
 
   return (
     <div className="min-h-screen select-none bg-gradient-to-r from-slate-900 to-zinc-900 flex justify-center items-center">
-      <div className="text-white relative bg-[#00000025] flex flex-col space-y-8 justify-center items-center p-8 rounded-xl">
-        <div>
-          <Stepper className="absolute top-0 right-0" stepIndex={currentStepIndex} />
-          {currentStepIndex + 1} / {steps.length}
-        </div>
-        <h1 className="font-semibold text-4xl">Signup to Linkaroo</h1>
+      <div className="text-white relative overflow-hidden bg-[#00000025] flex flex-col space-y-8 justify-center items-center p-8 rounded-xl">
+        <Stepper
+          className="absolute top-0 right-0"
+          stepIndex={currentStepIndex}
+        />
+        <span className="absolute top-0 right-10 text-sm">
+         {currentStepIndex + 1} / {steps.length}
+        </span>
+        <h1 className="font-semibold text-4xl pt-5">Signup to Linkaroo</h1>
         <form
           action="post"
           className="h-4/5 flex flex-col space-y-6 w-96 justify-center items-center"
@@ -128,9 +131,9 @@ const SignupPage = () => {
             <Button
               type="button"
               onClick={back}
-              className="!bg-transparent absolute top-0 left-0 text-zinc-300 hover:text-white space-x-2"
+              className="!bg-transparent absolute top-0 left-5 text-zinc-300 hover:text-white space-x-2"
             >
-              <IoMdArrowRoundBack />
+              <IoArrowBack />
               <span>Back</span>
             </Button>
           )}
