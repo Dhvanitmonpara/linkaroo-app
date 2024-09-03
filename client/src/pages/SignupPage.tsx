@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FormEvent, useState } from "react";
 import getErrorFromAxios from "@/utils/getErrorFromAxios.js";
 import { Loader2 } from "lucide-react";
-// import { Stepper } from "@/components/index.js";
+import { Stepper } from "@/components/index.js";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { useMultistepForm } from "@/Hooks/useMultistepForm.js";
 import EmailSignup from "@/components/Forms/EmailSignup.js";
@@ -99,23 +99,23 @@ const SignupPage = () => {
 
   const submitHandler = (e: FormEvent) => {
     e.preventDefault();
-    console.log(data.password)
-    console.log(data.confirmPassword)
-    if(data.password !== data.confirmPassword) {
+    console.log(data.password);
+    console.log(data.confirmPassword);
+    if (data.password !== data.confirmPassword) {
       toast.error("Passwords do not match");
-      return
+      return;
     }
     if (!isLastStep) return next();
-    console.log(data.otp)
-    userLogin()
+    console.log(data.otp);
+    userLogin();
   };
 
   return (
     <div className="min-h-screen select-none bg-gradient-to-r from-slate-900 to-zinc-900 flex justify-center items-center">
-      {/* <Stepper/> */}
       <div className="text-white relative bg-[#00000025] flex flex-col space-y-8 justify-center items-center p-8 rounded-xl">
         <div>
-          {currentStepIndex+1} / {steps.length}
+          <Stepper className="absolute top-0 right-0" stepIndex={currentStepIndex} />
+          {currentStepIndex + 1} / {steps.length}
         </div>
         <h1 className="font-semibold text-4xl">Signup to Linkaroo</h1>
         <form
@@ -142,7 +142,10 @@ const SignupPage = () => {
               <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
             </Button>
           ) : (
-            <Button type="submit" className="bg-slate-800 text-white hover:bg-slate-700 w-full">
+            <Button
+              type="submit"
+              className="bg-slate-800 text-white hover:bg-slate-700 w-full"
+            >
               {isLastStep ? "Create an Account" : "Next"}
             </Button>
           )}
