@@ -18,7 +18,9 @@ function App() {
         </div>
         <div
           className={`xl:px-0 lg:px-0 lg:pr-5 px-5 h-full select-none ${
-            !location.includes("/docs") ? "lg:col-span-3 xl:col-span-5 !pr-5" : "col-span-3"
+            !location.includes("/docs")
+              ? "lg:col-span-3 xl:col-span-5 !pr-5"
+              : "col-span-3"
           }`}
         >
           <Docs />
@@ -30,9 +32,7 @@ function App() {
         >
           {location.includes("/docs") ? (
             <div className="h-full w-full border-2 dark:border-zinc-600 rounded-md overflow-hidden">
-              <DocScreen
-                color={theme == "black" ? "bg-black" : "bg-emerald-400"}
-              />
+              <DocScreen/>
             </div>
           ) : (
             ""
