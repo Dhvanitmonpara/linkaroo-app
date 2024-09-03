@@ -1,23 +1,49 @@
 import axios, { AxiosError } from "axios";
-// import { useEffect } from "react";
 import useProfileStore from "../store/profileStore.js";
-import { Input } from "@/components/ui/input.js";
 import { Button } from "@/components/ui/button.js";
 import { Link, useNavigate } from "react-router-dom";
-import { IoMdEye } from "react-icons/io";
-import { IoMdEyeOff } from "react-icons/io";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { FormEvent, useState } from "react";
 import getErrorFromAxios from "@/utils/getErrorFromAxios.js";
 import { Loader2 } from "lucide-react";
-import { Stepper } from "@/components/index.js";
+// import { Stepper } from "@/components/index.js";
+import { IoMdArrowRoundBack } from "react-icons/io";
+import { useMultistepForm } from "@/Hooks/useMultistepForm.js";
+import EmailSignup from "@/components/Forms/EmailSignup.js";
+import ProfileSetup from "@/components/Forms/ProfileSetup.js";
+import EmailVerification from "@/components/Forms/EmailVerification.js";
+import toast from "react-hot-toast";
+
+type SignupFormData = {
+  firstName: string;
+  lastName: string;
+  username: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  avatarImage?: string;
+  otp: string;
+};
+
+const initialData = {
+  firstName: "",
+  lastName: "",
+  username: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+  avatarImage: "",
+  otp: "",
+};
 
 const SignupPage = () => {
   const { addProfile } = useProfileStore();
-  const [isPasswordShowing, setIsPasswordShowing] = useState(false);
   const [error, setError] = useState<null | string>(null);
   const [loading, setLoading] = useState(false);
-  const { register, handleSubmit } = useForm<SignupFormData>();
+  const [data, setData] = useState(initialData);
+
+  const updateFields = (fields: Partial<SignupFormData>) => {
+    setData((prev) => ({ ...prev, ...fields }));
+  };
 
   const navigate = useNavigate();
 
@@ -25,12 +51,14 @@ const SignupPage = () => {
     /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
   const usernameReg = /[a-zA-Z][a-zA-Z0-9-_]{3,32}/;
 
-  const userLogin = async (data: {
-    username: string;
-    email: string;
-    password: string;
-    confirmPassword: string
-  }) => {
+  const { steps, step, currentStepIndex, isLastStep, isFirstStep, next, back } =
+    useMultistepForm([
+      <EmailSignup {...data} updateFields={updateFields} />,
+      <ProfileSetup {...data} updateFields={updateFields} />,
+      <EmailVerification {...data} updateFields={updateFields} />,
+    ]);
+
+  const userLogin = async () => {
     try {
       setLoading(true);
       setError(null);
@@ -69,139 +97,53 @@ const SignupPage = () => {
     }
   };
 
-  type SignupFormData = {
-    firstName: string;
-    lastName: string;
-    username: string;
-    email: string;
-    password: string;
-    confirmPassword: string
+  const submitHandler = (e: FormEvent) => {
+    e.preventDefault();
+    console.log(data.password)
+    console.log(data.confirmPassword)
+    if(data.password !== data.confirmPassword) {
+      toast.error("Passwords do not match");
+      return
+    }
+    if (!isLastStep) return next();
+    console.log(data.otp)
+    userLogin()
   };
 
   return (
     <div className="min-h-screen select-none bg-gradient-to-r from-slate-900 to-zinc-900 flex justify-center items-center">
-      <Stepper/>
-      <div className="text-white bg-[#00000025] flex flex-col space-y-8 justify-center items-center p-8 rounded-xl">
+      {/* <Stepper/> */}
+      <div className="text-white relative bg-[#00000025] flex flex-col space-y-8 justify-center items-center p-8 rounded-xl">
+        <div>
+          {currentStepIndex+1} / {steps.length}
+        </div>
         <h1 className="font-semibold text-4xl">Signup to Linkaroo</h1>
         <form
           action="post"
           className="h-4/5 flex flex-col space-y-6 w-96 justify-center items-center"
-          onSubmit={handleSubmit(userLogin)}
+          onSubmit={submitHandler}
         >
-          <div className="flex space-x-2">
-            <div className="w-full space-y-2">
-              <label htmlFor="first-name">First name</label>
-              <Input
-                id="first-name"
-                type="text"
-                placeholder="Enter First name"
-                className="bg-slate-800"
-                {...register("firstName", {
-                  required: true,
-                })}
-              />
-            </div>
-            <div className="w-full space-y-2">
-              <label htmlFor="last-name">Last name</label>
-              <Input
-                id="last-name"
-                type="text"
-                placeholder="Enter Last name"
-                className="bg-slate-800"
-                {...register("lastName")}
-              />
-            </div>
-          </div>
-          <div className="w-full space-y-2">
-            <label htmlFor="username">Username</label>
-            <Input
-              id="username"
-              type="text"
-              placeholder="Enter Username"
-              className="bg-slate-800"
-              {...register("username", {
-                required: true,
-              })}
-            />
-          </div>
-          <div className="w-full space-y-2">
-            <label htmlFor="email">Email</label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="Enter Email"
-              className="bg-slate-800"
-              {...register("email", {
-                required: true,
-              })}
-            />
-          </div>
-          <div className="w-full space-y-2 pb-4">
-            <label htmlFor="password">Password</label>
-            <div className="w-full flex relative">
-              <Input
-                id="password"
-                type={isPasswordShowing ? "text" : "password"}
-                placeholder="Enter Password"
-                className="bg-slate-800"
-                {...register("password", {
-                  required: true,
-                })}
-              />
-              <div
-                className="w-12 absolute right-0 flex justify-center items-center h-full cursor-pointer"
-                onClick={() => {
-                  setIsPasswordShowing((prev) => !prev);
-                }}
-              >
-                {isPasswordShowing ? <IoMdEyeOff /> : <IoMdEye />}
-              </div>
-            </div>
-          </div>
-          <div className="w-full space-y-2 pb-4">
-            <label htmlFor="confirm-password">Confirm password</label>
-            <div className="w-full flex relative">
-              <Input
-                id="confirm-password"
-                type={isPasswordShowing ? "text" : "password"}
-                placeholder="Enter Password"
-                className="bg-slate-800"
-                {...register("confirmPassword", {
-                  required: true,
-                })}
-              />
-              <div
-                className="w-12 absolute right-0 flex justify-center items-center h-full cursor-pointer"
-                onClick={() => {
-                  setIsPasswordShowing((prev) => !prev);
-                }}
-              >
-                {isPasswordShowing ? <IoMdEyeOff /> : <IoMdEye />}
-              </div>
-            </div>
-          </div>
-          <div className="w-full space-y-2">
-            <label htmlFor="avatar">Avatar</label>
-            <Input
-              id="avatar"
-              type="file"
-              placeholder="Enter Username"
-              className="bg-slate-800"
-              {...register("username", {
-                required: true,
-              })}
-            />
-          </div>
+          {step}
+          {!isFirstStep && (
+            <Button
+              type="button"
+              onClick={back}
+              className="!bg-transparent absolute top-0 left-0 text-zinc-300 hover:text-white space-x-2"
+            >
+              <IoMdArrowRoundBack />
+              <span>Back</span>
+            </Button>
+          )}
           {loading ? (
             <Button
               disabled
-              className="bg-slate-800 hover:bg-slate-700 w-full cursor-wait"
+              className="bg-slate-800 text-white hover:bg-slate-700 w-full cursor-wait"
             >
               <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
             </Button>
           ) : (
-            <Button className="bg-slate-800 hover:bg-slate-700 w-full">
-              Create an Account
+            <Button type="submit" className="bg-slate-800 text-white hover:bg-slate-700 w-full">
+              {isLastStep ? "Create an Account" : "Next"}
             </Button>
           )}
           <p className="text-center">
