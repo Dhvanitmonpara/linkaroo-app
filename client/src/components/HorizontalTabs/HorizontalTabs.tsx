@@ -1,7 +1,7 @@
 import { MdHome } from "react-icons/md";
 import { FaPlus } from "react-icons/fa6";
 import { IoPerson } from "react-icons/io5";
-import { IoMdNotifications  } from "react-icons/io";
+import { IoMdAdd, IoMdNotifications } from "react-icons/io";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import "./HorizontalTabs.css";
 import { useNavigate } from "react-router-dom";
@@ -62,7 +62,8 @@ export default function HorizontalTabs() {
               );
             }}
           >
-            List
+            <IoMdAdd />
+            <span className="pl-2">List</span>
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => {
@@ -73,14 +74,22 @@ export default function HorizontalTabs() {
               );
             }}
           >
-            Doc
+            <IoMdAdd />
+            <span className="pl-2">List</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <RadioGroupItem value="notifications" id="notification-tab" className="radio-item" />
-      <label htmlFor="notification-tab" className="menu-label !text-3xl !w-auto">
-        <IoMdNotifications  />
+      <RadioGroupItem
+        value="notifications"
+        id="notification-tab"
+        className="radio-item"
+      />
+      <label
+        htmlFor="notification-tab"
+        className="menu-label !text-3xl !w-auto"
+      >
+        <IoMdNotifications />
       </label>
 
       {/* <RadioGroupItem value="profile" id="profile-tab" className="radio-item" /> */}
