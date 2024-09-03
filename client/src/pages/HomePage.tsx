@@ -29,7 +29,7 @@ function App() {
           }`}
         >
           {location.includes("/doc") ? (
-            <div className="h-[calc(100%-4rem)] w-full border-2 dark:border-zinc-600 rounded-md overflow-hidden">
+            <div className="h-full w-full border-2 dark:border-zinc-600 rounded-md overflow-hidden">
               <DocScreen
                 color={theme == "black" ? "bg-black" : "bg-emerald-400"}
               />
