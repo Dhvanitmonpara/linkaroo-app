@@ -89,7 +89,7 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-screen select-none bg-gradient-to-r from-slate-900 to-zinc-900 flex justify-center items-center">
-      <div className="text-white bg-[#00000025] flex flex-col space-y-8 justify-center items-center sm:p-8 p-0 rounded-xl">
+      <div className="text-white bg-[#00000025] flex flex-col space-y-8 justify-center items-center sm:p-8 p-4 rounded-xl">
         <h1 className="font-semibold text-4xl">Login to Linkaroo</h1>
         <form
           action="post"

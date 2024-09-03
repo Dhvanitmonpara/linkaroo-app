@@ -115,7 +115,7 @@ const Docs = () => {
   }
 
   return (
-    <div className="md:h-[calc(100vh-5rem)] md:px-0 px-4 h-[calc(100vh-8.5rem)] lg:h-[calc(100vh-9rem)] overflow-y-scroll w-full space-y-2 no-scrollbar">
+    <div className="md:h-[calc(100vh-5rem)] lg:px-0 px-4 h-[calc(100vh-8.5rem)] lg:h-[calc(100vh-9rem)] overflow-y-scroll w-full space-y-2 no-scrollbar">
       <div className="lg:h-2 h-16"></div>
       <div className="h-96 w-full py-2">
         <div

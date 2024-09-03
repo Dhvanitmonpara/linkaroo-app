@@ -15,7 +15,7 @@ const ProfileCard = () => {
   const { toggleModal, setModalContent } = useMethodStore();
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="w-full dark:text-white py-2 px-6 rounded-md focus:outline-none">
+      <DropdownMenuTrigger className="!w-14 dark:text-white flex justify-center items-center rounded-md focus:outline-none">
         <img
           className="rounded-full h-10 w-10 object-cover border-zinc-700 border-2 hover:border-zinc-200 transition-colors"
           src={profile.avatarImage}

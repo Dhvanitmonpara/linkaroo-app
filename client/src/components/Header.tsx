@@ -43,7 +43,7 @@ const Header = () => {
 
   return (
     <>
-      <nav className="lg:h-20 h-20 lg:py-5 pt-4 pb-[1rem] flex justify-between items-center space-x-2 px-5 lg:px-32 border-b-[1px] border-zinc-600 select-none">
+      <nav className="lg:h-20 h-20 lg:py-5 pt-4 pb-[1rem] flex justify-between items-center space-x-2 px-5 lg:px-20 border-b-[1px] border-zinc-600 select-none">
         <Link
           to={"/"}
           className="text-zinc-300 transition-colors cursor-pointer text-2xl font-helvetica font-semibold hover:text-white flex space-x-2 justify-center items-center"
@@ -56,20 +56,6 @@ const Header = () => {
           />
           <span className="hidden sm:inline">Linkaroo</span>
         </Link>
-        <div className="text-zinc-400 md:flex hidden space-x-7 font-semibold">
-          <span className="hover:text-zinc-100 cursor-pointer transition-colors">
-            Home
-          </span>
-          <span className="hover:text-zinc-100 cursor-pointer transition-colors">
-            Menu
-          </span>
-          <span className="hover:text-zinc-100 cursor-pointer transition-colors">
-            Pinned
-          </span>
-          <span className="hover:text-zinc-100 cursor-pointer transition-colors">
-            Docs
-          </span>
-        </div>
         <div className="lg:h-20 h-[4.5rem] lg:py-5 pt-4 pb-[1rem] flex space-x-2 md:w-2/5">
           <Input
             onClick={() => setOpen(true)}
@@ -95,7 +81,8 @@ const Header = () => {
                   );
                 }}
               >
-                List
+                <IoMdAdd />
+                <span className="pl-2">List</span>
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => {
@@ -106,7 +93,7 @@ const Header = () => {
                   );
                 }}
               >
-                Doc
+                <IoMdAdd /> <span className="pl-2">Doc</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -143,8 +130,22 @@ const Header = () => {
             </PopoverContent>
           </Popover>
         </div>
-        <div className="hidden lg:inline-block">
-          <ProfileCard />
+        <div className="text-zinc-400 md:flex justify-center items-center hidden space-x-7 font-semibold">
+          <span className="hover:text-zinc-100 cursor-pointer transition-colors">
+            Home
+          </span>
+          <span className="hover:text-zinc-100 cursor-pointer transition-colors">
+            Menu
+          </span>
+          <span className="hover:text-zinc-100 cursor-pointer transition-colors">
+            Pinned
+          </span>
+          <span className="hover:text-zinc-100 cursor-pointer transition-colors">
+            Docs
+          </span>
+          <div className="hidden lg:inline-block">
+            <ProfileCard />
+          </div>
         </div>
       </nav>
       <CommandMenu open={open} setOpen={setOpen} />

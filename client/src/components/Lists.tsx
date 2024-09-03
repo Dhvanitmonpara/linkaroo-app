@@ -7,12 +7,14 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { IoMdAdd } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
+import { CreateListForm } from "./Forms";
 
 const Lists = () => {
   const [loading, setLoading] = useState(true);
   const { setLists, lists } = useListStore();
-  const { toggleModal } = useMethodStore();
+  const { toggleModal, setModalContent } = useMethodStore();
   const { profile } = useProfileStore();
   const { theme, font } = profile.profile;
   const navigate = useNavigate();
@@ -62,6 +64,18 @@ const Lists = () => {
     <>
       <div className="col-span-2 relative lg:px-0 px-4 space-y-3 overflow-y-scroll no-scrollbar h-[calc(100vh-4.5rem)] lg:h-[calc(100vh-5rem)]">
         <div className="h-2"></div>
+        <div
+          onClick={() => {
+            setModalContent(
+              <CreateListForm toggleModal={toggleModal} theme={theme} />
+            );
+            toggleModal(true);
+          }}
+          className="h-11 w-full p-4 flex justify-start items-center space-x-2 border-[1px] text-zinc-300 md:text-zinc-400 md:dark:bg-zinc-800 dark:hover:bg-zinc-600 dark:text-white md:border-2 md:dark:border-zinc-700 md:border-zinc-200 hover:bg-zinc-200 rounded-sm transition-colors cursor-pointer"
+        >
+          <IoMdAdd />
+          <span>Create List</span>
+        </div>
         {lists.map((list, index) => (
           <ListCard
             key={index}
