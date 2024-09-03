@@ -56,11 +56,11 @@ const Docs = () => {
         }
       }
     })();
-  }, [location, setDocs, setCurrentListItem]);
+  }, [lists, currentCardColor, setDocs, setCurrentListItem]);
 
   if (loading) {
     return (
-      <div className="md:h-[calc(100vh-5rem)] h-[calc(100vh-8.5rem)] lg:h-[calc(100vh-9rem)] overflow-y-scroll w-full space-y-2 no-scrollbar">
+      <div className="md:h-[calc(100vh-5rem)] h-[calc(100vh-8rem)] lg:h-[calc(100vh-4.5rem)] overflow-y-scroll w-full space-y-2 no-scrollbar">
         <div className="dark:text-white h-full flex justify-center items-center">
           <Loader2 className="animate-spin" />
         </div>
@@ -77,7 +77,7 @@ const Docs = () => {
   if (docs.length == 0) {
     return (
       <div
-        className={`md:h-[calc(100vh-5rem)] select-none h-[calc(100vh-8.5rem)] lg:h-[calc(100vh-9rem)] overflow-y-hidden w-full space-y-2 no-scrollbar ${font}`}
+        className={`md:h-[calc(100vh-5rem)] select-none h-[calc(100vh-8rem)] lg:h-[calc(100vh-4.5rem)] overflow-y-hidden w-full space-y-2 no-scrollbar ${font}`}
       >
         <div className="h-48 w-full py-2">
           <div
@@ -115,8 +115,8 @@ const Docs = () => {
   }
 
   return (
-    <div className="md:h-[calc(100vh-5rem)] lg:px-0 px-4 h-[calc(100vh-8.5rem)] lg:h-[calc(100vh-9rem)] overflow-y-scroll w-full space-y-2 no-scrollbar">
-      <div className="lg:h-2 h-16"></div>
+    <div className="md:h-[calc(100vh-5rem)] lg:px-0 px-4 h-[calc(100vh-8rem)] lg:h-[calc(100vh-4.5rem)] overflow-y-scroll w-full space-y-2 no-scrollbar">
+      <div className="lg:h-2"></div>
       <div className="h-96 w-full py-2">
         <div
           className="group h-3/6 w-full relative overflow-hidden rounded-t-md"
@@ -158,6 +158,7 @@ const Docs = () => {
         {docs?.map((doc) => (
           <DocCard
             key={doc._id}
+            id={doc._id}
             title={doc.title}
             color={theme == "black" ? "bg-black" : currentCardColor}
             link={doc.link}

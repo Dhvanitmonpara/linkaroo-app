@@ -5,6 +5,7 @@ import useMethodStore from "@/store/MethodStore";
 import { useMediaQuery } from "react-responsive";
 
 type DocCardProps = {
+  id: string;
   title: string;
   color: colorOptions;
   link: string;
@@ -12,7 +13,7 @@ type DocCardProps = {
   toggleModal: (isOpen: boolean) => void;
 };
 
-const DocCard = ({ title, color, link, currentListId, toggleModal }: DocCardProps) => {
+const DocCard = ({id, title, color, link, currentListId, toggleModal }: DocCardProps) => {
   const navigate = useNavigate();
   const { setModalContent, setPrevPath } = useMethodStore();
   const isSmallScreen = useMediaQuery({ query: "(max-width: 1024px)" });
@@ -21,10 +22,10 @@ const DocCard = ({ title, color, link, currentListId, toggleModal }: DocCardProp
     toggleModal(true);
     e.stopPropagation();
     setPrevPath(location.pathname);
-    if (location.pathname.includes("/doc")) {
-      navigate(`/lists/${currentListId}/doc?docid=${title}`);
+    if (location.pathname.includes("/docs")) {
+      navigate(`/lists/${currentListId}/docs/${id}`);
     } else {
-      navigate(`doc?docid=${title}`);
+      navigate(`docs/${id}`);
     }
     setModalContent(<div className="text-5xl text-white">Hello</div>);
   };
@@ -47,10 +48,10 @@ const DocCard = ({ title, color, link, currentListId, toggleModal }: DocCardProp
           if (isSmallScreen) {
             openModal(e);
           } else {
-            if (location.pathname.includes("/doc")) {
-              navigate(`/lists/${currentListId}/doc?docid=${title}`);
+            if (location.pathname.includes("/docs")) {
+              navigate(`/lists/${currentListId}/docs/${id}`);
             } else {
-              navigate(`doc?docid=${title}`);
+              navigate(`docs/${id}`);
             }
           }
         }}

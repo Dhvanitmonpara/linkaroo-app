@@ -70,7 +70,7 @@ const LoginPage = () => {
       });
 
       addProfile(currentUser.data.data);
-      isSmallScreen ? navigate("/#list") : navigate("/");
+      isSmallScreen ? navigate("/list") : navigate("/");
 
     } catch (err) {
       const errorMsg = getErrorFromAxios(err as AxiosError);

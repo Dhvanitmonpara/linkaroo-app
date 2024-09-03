@@ -25,6 +25,7 @@ const RouterSetup: React.FC = () => {
           <Route path="/" element={<App />}>
             <Route path="" element={<HomePage />} />
             <Route path="/lists/:listId" element={<Docs />} />
+            <Route path="/lists/:listId/docs/:docId" element={<Docs />} />
             <Route path="/list" element={<Lists />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
@@ -49,7 +50,7 @@ const RouterSetup: React.FC = () => {
             />
             <Route path="/list" element={<HomePage />} />
             <Route path="/lists/:listId" element={<HomePage />} />
-            <Route path="/lists/:listId/doc" element={<HomePage />} />
+            <Route path="/lists/:listId/docs/:docId" element={<HomePage />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         )
