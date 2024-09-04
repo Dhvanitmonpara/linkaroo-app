@@ -12,7 +12,7 @@ type EmailVerificationProps = {
 
 const EmailVerification = ({ otp, updateFields }: EmailVerificationProps) => {
   return (
-    <div className="h-4/5 flex flex-col space-y-6 w-96 justify-center items-center">
+    <>
       <InputOTP maxLength={6} value={otp} onChange={(e) => updateFields({ otp: e })}>
         <InputOTPGroup>
           <InputOTPSlot index={0} />
@@ -26,7 +26,7 @@ const EmailVerification = ({ otp, updateFields }: EmailVerificationProps) => {
           <InputOTPSlot index={5} />
         </InputOTPGroup>
       </InputOTP>
-    </div>
+    </>
   );
 };
 

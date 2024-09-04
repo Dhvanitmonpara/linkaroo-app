@@ -16,7 +16,7 @@ const ProfileSetup = ({
   updateFields,
 }: ProfileSetupProps) => {
   return (
-    <div className="h-full flex flex-col space-y-6 w-96 justify-center items-center">
+    <>
       <div className="flex space-x-2">
         <div className="w-full space-y-2">
           <label htmlFor="first-name">First name</label>
@@ -54,7 +54,6 @@ const ProfileSetup = ({
           value={username}
         />
       </div>
-
       <div className="w-full space-y-2">
         <label htmlFor="avatar">Avatar</label>
         <Input
@@ -66,7 +65,7 @@ const ProfileSetup = ({
           value={avatarImage}
         />
       </div>
-    </div>
+    </>
   );
 };
 

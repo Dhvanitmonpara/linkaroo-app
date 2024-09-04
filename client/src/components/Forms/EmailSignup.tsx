@@ -18,7 +18,7 @@ const EmailSignup = ({
 }: EmailSignupProps) => {
   const [isPasswordShowing, setIsPasswordShowing] = useState(false);
   return (
-    <div className="h-full flex flex-col space-y-6 w-96 justify-center items-center">
+    <>
       <div className="w-full space-y-2">
         <label htmlFor="email">Email</label>
         <Input
@@ -32,7 +32,7 @@ const EmailSignup = ({
           autoFocus
         />
       </div>
-      <div className="w-full space-y-2 pb-4">
+      <div className="w-full space-y-2">
         <label htmlFor="password">Password</label>
         <div className="w-full flex relative">
           <Input
@@ -55,7 +55,7 @@ const EmailSignup = ({
           </div>
         </div>
       </div>
-      <div className="w-full space-y-2 pb-4">
+      <div className="w-full space-y-2">
         <label htmlFor="confirm-password">Confirm password</label>
         <div className="w-full flex relative">
           <Input
@@ -77,7 +77,7 @@ const EmailSignup = ({
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
