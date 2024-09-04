@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/input-otp";
 
 type EmailVerificationProps = {
-  otp: string;
+  otp?: string;
   updateFields: (fields: Partial<EmailVerificationProps>) => void;
 };
 

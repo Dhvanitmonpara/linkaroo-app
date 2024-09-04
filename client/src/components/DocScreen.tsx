@@ -18,7 +18,6 @@ const DocScreen = () => {
   const {theme} = useProfileStore().profile.profile
 
   const cardId = location.split("/").slice(-1)[0]
-  console.log(cardId)
   useEffect(() => {
     try {
       setLoading(true)

@@ -1,4 +1,4 @@
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import useProfileStore from "../store/profileStore.js";
 import { Button } from "@/components/ui/button.js";
 import { Link, useNavigate } from "react-router-dom";
@@ -20,8 +20,8 @@ type SignupFormData = {
   email: string;
   password: string;
   confirmPassword: string;
-  avatarImage?: string;
-  otp: string;
+  avatarImage?: File;
+  otp?: string;
 };
 
 const initialData = {
@@ -31,7 +31,6 @@ const initialData = {
   email: "",
   password: "",
   confirmPassword: "",
-  avatarImage: "",
   otp: "",
 };
 
@@ -39,7 +38,7 @@ const SignupPage = () => {
   const { addProfile } = useProfileStore();
   const [error, setError] = useState<null | string>(null);
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState<SignupFormData>(initialData);
 
   const updateFields = (fields: Partial<SignupFormData>) => {
     setData((prev) => ({ ...prev, ...fields }));
@@ -58,15 +57,35 @@ const SignupPage = () => {
       <EmailVerification {...data} updateFields={updateFields} />,
     ]);
 
-  const userLogin = async () => {
+  const userRegister = async () => {
     try {
       setLoading(true);
       setError(null);
+
+      const mailResponse: AxiosResponse = await axios.post(
+        `${import.meta.env.VITE_SERVER_API_URL}/users/otp`,
+        {
+          email: data.email,
+        },
+        { withCredentials: true }
+      );
+
+      console.log(mailResponse.data)
+
+      if (mailResponse.data !== data.otp) {
+        setError("Invalid OTP code");
+        setLoading(false);
+        return;
+      }
 
       const userCredentials = {
         password: data.password,
         email: "",
         username: "",
+        fullName: data.lastName
+          ? data.firstName + " " + data.lastName
+          : data.firstName,
+        avatarImage: data.avatarImage,
       };
 
       if (emailReg.test(data.email) && usernameReg.test(data.username)) {
@@ -80,7 +99,8 @@ const SignupPage = () => {
 
       const response = await axios.post(
         `${import.meta.env.VITE_SERVER_API_URL}/users/signup`,
-        userCredentials
+        userCredentials,
+        {withCredentials: true}
       );
 
       if (response?.data) {
@@ -99,15 +119,12 @@ const SignupPage = () => {
 
   const submitHandler = (e: FormEvent) => {
     e.preventDefault();
-    console.log(data.password);
-    console.log(data.confirmPassword);
     if (data.password !== data.confirmPassword) {
       toast.error("Passwords do not match");
       return;
     }
     if (!isLastStep) return next();
-    console.log(data.otp);
-    userLogin();
+    userRegister();
   };
 
   return (
@@ -118,7 +135,7 @@ const SignupPage = () => {
           stepIndex={currentStepIndex}
         />
         <span className="absolute top-0 right-10 text-sm">
-         {currentStepIndex + 1} / {steps.length}
+          {currentStepIndex + 1} / {steps.length}
         </span>
         <h1 className="font-semibold text-4xl pt-5">Signup to Linkaroo</h1>
         <form

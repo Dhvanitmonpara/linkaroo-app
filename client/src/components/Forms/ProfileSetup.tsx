@@ -4,7 +4,7 @@ type ProfileSetupProps = {
   firstName: string;
   lastName: string;
   username: string;
-  avatarImage: string;
+  avatarImage?: File;
   updateFields: (fields: Partial<ProfileSetupProps>) => void;
 };
 
@@ -12,7 +12,6 @@ const ProfileSetup = ({
   firstName,
   lastName,
   username,
-  avatarImage,
   updateFields,
 }: ProfileSetupProps) => {
   return (
@@ -59,10 +58,10 @@ const ProfileSetup = ({
         <Input
           id="avatar"
           type="file"
-          placeholder="Enter Username"
           className="bg-slate-800 text-white"
-          onChange={(e) => updateFields({ avatarImage: e.target.value })}
-          value={avatarImage}
+          onChange={(e) =>
+            updateFields({ avatarImage: e.target.files?.[0] })
+          }
         />
       </div>
     </>
