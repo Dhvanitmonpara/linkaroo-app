@@ -1,6 +1,15 @@
 import nodemailer from "nodemailer";
 
-// Utility function to generate a random OTP of a given length
+const transporter = nodemailer.createTransport({
+  host: "smtp.ethereal.email",
+  port: Number(process.env.NODEMAILER_PORT) || 465,
+  secure: Boolean(process.env.NODEMAILER_SECURITY),
+  auth: {
+    user: "maddison53@ethereal.email",
+    pass: process.env.NODEMAILER_LESS_SECURE_PASS,
+  },
+});
+
 const generateOtp = (length = 6) => {
   const digits = "0123456789";
   let otp = "";
@@ -10,21 +19,8 @@ const generateOtp = (length = 6) => {
   return otp;
 };
 
-const sendMail = async (
-  user,
-  isOtpMail = false
-) => {
+const sendMail = async (user, isOtpMail = false) => {
   try {
-    const transporter = nodemailer.createTransport({
-      host: "smtp.ethereal.email",
-      port: Number(import.meta.env.VITE_NODEMAILER_PORT) || 465,
-      secure: Boolean(import.meta.env.VITE_NODEMAILER_SECURITY),
-      auth: {
-        user: "maddison53@ethereal.email",
-        pass: import.meta.env.VITE_NODEMAILER_LESS_SECURE_PASS,
-      },
-    });
-
     // Generate OTP if it's an OTP mail
     const otpCode = isOtpMail ? generateOtp() : undefined;
 
@@ -45,6 +41,7 @@ const sendMail = async (
       html,
     });
 
+    console.log(info)
     return {
       success: true,
       messageId: info.messageId,

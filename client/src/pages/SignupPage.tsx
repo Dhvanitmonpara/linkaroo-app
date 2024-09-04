@@ -1,9 +1,8 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosError } from "axios";
 import useProfileStore from "../store/profileStore.js";
 import { Button } from "@/components/ui/button.js";
 import { Link, useNavigate } from "react-router-dom";
 import { FormEvent, useState } from "react";
-import getErrorFromAxios from "@/utils/getErrorFromAxios.js";
 import { Loader2 } from "lucide-react";
 import { Stepper } from "@/components/index.js";
 import { IoArrowBack } from "react-icons/io5";
@@ -12,6 +11,7 @@ import EmailSignup from "@/components/Forms/EmailSignup.js";
 import ProfileSetup from "@/components/Forms/ProfileSetup.js";
 import EmailVerification from "@/components/Forms/EmailVerification.js";
 import toast from "react-hot-toast";
+import { handleAxiosError } from "@/utils/handlerAxiosError.js";
 
 type SignupFormData = {
   firstName: string;
@@ -21,7 +21,7 @@ type SignupFormData = {
   password: string;
   confirmPassword: string;
   avatarImage?: File;
-  otp?: string;
+  isOtpVerified?: boolean;
 };
 
 const initialData = {
@@ -31,12 +31,11 @@ const initialData = {
   email: "",
   password: "",
   confirmPassword: "",
-  otp: "",
+  isOtpVerified: false,
 };
 
 const SignupPage = () => {
   const { addProfile } = useProfileStore();
-  const [error, setError] = useState<null | string>(null);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<SignupFormData>(initialData);
 
@@ -60,22 +59,9 @@ const SignupPage = () => {
   const userRegister = async () => {
     try {
       setLoading(true);
-      setError(null);
 
-      const mailResponse: AxiosResponse = await axios.post(
-        `${import.meta.env.VITE_SERVER_API_URL}/users/otp`,
-        {
-          email: data.email,
-        },
-        { withCredentials: true }
-      );
-
-      console.log(mailResponse.data)
-
-      if (mailResponse.data !== data.otp) {
-        setError("Invalid OTP code");
-        setLoading(false);
-        return;
+      if(!data.isOtpVerified){
+        throw new Error("Please verify your email")
       }
 
       const userCredentials = {
@@ -92,7 +78,7 @@ const SignupPage = () => {
         userCredentials.email = data.email;
         userCredentials.username = data.username;
       } else {
-        setError("Invalid email or username");
+        toast.error("Invalid email or username");
         setLoading(false);
         return;
       }
@@ -100,7 +86,7 @@ const SignupPage = () => {
       const response = await axios.post(
         `${import.meta.env.VITE_SERVER_API_URL}/users/signup`,
         userCredentials,
-        {withCredentials: true}
+        { withCredentials: true }
       );
 
       if (response?.data) {
@@ -108,10 +94,7 @@ const SignupPage = () => {
         navigate("/");
       }
     } catch (err) {
-      const errorMsg = getErrorFromAxios(err as AxiosError);
-      if (errorMsg !== undefined) {
-        setError(errorMsg);
-      }
+      handleAxiosError(err as AxiosError, navigate);
     } finally {
       setLoading(false);
     }
@@ -177,8 +160,6 @@ const SignupPage = () => {
             >
               Login
             </Link>
-            <br />
-            {error && <span className="text-red-500">{error}</span>}
           </p>
         </form>
       </div>
