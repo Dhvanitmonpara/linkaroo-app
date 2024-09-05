@@ -49,19 +49,27 @@ const SignupPage = () => {
     /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
   const usernameReg = /[a-zA-Z][a-zA-Z0-9-_]{3,32}/;
 
-  const { steps, step, currentStepIndex, isLastStep, isFirstStep, next, back } =
-    useMultistepForm([
-      <EmailSignup {...data} updateFields={updateFields} />,
-      <ProfileSetup {...data} updateFields={updateFields} />,
-      <EmailVerification {...data} updateFields={updateFields} />,
-    ]);
+  const {
+    steps,
+    step,
+    currentStepIndex,
+    isLastStep,
+    isFirstStep,
+    next,
+    back,
+    goTo,
+  } = useMultistepForm([
+    <EmailSignup {...data} updateFields={updateFields} />,
+    <ProfileSetup {...data} updateFields={updateFields} />,
+    <EmailVerification {...data} updateFields={updateFields} />,
+  ]);
 
   const userRegister = async () => {
     try {
       setLoading(true);
 
-      if(!data.isOtpVerified){
-        throw new Error("Please verify your email")
+      if (!data.isOtpVerified) {
+        throw new Error("Please verify your email");
       }
 
       const userCredentials = {
@@ -136,6 +144,20 @@ const SignupPage = () => {
               <IoArrowBack />
               <span>Back</span>
             </Button>
+          )}
+          {currentStepIndex === 2 && (
+            <p className="text-sm text-foreground/60 text-center">
+              If the email address is incorrect,{" "}
+              <span
+                onClick={() => {
+                  goTo(0);
+                }}
+                className="text-blue-500 hover:underline cursor-pointer"
+              >
+                click here
+              </span>{" "}
+              to change it.
+            </p>
           )}
           {loading ? (
             <Button

@@ -34,10 +34,14 @@ const EmailVerification = ({ email, updateFields }: EmailVerificationProps) => {
         { withCredentials: true }
       );
       setClientOtp(mailResponse.data.otp);
+      setTimeout(() => {
+        setClientOtp("");
+      }, 60000);
     } catch (error) {
       console.error("Error sending OTP:", error);
     }
   };
+
 
   const handleResendOTP = () => {
     setTimeLeft(60);
@@ -94,13 +98,6 @@ const EmailVerification = ({ email, updateFields }: EmailVerificationProps) => {
           <InputOTPSlot index={5} />
         </InputOTPGroup>
       </InputOTP>
-      <p className="text-sm text-foreground/60 text-center">
-        If the email address is incorrect,{" "}
-        <span className="text-blue-500 hover:underline cursor-pointer">
-          click here
-        </span>{" "}
-        to change it.
-      </p>
     </>
   );
 };
