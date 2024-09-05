@@ -1,12 +1,12 @@
 import nodemailer from "nodemailer";
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465, // For TLS
-  secure: true, // Use TLS
+  service: "gmail",
+  port: 465,
+  secure: true,
   auth: {
     user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_LESS_SECURE_PASS
+    pass: process.env.GMAIL_APP_PASSWORD,
   },
   tls: {
     rejectUnauthorized: false,
@@ -26,16 +26,16 @@ const sendMail = async (user, isOtpMail = false) => {
   try {
     // Generate OTP if it's an OTP mail
     const otpCode = isOtpMail ? generateOtp() : undefined;
-
     // Customize the email content based on whether it's an OTP mail
     const subject = isOtpMail ? "Your OTP Code" : "Hello ✔";
     const text = isOtpMail
-      ? `Your OTP code is ${otpCode}. It will expire in 10 minutes.`
-      : "Hello world?";
+    ? `Your OTP code is ${otpCode}. It will expire in 10 minutes.`
+    : "Hello world?";
     const html = isOtpMail
-      ? `<p>Your OTP code is <b>${otpCode}</b>. It will expire in 10 minutes.</p>`
-      : "<b>Hello world?</b>";
-
+    ? `<p>Your OTP code is <b>${otpCode}</b>. It will expire in 10 minutes.</p>`
+    : "<b>Hello world?</b>";
+    
+    console.log("sending email")
     // Send email
     const info = await transporter.sendMail({
       from: `"Linkaroo By Ascedium" <${process.env.GMAIL_USER}>`,
@@ -45,7 +45,6 @@ const sendMail = async (user, isOtpMail = false) => {
       html,
     });
 
-    console.log(info);
     return {
       success: true,
       messageId: info.messageId,

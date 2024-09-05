@@ -380,11 +380,11 @@ const searchUser = asyncHandler(async (req, res) => {
         ))
 })
 
-const sendOtp = asyncHandler(async (req, res, next) => {
+const sendOtp = asyncHandler(async (req, res) => {
     const { email } = req.body;
 
     if (!email) {
-        return next(new ApiError(400, "Email is required"));
+        return res.status(400).json({ message: "Email is required" });
     }
 
     try {
@@ -392,15 +392,19 @@ const sendOtp = asyncHandler(async (req, res, next) => {
 
         if (!mailResponse.success) {
             console.error("Failed to send OTP:", mailResponse.error);
-            throw new ApiError(500, mailResponse.error || "Failed to send OTP");
+            return res.status(500).json({ message: mailResponse.error || "Failed to send OTP" });
         }
 
-        return res.status(200).json(
-            new ApiResponse(200, { messageId: mailResponse.messageId }, "OTP sent successfully")
-        );
+        return res.status(200).json({
+            messageId: mailResponse.messageId,
+            message: "OTP sent successfully"
+        });
     } catch (error) {
-        console.error("Error in sendOtp:", error);
-        return next(new ApiError(500, "Failed to send OTP due to server error"));
+        console.error("Error in sendOtp:", error.message);
+        return res.status(500).json({
+            message: "Failed to send OTP due to server error",
+            error: error.message
+        });
     }
 });
 

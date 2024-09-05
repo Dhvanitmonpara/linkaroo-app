@@ -14,7 +14,8 @@ type EmailVerificationProps = {
 };
 
 const EmailVerification = ({ email, updateFields }: EmailVerificationProps) => {
-  const [timeLeft, setTimeLeft] = useState(0); // Timer for requesting a new OTP
+  const [timeLeft, setTimeLeft] = useState(60);
+  const [clientOtp, setClientOtp] = useState("");
   const [otp, setOtp] = useState("");
 
   useEffect(() => {
@@ -31,44 +32,26 @@ const EmailVerification = ({ email, updateFields }: EmailVerificationProps) => {
         { email: email },
         { withCredentials: true }
       );
-      console.log("OTP sent:", mailResponse);
+      setClientOtp(mailResponse.data.otp);
     } catch (error) {
       console.error("Error sending OTP:", error);
     }
   };
 
-  const verifyOtp = async () => {
-    try {
-      const verificationResponse: AxiosResponse = await axios.post(
-        `${import.meta.env.VITE_SERVER_API_URL}/users/verify-otp`,
-        { email, otp },
-        { withCredentials: true }
-      );
-
-      if (verificationResponse.data.success) {
-        updateFields({ isOtpVerified: true });
-        console.log("OTP verified");
-      } else {
-        console.error("OTP verification failed:", verificationResponse.data.message);
-      }
-    } catch (error) {
-      console.error("Error verifying OTP:", error);
-    }
-  };
-
   const handleResendOTP = () => {
-    console.log("Resending OTP...");
     setTimeLeft(60);
     sendOtp();
   };
 
   useEffect(() => {
-    sendOtp(); // Initial OTP send
+    sendOtp(); 
   }, []);
 
   useEffect(() => {
     if (otp.length === 6) {
-      verifyOtp();
+      if(otp === clientOtp) {
+        updateFields({ isOtpVerified: true });
+      }
     }
   }, [otp]);
 
@@ -93,7 +76,7 @@ const EmailVerification = ({ email, updateFields }: EmailVerificationProps) => {
       </p>
       <InputOTP maxLength={6} value={otp} onChange={setOtp}>
         <InputOTPGroup>
-          <InputOTPSlot index={0} />
+          <InputOTPSlot autoFocus index={0} />
           <InputOTPSlot index={1} />
           <InputOTPSlot index={2} />
         </InputOTPGroup>

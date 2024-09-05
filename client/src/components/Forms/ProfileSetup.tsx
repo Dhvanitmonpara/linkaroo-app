@@ -27,6 +27,7 @@ const ProfileSetup = ({
             value={firstName}
             onChange={(e) => updateFields({ firstName: e.target.value })}
             required
+            autoFocus
           />
         </div>
         <div className="w-full space-y-2">
