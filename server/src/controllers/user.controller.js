@@ -380,29 +380,30 @@ const searchUser = asyncHandler(async (req, res) => {
         ))
 })
 
-const sendOtp = asyncHandler(async (req, res) => {
+const sendOtp = asyncHandler(async (req, res, next) => {
+    const { email } = req.body;
 
-    const { email } = req.body
-
-    if(!email) {
-        throw new ApiError(400, "Email is required")
+    if (!email) {
+        return next(new ApiError(400, "Email is required"));
     }
 
-    const mailResponse = await sendMail(email, true);
+    try {
+        const mailResponse = await sendMail(email, true);
 
-    if (!mailResponse) {
-        throw new ApiError(500, "Failed to send OTP")        
+        if (!mailResponse.success) {
+            console.error("Failed to send OTP:", mailResponse.error);
+            throw new ApiError(500, mailResponse.error || "Failed to send OTP");
+        }
+
+        return res.status(200).json(
+            new ApiResponse(200, { messageId: mailResponse.messageId }, "OTP sent successfully")
+        );
+    } catch (error) {
+        console.error("Error in sendOtp:", error);
+        return next(new ApiError(500, "Failed to send OTP due to server error"));
     }
+});
 
-    return res
-    .status(200)
-    .json(new ApiResponse(
-        200,
-        mailResponse,
-        "OTP sent successfully"
-    ))
-
-})
 
 export {
     registerUser,

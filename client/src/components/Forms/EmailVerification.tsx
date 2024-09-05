@@ -13,42 +13,64 @@ type EmailVerificationProps = {
   updateFields: (fields: Partial<EmailVerificationProps>) => void;
 };
 
-const EmailVerification = ({
-  email,
-  updateFields,
-}: EmailVerificationProps) => {
-  const [timeLeft, setTimeLeft] = useState(60); // Timer for requesting a new OTP
+const EmailVerification = ({ email, updateFields }: EmailVerificationProps) => {
+  const [timeLeft, setTimeLeft] = useState(0); // Timer for requesting a new OTP
   const [otp, setOtp] = useState("");
 
   useEffect(() => {
-    // Countdown timer for when a new OTP can be requested
     if (timeLeft > 0) {
       const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
       return () => clearTimeout(timer);
     }
   }, [timeLeft]);
 
-  const otpVerification = async () => {
-    const mailResponse: AxiosResponse = await axios.post(
-      `${import.meta.env.VITE_SERVER_API_URL}/users/otp`,
-      {
-        email: email,
-      },
-      { withCredentials: true }
-    );
+  const sendOtp = async () => {
+    try {
+      const mailResponse: AxiosResponse = await axios.post(
+        `${import.meta.env.VITE_SERVER_API_URL}/users/send-otp`,
+        { email: email },
+        { withCredentials: true }
+      );
+      console.log("OTP sent:", mailResponse);
+    } catch (error) {
+      console.error("Error sending OTP:", error);
+    }
+  };
 
-    console.log(mailResponse.data);
+  const verifyOtp = async () => {
+    try {
+      const verificationResponse: AxiosResponse = await axios.post(
+        `${import.meta.env.VITE_SERVER_API_URL}/users/verify-otp`,
+        { email, otp },
+        { withCredentials: true }
+      );
 
-    if (mailResponse.data === otp) {
-      updateFields({ isOtpVerified: true });
-      return;
+      if (verificationResponse.data.success) {
+        updateFields({ isOtpVerified: true });
+        console.log("OTP verified");
+      } else {
+        console.error("OTP verification failed:", verificationResponse.data.message);
+      }
+    } catch (error) {
+      console.error("Error verifying OTP:", error);
     }
   };
 
   const handleResendOTP = () => {
+    console.log("Resending OTP...");
     setTimeLeft(60);
-    otpVerification()
+    sendOtp();
   };
+
+  useEffect(() => {
+    sendOtp(); // Initial OTP send
+  }, []);
+
+  useEffect(() => {
+    if (otp.length === 6) {
+      verifyOtp();
+    }
+  }, [otp]);
 
   return (
     <>
@@ -62,14 +84,14 @@ const EmailVerification = ({
         ) : (
           <span
             className="text-blue-500 hover:underline cursor-pointer"
-            onClick={() => handleResendOTP}
+            onClick={handleResendOTP}
           >
             Resend OTP
           </span>
         )}
         .
       </p>
-      <InputOTP maxLength={6} value={otp} onChange={(e) => setOtp(e)}>
+      <InputOTP maxLength={6} value={otp} onChange={setOtp}>
         <InputOTPGroup>
           <InputOTPSlot index={0} />
           <InputOTPSlot index={1} />

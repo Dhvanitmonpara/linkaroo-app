@@ -1,12 +1,15 @@
 import nodemailer from "nodemailer";
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.ethereal.email",
-  port: Number(process.env.NODEMAILER_PORT) || 465,
-  secure: Boolean(process.env.NODEMAILER_SECURITY),
+  host: "smtp.gmail.com",
+  port: 465, // For TLS
+  secure: true, // Use TLS
   auth: {
-    user: "maddison53@ethereal.email",
-    pass: process.env.NODEMAILER_LESS_SECURE_PASS,
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_LESS_SECURE_PASS
+  },
+  tls: {
+    rejectUnauthorized: false,
   },
 });
 
@@ -33,22 +36,24 @@ const sendMail = async (user, isOtpMail = false) => {
       ? `<p>Your OTP code is <b>${otpCode}</b>. It will expire in 10 minutes.</p>`
       : "<b>Hello world?</b>";
 
+    // Send email
     const info = await transporter.sendMail({
-      from: '"Linkaroo By Ascedium" <ascediumorg@gmail.com>',
+      from: `"Linkaroo By Ascedium" <${process.env.GMAIL_USER}>`,
       to: user,
       subject,
       text,
       html,
     });
 
-    console.log(info)
+    console.log(info);
     return {
       success: true,
       messageId: info.messageId,
       isOtpMail,
-      otpCode
+      otpCode,
     };
   } catch (error) {
+    console.error("Error in sendMail:", error); // Log full error details
     return {
       success: false,
       error: error.message,
