@@ -35,8 +35,6 @@ const sendMail = async (user, isOtpMail = false) => {
     ? `<p>Your OTP code is <b>${otpCode}</b>. It will expire in 10 minutes.</p>`
     : "<b>Hello world?</b>";
     
-    console.log("sending email")
-    // Send email
     const info = await transporter.sendMail({
       from: `"Linkaroo By Ascedium" <${process.env.GMAIL_USER}>`,
       to: user,
@@ -52,7 +50,7 @@ const sendMail = async (user, isOtpMail = false) => {
       otpCode,
     };
   } catch (error) {
-    console.error("Error in sendMail:", error); // Log full error details
+    console.error("Error in sendMail:", error);
     return {
       success: false,
       error: error.message,

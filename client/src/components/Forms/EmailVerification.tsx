@@ -6,6 +6,7 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import axios, { AxiosResponse } from "axios";
+import toast from "react-hot-toast";
 
 type EmailVerificationProps = {
   email: string;
@@ -44,16 +45,22 @@ const EmailVerification = ({ email, updateFields }: EmailVerificationProps) => {
   };
 
   useEffect(() => {
-    sendOtp(); 
-  }, []);
-
-  useEffect(() => {
+    console.log(clientOtp);
+    console.log(otp);
+    console.log(otp.length)
     if (otp.length === 6) {
-      if(otp === clientOtp) {
+      if (otp.toString() === clientOtp.toString()) {
+        toast.success("opt verified");
         updateFields({ isOtpVerified: true });
+      } else {
+        toast.error("wrong otp try again");
       }
     }
   }, [otp]);
+
+  useEffect(() => {
+    sendOtp();
+  }, [email]);
 
   return (
     <>

@@ -397,6 +397,7 @@ const sendOtp = asyncHandler(async (req, res) => {
 
         return res.status(200).json({
             messageId: mailResponse.messageId,
+            otp: mailResponse.otpCode,
             message: "OTP sent successfully"
         });
     } catch (error) {
