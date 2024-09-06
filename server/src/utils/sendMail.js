@@ -26,15 +26,35 @@ const sendMail = async (user, isOtpMail = false) => {
   try {
     // Generate OTP if it's an OTP mail
     const otpCode = isOtpMail ? generateOtp() : undefined;
+
     // Customize the email content based on whether it's an OTP mail
-    const subject = isOtpMail ? "Your OTP Code" : "Hello ✔";
+    const subject = isOtpMail ? "Your OTP Code - Secure Login" : "Welcome to Linkaroo!";
+
     const text = isOtpMail
-    ? `Your OTP code is ${otpCode}. It will expire in 10 minutes.`
-    : "Hello world?";
+      ? `Dear user,\n\nYour OTP code is: ${otpCode}. This code will expire in 1 minute. Please do not share it with anyone for security reasons.\n\nThank you for using Linkaroo!\nBest regards,\nThe Linkaroo Team`
+      : `Hello,\n\nThank you for choosing Linkaroo! We're excited to have you with us.\n\nIf you have any questions, feel free to reach out!\nBest regards,\nThe Linkaroo Team`;
+
     const html = isOtpMail
-    ? `<p>Your OTP code is <b>${otpCode}</b>. It will expire in 10 minutes.</p>`
-    : "<b>Hello world?</b>";
-    
+      ? `
+      <div style="font-family: Arial, sans-serif; padding: 20px; line-height: 1.6;">
+        <h2 style="color: #4CAF50;">Your OTP Code</h2>
+        <p>Dear user,</p>
+        <p>Your <strong>One-Time Password (OTP)</strong> is:</p>
+        <p style="font-size: 1.5em; font-weight: bold; color: #333;">${otpCode}</p>
+        <p>This code will expire in <strong>1 minute</strong>. Please do not share it with anyone for security reasons.</p>
+        <hr style="border: none; border-top: 1px solid #ccc;" />
+        <p style="color: #888;">Thank you for using Linkaroo!</p>
+        <p style="color: #888;">Best regards,<br />The Linkaroo Team</p>
+      </div>`
+      : `
+      <div style="font-family: Arial, sans-serif; padding: 20px; line-height: 1.6;">
+        <h2 style="color: #4CAF50;">Welcome to Linkaroo!</h2>
+        <p>We're excited to have you with us. Linkaroo helps you manage and organize your links easily and securely.</p>
+        <p>If you have any questions or need assistance, feel free to reach out to us anytime.</p>
+        <hr style="border: none; border-top: 1px solid #ccc;" />
+        <p style="color: #888;">Best regards,<br />The Linkaroo Team</p>
+      </div>`;
+
     const info = await transporter.sendMail({
       from: `"Linkaroo By Ascedium" <${process.env.GMAIL_USER}>`,
       to: user,
@@ -58,5 +78,6 @@ const sendMail = async (user, isOtpMail = false) => {
     };
   }
 };
+
 
 export default sendMail;

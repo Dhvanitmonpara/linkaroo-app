@@ -42,7 +42,6 @@ const EmailVerification = ({ email, updateFields }: EmailVerificationProps) => {
     }
   };
 
-
   const handleResendOTP = () => {
     setTimeLeft(60);
     sendOtp();
