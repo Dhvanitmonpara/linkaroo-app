@@ -112,6 +112,7 @@ const SignupPage = () => {
         toast.error("Failed to Register");
         return;
       }
+      console.log(response.data)
 
       const currentUser = await axios({
         method: "GET",

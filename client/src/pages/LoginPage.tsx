@@ -63,13 +63,7 @@ const LoginPage = () => {
         return;
       }
 
-      const currentUser = await axios({
-        method: "GET",
-        url: `${import.meta.env.VITE_SERVER_API_URL}/users/current-user`,
-        withCredentials: true,
-      });
-
-      addProfile(currentUser.data.data);
+      addProfile(response.data.data.user);
       isSmallScreen ? navigate("/list") : navigate("/");
     } catch (err) {
       const errorMsg = getErrorFromAxios(err as AxiosError);
