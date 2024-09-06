@@ -32,6 +32,22 @@ const userSchema = new Schema({
         type: String,
         default: ""
     },
+    coverImage: {
+        type: String,
+        default: ""
+    },
+    theme: {
+        type: String,
+        default: "dark"
+    },
+    font: {
+        type: String,
+
+    },
+    bio: {
+        type: String,
+        trim: true
+    },
     refreshToken: {
         type: String
     }

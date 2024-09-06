@@ -244,40 +244,14 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
 
 const getCurrentUser = asyncHandler(async (req, res) => {
 
-    const userId = req.user._id
-
-    const user = await User.aggregate([
-        {
-            $match: { _id: userId }
-        },
-        {
-            $lookup: {
-                from: "profiles",
-                localField: "_id",
-                foreignField: "userId",
-                as: "profile"
-            }
-        },
-        {
-            $unwind: "$profile"
-        },
-        {
-            $project: {
-                fullName: 1,
-                email: 1,
-                username: 1,
-                avatarImage: 1,
-                profile: 1
-            }
-        }
-    ])
+    const user = await User.findById(req.user._id).select("-password -refreshToken")
 
     if (!user) {
         return res
             .status(200)
             .json(
                 200,
-                profile,
+                user,
                 "Unauthorized request"
             )
     }
@@ -286,7 +260,7 @@ const getCurrentUser = asyncHandler(async (req, res) => {
         .status(200)
         .json(new ApiResponse(
             200,
-            user[0],
+            user,
             "Current user fetched successfully"
         ))
 })
@@ -413,6 +387,186 @@ const sendOtp = asyncHandler(async (req, res) => {
     }
 });
 
+const updateBio = asyncHandler(async (req, res) => {
+
+    const bio = req.body.bio
+
+    if (!bio) {
+        throw new ApiError(400, "Bio is required")
+    }
+
+    const userId = req.user?._id
+
+    const user = await User.findByIdAndUpdate(
+        userId,
+        {
+            $set: {
+                bio
+            }
+        },
+        {
+            new: true
+        }
+    )
+
+    return res
+        .status(200)
+        .json(new ApiResponse(
+            200,
+            user,
+            "Bio updated successfully"
+        ))
+})
+
+const updateUserCoverImage = asyncHandler(async (req, res) => {
+
+    const coverImageLocalPath = req.file?.path
+
+    if (!coverImageLocalPath) {
+        throw new ApiError(400, "Cover image file is missing")
+    }
+
+    const coverImage = await uploadOnCloudinary(coverImageLocalPath)
+
+    if (!coverImage.url) {
+        throw new ApiError(400, "Error while uploading on cover image")
+    }
+
+    // deleting cover image from cloudinary
+
+    const oldImagePath = await User.findById(req.user?._id).$project({ coverImage: 1 })
+
+    const coverImageName = getPublicId(oldImagePath.coverImage)
+
+    if (!coverImageName) {
+        throw new ApiError(500, "Error while extracting image name from image URL",)
+    }
+
+    const response = await deleteFromCloudinary(coverImageName)
+
+    // updating profile in the database
+
+    const user = await User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $set: {
+                coverImage: coverImage.url
+            }
+        },
+        {
+            new: true
+        }
+    ).select("-bio")
+
+    return res
+        .status(200)
+        .json(new ApiResponse(
+            200,
+            {
+                user,
+                deletionResponse: response
+            },
+            "Cover image updated successfully"
+        ))
+})
+
+const uploadUserCoverImage = asyncHandler(async (req, res) => {
+    const coverImageLocalPath = req.file?.path
+
+    if (!coverImageLocalPath) {
+        throw new ApiError(400, "Cover image file is missing")
+    }
+
+    const coverImage = await uploadOnCloudinary(coverImageLocalPath)
+
+    if (!coverImage.url) {
+        throw new ApiError(400, "Error while uploading on cover image")
+    }
+
+    const coverImageURL = coverImage?.url
+
+    const user = await User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $set: {
+                coverImage: coverImageURL
+            }
+        },
+        {
+            new: true
+        }
+    )
+
+    return res
+        .status(200)
+        .json(new ApiResponse(
+            200,
+            {
+                user,
+                coverImageURL
+            },
+            "Cover image uploaded successfully"
+        ))
+})
+
+const toggleTheme = asyncHandler(async (req, res) => {
+
+    const { theme } = req.body
+
+    const userId = req.user?._id
+
+    const user = await User.findByIdAndUpdate(
+        userId,
+        {
+            $set: {
+                theme: theme
+            }
+        },
+        {
+            new: true
+        }
+    ).select("-coverImage -bio")
+
+    return res
+        .status(200)
+        .json(new ApiResponse(
+            200,
+            user,
+            "Theme updated successfully"
+        ))
+
+})
+
+const updateProfileSettings = asyncHandler(async (req, res) => {
+    const { font = "font-mono", theme = "dark" } = req.body    
+
+    const userId = req.user?._id
+
+    const user = await User.findByIdAndUpdate(
+        userId,
+        {
+            $set: {
+                font,
+                theme
+            }
+        },
+        {
+            new: true
+        }
+    ).select("-coverImage -bio")
+
+    if(!user) {
+        throw new ApiError(500, "Failed to update profile settings")
+    }
+
+    return res
+       .status(200)
+       .json(new ApiResponse(
+            200,
+            user,
+            "Profile settings updated successfully"
+        ))
+})
 
 export {
     registerUser,
@@ -424,5 +578,10 @@ export {
     updateAccountDetails,
     updateUserAvatar,
     searchUser,
+    updateBio,
+    updateUserCoverImage,
+    uploadUserCoverImage,
+    toggleTheme,
+    updateProfileSettings,
     sendOtp
 }
