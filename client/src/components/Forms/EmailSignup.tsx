@@ -43,7 +43,6 @@ const EmailSignup = ({
             value={password}
             onChange={(e) => updateFields({ password: e.target.value })}
             required
-            autoFocus
           />
           <div
             className="w-12 absolute right-0 flex justify-center items-center h-full cursor-pointer"

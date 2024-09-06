@@ -16,10 +16,11 @@ import { upload } from "../middlewares/multer.middleware.js";
 
 const router = Router()
 
-router.route("/register").post(
+router.route("/register/avatar").post(
     upload.single("avatar"),
     registerUser
 )
+router.route("/register").post(registerUser)
 router.route("/login").post(loginUser)
 router.route("/send-otp").post(sendOtp)
 

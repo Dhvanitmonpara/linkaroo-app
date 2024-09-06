@@ -12,6 +12,7 @@ import ProfileSetup from "@/components/Forms/ProfileSetup.js";
 import EmailVerification from "@/components/Forms/EmailVerification.js";
 import toast from "react-hot-toast";
 import { handleAxiosError } from "@/utils/handlerAxiosError.js";
+import { useMediaQuery } from "react-responsive";
 
 type SignupFormData = {
   firstName: string;
@@ -38,6 +39,8 @@ const SignupPage = () => {
   const { addProfile } = useProfileStore();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<SignupFormData>(initialData);
+
+  const isSmallScreen = useMediaQuery({ query: "(max-width: 1024px)" });
 
   const updateFields = (fields: Partial<SignupFormData>) => {
     setData((prev) => ({ ...prev, ...fields }));
@@ -91,16 +94,33 @@ const SignupPage = () => {
         return;
       }
 
-      const response = await axios.post(
-        `${import.meta.env.VITE_SERVER_API_URL}/users/signup`,
-        userCredentials,
-        { withCredentials: true }
-      );
+      const response = await axios({
+        method: "POST",
+        url: `${import.meta.env.VITE_SERVER_API_URL}/users/register${
+          userCredentials.avatarImage != undefined ? "/avatar" : ""
+        }`,
+        data: userCredentials,
+        withCredentials: true,
+        headers: {
+          "Access-control-Allow-Origin": import.meta.env
+            .VITE_ACCESS_CONTROL_ORIGIN,
+          "Content-Type": "application/json",
+        },
+      });
 
-      if (response?.data) {
-        addProfile(response.data);
-        navigate("/");
+      if (!response.data.success) {
+        toast.error("Failed to Register");
+        return;
       }
+
+      const currentUser = await axios({
+        method: "GET",
+        url: `${import.meta.env.VITE_SERVER_API_URL}/users/current-user`,
+        withCredentials: true,
+      });
+
+      addProfile(currentUser.data.data);
+      isSmallScreen ? navigate("/list") : navigate("/");
     } catch (err) {
       handleAxiosError(err as AxiosError, navigate);
     } finally {

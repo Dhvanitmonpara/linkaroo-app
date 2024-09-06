@@ -55,7 +55,7 @@ const ProfileSetup = ({
         />
       </div>
       <div className="w-full space-y-2">
-        <label htmlFor="avatar">Avatar</label>
+        <label htmlFor="avatar">Avatar &#40;Optional&#41;</label>
         <Input
           id="avatar"
           type="file"

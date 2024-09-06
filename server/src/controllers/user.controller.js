@@ -62,7 +62,7 @@ const registerUser = asyncHandler(async (req, res) => {
     if (avatarLocalPath) {
         avatar = await uploadOnCloudinary(avatarLocalPath)
     } else {
-        avatar = { url: "" } // update a default avatar image
+        avatar = { url: "https://res.cloudinary.com/df5xtraqr/image/upload/v1725599756/otkudqvvu9p99fmixl9k.jpg" }
     }
 
     const user = await User.create({
@@ -87,8 +87,12 @@ const registerUser = asyncHandler(async (req, res) => {
         throw new ApiError(500, "Failed to create profile")
     }
 
+    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id)
+
     return res
         .status(201)
+        .cookie("accessToken", accessToken, options)
+        .cookie("refreshToken", refreshToken, options)
         .json(
             new ApiResponse(
                 201,

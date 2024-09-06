@@ -58,7 +58,7 @@ const LoginPage = () => {
         },
       });
 
-      if(!response.data.success) {
+      if (!response.data.success) {
         toast.error("Failed to login");
         return;
       }
@@ -71,7 +71,6 @@ const LoginPage = () => {
 
       addProfile(currentUser.data.data);
       isSmallScreen ? navigate("/list") : navigate("/");
-
     } catch (err) {
       const errorMsg = getErrorFromAxios(err as AxiosError);
       if (errorMsg !== undefined) {
