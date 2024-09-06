@@ -1,5 +1,3 @@
-import "./Stepper.css";
-
 type StepperProps = {
   stepIndex: number;
   className?: string;

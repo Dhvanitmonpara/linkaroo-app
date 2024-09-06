@@ -14,6 +14,9 @@ import {
 import useProfileStore from "@/store/profileStore";
 import useMethodStore from "@/store/MethodStore";
 import { CreateDocForm, CreateListForm, SettingsForm } from "../Forms";
+import DrawerMenu from "../DrawerMenu";
+import { Button } from "../ui/button";
+import { DrawerClose } from "../ui/drawer";
 
 export default function HorizontalTabs() {
   const { profile } = useProfileStore();
@@ -41,44 +44,48 @@ export default function HorizontalTabs() {
         <MdHome />
       </label>
 
-      {/* <RadioGroupItem value="create" id="create-tab" className="radio-item" /> */}
-      <DropdownMenu>
-        <DropdownMenuTrigger className="flex justify-center items-center">
-          <label htmlFor="create-tab" className="menu-label !text-3xl !w-auto">
+      <DrawerMenu
+      title="Create"
+        trigger={
+          <label
+            htmlFor="create-tab"
+            className="menu-label !text-3xl bg-transparent !w-auto"
+          >
             <FaPlus />
           </label>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent
-          className={
-            theme !== "light" ? "!bg-black !text-white border-zinc-800" : ""
-          }
-        >
-          <DropdownMenuItem
-            onClick={() => {
-              setPrevPath(location.pathname);
-              toggleModal(true);
-              setModalContent(
-                <CreateListForm toggleModal={toggleModal} theme={theme} />
-              );
-            }}
-          >
-            <IoMdAdd />
-            <span className="pl-2">List</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => {
-              setPrevPath(location.pathname);
-              toggleModal(true);
-              setModalContent(
-                <CreateDocForm toggleModal={toggleModal} theme={theme} />
-              );
-            }}
-          >
-            <IoMdAdd />
-            <span className="pl-2">List</span>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+        }
+      >
+        <div className="w-full px-2 flex flex-col">
+          <DrawerClose>
+            <Button
+              className="w-full flex justify-normal bg-zinc-900 hover:bg-zinc-800 text-zinc-200"
+              onClick={() => {
+                setModalContent(
+                  <CreateListForm theme={theme} toggleModal={toggleModal} />
+                );
+                toggleModal(true);
+              }}
+            >
+              <IoMdAdd />
+              <span className="pl-2">List</span>
+            </Button>
+          </DrawerClose>
+          <DrawerClose>
+            <Button
+              className="w-full flex justify-normal bg-zinc-900 hover:bg-zinc-800 text-zinc-200"
+              onClick={() => {
+                setModalContent(
+                  <CreateDocForm theme={theme} toggleModal={toggleModal} />
+                );
+                toggleModal(true);
+              }}
+            >
+              <IoMdAdd />
+              <span className="pl-2">Card</span>
+            </Button>
+          </DrawerClose>
+        </div>
+      </DrawerMenu>
 
       <RadioGroupItem
         value="notifications"

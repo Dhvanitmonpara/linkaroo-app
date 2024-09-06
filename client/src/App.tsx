@@ -52,7 +52,7 @@ const App = () => {
       try {
         setLists([]);
         setDocs([]);
-        setCurrentListItem(null)
+        setCurrentListItem(null);
 
         const currentUser = await axios({
           method: "GET",
@@ -60,7 +60,7 @@ const App = () => {
           withCredentials: true,
         });
 
-        setProgress(78)
+        setProgress(78);
 
         if (currentUser.data === "Unauthorized request") {
           navigate("/login");
