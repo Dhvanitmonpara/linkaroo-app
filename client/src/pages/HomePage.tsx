@@ -4,7 +4,7 @@ import useProfileStore from "@/store/profileStore";
 
 function App() {
   const { profile } = useProfileStore();
-  const { theme } = profile.profile;
+  const { theme } = profile;
   const checkThemeStatus = theme == "black" ? "!bg-black !text-while" : "";
   const location = useLocation().pathname;
 

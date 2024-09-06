@@ -33,7 +33,7 @@ const AddCollaborator = () => {
   const [isAddNewFunctionActive, setIsAddNewFunctionActive] = useState(false);
 
   const { profile } = useProfileStore();
-  const theme = profile.profile.theme;
+  const theme = profile.theme;
   const navigate = useNavigate();
   const { currentListItem } = useDocStore();
 
