@@ -1,15 +1,15 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import useMethodStore from "./store/MethodStore";
 import useProfileStore from "./store/profileStore";
 import { useMediaQuery } from "react-responsive";
 import axios, { AxiosError } from "axios";
-import getErrorFromAxios from "./utils/getErrorFromAxios";
 import toggleThemeModeAtRootElem from "./utils/toggleThemeMode";
 import { Header, HorizontalTabs, Loading, Modal } from "./components";
 import useListStore from "./store/listStore";
 import useDocStore from "./store/docStore";
+import { handleAxiosError } from "./utils/handlerAxiosError";
 
 const App = () => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -62,36 +62,13 @@ const App = () => {
 
         setProgress(78);
 
-        if (currentUser.data === "Unauthorized request") {
-          navigate("/login");
-          return;
-        }
-
         addProfile(currentUser.data.data);
 
         if (isSmallScreen) {
           navigate("/list");
         }
       } catch (error) {
-        const errorMsg = getErrorFromAxios(error as AxiosError);
-        if (errorMsg === "Unauthorized request") {
-          navigate("/login");
-        } else if (errorMsg !== undefined) {
-          toast.error((t) => (
-            <span className="space-x-3">
-              <span>{errorMsg}</span>
-              <button
-                className="bg-red-500 text-white font-semibold hover:underline h-full w-auto rounded-sm py-1 px-3"
-                onClick={() => {
-                  toast.dismiss(t.id);
-                  navigate("/login");
-                }}
-              >
-                Login again
-              </button>
-            </span>
-          ));
-        }
+        handleAxiosError(error as AxiosError, navigate);
       } finally {
         setLoading(false);
       }
