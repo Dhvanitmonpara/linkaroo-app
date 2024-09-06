@@ -30,7 +30,6 @@ import listRouter from "./routes/list.routes.js"
 //routes declaration
 app.use("/api/v1/healthcheck", healthcheckRouter)
 app.use("/api/v1/users", userRouter)
-app.use("/api/v1/profiles", profileRouter)
 app.use("/api/v1/cards", cardRouter)
 app.use("/api/v1/tags", tagRouter)
 app.use("/api/v1/lists", listRouter)

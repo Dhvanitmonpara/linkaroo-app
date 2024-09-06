@@ -50,7 +50,7 @@ const SettingsForm: React.FC<SettingsFormProps> = ({
       setLoading(true);
 
       const response = await axios.post(
-        `${import.meta.env.VITE_SERVER_API_URL}/profiles/settings/update`,
+        `${import.meta.env.VITE_SERVER_API_URL}/users/settings/update`,
         data,
         { withCredentials: true }
       );
