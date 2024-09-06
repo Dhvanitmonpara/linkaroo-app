@@ -7,8 +7,11 @@ import { uploadOnCloudinary, deleteFromCloudinary } from "../utils/cloudinary.js
 import getPublicId from "../utils/getPublicId.js"
 import sendMail from "../utils/sendMail.js"
 
+const refreshTokenMaxAge =  3600 * 24 * 10 * 1000;
+const accessTokenMaxAge = 3600 * 24 * 1000;
+
 const options = {
-    maxAge: 3600 * 24 * 30,
+    maxAge: accessTokenMaxAge,
     httpOnly: true,
     secure: process.env.HTTP_SECURE_OPTION,
     sameSite: "None",
@@ -91,7 +94,7 @@ const registerUser = asyncHandler(async (req, res) => {
     return res
         .status(201)
         .cookie("accessToken", accessToken, options)
-        .cookie("refreshToken", refreshToken, options)
+        .cookie("refreshToken", refreshToken, {...options, maxAge: refreshTokenMaxAge})
         .json(
             new ApiResponse(
                 201,
@@ -144,7 +147,7 @@ const loginUser = asyncHandler(async (req, res) => {
     return res
         .status(200)
         .cookie("accessToken", accessToken, options)
-        .cookie("refreshToken", refreshToken, options)
+        .cookie("refreshToken", refreshToken, {...options, maxAge: refreshTokenMaxAge})
         .json(
             new ApiResponse(
                 200,
@@ -174,7 +177,7 @@ const logoutUser = asyncHandler(async (req, res) => {
     return res
         .status(200)
         .clearCookie("accessToken", options)
-        .clearCookie("refreshToken", options)
+        .clearCookie("refreshToken", {...options, maxAge: refreshTokenMaxAge})
         .json(new ApiResponse(200, {}, "User logged Out"))
 })
 
