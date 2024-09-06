@@ -22,7 +22,6 @@ app.options('*', cors());  // Handle preflight requests for all routes
 //routes import
 import userRouter from './routes/user.routes.js'
 import cardRouter from "./routes/card.routes.js"
-import profileRouter from "./routes/profile.routes.js"
 import healthcheckRouter from "./routes/healthcheck.routes.js"
 import tagRouter from "./routes/tag.routes.js"
 import listRouter from "./routes/list.routes.js"

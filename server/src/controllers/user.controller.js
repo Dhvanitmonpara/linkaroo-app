@@ -4,7 +4,6 @@ import { User } from "../models/user.model.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
 import jwt from "jsonwebtoken"
 import { uploadOnCloudinary, deleteFromCloudinary } from "../utils/cloudinary.js"
-import { Profile } from "../models/profile.model.js"
 import getPublicId from "../utils/getPublicId.js"
 import sendMail from "../utils/sendMail.js"
 
