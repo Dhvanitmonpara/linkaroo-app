@@ -39,8 +39,8 @@ const SettingsForm: React.FC<SettingsFormProps> = ({
 
   const { control, handleSubmit } = useForm<HandleSettingsType>({
     defaultValues: {
-      theme: profile.profile.theme,
-      font: profile.profile.font,
+      theme: profile.theme,
+      font: profile.font,
     },
   });
 

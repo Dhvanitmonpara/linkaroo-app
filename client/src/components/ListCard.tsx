@@ -60,7 +60,7 @@ const ListCard = ({
     navigate(`/list?listid=${title}`, { replace: true });
     setModalContent(
       <CreateDocForm
-        theme={profile.profile.theme}
+        theme={profile.theme}
         toggleModal={toggleModal}
         listTitle={title}
       />

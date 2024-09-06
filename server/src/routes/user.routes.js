@@ -9,6 +9,11 @@ import {
     updateAccountDetails,
     updateUserAvatar,
     searchUser,
+    updateBio,
+    updateProfileSettings,
+    uploadUserCoverImage,
+    updateUserCoverImage,
+    toggleTheme,
     sendOtp
 } from "../controllers/user.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
@@ -32,5 +37,11 @@ router.route("/current-user").get(verifyJWT, getCurrentUser)
 router.route("/update-account").patch(verifyJWT, updateAccountDetails)
 router.route("/avatar").patch(verifyJWT, upload.single("avatar"), updateUserAvatar)
 router.route("/search").patch(verifyJWT, searchUser)
+router.route("/update-bio").patch(updateBio)
+router.route("/settings/update").post(updateProfileSettings)
+router.route("/cover-image")
+    .post(upload.single("coverImage"), uploadUserCoverImage)
+    .patch(upload.single("coverImage"), updateUserCoverImage)
+router.route("/theme").patch(toggleTheme)
 
 export default router;

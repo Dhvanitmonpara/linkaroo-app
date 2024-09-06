@@ -51,7 +51,7 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
   const { profile, setTags } = useProfileStore();
   const { removeListItem, updateListTags } = useListStore();
   const { setDocs } = useDocStore();
-  const theme = profile.profile.theme;
+  const theme = profile.theme;
   const [loading, setLoading] = useState(false);
   const [saveChangesLoading, setSaveChangesLoading] = useState(false);
   const [checkedTags, setCheckedTags] = useState<checkedTagsType[]>([]);

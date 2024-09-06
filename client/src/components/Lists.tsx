@@ -14,7 +14,7 @@ const Lists = () => {
   const { setLists, lists } = useListStore();
   const { toggleModal } = useMethodStore();
   const { profile } = useProfileStore();
-  const { theme, font } = profile.profile;
+  const { theme, font } = profile;
   const navigate = useNavigate();
 
   useEffect(() => {

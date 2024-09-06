@@ -3,30 +3,24 @@ import { devtools, persist } from "zustand/middleware";
 import { fontOptions, themeType } from "@/lib/types";
 import { fetchedTagType } from "@/lib/types";
 
-type ProfileType = {
-  _id: string;
-  userId: string;
-  coverImage: string;
-  theme: themeType;
-  font: fontOptions;
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
-};
-
 type User = {
   _id: string;
   username: string;
   email: string;
   fullName: string;
   avatarImage: string;
-  profile: ProfileType;
+  coverImage: string;
+  theme: themeType;
+  font: fontOptions;
+  createdAt: string;
+  updatedAt: string;
+  _v: number;
 };
 
 interface ProfileState {
   profile: User;
   addProfile: (profile: User) => void;
-  updateProfile: (updatedProfile: ProfileType) => void;
+  updateProfile: (updatedProfile: User) => void;
   removeProfile: () => void;
   changeTheme: (theme: themeType) => void;
   changeFont: (font: fontOptions) => void;
@@ -44,21 +38,20 @@ const useProfileStore = create<ProfileState>()(
           email: "",
           fullName: "",
           avatarImage: "",
-          profile: {
-            _id: "",
-            userId: "",
-            coverImage: "",
-            theme: "light",
-            font: "font-mono", 
-            createdAt: "",
-            updatedAt: "",
-            __v: 0,
-          },
+          coverImage: "",
+          theme: "light",
+          font: "font-mono",
+          createdAt: "",
+          updatedAt: "",
+          _v: 0,
         },
         addProfile: (profile) => set({ profile }),
         updateProfile: (updatedProfile) =>
           set((state) => ({
-            profile: { ...state.profile, profile: {...state.profile.profile, ...updatedProfile} },
+            profile: {
+              ...state.profile,
+              profile: { ...state.profile, ...updatedProfile },
+            },
           })),
         removeProfile: () =>
           set({
@@ -68,33 +61,29 @@ const useProfileStore = create<ProfileState>()(
               email: "",
               fullName: "",
               avatarImage: "",
-              profile: {
-                _id: "",
-                userId: "",
-                coverImage: "",
-                theme: "light",
-                font: "font-mono",
-                createdAt: "",
-                updatedAt: "",
-                __v: 0,
-              },
+              coverImage: "",
+              theme: "light",
+              font: "font-mono",
+              createdAt: "",
+              updatedAt: "",
+              _v: 0,
             },
           }),
         changeTheme: (theme: themeType) => {
           set((state) => ({
             profile: {
               ...state.profile,
-              profile: { ...state.profile.profile, theme },
+              profile: { ...state.profile, theme },
             },
           }));
         },
         changeFont: (font: fontOptions) => {
-          set(state => ({
+          set((state) => ({
             profile: {
               ...state.profile,
-              profile: {...state.profile.profile, font },
-            }
-          }))
+              profile: { ...state.profile, font },
+            },
+          }));
         },
         tags: null,
         setTags: (tags) => set({ tags }),
@@ -105,4 +94,4 @@ const useProfileStore = create<ProfileState>()(
 );
 
 export default useProfileStore;
-export type { ProfileType, User };
+export type { User };

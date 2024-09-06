@@ -20,7 +20,7 @@ import { DrawerClose } from "../ui/drawer";
 
 export default function HorizontalTabs() {
   const { profile } = useProfileStore();
-  const { theme } = profile.profile;
+  const { theme } = profile;
   const { toggleModal, setModalContent, setPrevPath } = useMethodStore();
 
   const navigate = useNavigate();

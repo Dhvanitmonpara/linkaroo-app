@@ -15,7 +15,7 @@ const DocScreen = () => {
   const navigate = useNavigate()
   const location = useLocation().pathname
   const {currentCardColor} = useMethodStore()
-  const {theme} = useProfileStore().profile.profile
+  const {theme} = useProfileStore().profile
 
   const cardId = location.split("/").slice(-1)[0]
   useEffect(() => {

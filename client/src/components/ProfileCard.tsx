@@ -11,7 +11,7 @@ import useMethodStore from "@/store/MethodStore";
 const ProfileCard = () => {
   const { setPrevPath } = useMethodStore();
   const { profile } = useProfileStore();
-  const theme = profile.profile.theme;
+  const theme = profile.theme;
   const { toggleModal, setModalContent } = useMethodStore();
   return (
     <DropdownMenu>

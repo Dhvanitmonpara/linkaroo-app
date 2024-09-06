@@ -26,7 +26,7 @@ import ProfileCard from "./ProfileCard";
 const Header = () => {
   const { toggleModal, setModalContent, setPrevPath } = useMethodStore();
   const { profile } = useProfileStore();
-  const { theme } = profile.profile;
+  const { theme } = profile;
 
   const [open, setOpen] = useState(false);
 

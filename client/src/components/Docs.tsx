@@ -19,7 +19,7 @@ const Docs = () => {
   const { docs, setDocs, currentListItem, setCurrentListItem } = useDocStore();
   const { lists } = useListStore();
   const { profile } = useProfileStore();
-  const { theme, font } = profile.profile;
+  const { theme, font } = profile;
   const { currentCardColor } = useMethodStore();
   const navigate = useNavigate();
 
