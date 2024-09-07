@@ -102,8 +102,6 @@ const deleteCollaborator = asyncHandler(async (req, res) => {
     if (!userId) {
         throw new ApiError(400, "User ID is required")
     }
-    console.log(list.collaborators)
-
 
     const newCollaborators = list.collaborators.filter(collaborator => (
         (typeof collaborator == "object" ? collaborator.valueOf().toString() : collaborator.toString()) !== userId.toString()

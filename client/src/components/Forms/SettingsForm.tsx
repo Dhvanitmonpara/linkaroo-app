@@ -44,7 +44,7 @@ const SettingsForm: React.FC<SettingsFormProps> = ({
     },
   });
 
-  const handleListCreation = async (data: HandleSettingsType) => {
+  const handleUpdateSettings = async (data: HandleSettingsType) => {
     try {
 
       setLoading(true);
@@ -58,7 +58,7 @@ const SettingsForm: React.FC<SettingsFormProps> = ({
       if (response.status !== 200) {
         toast.error("Failed to update settings");
       }
-      updateProfile(response.data);
+      updateProfile(response.data.data);
     } catch (error) {
       handleAxiosError(error as AxiosError, navigate);
     } finally {
@@ -72,7 +72,7 @@ const SettingsForm: React.FC<SettingsFormProps> = ({
       <h1 className="text-3xl">Settings</h1>
       <form
         className="h-4/5 flex flex-col space-y-6 sm:w-96 w-72 justify-center items-center"
-        onSubmit={handleSubmit(handleListCreation)}
+        onSubmit={handleSubmit(handleUpdateSettings)}
       >
         <div className="w-full space-y-2">
           <span>Theme</span>

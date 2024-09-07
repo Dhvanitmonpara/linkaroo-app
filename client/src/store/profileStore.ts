@@ -48,10 +48,7 @@ const useProfileStore = create<ProfileState>()(
         addProfile: (profile) => set({ profile }),
         updateProfile: (updatedProfile) =>
           set((state) => ({
-            profile: {
-              ...state.profile,
-              profile: { ...state.profile, ...updatedProfile },
-            },
+            profile: { ...state.profile, ...updatedProfile },
           })),
         removeProfile: () =>
           set({
@@ -71,18 +68,12 @@ const useProfileStore = create<ProfileState>()(
           }),
         changeTheme: (theme: themeType) => {
           set((state) => ({
-            profile: {
-              ...state.profile,
-              profile: { ...state.profile, theme },
-            },
+            profile: { ...state.profile, theme },
           }));
         },
         changeFont: (font: fontOptions) => {
           set((state) => ({
-            profile: {
-              ...state.profile,
-              profile: { ...state.profile, font },
-            },
+            profile: { ...state.profile, font },
           }));
         },
         tags: null,

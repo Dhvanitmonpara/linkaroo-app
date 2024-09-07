@@ -537,10 +537,10 @@ const toggleTheme = asyncHandler(async (req, res) => {
 })
 
 const updateProfileSettings = asyncHandler(async (req, res) => {
-    const { font = "font-mono", theme = "dark" } = req.body    
 
-    const userId = req.user?._id
-
+    const { font = "font-mono", theme = "dark" } = req.body;    
+    const userId = req.user?._id;
+    
     const user = await User.findByIdAndUpdate(
         userId,
         {
@@ -550,22 +550,24 @@ const updateProfileSettings = asyncHandler(async (req, res) => {
             }
         },
         {
-            new: true
+            new: true,
+            select: "-refreshToken -password -coverImage -bio" // You can use this option to exclude directly in the query
         }
-    ).select("-coverImage -bio")
+    );
 
-    if(!user) {
-        throw new ApiError(500, "Failed to update profile settings")
+    if (!user) {
+        throw new ApiError(500, "Failed to update profile settings");
     }
 
-    return res
-       .status(200)
-       .json(new ApiResponse(
+    return res.status(200).json(
+        new ApiResponse(
             200,
             user,
             "Profile settings updated successfully"
-        ))
-})
+        )
+    );
+});
+
 
 export {
     registerUser,

@@ -48,7 +48,6 @@ const EmailVerification = ({ email, updateFields }: EmailVerificationProps) => {
   };
 
   useEffect(() => {
-    console.log(clientOtp);
     if (otp.length === 6) {
       if (otp.toString() === clientOtp.toString()) {
         toast.success("opt verified");
