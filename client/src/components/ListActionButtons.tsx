@@ -37,6 +37,7 @@ import { handleAxiosError } from "@/utils/handlerAxiosError";
 import { AddCollaborator } from "./ActionButtons";
 import { FaLock } from "react-icons/fa";
 import { FaLockOpen } from "react-icons/fa";
+import { useMediaQuery } from "react-responsive";
 
 type Checked = boolean;
 
@@ -52,7 +53,7 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
   const { toggleModal, setModalContent, setPrevPath } = useMethodStore();
   const { profile, setTags } = useProfileStore();
   const { removeListItem, updateListTags, toggleIsPublic } = useListStore();
-  const { setDocs, currentListItem } = useDocStore();
+  const { setDocs, currentListItem, setCurrentListItem } = useDocStore();
   const theme = profile.theme;
   const [loading, setLoading] = useState(false);
   const [saveChangesLoading, setSaveChangesLoading] = useState(false);
@@ -62,7 +63,7 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
   const [newTagSubmitLoading, setNewTagSubmitLoading] = useState(false);
 
   const navigate = useNavigate();
-
+  const isSmallScreen = useMediaQuery({ query: "(max-width: 1024px)" });
   const { listId } = useParams();
 
   useEffect(() => {
@@ -259,6 +260,12 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
     } catch (error) {
       handleAxiosError(error as AxiosError, navigate);
     } finally {
+      if(isSmallScreen){
+        navigate("/lists")
+      } else {
+        navigate("/")
+      }
+      setCurrentListItem(null)
       toast.dismiss(loadingId);
     }
   };
