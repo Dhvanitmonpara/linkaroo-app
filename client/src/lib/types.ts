@@ -69,6 +69,7 @@ type fetchedListType = {
   description: string;
   tags: TagType[];
   theme: colorOptions;
+  isPublic: boolean;
   title: string;
   coverImage: string;
   createdAt: string;

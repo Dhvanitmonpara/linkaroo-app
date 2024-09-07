@@ -35,6 +35,8 @@ import { CreateDocForm, EditListForm } from "./Forms";
 import { Input } from "./ui/input";
 import { handleAxiosError } from "@/utils/handlerAxiosError";
 import { AddCollaborator } from "./ActionButtons";
+import { FaLock } from "react-icons/fa";
+import { FaLockOpen } from "react-icons/fa";
 
 type Checked = boolean;
 
@@ -49,8 +51,8 @@ type ListActionButtonsProps = {
 const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
   const { toggleModal, setModalContent, setPrevPath } = useMethodStore();
   const { profile, setTags } = useProfileStore();
-  const { removeListItem, updateListTags } = useListStore();
-  const { setDocs } = useDocStore();
+  const { removeListItem, updateListTags, toggleIsPublic } = useListStore();
+  const { setDocs, currentListItem } = useDocStore();
   const theme = profile.theme;
   const [loading, setLoading] = useState(false);
   const [saveChangesLoading, setSaveChangesLoading] = useState(false);
@@ -183,6 +185,38 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
     }
   };
 
+  const handleToggleIsPublic = async () => {
+    let loaderId = "";
+
+    toast.loading((t) => {
+      loaderId = t.id;
+      return "Updating list...";
+    });
+
+    if (!currentListItem) {
+      toast.error("List not found");
+      return;
+    }
+    try {
+      const list = await axios.patch(
+        `${import.meta.env.VITE_SERVER_API_URL}/lists/status/${listId}`,
+        {},
+        { withCredentials: true }
+      );
+
+      if (!list) {
+        toast.error("Failed to update list");
+        return;
+      }
+
+      toggleIsPublic(currentListItem);
+    } catch (error) {
+      handleAxiosError(error as AxiosError, navigate);
+    } finally {
+      toast.dismiss(loaderId);
+    }
+  };
+
   const handleCheckboxChange = (tag: checkedTagsType, checked: boolean) => {
     setCheckedTags((state) =>
       state.map((t) => {
@@ -229,7 +263,52 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
     }
   };
 
+  {
+    currentListItem?.isPublic;
+  }
+
   const actionButtons = [
+    {
+      element: (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <div
+              className="h-12 w-12 bg-transparent hover:bg-transparent border-none flex justify-center items-center rounded-full text-xl"
+              aria-label="Tag Options"
+            >
+              {currentListItem?.isPublic ? <FaLockOpen /> : <FaLock />}
+            </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            className={`w-56 ${
+              theme !== "light"
+                ? "!bg-black !text-zinc-200 border-zinc-800"
+                : ""
+            } p-4 space-y-2`}
+          >
+            <span className="text-sm text-zinc-200">
+              Are you sure to make your list{" "}
+              {currentListItem?.isPublic ? "private" : "public"}?
+            </span>
+            <div className="flex gap-2 w-full justify-center items-center">
+              <DropdownMenuItem
+                onClick={() => {
+                  handleToggleIsPublic();
+                }}
+                className="w-full bg-zinc-800 h-10 flex justify-center items-center"
+              >
+                <span>Yes</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="w-full bg-zinc-800 h-10 flex justify-center items-center">
+                No
+              </DropdownMenuItem>
+            </div>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ),
+      action: () => {},
+      tooltip: "toggle card visibility",
+    },
     {
       element: <AddCollaborator />,
       action: () => {},
@@ -470,7 +549,10 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
             {actionButtons?.map((actionButton, index) => (
-              <DropdownMenuItem key={index} className="flex justify-start items-center space-x-2">
+              <DropdownMenuItem
+                key={index}
+                className="flex justify-start items-center space-x-2"
+              >
                 {/* <span className="!text-md">{actionButton.element}</span> */}
                 <span>{actionButton.tooltip}</span>
               </DropdownMenuItem>

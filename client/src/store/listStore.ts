@@ -10,6 +10,7 @@ interface ListState {
   removeListItem: (listId: string) => void;
   updateListItem: (list: fetchedListType) => void;
   updateListTags: (list: fetchedListType) => void;
+  toggleIsPublic: (list: fetchedListType) => void;
 }
 
 const useListStore = create<ListState>()(
@@ -55,6 +56,15 @@ const useListStore = create<ListState>()(
             return state;
           });
         },
+        toggleIsPublic: (list: fetchedListType) => {
+          set((state) => ({
+            lists: state.lists.map((existingList) =>
+              existingList._id === list._id
+                ? { ...existingList, isPublic: !list.isPublic }
+                : existingList
+            ),
+          }));
+        }
       }),
       {
         name: "lists",

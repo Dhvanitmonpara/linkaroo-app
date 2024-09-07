@@ -30,7 +30,7 @@ const useDocStore = create<DocState>()(
         setCurrentListItem: (listItem) => set(({ currentListItem: listItem })),
       }),
       {
-        name: "lists",
+        name: "docs",
       }
     )
   )
