@@ -18,7 +18,7 @@ const createCard = asyncHandler(async (req, res) => {
     }
 
     const cards = await Card.find({ userId: req.user.id, listId: listId })
-    
+
     if (cards.some(card => card.title == title)) {
         throw new ApiError(400, "Card with the same title already exists")
     }
@@ -72,7 +72,7 @@ const updateCard = asyncHandler(async (req, res) => {
 
     const cardId = req.params.cardId
 
-    if(!cardId){
+    if (!cardId) {
         throw new ApiError(400, "Card ID is required")
     }
 
@@ -106,7 +106,7 @@ const deleteCard = asyncHandler(async (req, res) => {
 
     const cardId = req.params.cardId
 
-    if(!cardId){
+    if (!cardId) {
         throw new ApiError(400, "Card ID is required")
     }
 
@@ -125,4 +125,31 @@ const deleteCard = asyncHandler(async (req, res) => {
         ))
 })
 
-export { createCard, getCardsByList, updateCard, deleteCard }
+const toggleIsChecked = asyncHandler(async (req, res) => {
+
+    const cardId = req.params.cardId
+
+    if (!cardId) {
+        throw new ApiError(400, "Card ID is required")
+    }
+
+    const card = await Card.findById(cardId)
+
+    if (!card) {
+        throw new ApiError(400, "Card not found")
+    }
+
+    card.isChecked = !card.isChecked
+
+    await card.save()
+
+    return res
+        .status(200)
+        .json(new ApiResponse(
+            200,
+            card,
+            "Card updated successfully"
+        ))
+})
+
+export { createCard, getCardsByList, updateCard, deleteCard, toggleIsChecked }

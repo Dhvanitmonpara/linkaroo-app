@@ -8,6 +8,7 @@ interface DocState {
   setDocs: (lists: fetchedDocType[]) => void;
   addDocItem: (item: fetchedDocType) => void;
   removeDocItem: (itemId: string) => void;
+  toggleIsChecked: (docId: string, isChecked:boolean) => void;
   currentListItem: fetchedListType | null;
   setCurrentListItem: (listItem: fetchedListType | null) => void;
 }
@@ -24,6 +25,15 @@ const useDocStore = create<DocState>()(
         removeDocItem: (docId) => {
           set((state) => ({
             docs: state.docs.filter((doc) => doc._id !== docId),
+          }));
+        },
+        toggleIsChecked: (docId, isChecked) => {
+          set((state) => ({
+            docs: state.docs.map((existingDoc) =>
+              existingDoc._id === docId
+                ? { ...existingDoc, isChecked: !isChecked }
+                : existingDoc
+            ),
           }));
         },
         currentListItem: null,

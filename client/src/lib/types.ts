@@ -57,6 +57,7 @@ type fetchedDocType = {
   userId: string;
   listId: string;
   createdAt: string; 
+  isChecked: boolean;
   updatedAt: string; 
   __v: number;
 };

@@ -8,52 +8,57 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const DocScreen = () => {
-
   const [loading, setLoading] = useState(true);
-  const {docs} = useDocStore()
-  const [currentCard, setCurrentCard] = useState<fetchedDocType | null>(null)
-  const navigate = useNavigate()
-  const location = useLocation().pathname
-  const {currentCardColor} = useMethodStore()
-  const {theme} = useProfileStore().profile
+  const { docs } = useDocStore();
+  const [currentCard, setCurrentCard] = useState<fetchedDocType | null>(null);
+  const navigate = useNavigate();
+  const location = useLocation().pathname;
+  const { currentCardColor } = useMethodStore();
+  const { theme } = useProfileStore().profile;
 
-  const cardId = location.split("/").slice(-1)[0]
+  const cardId = location.split("/").slice(-1)[0];
   useEffect(() => {
     try {
-      setLoading(true)
-     const card = docs.filter(card => card._id == cardId)[0]
-      
-      setCurrentCard(card)
+      setLoading(true);
+      const card = docs.filter((card) => card._id == cardId)[0];
+
+      setCurrentCard(card);
     } catch (error) {
       handleAxiosError(error as AxiosError, navigate);
     } finally {
       setLoading(false);
     }
-  }, [location])
+  }, [location]);
 
-  if(loading) return <div>Loading</div>
+  if (loading) return <div>Loading</div>;
 
   return (
     <div
-      className={`h-full w-full relative ${theme == "black" ? "dark:bg-zinc-900 dark:text-zinc-300" : "dark:bg-zinc-800 dark:text-zinc-200"} flex flex-col p-5`}
+      className={`h-full w-full relative ${
+        theme == "black"
+          ? "dark:bg-zinc-900 dark:text-zinc-300"
+          : "dark:bg-zinc-800 dark:text-zinc-200"
+      } flex flex-col p-5`}
     >
-      <div className={`${
-        currentCardColor == "bg-black"
-          ? "bg-zinc-900 text-zinc-300"
-          : currentCardColor + " text-zinc-900"
-      } h-1.5 w-full absolute top-0 left-0`}></div>
+      <div
+        className={`${
+          currentCardColor == "bg-black"
+            ? "bg-zinc-900 text-zinc-300"
+            : currentCardColor + " text-zinc-900"
+        } h-1.5 w-full absolute top-0 left-0`}
+      ></div>
       <h1 className="text-4xl font-semibold pt-3">{currentCard?.title}</h1>
-      <a
-        href={currentCard?.link}
+      <span
+        onClick={() => {
+          window.open(currentCard?.link, "_blank");
+        }}
         className={`pt-3 hover:text-black dark:hover:text-white ${
           currentCardColor == "bg-black" ? "dark:hover:text-white" : ""
         } cursor-pointer hover:underline`}
       >
         {currentCard?.link}
-      </a>
-      <p className="pt-5">
-        {currentCard?.description}
-      </p>
+      </span>
+      <p className="pt-5">{currentCard?.description}</p>
     </div>
   );
 };

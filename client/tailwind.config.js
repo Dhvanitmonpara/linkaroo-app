@@ -82,6 +82,10 @@ export default {
           "0%,70%,100%": { opacity: "1" },
           "20%,50%": { opacity: "0" },
         },
+        ripple: {
+          '0%': { transform: 'scale(0)', opacity: 1 },
+          '100%': { transform: 'scale(100)', opacity: 0 },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",

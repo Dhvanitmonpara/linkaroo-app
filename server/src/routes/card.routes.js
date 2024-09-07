@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
-    createCard, getCardsByList, updateCard, deleteCard
+    createCard, getCardsByList, updateCard, deleteCard,
+    toggleIsChecked
 } from "../controllers/card.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 
@@ -16,5 +17,7 @@ router.route("/:listId")
 router.route("/:cardId")
     .patch(updateCard)
     .delete(deleteCard)
+
+router.route("/:cardId/toggle-checked").patch(toggleIsChecked)
 
 export default router

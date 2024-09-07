@@ -13,6 +13,10 @@ const cardSchema = new Schema({
         type: String,
         required: true,
     },
+    isChecked: {
+        type: Boolean,
+        default: false
+    },
     userId: {
         type: Schema.Types.ObjectId,
         ref: "User",

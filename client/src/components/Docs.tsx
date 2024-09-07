@@ -162,6 +162,7 @@ const Docs = () => {
             title={doc.title}
             color={theme == "black" ? "bg-black" : currentCardColor}
             link={doc.link}
+            isChecked={doc.isChecked}
             currentListId={currentListItem?._id}
             toggleModal={toggleModal}
           />

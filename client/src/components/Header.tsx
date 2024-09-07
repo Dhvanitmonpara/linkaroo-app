@@ -52,7 +52,7 @@ const Header = () => {
             src="/linkaroo.png"
             alt="Linkaroo-logo"
             width="24px"
-            className="h-[24px]"
+            className="h-[24px] active:animate-spin"
           />
           <span className="hidden sm:inline">Linkaroo</span>
         </Link>
