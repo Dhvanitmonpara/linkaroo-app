@@ -7,7 +7,7 @@ import { uploadOnCloudinary, deleteFromCloudinary } from "../utils/cloudinary.js
 import getPublicId from "../utils/getPublicId.js"
 import sendMail from "../utils/sendMail.js"
 
-const refreshTokenMaxAge =  3600 * 24 * 10 * 1000;
+const refreshTokenMaxAge = 3600 * 24 * 10 * 1000;
 const accessTokenMaxAge = 3600 * 24 * 1000;
 
 const options = {
@@ -94,7 +94,7 @@ const registerUser = asyncHandler(async (req, res) => {
     return res
         .status(201)
         .cookie("accessToken", accessToken, options)
-        .cookie("refreshToken", refreshToken, {...options, maxAge: refreshTokenMaxAge})
+        .cookie("refreshToken", refreshToken, { ...options, maxAge: refreshTokenMaxAge })
         .json(
             new ApiResponse(
                 201,
@@ -116,7 +116,7 @@ const loginUser = asyncHandler(async (req, res) => {
     // send cookie
     // send response
 
-    const { username, email, password } = req.body
+    const { username, email, password, rememberMe } = req.body
 
     if (!username && !email) {
         throw new ApiError(400, "Username or Email is required")
@@ -126,39 +126,46 @@ const loginUser = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Password is required")
     }
 
-    const user = await User.findOne({
+    const existingUser = await User.findOne({
         $or: [{ username }, { email }]
     })
 
-    if (!user) {
+    if (!existingUser) {
         throw new ApiError(404, "User does not exists")
     }
 
-    const isPasswordValid = await user.isPasswordCorrect(password)
+    const isPasswordValid = await existingUser.isPasswordCorrect(password)
 
     if (!isPasswordValid) {
         throw new ApiError(401, "Invalid password")
     }
+    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(existingUser._id)
 
-    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id)
+    const user = {...existingUser._doc, refreshToken: "", password: "" }
 
-    const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
-
-    return res
-        .status(200)
-        .cookie("accessToken", accessToken, options)
-        .cookie("refreshToken", refreshToken, {...options, maxAge: refreshTokenMaxAge})
-        .json(
-            new ApiResponse(
-                200,
-                {
-                    user: loggedInUser,
-                    accessToken,
-                    refreshToken
-                },
-                "User logged In Successfully")
-        )
-
+    if (rememberMe) {
+        return res
+            .status(200)
+            .cookie("accessToken", accessToken, options)
+            .cookie("refreshToken", refreshToken, { ...options, maxAge: refreshTokenMaxAge })
+            .json(
+                new ApiResponse(
+                    200,
+                    user,
+                    "User logged In Successfully")
+            )
+    } else {
+        return res
+            .status(200)
+            .cookie("accessToken", accessToken, { ...options, maxAge: 3600 * 1000 })
+            .json(
+                new ApiResponse(
+                    200,
+                    user,
+                    "User logged In Successfully"
+                )
+            )
+    }
 })
 
 const logoutUser = asyncHandler(async (req, res) => {
@@ -177,7 +184,7 @@ const logoutUser = asyncHandler(async (req, res) => {
     return res
         .status(200)
         .clearCookie("accessToken", options)
-        .clearCookie("refreshToken", {...options, maxAge: refreshTokenMaxAge})
+        .clearCookie("refreshToken", { ...options, maxAge: refreshTokenMaxAge })
         .json(new ApiResponse(200, {}, "User logged Out"))
 })
 
@@ -207,7 +214,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
         return res
             .status(200)
             .cookie("accessToken", accessToken, options)
-            .cookie("refreshToken", newRefreshToken, {...options, maxAge: refreshTokenMaxAge})
+            .cookie("refreshToken", newRefreshToken, { ...options, maxAge: refreshTokenMaxAge })
             .json(new ApiResponse(
                 200,
                 {},
@@ -538,9 +545,9 @@ const toggleTheme = asyncHandler(async (req, res) => {
 
 const updateProfileSettings = asyncHandler(async (req, res) => {
 
-    const { font = "font-mono", theme = "dark" } = req.body;    
+    const { font = "font-mono", theme = "dark" } = req.body;
     const userId = req.user?._id;
-    
+
     const user = await User.findByIdAndUpdate(
         userId,
         {

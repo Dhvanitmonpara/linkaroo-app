@@ -18,6 +18,7 @@ const LoginPage = () => {
   const [isPasswordShowing, setIsPasswordShowing] = useState(false);
   const [loading, setLoading] = useState(false);
   const { register, handleSubmit } = useForm<LoginFormData>();
+  const [rememberMe, setRememberMe] = useState(false);
 
   const navigate = useNavigate();
   const isSmallScreen = useMediaQuery({ query: "(max-width: 1024px)" });
@@ -26,14 +27,17 @@ const LoginPage = () => {
     /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
   const usernameReg = /[a-zA-Z][a-zA-Z0-9-_]{3,32}/;
 
-  const userLogin = async (data: { text: string; password: string }) => {
+  const userLogin = async (data: {
+    text: string;
+    password: string;
+  }) => {
     try {
       setLoading(true);
-
       const userCredentials = {
         password: data.password,
         email: "",
         username: "",
+        rememberMe,
       };
 
       if (emailReg.test(data.text)) {
@@ -63,8 +67,9 @@ const LoginPage = () => {
         return;
       }
 
-      addProfile(response.data.data.user);
+      addProfile(response.data.data);
       isSmallScreen ? navigate("/list") : navigate("/");
+      
     } catch (err) {
       const errorMsg = getErrorFromAxios(err as AxiosError);
       if (errorMsg !== undefined) {
@@ -126,6 +131,12 @@ const LoginPage = () => {
               <div className="space-x-1 flex justify-center items-center">
                 <Checkbox
                   id="remember-me"
+                  checked={rememberMe}
+                  onCheckedChange={(checked) => {
+                    if (typeof checked == "boolean") {
+                      setRememberMe(checked);
+                    }
+                  }}
                   className="border-white data-[state=checked]:bg-white data-[state=checked]:text-black"
                 />
                 <label htmlFor="remember-me" className="cursor-pointer">
