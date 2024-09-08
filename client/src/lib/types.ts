@@ -48,7 +48,6 @@ type fetchedTagType = {
   updatedAt: string;
 };
 
-
 type fetchedDocType = {
   _id: string;
   title: string;
@@ -56,12 +55,11 @@ type fetchedDocType = {
   link: string;
   userId: string;
   listId: string;
-  createdAt: string; 
+  createdAt: string;
   isChecked: boolean;
-  updatedAt: string; 
+  updatedAt: string;
   __v: number;
 };
-
 
 type fetchedListType = {
   _id: string;
@@ -77,6 +75,11 @@ type fetchedListType = {
   updatedAt: string;
 };
 
+type cachedDocs = {
+  listId: string;
+  docs: fetchedDocType[];
+};
+
 export type {
   colorOptions,
   themeType,
@@ -86,5 +89,6 @@ export type {
   Collaborator,
   fontOptions,
   fetchedDocType,
-  fetchedTagType
+  fetchedTagType,
+  cachedDocs,
 };

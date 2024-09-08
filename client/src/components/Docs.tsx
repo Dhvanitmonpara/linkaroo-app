@@ -16,7 +16,14 @@ const Docs = () => {
   const { toggleModal } = useMethodStore();
   const [loading, setLoading] = useState(false);
   const location = useLocation().pathname;
-  const { docs, setDocs, currentListItem, setCurrentListItem } = useDocStore();
+  const {
+    docs,
+    setDocs,
+    currentListItem,
+    setCurrentListItem,
+    cachedDocs,
+    addCachedDocItem,
+  } = useDocStore();
   const { lists } = useListStore();
   const { profile } = useProfileStore();
   const { theme, font } = profile;
@@ -33,22 +40,29 @@ const Docs = () => {
         try {
           setLoading(true);
           const listId = location.split("/")[2];
-          const response: AxiosResponse = await axios.get(
-            `${import.meta.env.VITE_SERVER_API_URL}/cards/${listId}`,
-            { withCredentials: true }
-          );
 
-          if (!response.data.data) {
-            toast.error("Failed to fetch list details");
-            return;
+          const cache = cachedDocs.filter((doc) => doc.listId === listId)[0];
+
+          if (cache) {
+            setDocs(cache.docs);
+          } else {
+            const response: AxiosResponse = await axios.get(
+              `${import.meta.env.VITE_SERVER_API_URL}/cards/${listId}`,
+              { withCredentials: true }
+            );
+
+            if (!response.data.data) {
+              toast.error("Failed to fetch list details");
+              return;
+            }
+            setDocs(response.data.data);
+            addCachedDocItem({ listId, docs: response.data.data});
           }
 
           const currentListRes = await lists.filter(
             (list) => list._id === listId
           )[0];
           setCurrentListItem(currentListRes);
-
-          setDocs(response.data.data);
         } catch (error) {
           handleAxiosError(error as AxiosError, navigate);
         } finally {
@@ -154,7 +168,11 @@ const Docs = () => {
           </div>
         </div>
       </div>
-      <div className={`grid grid-cols-1 gap-2 ${location.includes("/doc") ? "" : "lg:grid-cols-2"}`}>
+      <div
+        className={`grid grid-cols-1 gap-2 ${
+          location.includes("/doc") ? "" : "lg:grid-cols-2"
+        }`}
+      >
         {docs?.map((doc) => (
           <DocCard
             key={doc._id}
