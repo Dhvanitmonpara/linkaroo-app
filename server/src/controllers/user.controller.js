@@ -141,7 +141,7 @@ const loginUser = asyncHandler(async (req, res) => {
     }
     const { accessToken, refreshToken } = await generateAccessAndRefreshToken(existingUser._id)
 
-    const user = {...existingUser._doc, refreshToken: "", password: "" }
+    const user = { ...existingUser._doc, refreshToken: "", password: "" }
 
     if (rememberMe) {
         return res
