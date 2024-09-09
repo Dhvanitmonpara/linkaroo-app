@@ -43,7 +43,7 @@ const CreateDocForm: React.FC<CreateDocFormProps> = ({
   const navigate = useNavigate();
 
   const { lists } = useListStore();
-  const { addDocItem, docs } = useDocStore();
+  const { addDocItem, docs, addCachedDocItem } = useDocStore();
 
   const { control, handleSubmit, register } = useForm<HandleDocCreationType>({
     defaultValues: {
@@ -53,7 +53,7 @@ const CreateDocForm: React.FC<CreateDocFormProps> = ({
     },
   });
 
-  const handleListCreation = async (data: HandleDocCreationType) => {
+  const handleDocCreation = async (data: HandleDocCreationType) => {
     try {
       setLoading(true);
 
@@ -83,6 +83,9 @@ const CreateDocForm: React.FC<CreateDocFormProps> = ({
       if (data.list == docs[0].listId) {
         addDocItem(doc.data.data);
       }
+
+      addCachedDocItem(data.list, doc.data.data);
+
     } catch (error) {
       handleAxiosError(error as AxiosError, navigate);
     } finally {
@@ -97,7 +100,7 @@ const CreateDocForm: React.FC<CreateDocFormProps> = ({
       <h1 className="text-3xl">Create a new Doc</h1>
       <form
         className="h-4/5 flex flex-col space-y-6 sm:w-96 w-72 justify-center items-center"
-        onSubmit={handleSubmit(handleListCreation)}
+        onSubmit={handleSubmit(handleDocCreation)}
       >
         <div className="w-full space-y-2">
           <label htmlFor="title">Title</label>

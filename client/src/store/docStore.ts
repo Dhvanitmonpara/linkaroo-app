@@ -6,8 +6,12 @@ import { devtools, persist } from "zustand/middleware";
 interface DocState {
   cachedDocs: cachedDocs[] | [];
   setCachedDocs: (lists: cachedDocs[]) => void;
-  addCachedDocItem: (item: cachedDocs) => void;
-  removeCachedDocItem: (itemId: string) => void;
+  addCachedDocList: (item: cachedDocs) => void;
+  removeCachedDocList: (itemId: string) => void;
+  replaceCachedDocList: (doc: cachedDocs) => void;
+  addCachedDocItem: (listId: string, item: fetchedDocType) => void;
+  removeCachedDocItem: (listId: string, docId: string) => void;
+  replaceCachedDocItem: (listId: string, item: fetchedDocType) => void;
   docs: fetchedDocType[] | [];
   setDocs: (lists: fetchedDocType[]) => void;
   addDocItem: (item: fetchedDocType) => void;
@@ -23,13 +27,50 @@ const useDocStore = create<DocState>()(
       (set) => ({
         cachedDocs: [],
         setCachedDocs: (lists) => set({ cachedDocs: lists }),
-        addCachedDocItem: (list) => {
+        addCachedDocList: (list) => {
           set((state) => ({ cachedDocs: [...state.cachedDocs, list] }));
         },
-        removeCachedDocItem: (itemId) => {
+        removeCachedDocList: (listId) => {
           set((state) => ({
             cachedDocs: state.cachedDocs.filter(
-              (list) => list.listId !== itemId
+              (list) => list.listId !== listId
+            ),
+          }));
+        },
+        replaceCachedDocList: (newList) => {
+          set((state) => ({
+            cachedDocs: state.cachedDocs.map((list) =>
+              list.listId === newList.listId ? newList : list
+            ),
+          }));
+        },
+        addCachedDocItem: (listId, item) => {
+          set((state) => ({
+            cachedDocs: state.cachedDocs.map((list) =>
+              list.listId === listId
+                ? { ...list, docs: [...list.docs, item] }
+                : list
+            ),
+          }));
+        },
+        removeCachedDocItem: (listId, docId) => {
+          set((state) => ({
+            cachedDocs: state.cachedDocs.map((list) =>
+              list.listId === listId
+                ? {
+                    ...list,
+                    docs: list.docs.filter((doc) => doc._id !== docId),
+                  }
+                : list
+            ),
+          }));
+        },
+        replaceCachedDocItem: (listId, item) => {
+          set((state) => ({
+            cachedDocs: state.cachedDocs.map((list) =>
+              list.listId === listId
+                ? { ...list, docs: [...list.docs, item] }
+                : list
             ),
           }));
         },

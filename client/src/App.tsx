@@ -23,7 +23,7 @@ const App = () => {
     useMethodStore();
   const { addProfile, profile } = useProfileStore();
   const { setLists } = useListStore();
-  const { setDocs, setCurrentListItem } = useDocStore();
+  const { setDocs, setCurrentListItem, setCachedDocs } = useDocStore();
 
   const isSmallScreen = useMediaQuery({ query: "(max-width: 1024px)" });
 
@@ -52,6 +52,7 @@ const App = () => {
       try {
         setLists([]);
         setDocs([]);
+        setCachedDocs([]);
         setCurrentListItem(null);
 
         const currentUser = await axios({

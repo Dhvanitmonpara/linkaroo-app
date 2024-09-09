@@ -22,7 +22,7 @@ const Docs = () => {
     currentListItem,
     setCurrentListItem,
     cachedDocs,
-    addCachedDocItem,
+    addCachedDocList,
   } = useDocStore();
   const { lists } = useListStore();
   const { profile } = useProfileStore();
@@ -56,7 +56,7 @@ const Docs = () => {
               return;
             }
             setDocs(response.data.data);
-            addCachedDocItem({ listId, docs: response.data.data});
+            addCachedDocList({ listId, docs: response.data.data});
           }
 
           const currentListRes = await lists.filter(
