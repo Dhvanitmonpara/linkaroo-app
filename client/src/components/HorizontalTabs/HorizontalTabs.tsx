@@ -2,9 +2,8 @@ import { MdHome } from "react-icons/md";
 import { FaPlus } from "react-icons/fa6";
 import { IoPerson } from "react-icons/io5";
 import { IoMdAdd, IoMdNotifications } from "react-icons/io";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import "./HorizontalTabs.css";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, NavLink } from "react-router-dom";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,28 +21,18 @@ export default function HorizontalTabs() {
   const { profile } = useProfileStore();
   const { theme } = profile;
   const { toggleModal, setModalContent, setPrevPath } = useMethodStore();
-  const location = useLocation().pathname
+  const location = useLocation().pathname;
 
-  const navigate = useNavigate();
   return (
-    <RadioGroup
-      onValueChange={(value) => {
-        if (value === "list") {
-          navigate(`/${value}`, { replace: true });
+    <div className="flex md:justify-between justify-evenly dark:bg-zinc-800 w-full px-5 bg-zinc-200 h-full md:px-24 sm:px-16 sm:!rounded-t-xl items-center sm:w-6/12">
+      <NavLink
+        to="/list"
+        className={({ isActive }) =>
+          `menu-label !text-3xl !w-auto ${isActive ? "!text-white" : ""}`
         }
-      }}
-      defaultValue="list"
-      className="flex md:justify-between justify-evenly dark:bg-zinc-800 w-full px-5 bg-zinc-200 h-full md:px-24 sm:px-16 sm:!rounded-t-xl items-center sm:w-6/12"
-    >
-      <RadioGroupItem
-        defaultChecked={location === "/list" ? true : false}
-        value="list"
-        id="list-tab"
-        className="radio-item"
-      />
-      <label htmlFor="list-tab" className="menu-label !text-3xl !w-auto">
+      >
         <MdHome />
-      </label>
+      </NavLink>
 
       <DrawerMenu
         title="Create"
@@ -88,19 +77,15 @@ export default function HorizontalTabs() {
         </div>
       </DrawerMenu>
 
-      <RadioGroupItem
-        value="notifications"
-        id="notification-tab"
-        className="radio-item"
-      />
-      <label
-        htmlFor="notification-tab"
-        className="menu-label !text-3xl !w-auto"
+      <NavLink
+        to="notifications"
+        className={({ isActive }) =>
+          `menu-label !text-3xl !w-auto ${isActive ? "!text-white" : ""}`
+        }
       >
         <IoMdNotifications />
-      </label>
+      </NavLink>
 
-      {/* <RadioGroupItem value="profile" id="profile-tab" className="radio-item" /> */}
       <DropdownMenu>
         <DropdownMenuTrigger>
           <label
@@ -161,6 +146,6 @@ export default function HorizontalTabs() {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-    </RadioGroup>
+    </div>
   );
 }

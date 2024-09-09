@@ -1,7 +1,9 @@
 import useProfileStore from "@/store/profileStore";
+import { useMediaQuery } from "react-responsive";
 import { Link } from "react-router-dom";
 
 const NotFound = () => {
+  const isSmallScreen = useMediaQuery({ query: "(max-width: 1024px)" });
   const { profile } = useProfileStore();
   const theme = profile?.theme;
   return (
@@ -10,7 +12,7 @@ const NotFound = () => {
       <p className="mt-4 md:text-2xl text-gray-500 text-xl px-5">
         Oops! The page you're looking for doesn't exist.
       </p>
-      <Link to="/" className="mt-6 text-lg text-blue-600 hover:underline">
+      <Link to={isSmallScreen ? "/list" : "/"} className="mt-6 text-lg text-blue-600 hover:underline">
         Go Back Home
       </Link>
     </div>
