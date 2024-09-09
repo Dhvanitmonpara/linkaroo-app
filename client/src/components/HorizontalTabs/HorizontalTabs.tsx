@@ -4,7 +4,7 @@ import { IoPerson } from "react-icons/io5";
 import { IoMdAdd, IoMdNotifications } from "react-icons/io";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import "./HorizontalTabs.css";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,20 +22,21 @@ export default function HorizontalTabs() {
   const { profile } = useProfileStore();
   const { theme } = profile;
   const { toggleModal, setModalContent, setPrevPath } = useMethodStore();
+  const location = useLocation().pathname
 
   const navigate = useNavigate();
   return (
     <RadioGroup
       onValueChange={(value) => {
         if (value === "list") {
-          navigate(`/${value}`);
+          navigate(`/${value}`, { replace: true });
         }
       }}
       defaultValue="list"
       className="flex md:justify-between justify-evenly dark:bg-zinc-800 w-full px-5 bg-zinc-200 h-full md:px-24 sm:px-16 sm:!rounded-t-xl items-center sm:w-6/12"
     >
       <RadioGroupItem
-        defaultChecked={true}
+        defaultChecked={location === "/list" ? true : false}
         value="list"
         id="list-tab"
         className="radio-item"
@@ -45,7 +46,7 @@ export default function HorizontalTabs() {
       </label>
 
       <DrawerMenu
-      title="Create"
+        title="Create"
         trigger={
           <label
             htmlFor="create-tab"
@@ -119,7 +120,7 @@ export default function HorizontalTabs() {
           <DropdownMenuItem
             className="py-2"
             onClick={() => {
-              setPrevPath(location.pathname);
+              setPrevPath(location);
               toggleModal(true);
               setModalContent(
                 <div className="dark:text-white p-5 flex justify-center items-center space-y-3">
@@ -134,7 +135,7 @@ export default function HorizontalTabs() {
           <DropdownMenuItem
             className="py-2"
             onClick={() => {
-              setPrevPath(location.pathname);
+              setPrevPath(location);
               toggleModal(true);
               setModalContent(
                 <SettingsForm theme={theme} toggleModal={toggleModal} />
@@ -146,7 +147,7 @@ export default function HorizontalTabs() {
           <DropdownMenuItem
             className="py-2"
             onClick={() => {
-              setPrevPath(location.pathname);
+              setPrevPath(location);
               toggleModal(true);
               setModalContent(
                 <div className="dark:text-white p-5 flex justify-center items-center space-y-3">

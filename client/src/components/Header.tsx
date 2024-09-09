@@ -22,8 +22,12 @@ import CommandMenu from "./CommandMenu";
 import NotificationCard from "./NotificationCard";
 import { Link } from "react-router-dom";
 import ProfileCard from "./ProfileCard";
+import { useMediaQuery } from "react-responsive";
 
 const Header = () => {
+
+  const isSmallScreen = useMediaQuery({ query: "(max-width: 1024px)" });
+
   const { toggleModal, setModalContent, setPrevPath } = useMethodStore();
   const { profile } = useProfileStore();
   const { theme } = profile;
@@ -45,7 +49,7 @@ const Header = () => {
     <>
       <nav className="lg:h-[4.5rem] h-16 lg:py-5 pt-4 pb-[1rem] flex justify-between items-center space-x-2 px-5 lg:px-20 border-b-[1px] border-zinc-600 select-none">
         <Link
-          to={"/"}
+          to={isSmallScreen ? "/list" : "/"}
           className="text-zinc-300 transition-colors cursor-pointer text-2xl font-helvetica font-semibold hover:text-white flex space-x-2 justify-center items-center"
         >
           <img
