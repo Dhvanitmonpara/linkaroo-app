@@ -53,7 +53,7 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
   const { toggleModal, setModalContent, setPrevPath } = useMethodStore();
   const { profile, setTags } = useProfileStore();
   const { removeListItem, updateListTags, toggleIsPublic } = useListStore();
-  const { setDocs, currentListItem, setCurrentListItem } = useDocStore();
+  const { setDocs, currentListItem, setCurrentListItem, removeCachedDocList } = useDocStore();
   const theme = profile.theme;
   const [loading, setLoading] = useState(false);
   const [saveChangesLoading, setSaveChangesLoading] = useState(false);
@@ -255,6 +255,7 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
       }
 
       setDocs([]);
+      removeCachedDocList(listId);
       toast.success("List deleted successfully");
       setLoading(false);
     } catch (error) {

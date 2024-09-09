@@ -38,7 +38,7 @@ const DocScreen = () => {
         theme == "black"
           ? "dark:bg-zinc-900 dark:text-zinc-300"
           : "dark:bg-zinc-800 dark:text-zinc-200"
-      } flex flex-col p-5`}
+      } flex flex-col p-5 select-none`}
     >
       <div
         className={`${
