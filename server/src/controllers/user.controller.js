@@ -96,8 +96,7 @@ const registerUser = asyncHandler(async (req, res) => {
             new ApiResponse(
                 201,
                 {
-                    createdUser,
-                    profile
+                    user: createdUser,
                 },
                 "User registered successfully"
             )
