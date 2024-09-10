@@ -519,7 +519,7 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
 
   return (
     <div className="flex justify-center items-center">
-      <div className="hidden md:flex justify-center items-center space-x-3">
+      <div className="hidden md:flex justify-center items-center space-x-3 !relative">
         {actionButtons.map((actionButton, index) => (
           <button
             key={index}

@@ -132,7 +132,7 @@ const ListCard = ({
           </div>
           <p className={`text-sm font-semibold ${font}`}>{description}</p>
         </div>
-        <div className="flex space-x-2 overflow-x-scroll">
+        <div className="flex space-x-2 overflow-x-scroll no-scrollbar">
           <AvatarGroup
             width="w-7"
             height="h-7"
