@@ -53,7 +53,7 @@ export default function HorizontalTabs() {
   return (
     <div className="flex md:justify-between justify-evenly dark:bg-zinc-800 w-full px-5 bg-zinc-200 h-full md:px-24 sm:px-16 sm:!rounded-t-xl items-center sm:w-6/12">
       <NavLink
-        to="/list"
+        to="/"
         className={({ isActive }) =>
           `menu-label !text-3xl !w-auto ${isActive ? "!text-white" : ""}`
         }

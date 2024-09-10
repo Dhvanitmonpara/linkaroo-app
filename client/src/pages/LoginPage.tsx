@@ -11,7 +11,6 @@ import getErrorFromAxios from "@/utils/getErrorFromAxios.js";
 import { Loader2 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox.js";
 import toast, { Toaster } from "react-hot-toast";
-import { useMediaQuery } from "react-responsive";
 
 const LoginPage = () => {
   const { addProfile } = useProfileStore();
@@ -21,7 +20,6 @@ const LoginPage = () => {
   const [rememberMe, setRememberMe] = useState(false);
 
   const navigate = useNavigate();
-  const isSmallScreen = useMediaQuery({ query: "(max-width: 1024px)" });
 
   const emailReg =
     /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
@@ -67,8 +65,7 @@ const LoginPage = () => {
         return;
       }
 
-      addProfile(response.data.data);
-      isSmallScreen ? navigate("/list") : navigate("/");
+      addProfile(response.data.data);navigate("/");
       
     } catch (err) {
       const errorMsg = getErrorFromAxios(err as AxiosError);

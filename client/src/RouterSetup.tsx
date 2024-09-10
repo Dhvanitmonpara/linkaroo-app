@@ -23,10 +23,9 @@ const RouterSetup: React.FC = () => {
         // Small screen
         createRoutesFromElements(
           <Route path="/" element={<App />}>
-            <Route path="" element={<HomePage />} />
+            <Route path="" element={<Lists />} />
             <Route path="/lists/:listId" element={<Docs />} />
             <Route path="/lists/:listId/docs/:docId" element={<Docs />} />
-            <Route path="/list" element={<Lists />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
             <Route

@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import useMethodStore from "./store/MethodStore";
 import useProfileStore from "./store/profileStore";
-import { useMediaQuery } from "react-responsive";
 import axios, { AxiosError } from "axios";
 import toggleThemeModeAtRootElem from "./utils/toggleThemeMode";
 import { Header, HorizontalTabs, Loading, Modal } from "./components";
@@ -24,8 +23,6 @@ const App = () => {
   const { addProfile, profile } = useProfileStore();
   const { setLists } = useListStore();
   const { setDocs, setCurrentListItem, setCachedDocs } = useDocStore();
-
-  const isSmallScreen = useMediaQuery({ query: "(max-width: 1024px)" });
 
   const closeModal = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (modalRef.current === e.target) {
@@ -65,9 +62,6 @@ const App = () => {
 
         addProfile(currentUser.data.data);
 
-        if (isSmallScreen) {
-          navigate("/list");
-        }
       } catch (error) {
         handleAxiosError(error as AxiosError, navigate);
       } finally {
