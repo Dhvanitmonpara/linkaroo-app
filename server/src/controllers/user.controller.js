@@ -72,6 +72,9 @@ const registerUser = asyncHandler(async (req, res) => {
         email,
         password,
         avatarImage: avatar.url,
+        bio: "",
+        coverImage: "",
+        theme: "dark",
         username: username.toLowerCase()
     })
 
@@ -81,12 +84,6 @@ const registerUser = asyncHandler(async (req, res) => {
 
     if (!createdUser) {
         throw new ApiError(500, "Something went wrong while registering the user")
-    }
-
-    const profile = await Profile.create({ userId: user?.id })
-
-    if (!profile) {
-        throw new ApiError(500, "Failed to create profile")
     }
 
     const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id)
