@@ -67,7 +67,7 @@ const registerUser = asyncHandler(async (req, res) => {
         avatar = { url: "https://res.cloudinary.com/df5xtraqr/image/upload/v1725599756/otkudqvvu9p99fmixl9k.jpg" }
     }
 
-    const user = await User.create({
+    const response = await User.create({
         fullName,
         email,
         password,
@@ -78,15 +78,9 @@ const registerUser = asyncHandler(async (req, res) => {
         username: username.toLowerCase()
     })
 
-    const createdUser = await User.findById(user._id).select(
-        "-password -refreshToken"
-    )
+    const user = { ...response._doc, password: "", refreshToken: "" }
 
-    if (!createdUser) {
-        throw new ApiError(500, "Something went wrong while registering the user")
-    }
-
-    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id)
+    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(response._id)
 
     return res
         .status(201)
@@ -95,9 +89,7 @@ const registerUser = asyncHandler(async (req, res) => {
         .json(
             new ApiResponse(
                 201,
-                {
-                    user: createdUser,
-                },
+                user,
                 "User registered successfully"
             )
         )

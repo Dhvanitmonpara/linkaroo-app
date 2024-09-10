@@ -31,7 +31,7 @@ const ProfileSetup = ({
           />
         </div>
         <div className="w-full space-y-2">
-          <label htmlFor="last-name">Last name</label>
+          <label htmlFor="last-name">Last name &#40;Optional&#41;</label>
           <Input
             id="last-name"
             type="text"
