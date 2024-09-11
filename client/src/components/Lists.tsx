@@ -19,27 +19,29 @@ const Lists = () => {
 
   useEffect(() => {
     (async () => {
-      try {
-        setLoading(true);
+      if (profile._id !== "") {
+        try {
+          setLoading(true);
 
-        if (!lists.length) {
-          const response: AxiosResponse = await axios({
-            method: "GET",
-            url: `${import.meta.env.VITE_SERVER_API_URL}/lists/u`,
-            withCredentials: true,
-          });
+          if (!lists.length) {
+            const response: AxiosResponse = await axios({
+              method: "GET",
+              url: `${import.meta.env.VITE_SERVER_API_URL}/lists/u`,
+              withCredentials: true,
+            });
 
-          if (!response) {
-            toast.error("Failed to fetch user's lists.");
-            return;
+            if (!response) {
+              toast.error("Failed to fetch user's lists.");
+              return;
+            }
+
+            setLists(response.data.data);
           }
-
-          setLists(response.data.data);
+        } catch (error) {
+          handleAxiosError(error as AxiosError, navigate);
+        } finally {
+          setLoading(false);
         }
-      } catch (error) {
-        handleAxiosError(error as AxiosError, navigate);
-      } finally {
-        setLoading(false);
       }
     })();
   }, [setLists]);

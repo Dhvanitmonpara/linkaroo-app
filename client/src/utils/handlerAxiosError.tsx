@@ -13,7 +13,7 @@ export const handleAxiosError = async (
     try {
       await axios.post(
         `${import.meta.env.VITE_SERVER_API_URL}/users/refresh-token`,
-        {}, // Pass an empty object as the body if needed
+        {},
         {
           withCredentials: true,
           headers: {

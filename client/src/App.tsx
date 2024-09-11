@@ -50,6 +50,19 @@ const App = () => {
         setLists([]);
         setDocs([]);
         setCachedDocs([]);
+        addProfile({
+          _id: "",
+          username: "",
+          email: "",
+          fullName: "",
+          avatarImage: "",
+          coverImage: "",
+          theme: "dark",
+          font: "font-sans",
+          createdAt: "",
+          updatedAt: "",
+          _v: 0,
+        });
         setCurrentListItem(null);
 
         const currentUser = await axios({
@@ -60,8 +73,9 @@ const App = () => {
 
         setProgress(78);
 
-        addProfile(currentUser.data.data);
-
+        if (currentUser.data.data) {
+          addProfile(currentUser.data.data);
+        }
       } catch (error) {
         handleAxiosError(error as AxiosError, navigate);
       } finally {
