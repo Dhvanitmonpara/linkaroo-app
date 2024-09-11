@@ -10,7 +10,6 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { handleAxiosError } from "@/utils/handlerAxiosError";
 import { useNavigate } from "react-router-dom";
 import { Collaborator } from "@/lib/types";
-import toast from "react-hot-toast";
 import debounce from "lodash/debounce";
 import useProfileStore from "@/store/profileStore";
 import { Check, Loader2 } from "lucide-react";
@@ -51,7 +50,6 @@ const AddCollaborator: React.FC = () => {
       } catch (error) {
         handleAxiosError(error as AxiosError, navigate);
         setUserList([]);
-        toast.error("Failed to retrieve users.");
       } finally {
         setLoading(false);
       }
@@ -128,16 +126,25 @@ const AddCollaborator: React.FC = () => {
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Loading...
               </div>
+            ) : userList.length === 0 && value ? ( // Check if userList is empty and input has value
+              <div
+                className={cn(
+                  "p-2 text-center",
+                  theme !== "light" ? "text-zinc-200" : "text-black"
+                )}
+              >
+                No data found
+              </div>
             ) : (
               userList.map((user, index) => (
                 <div
                   key={user.email}
-                  ref={(el) => (resultRefs.current[index] = el)} 
+                  ref={(el) => (resultRefs.current[index] = el)}
                   tabIndex={-1} // Make it focusable
                   className={cn(
                     "flex items-center p-2 cursor-pointer outline-none rounded-sm",
                     selectedIndex === index
-                      ? "bg-zinc-100 text-black" 
+                      ? "bg-zinc-100 text-black"
                       : theme !== "light"
                       ? "!bg-zinc-900 text-zinc-200 hover:bg-zinc-800"
                       : "bg-white text-black hover:bg-gray-100"

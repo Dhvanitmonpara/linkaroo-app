@@ -336,13 +336,32 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
 })
 
 const searchUser = asyncHandler(async (req, res) => {
-    const { user } = req.body
+    const { user } = req.body;
+
+    // FIXME: Add fuzzy search
+    // const users = await User.aggregate([
+    //     {
+    //         $search: {
+    //             index: 'username_text_email_text', // Replace with your actual search index name
+    //             text: {
+    //                 query: `"${user}"`,
+    //                 path: ['username', 'email'],
+    //                 fuzzy: { maxEdits: 1 } // Adjust maxEdits as needed
+    //             }
+    //         }
+    //     },
+    //     {
+    //         $project: { _id: 0, username: 1, email: 1 }
+    //     }
+    // ]);
 
     const users = await User
-        .find({ $or: [{ username: user }, { email: user }] }, { _id: 0, username: 1, email: 1 })
+    .find({
+        $text: { $search: user }
+    }, { _id: 0, username: 1, email: 1 });
 
     if (!users.length) {
-        throw new ApiError(404, "No users found matching the given input")
+        throw new ApiError(404, "No users found matching the given input");
     }
 
     return res
@@ -351,8 +370,9 @@ const searchUser = asyncHandler(async (req, res) => {
             200,
             users,
             "Users fetched successfully"
-        ))
-})
+        ));
+});
+
 
 const sendOtp = asyncHandler(async (req, res) => {
     const { email } = req.body;
