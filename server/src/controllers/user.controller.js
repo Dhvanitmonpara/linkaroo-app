@@ -339,8 +339,7 @@ const searchUser = asyncHandler(async (req, res) => {
     const { user } = req.body
 
     const users = await User
-        .find({ $or: [{ username: user }, { email: user }] })
-        .select("-password -refreshToken")
+        .find({ $or: [{ username: user }, { email: user }] }, { _id: 0, username: 1, email: 1 })
 
     if (!users.length) {
         throw new ApiError(404, "No users found matching the given input")
