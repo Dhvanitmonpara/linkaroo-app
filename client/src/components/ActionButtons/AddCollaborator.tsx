@@ -30,7 +30,8 @@ const AddCollaborator: React.FC = () => {
   const [userList, setUserList] = useState<Collaborator[]>([]);
   const [searchByEmail, setSearchByEmail] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [SendRequestLoading, setSendRequestLoading] = useState(false);
+  const [confirmRequest, setConfirmRequest] = useState(false);
 
   const { profile } = useProfileStore();
   const theme = profile.theme;
@@ -57,7 +58,6 @@ const AddCollaborator: React.FC = () => {
         );
 
         setUserList(response.data.data);
-        setSelectedIndex(-1);
       } catch (error) {
         handleAxiosError(error as AxiosError, navigate);
         setUserList([]);
@@ -73,9 +73,20 @@ const AddCollaborator: React.FC = () => {
     return () => searchUsers.cancel();
   }, [value, searchUsers]);
 
-  const handleSelect = (email: string) => {
-    setValue(email);
-    setOpen(false);
+  const handleSelect = (user: string) => {
+    setConfirmRequest(true);
+    setValue(user);
+  };
+
+  const handleSendRequest = async () => {
+    try {
+      setSendRequestLoading(true);
+      // send notification req
+    } catch (error) {
+      handleAxiosError(error as AxiosError, navigate);
+    } finally {
+      setSendRequestLoading(false);
+    }
   };
 
   const handleSearchModeToggle = (isEmailSearch: boolean) => {
@@ -102,7 +113,15 @@ const AddCollaborator: React.FC = () => {
   };
 
   return (
-    <DropdownMenu open={open} onOpenChange={() => setOpen(!open)} modal={false}>
+    <DropdownMenu
+      open={open}
+      onOpenChange={() => {
+        setOpen(!open);
+        setConfirmRequest(false);
+        setValue("");
+      }}
+      modal={false}
+    >
       <DropdownMenuTrigger asChild>
         <div className="h-full w-full flex justify-center items-center cursor-pointer">
           <IoMdPersonAdd />
@@ -146,19 +165,36 @@ const AddCollaborator: React.FC = () => {
             <ScrollArea>
               <div className="p-2">
                 {loading ? (
-                  <DropdownMenuItem className="flex items-center justify-center p-2">
+                  <div className="flex items-center justify-center p-2">
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     Loading...
-                  </DropdownMenuItem>
+                  </div>
                 ) : userList.length === 0 ? (
-                  <DropdownMenuItem
+                  <div
                     className={cn(
                       "p-2 text-center",
                       theme !== "light" ? "text-zinc-200" : "text-black"
                     )}
                   >
                     No data found
-                  </DropdownMenuItem>
+                  </div>
+                ) : confirmRequest ? (
+                  <div>
+                    <Button
+                      onClick={handleSendRequest}
+                      className={`w-full flex justify-center p-0 items-center ${
+                        theme !== "light"
+                          ? "text-zinc-200 bg-zinc-800 hover:bg-zinc-700"
+                          : "bg-zinc-100 hover:bg-zinc-200 text-zinc-950"
+                      }`}
+                    >
+                      {SendRequestLoading ? (
+                        <Loader2 className="animate-spin" />
+                      ) : (
+                        "Send request"
+                      )}
+                    </Button>
+                  </div>
                 ) : (
                   userList.map((user, index) => (
                     <DropdownMenuItem
@@ -166,15 +202,21 @@ const AddCollaborator: React.FC = () => {
                       ref={(el) => (resultRefs.current[index] = el)}
                       className={cn(
                         "flex items-center p-2 cursor-pointer rounded-sm",
-                        selectedIndex === index
-                          ? "bg-zinc-100 text-black"
-                          : theme !== "light"
+                        theme !== "light"
                           ? "bg-zinc-900 text-zinc-200 hover:bg-zinc-800"
                           : "bg-white text-black hover:bg-gray-100"
                       )}
-                      onClick={() => handleSelect(user.email)}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleSelect(
+                          searchByEmail ? user.email : user.username
+                        );
+                      }}
                       onKeyDown={(e) => {
-                        if (e.key === "Enter") handleSelect(user.email);
+                        if (e.key === "Enter")
+                          handleSelect(
+                            searchByEmail ? user.email : user.username
+                          );
                       }}
                     >
                       {searchByEmail ? user.email : `@${user.username}`}
@@ -185,18 +227,43 @@ const AddCollaborator: React.FC = () => {
             </ScrollArea>
           </>
         ) : (
-          <div className="w-full h-full p-2 space-y-2">
-            <Button
-              onClick={getSharableLink}
-              className={`w-full flex justify-center p-0 items-center ${
-                theme !== "light"
-                  ? "text-zinc-200 bg-zinc-800 hover:bg-zinc-700"
-                  : "bg-zinc-100 hover:bg-zinc-200 text-zinc-950"
+          <>
+            <div
+              className={`grid w-full grid-cols-12 justify-center items-center ${
+                theme !== "light" ? "text-zinc-600" : "text-zinc-300"
               }`}
             >
-              Get a sharable link
-            </Button>
-          </div>
+              <span className="col-span-5">
+                <hr
+                  className={
+                    theme !== "light" ? "border-zinc-600" : "border-zinc-300"
+                  }
+                />
+              </span>
+              <span className="col-span-2 flex justify-center items-center text-xs">
+                OR
+              </span>
+              <span className="col-span-5">
+                <hr
+                  className={
+                    theme !== "light" ? "border-zinc-600" : "border-zinc-300"
+                  }
+                />
+              </span>
+            </div>
+            <div className="w-full h-full p-2 space-y-2">
+              <Button
+                onClick={getSharableLink}
+                className={`w-full flex justify-center p-0 items-center ${
+                  theme !== "light"
+                    ? "text-zinc-200 bg-zinc-800 hover:bg-zinc-700"
+                    : "bg-zinc-100 hover:bg-zinc-200 text-zinc-950"
+                }`}
+              >
+                Get a sharable link
+              </Button>
+            </div>
+          </>
         )}
       </DropdownMenuContent>
     </DropdownMenu>
