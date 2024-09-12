@@ -1,7 +1,6 @@
 import { Input } from "./ui/input";
 import { IoMdAdd } from "react-icons/io";
 import { IoFilterOutline } from "react-icons/io5";
-import { IoMdNotificationsOutline } from "react-icons/io";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,18 +12,18 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { IoMdNotificationsOutline } from "react-icons/io";
 import { IoSearchSharp } from "react-icons/io5";
 import { CreateDocForm, CreateListForm } from "./Forms";
 import useMethodStore from "@/store/MethodStore";
 import useProfileStore from "@/store/profileStore";
 import { useEffect, useState } from "react";
 import CommandMenu from "./CommandMenu";
-import NotificationCard from "./NotificationCard";
 import { Link } from "react-router-dom";
 import ProfileCard from "./ProfileCard";
+import Notifications from "./Notifications";
 
 const Header = () => {
-
   const { toggleModal, setModalContent, setPrevPath } = useMethodStore();
   const { profile } = useProfileStore();
   const { theme } = profile;
@@ -118,16 +117,9 @@ const Header = () => {
                 theme == "dark" || theme == "black"
                   ? "bg-zinc-900 border-zinc-700 text-zinc-100"
                   : "bg-zinc-200 border-zinc-300 text-zinc-950"
-              } space-y-2 overflow-y-scroll h-[32rem]`}
+              } space-y-2 overflow-y-scroll h-[32rem] p-0`}
             >
-              <NotificationCard
-                buttonMethods={{ onAccept: () => {}, onDismiss: () => {} }}
-                notification={{
-                  title: "Connection req",
-                  description: "@tanishka sent you conection req",
-                  time: "27 sep saturday",
-                }}
-              />
+              <Notifications />
             </PopoverContent>
           </Popover>
         </div>
