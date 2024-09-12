@@ -8,7 +8,8 @@ import {
     registerUser,
     updateAccountDetails,
     updateUserAvatar,
-    searchUser,
+    searchUserByEmail,
+    searchUserByUsername,
     updateBio,
     updateProfileSettings,
     uploadUserCoverImage,
@@ -42,7 +43,9 @@ router.route("/cover-image")
 .post(verifyJWT, upload.single("coverImage"), uploadUserCoverImage)
 .patch(verifyJWT, upload.single("coverImage"), updateUserCoverImage)
 router.route("/theme").patch(verifyJWT, toggleTheme)
-router.route("/verified-search").patch(verifyJWT, searchUser)
-router.route("/search").patch(searchUser)
+router.route("/verified-search/email").patch(verifyJWT, searchUserByEmail)
+router.route("/search/email").patch(searchUserByEmail)
+router.route("/verified-search/username").patch(verifyJWT, searchUserByUsername)
+router.route("/search/username").patch(searchUserByUsername)
 
 export default router;
