@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { IoMdPersonAdd } from "react-icons/io";
 import axios, { AxiosError, AxiosResponse } from "axios";
@@ -67,34 +69,18 @@ const AddCollaborator: React.FC = () => {
     setOpen(false);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "ArrowDown") {
-      // Move focus to the first result
-      e.preventDefault();
-      setSelectedIndex((prev) => Math.min(prev + 1, userList.length - 1));
-      resultRefs.current[selectedIndex + 1]?.focus();
-    } else if (e.key === "ArrowUp") {
-      // Move focus up, or back to input
-      e.preventDefault();
-      if (selectedIndex === 0) {
-        inputRef.current?.focus();
-      } else {
-        setSelectedIndex((prev) => Math.max(prev - 1, 0));
-        resultRefs.current[selectedIndex - 1]?.focus();
-      }
-    } else if (e.key === "Enter" && selectedIndex >= 0) {
-      handleSelect(userList[selectedIndex].email); // Select the highlighted user
-    }
-  };
-
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
+    <DropdownMenu
+      open={open}
+      onOpenChange={setOpen}
+      modal={false} // Keeps dropdown within the context of the parent
+    >
+      <DropdownMenuTrigger asChild>
         <div className="h-full w-full flex justify-center items-center cursor-pointer">
           <IoMdPersonAdd />
         </div>
-      </PopoverTrigger>
-      <PopoverContent
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
         className={cn(
           "w-[200px] p-0",
           theme !== "light" && "bg-zinc-900 text-zinc-200 border-zinc-700"
@@ -111,7 +97,6 @@ const AddCollaborator: React.FC = () => {
             placeholder="Search for a user..."
             value={value}
             onChange={(e) => setValue(e.target.value)}
-            onKeyDown={handleKeyDown}
             ref={inputRef}
             className={cn(
               "w-full p-2 border rounded",
@@ -119,25 +104,26 @@ const AddCollaborator: React.FC = () => {
             )}
           />
         </div>
+        <DropdownMenuSeparator />
         <ScrollArea>
           <div className="p-2">
             {loading ? (
-              <div className="flex items-center justify-center p-2">
+              <DropdownMenuItem className="flex items-center justify-center p-2">
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Loading...
-              </div>
+              </DropdownMenuItem>
             ) : userList.length === 0 && value ? ( // Check if userList is empty and input has value
-              <div
+              <DropdownMenuItem
                 className={cn(
                   "p-2 text-center",
                   theme !== "light" ? "text-zinc-200" : "text-black"
                 )}
               >
                 No data found
-              </div>
+              </DropdownMenuItem>
             ) : (
               userList.map((user, index) => (
-                <div
+                <DropdownMenuItem
                   key={user.email}
                   ref={(el) => (resultRefs.current[index] = el)}
                   tabIndex={-1} // Make it focusable
@@ -161,13 +147,13 @@ const AddCollaborator: React.FC = () => {
                     )}
                   />
                   {user.email}
-                </div>
+                </DropdownMenuItem>
               ))
             )}
           </div>
         </ScrollArea>
-      </PopoverContent>
-    </Popover>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 

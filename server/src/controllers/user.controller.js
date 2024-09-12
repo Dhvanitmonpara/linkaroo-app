@@ -355,13 +355,140 @@ const searchUser = asyncHandler(async (req, res) => {
     //     }
     // ]);
 
-    const users = await User
-    .find({
-        $text: { $search: user }
-    }, { _id: 0, username: 1, email: 1 });
+    // const users = await User.aggregate([
+    //     {
+    //       $match: {
+    //         $text: { $search: user }
+    //       }
+    //     },
+    //     {
+    //       $project: {
+    //         _id: 0,
+    //         username: 1,
+    //         email: 1,
+    //         score: { $meta: "textScore" }
+    //       }
+    //     },
+    //     {
+    //       $sort: { score: -1 }
+    //     },
+    //     {
+    //       $limit: 10
+    //     }
+    //   ]);
 
-    if (!users.length) {
-        throw new ApiError(404, "No users found matching the given input");
+    // const users = await User.aggregate([
+    //     {
+    //       $search: {
+    //         index: "username_text_email_text", // Replace with your actual search index name
+    //         compound: {
+    //           should: [
+    //             {
+    //               autocomplete: {
+    //                 query: user,
+    //                 path: "username",
+    //                 fuzzy: {
+    //                   maxEdits: 1,
+    //                   prefixLength: 1
+    //                 }
+    //               }
+    //             },
+    //             {
+    //               autocomplete: {
+    //                 query: user,
+    //                 path: "email",
+    //                 fuzzy: {
+    //                   maxEdits: 1,
+    //                   prefixLength: 1
+    //                 }
+    //               }
+    //             }
+    //           ]
+    //         }
+    //       }
+    //     },
+    //     {
+    //       $project: {
+    //         _id: 0,
+    //         username: 1,
+    //         email: 1,
+    //         score: { $meta: "searchScore" }
+    //       }
+    //     },
+    //     {
+    //       $sort: { score: -1 }
+    //     }
+    //   ]);
+
+    // const users = await User.aggregate([
+    //     {
+    //       $search: {
+    //         index: "username_text_email_text", // Make sure this matches your actual index name
+    //         text: {
+    //           query: user,
+    //           path: ["username", "email"]
+    //         }
+    //       }
+    //     }
+    //   ]);
+
+    // const users = await User.aggregate([
+    //     {
+    //         $search: {
+    //             index: 'username_email_search_index', // Use the name of the created Atlas Search index
+    //             text: {
+    //                 query: user,
+    //                 path: ['username', 'email'],
+    //                 fuzzy: {
+    //                     maxEdits: 2, // Maximum allowed edit distance for fuzzy matching
+    //                     prefixLength: 2 // Minimum exact-match prefix
+    //                 }
+    //             }
+    //         }
+    //     },
+    //     {
+    //         $project: {
+    //             _id: 0,
+    //             username: 1,
+    //             email: 1
+    //         }
+    //     }
+    // ]);
+
+    // const users = await User.aggregate([
+    //     {
+    //         $search: {
+    //             index: 'username_email_search_index', // your Atlas Search index
+    //             text: {
+    //                 query: "dhvanitpatel",  // Replace with a known username
+    //                 path: ['username', 'email'],
+    //                 fuzzy: {
+    //                     maxEdits: 2,
+    //                     prefixLength: 2
+    //                 }
+    //             }
+    //         }
+    //     }
+    // ]).explain("executionStats");
+
+
+    // const users = await User
+    // .find({
+    //     $text: { $search: user }
+    // }, { _id: 0, username: 1, email: 1 })
+
+    // const listIndexes = await User.collection.listIndexes().toArray();
+    // console.log("Search Indexes:", listIndexes);
+
+    const users = await User.find({
+        $or: [
+            { username: { $regex: user, $options: 'i' } },
+            { email: { $regex: user, $options: 'i' } }
+        ]
+    }, { _id: 0, username: 1, email: 1 })
+
+    if (!users) {
+        throw new ApiError(404, "No users found")
     }
 
     return res
