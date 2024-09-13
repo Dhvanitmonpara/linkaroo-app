@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Input } from "../ui/input";
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
+import { CloudCog, Loader2 } from "lucide-react";
 import {
   Select,
   SelectItem,
@@ -20,6 +20,7 @@ import { cn } from "@/lib/utils";
 import { backgroundImageUrls, themeOptionsArray } from "@/lib/constants";
 import { useNavigate } from "react-router-dom";
 import { handleAxiosError } from "@/utils/handlerAxiosError";
+import useDocStore from "@/store/docStore";
 
 type CreateListFormProps = {
   theme: themeType | undefined;
@@ -39,6 +40,7 @@ const CreateListForm: React.FC<CreateListFormProps> = ({
   const [loading, setLoading] = useState(false);
   const { addListItem } = useListStore();
   const navigate = useNavigate()
+  const { setCurrentListItem } = useDocStore()
 
   const { control, handleSubmit, register } = useForm<HandleListCreationType>({
     defaultValues: {
@@ -83,7 +85,9 @@ const CreateListForm: React.FC<CreateListFormProps> = ({
         return;
       }
 
+
       addListItem(list.data.data);
+      setCurrentListItem(list.data.data);
       navigate(`/lists/${list.data.data._id}`);
     } catch (error) {
       handleAxiosError(error as AxiosError, navigate);
