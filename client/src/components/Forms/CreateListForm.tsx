@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Input } from "../ui/input";
 import { Button } from "@/components/ui/button";
-import { CloudCog, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import {
   Select,
   SelectItem,

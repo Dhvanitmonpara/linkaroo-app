@@ -7,13 +7,14 @@ import {
 } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 
-import HomePage from "./pages/HomePage";
+import DashboardPage from "./pages/DashboardPage";
 import App from "./App";
 import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
 import PasswordRecoveryPage from "./pages/PasswordRecoveryPage";
 import { Docs, Lists, Notifications } from "@/components";
 import NotFound from "@/pages/NotFound"; // Import your NotFound component
+import HomePage from "./pages/HomePage";
 
 const RouterSetup: React.FC = () => {
   const isSmallScreen = useMediaQuery({ query: "(max-width: 1024px)" });
@@ -42,15 +43,16 @@ const RouterSetup: React.FC = () => {
         createRoutesFromElements(
           <Route path="/" element={<App />}>
             <Route path="" element={<HomePage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
             <Route
               path="/password-recovery"
               element={<PasswordRecoveryPage />}
             />
-            <Route path="/list" element={<HomePage />} />
-            <Route path="/lists/:listId" element={<HomePage />} />
-            <Route path="/lists/:listId/docs/:docId" element={<HomePage />} />
+            <Route path="/list" element={<DashboardPage />} />
+            <Route path="/lists/:listId" element={<DashboardPage />} />
+            <Route path="/lists/:listId/docs/:docId" element={<DashboardPage />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         )

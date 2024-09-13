@@ -9,7 +9,12 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-const Lists = () => {
+type ListsProps = {
+  className?: string;
+  extraElementClassNames?: string
+}
+
+const Lists = ({className, extraElementClassNames}: ListsProps) => {
   const [loading, setLoading] = useState(true);
   const { setLists, lists } = useListStore();
   const { toggleModal } = useMethodStore();
@@ -64,8 +69,8 @@ const Lists = () => {
 
   return (
     <>
-      <div className="col-span-2 relative lg:px-0 px-4 space-y-3 overflow-y-scroll no-scrollbar h-[calc(100vh-4.5rem)] lg:h-[calc(100vh-4.5rem)]">
-        <div className="h-2"></div>
+      <div className={`col-span-2 relative lg:px-0 px-4 space-y-3 overflow-y-scroll no-scrollbar h-[calc(100vh-4.5rem)] ${className}`}>
+        <div className={`h-2 ${extraElementClassNames}`}></div>
         {lists.map((list, index) => (
           <ListCard
             key={index}

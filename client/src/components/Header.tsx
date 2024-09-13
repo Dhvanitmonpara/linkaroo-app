@@ -19,7 +19,7 @@ import useMethodStore from "@/store/MethodStore";
 import useProfileStore from "@/store/profileStore";
 import { useEffect, useState } from "react";
 import CommandMenu from "./CommandMenu";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import ProfileCard from "./ProfileCard";
 import Notifications from "./Notifications";
 
@@ -124,18 +124,18 @@ const Header = () => {
           </Popover>
         </div>
         <div className="text-zinc-400 md:flex justify-center items-center hidden space-x-7 font-semibold">
-          <span className="hover:text-zinc-100 cursor-pointer transition-colors">
+          <NavLink to="/" className={({isActive})=>(`${isActive ? "text-zinc-100" : ""} hover:text-zinc-100 cursor-pointer transition-colors`)}>
             Home
-          </span>
-          <span className="hover:text-zinc-100 cursor-pointer transition-colors">
-            Menu
-          </span>
-          <span className="hover:text-zinc-100 cursor-pointer transition-colors">
+          </NavLink>
+          <NavLink to="/dashboard" className={({isActive})=>(`${isActive ? "text-zinc-100" : ""} hover:text-zinc-100 cursor-pointer transition-colors`)}>
+            Dashboard
+          </NavLink>
+          <NavLink to="pinned" className={({isActive})=>(`${isActive ? "text-zinc-100" : ""} hover:text-zinc-100 cursor-pointer transition-colors`)}>
             Pinned
-          </span>
-          <span className="hover:text-zinc-100 cursor-pointer transition-colors">
+          </NavLink>
+          <NavLink to="/docs" className={({isActive})=>(`${isActive ? "text-zinc-100" : ""} hover:text-zinc-100 cursor-pointer transition-colors`)}>
             Docs
-          </span>
+          </NavLink>
           <div className="hidden lg:inline-block">
             <ProfileCard />
           </div>
