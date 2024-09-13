@@ -12,13 +12,13 @@ import { BiSolidPencil } from "react-icons/bi";
 import { handleAxiosError } from "@/utils/handlerAxiosError";
 import convertMongoDBDate from "@/utils/convertMongoDBDate";
 import { Button } from "./ui/button";
-import { CreateDocForm } from "./Forms";
+import { CreateDocForm, CreateListForm } from "./Forms";
 
 const Docs = () => {
   const { toggleModal } = useMethodStore();
   const [loading, setLoading] = useState(false);
   const location = useLocation().pathname;
-  
+
   const {
     docs,
     setDocs,
@@ -43,10 +43,10 @@ const Docs = () => {
         try {
           setLoading(true);
           const listId = location.split("/")[2];
-        
-          console.log(listId)
+
+
           const cache = cachedDocs.filter((doc) => doc.listId === listId)[0];
-          console.log(cache)
+
           if (cache) {
             setDocs(cache.docs);
           } else {
@@ -92,6 +92,39 @@ const Docs = () => {
     backgroundPosition: "center",
   };
 
+  if (!currentListItem?._id) {
+    return (
+      <div>
+        <div className="md:h-[calc(100vh-5rem)] h-[calc(100vh-8rem)] lg:h-[calc(100vh-4.5rem)] overflow-y-scroll w-full flex flex-col justify-center items-center space-y-6 p-4">
+          <h1 className="text-3xl font-bold text-center dark:text-white">Welcome to Your Document Space</h1>
+          <p className="text-lg text-center max-w-2xl dark:text-gray-300">
+            It looks like you haven't selected a list yet. To get started, create a new list or select an existing one from the sidebar.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <Button
+              onClick={() => navigate('/lists')}
+              className={`${theme !== "light" ? "bg-zinc-900 hover:bg-zinc-800 text-zinc-200" : "bg-zinc-300 hover:bg-zinc-400 px-6 py-2"} `}
+            >
+              View Your Lists
+            </Button>
+            <Button
+              onClick={() => {
+                setPrevPath(location);
+                toggleModal(true);
+                setModalContent(
+                  <CreateListForm toggleModal={toggleModal} theme={theme} />
+                );
+              }}
+              className={`${theme !== "light" ? "bg-zinc-900 hover:bg-zinc-800 text-zinc-200" : "bg-zinc-300 hover:bg-zinc-400 px-6 py-2"} `}
+            >
+              Create New List
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (docs.length == 0) {
     return (
       <div className={`md:h-[calc(100vh-5rem)] select-none h-[calc(100vh-8rem)] overflow-y-hidden lg:h-[calc(100vh-4.5rem)]  w-full space-y-2 no-scrollbar ${font}`}>
@@ -134,9 +167,9 @@ const Docs = () => {
           </div>
         </div>
         <div
-          className="flex justify-center flex-col gap-2 items-center w-full h-2/6"
+          className="flex justify-center flex-col gap-4 items-center w-full h-2/6"
         >
-          <span className={`${theme !== "light" ? "text-zinc-200" : "text-zinc-800"} `}>No docs are there :&#41;</span>
+          <span className={`${theme !== "light" ? "text-zinc-200" : "text-zinc-800"} `}>You don't have any documents on this list.</span>
           <Button
             onClick={
               () => {
@@ -151,7 +184,7 @@ const Docs = () => {
                 );
               }
             }
-            className={`${theme !== "light" ? "bg-zinc-900 hover:bg-zinc-800 text-zinc-200" : "bg-zinc-300 hover:bg-zinc-400"} `}>
+            className={`${theme !== "light" ? "bg-zinc-900 hover:bg-zinc-800 text-zinc-200" : "bg-zinc-300 hover:bg-zinc-400"} px-6 py-2`}>
             Create a Doc
           </Button>
         </div>
