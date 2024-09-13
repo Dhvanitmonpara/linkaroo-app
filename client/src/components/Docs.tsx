@@ -1,4 +1,4 @@
-import { DocCard, ListActionButtons } from "@/components";
+import { DocCard, ListActionButtons, Tag } from "@/components";
 import useDocStore from "@/store/docStore";
 import useListStore from "@/store/listStore";
 import useMethodStore from "@/store/MethodStore";
@@ -13,6 +13,7 @@ import { handleAxiosError } from "@/utils/handlerAxiosError";
 import convertMongoDBDate from "@/utils/convertMongoDBDate";
 import { Button } from "./ui/button";
 import { CreateDocForm, CreateListForm } from "./Forms";
+import { removeUsernameTag } from "@/utils/toggleUsernameInTag";
 
 const Docs = () => {
   const { toggleModal } = useMethodStore();
@@ -75,6 +76,15 @@ const Docs = () => {
       }
     })();
   }, [lists, currentCardColor, location, setDocs, setCurrentListItem]);
+
+  const tags: string[] = [];
+
+  currentListItem?.tags?.forEach((tag) => {
+    const tagname = removeUsernameTag(tag.tagname);
+    if (tagname != undefined) {
+      tags.push(tagname);
+    }
+  });
 
   if (loading) {
     return (
@@ -228,8 +238,13 @@ const Docs = () => {
               </span>
             </div>
           </div>
-          <div className="pt-4">
+          <div className="pt-4 space-y-4">
             <p>{currentListItem?.description}</p>
+            <div className="flex space-x-1">
+              {tags.length > 0 && tags.map((tag, index) => (
+                <Tag isBlackEnable={theme === "black"} key={index} text={tag} />
+              ))}
+            </div>
           </div>
         </div>
       </div>
