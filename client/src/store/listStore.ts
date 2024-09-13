@@ -11,6 +11,8 @@ interface ListState {
   updateListItem: (list: fetchedListType) => void;
   updateListTags: (list: fetchedListType) => void;
   toggleIsPublic: (list: fetchedListType) => void;
+  inbox: fetchedListType | null;
+  setInbox: (inbox: fetchedListType | null) => void;
 }
 
 const useListStore = create<ListState>()(
@@ -56,7 +58,7 @@ const useListStore = create<ListState>()(
             return state;
           });
         },
-        toggleIsPublic: (list: fetchedListType) => {
+        toggleIsPublic: (list) => {
           set((state) => ({
             lists: state.lists.map((existingList) =>
               existingList._id === list._id
@@ -64,7 +66,9 @@ const useListStore = create<ListState>()(
                 : existingList
             ),
           }));
-        }
+        },
+        inbox: null,
+        setInbox(inbox) { set({ inbox }) },
       }),
       {
         name: "lists",

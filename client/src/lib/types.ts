@@ -67,6 +67,7 @@ type fetchedListType = {
   createdBy: Collaborator;
   description: string;
   tags: TagType[];
+  isInbox: boolean;
   theme: colorOptions;
   isPublic: boolean;
   title: string;

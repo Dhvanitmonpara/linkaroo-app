@@ -10,7 +10,7 @@ import { Card } from "../models/card.model.js"
 
 const createList = asyncHandler(async (req, res) => {
 
-    const { title, description, theme = "bg-zinc-200", coverImage } = req.body
+    const { title, description, theme = "bg-zinc-200", coverImage, isInbox = false } = req.body
 
     if (!title || !description) {
         throw new ApiError(400, "Title and description are required")
@@ -29,6 +29,7 @@ const createList = asyncHandler(async (req, res) => {
         createdBy: req.user._id,
         title,
         description,
+        isInbox,
         theme,
         coverImage,
         collaborators: []

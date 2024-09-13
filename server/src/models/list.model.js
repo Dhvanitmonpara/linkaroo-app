@@ -25,6 +25,10 @@ const listSchema = new Schema({
         type: Boolean,
         default: true
     },
+    isInbox: {
+        type: Boolean,
+        default: false
+    },
     tags: [
         {
             type: Schema.Types.ObjectId,

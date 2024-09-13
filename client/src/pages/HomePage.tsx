@@ -15,7 +15,7 @@ const HomePage = () => {
                     <Input
                         type="text"
                         placeholder="Quick add a new doc..."
-                        className={`w-full px-4 py-6 text-lg rounded-md ${theme !== "light"
+                        className={`w-full px-6 py-6 text-lg rounded-md ${theme !== "light"
                             ? "bg-zinc-800 text-zinc-100 placeholder-zinc-400"
                             : "bg-white text-zinc-900 placeholder-zinc-500"
                             } rounded-3xl w-full`}

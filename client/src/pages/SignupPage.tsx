@@ -110,7 +110,7 @@ const SignupPage = () => {
         return;
       }
 
-      addProfile(response.data.data);
+      addProfile(response.data.data.user);
       navigate("/");
     } catch (err) {
       handleAxiosError(err as AxiosError, navigate);

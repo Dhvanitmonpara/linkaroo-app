@@ -1,4 +1,5 @@
 import { ListCard } from "@/components";
+import { fetchedListType } from "@/lib/types";
 import useListStore from "@/store/listStore";
 import useMethodStore from "@/store/MethodStore";
 import useProfileStore from "@/store/profileStore";
@@ -14,9 +15,9 @@ type ListsProps = {
   extraElementClassNames?: string
 }
 
-const Lists = ({className, extraElementClassNames}: ListsProps) => {
+const Lists = ({ className, extraElementClassNames }: ListsProps) => {
   const [loading, setLoading] = useState(true);
-  const { setLists, lists } = useListStore();
+  const { setLists, lists, setInbox } = useListStore();
   const { toggleModal } = useMethodStore();
   const { profile } = useProfileStore();
   const { theme, font } = profile;
@@ -40,7 +41,12 @@ const Lists = ({className, extraElementClassNames}: ListsProps) => {
               return;
             }
 
-            setLists(response.data.data);
+            const allLists = response.data.data;
+            const inboxList = allLists.find((list: fetchedListType) => list.isInbox === true);
+            const regularLists = allLists.filter((list: fetchedListType) => list.isInbox === false);
+
+            setLists(regularLists);
+            setInbox(inboxList)
           }
         } catch (error) {
           handleAxiosError(error as AxiosError, navigate);
