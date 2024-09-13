@@ -29,8 +29,8 @@ const HomePage = () => {
                     />
                 </div>
             </div>
-            <div className="px-64 pt-24">
-                <Lists className="!h-auto grid grid-cols-3 !gap-2 space-y-0" extraElementClassNames="hidden" />
+            <div className="px-64 py-8 pt-24">
+                <Lists className="!h-auto grid grid-cols-3 !gap-2 !space-y-0" extraElementClassNames="hidden" />
             </div>
         </div>
     )
