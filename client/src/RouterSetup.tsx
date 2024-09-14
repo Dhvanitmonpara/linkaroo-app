@@ -12,7 +12,7 @@ import App from "./App";
 import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
 import PasswordRecoveryPage from "./pages/PasswordRecoveryPage";
-import { Docs, Lists, Notifications } from "@/components";
+import { Docs, Notifications } from "@/components";
 import NotFound from "@/pages/NotFound"; // Import your NotFound component
 import HomePage from "./pages/HomePage";
 import InboxPage from "./pages/InboxPage";
@@ -25,7 +25,7 @@ const RouterSetup: React.FC = () => {
       // Small screen
       createRoutesFromElements(
         <Route path="/" element={<App />}>
-          <Route path="" element={<Lists />} />
+          <Route path="" element={<HomePage />} />
           <Route path="/lists/:listId" element={<Docs />} />
           <Route path="/lists/:listId/docs/:docId" element={<Docs />} />
           <Route path="/notifications" element={<Notifications />} />

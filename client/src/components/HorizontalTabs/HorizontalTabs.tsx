@@ -19,6 +19,7 @@ import { IoLogOut } from "react-icons/io5";
 import toast from "react-hot-toast";
 import { handleAxiosError } from "@/utils/handlerAxiosError";
 import axios, { AxiosError } from "axios";
+import { FaInbox } from "react-icons/fa6";
 
 export default function HorizontalTabs() {
   const { profile } = useProfileStore();
@@ -59,6 +60,15 @@ export default function HorizontalTabs() {
         }
       >
         <MdHome />
+      </NavLink>
+
+      <NavLink
+        to="/inbox"
+        className={({ isActive }) =>
+          `menu-label !text-2xl !w-auto ${isActive ? "!text-white" : ""}`
+        }
+      >
+        <FaInbox />
       </NavLink>
 
       <DrawerMenu

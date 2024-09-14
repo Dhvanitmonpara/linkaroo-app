@@ -49,7 +49,7 @@ const InboxPage = () => {
                 }
             }
         })();
-    }, [setInboxDocs, location]);
+    }, [setInboxDocs, location, inbox?._id, navigate]);
 
     if (loading) {
         return (
