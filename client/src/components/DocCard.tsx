@@ -47,11 +47,10 @@ const DocCard = ({
     window.open(link, "_blank");
   };
 
-  const cardClass = `${color} ${
-    color === "bg-black"
-      ? "!text-zinc-300 border-zinc-500 !bg-zinc-900 border-[1px]"
-      : "text-black"
-  } select-none group px-5 h-14 flex-col transition-all rounded-md flex justify-center items-center`;
+  const cardClass = `${color} ${color === "bg-black"
+    ? "!text-zinc-300 border-zinc-500 !bg-zinc-900 border-[1px]"
+    : "text-black"
+    } select-none group relative px-5 h-14 flex-col transition-all rounded-md flex justify-center items-center`;
 
   return (
     <div className={cardClass}>
@@ -74,24 +73,24 @@ const DocCard = ({
             e.stopPropagation();
             toggleIsChecked(id, isChecked);
           }}
-          className={`${
-            isChecked
-              ? ""
-              : "group-hover:opacity-100 ease-in-out duration-300 lg:opacity-0"
-          } ${color}`}
+          className={`${isChecked
+            ? ""
+            : "group-hover:opacity-100 ease-in-out duration-300 lg:opacity-0"
+            } ${color}`}
           id={id}
         />
-        <div className="flex justify-between items-center w-full">
-          <span className="hover:underline" onClick={openLink}>
-            {title}
-          </span>
-          <span
-            onClick={openLink}
-            className="md:opacity-0 opacity-100 hover:bg-[#00000020] active:scale-95 rounded-full p-2 group-hover:opacity-100 transition-all ease-in-out duration-300"
-          >
-            <FiArrowUpRight />
-          </span>
-        </div>
+        <span
+          className="hover:underline max-w-[80%] overflow-hidden text-ellipsis whitespace-nowrap"
+          onClick={openLink}
+        >
+          {title}
+        </span>
+        <span
+          onClick={openLink}
+          className="md:opacity-0 absolute right-6 opacity-100 hover:bg-[#00000020] active:scale-95 rounded-full p-2 group-hover:opacity-100 transition-all ease-in-out duration-300"
+        >
+          <FiArrowUpRight />
+        </span>
       </h2>
     </div>
   );
