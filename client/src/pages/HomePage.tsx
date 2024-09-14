@@ -1,19 +1,33 @@
 import { Lists } from "@/components";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import useProfileStore from "@/store/profileStore"
+import { useState } from "react";
 
 const HomePage = () => {
+
     const { theme, fullName } = useProfileStore().profile
+    const [input, setInput] = useState("")
+
+    const quickAddHandler = async (data: { url: string; title?: string }) => {
+        console.log(data);
+    }
+
     return (
-        <div className={`${theme !== "light" ? "text-zinc-100" : "text-zinc-900"} select-none h-[calc(100vh-4.5rem)] overflow-y-scroll`}>
+        <div className={`${theme !== "light" ? "text-zinc-100" : "text-zinc-900"} no-scrollbar select-none h-[calc(100vh-4.5rem)] overflow-y-scroll`}>
             <div className="flex justify-center items-center flex-col space-y-12 pt-36">
                 <div className="flex justify-center items-center flex-col space-y-3">
                     <h1 className="text-5xl font-semibold">Welcome back, {fullName}</h1>
                     <p className={`mt-4 text-lg ${theme !== "light" ? "text-zinc-400" : "text-zinc-500"}`}>Ready to capture your links?</p>
                 </div>
-                <div className="mt-8 max-w-5xl w-2/5">
+                <form onSubmit={(e) => {
+                    e.preventDefault();
+                    quickAddHandler({ url: input });
+                }} className="mt-8 max-w-5xl w-2/5 relative">
                     <Input
                         type="text"
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
                         placeholder="Quick add a new doc..."
                         className={`w-full px-6 py-6 text-lg rounded-md ${theme !== "light"
                             ? "bg-zinc-800 text-zinc-100 placeholder-zinc-400"
@@ -21,16 +35,22 @@ const HomePage = () => {
                             } rounded-3xl w-full`}
                         onKeyDown={(e) => {
                             if (e.key === 'Enter') {
-                                // TODO: Implement quick add functionality
-                                console.log("Quick add:", e.currentTarget.value);
-                                e.currentTarget.value = '';
+                                e.preventDefault();
+                                quickAddHandler({ url: input });
+                                setInput('');
                             }
                         }}
                     />
-                </div>
+                    <Button
+                        type="submit"
+                        className={`${theme !== "light" ? "bg-zinc-700 hover:bg-zinc-600 text-zinc-200" : "bg-zinc-300 hover:bg-zinc-400"} rounded-full px-8 py-5 absolute top-1 right-1 transition-all ease-in-out ${input !== "" ? "scale-100" : "scale-0"}`}
+                    >
+                        Add
+                    </Button>
+                </form>
             </div>
-            <div className="px-64 py-8 pt-24">
-                <Lists className="!h-auto grid grid-cols-3 !gap-2 !space-y-0" extraElementClassNames="hidden" />
+            <div className="px-24 xl:px-56 2xl-px-64 py-8 pt-24">
+                <Lists className="!h-auto 2xl:!grid-cols-3" extraElementClassNames="hidden" />
             </div>
         </div>
     )

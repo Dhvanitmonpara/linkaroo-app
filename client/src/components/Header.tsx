@@ -107,8 +107,8 @@ const Header = () => {
             <IoFilterOutline />
           </div>
           <Popover>
-            <PopoverTrigger className="md:w-12 w-10 text-xl md:text-base">
-              <div className="w-full h-full flex justify-center items-center text-zinc-300 md:text-zinc-400 md:dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-white rounded-sm md:border-2 md:dark:border-zinc-700 md:border-zinc-200 hover:bg-zinc-200">
+            <PopoverTrigger className="md:w-12 w-10 text-xl md:text-base hidden lg:flex">
+              <div className="w-full h-full flex justify-center items-center text-zinc-400 dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-white rounded-sm border-2 dark:border-zinc-700 border-zinc-200 hover:bg-zinc-200">
                 <IoMdNotificationsOutline />
               </div>
             </PopoverTrigger>
@@ -130,11 +130,11 @@ const Header = () => {
           <NavLink to="/dashboard" className={({isActive})=>(`${isActive ? "text-zinc-100" : ""} hover:text-zinc-100 cursor-pointer transition-colors`)}>
             Dashboard
           </NavLink>
-          <NavLink to="pinned" className={({isActive})=>(`${isActive ? "text-zinc-100" : ""} hover:text-zinc-100 cursor-pointer transition-colors`)}>
+          {/* <NavLink to="pinned" className={({isActive})=>(`${isActive ? "text-zinc-100" : ""} hover:text-zinc-100 cursor-pointer transition-colors`)}>
             Pinned
-          </NavLink>
-          <NavLink to="/docs" className={({isActive})=>(`${isActive ? "text-zinc-100" : ""} hover:text-zinc-100 cursor-pointer transition-colors`)}>
-            Docs
+          </NavLink> */}
+          <NavLink to="/inbox" className={({isActive})=>(`${isActive ? "text-zinc-100" : ""} hover:text-zinc-100 cursor-pointer transition-colors`)}>
+            Inbox
           </NavLink>
           <div className="hidden lg:inline-block">
             <ProfileCard />

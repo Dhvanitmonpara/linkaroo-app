@@ -121,7 +121,7 @@ const App = () => {
         <Outlet />
       </div>
       <div
-        className={`fixed z-30 md:fixed bottom-0 px-0 dark:text-zinc-400 ${
+        className={`fixed z-30 bottom-0 px-0 dark:text-zinc-400 ${
           theme === "black" ? "bg-black" : "dark:bg-zinc-800"
         } sm:!bg-transparent justify-center items-center flex w-screen h-16 ${
           showBars ? "hidden" : ""

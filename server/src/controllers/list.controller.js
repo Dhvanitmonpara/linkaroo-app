@@ -166,6 +166,7 @@ const getListById = asyncHandler(async (req, res) => {
                 theme: 1,
                 font: 1,
                 createdAt: 1,
+                isInbox: 1,
                 updatedAt: 1,
                 coverImage: 1,
                 collaborators: {
@@ -356,6 +357,7 @@ const getListsByUser = asyncHandler(async (req, res) => {
                 font: 1,
                 createdAt: 1,
                 updatedAt: 1,
+                isInbox: 1,
                 coverImage: 1,
                 isPublic: 1,
                 collaborators: {

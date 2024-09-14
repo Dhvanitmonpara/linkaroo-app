@@ -40,7 +40,6 @@ const Lists = ({ className, extraElementClassNames }: ListsProps) => {
               toast.error("Failed to fetch user's lists.");
               return;
             }
-
             const allLists = response.data.data;
             const inboxList = allLists.find((list: fetchedListType) => list.isInbox === true);
             const regularLists = allLists.filter((list: fetchedListType) => list.isInbox === false);
@@ -75,8 +74,8 @@ const Lists = ({ className, extraElementClassNames }: ListsProps) => {
 
   return (
     <>
-      <div className={`col-span-2 relative lg:px-0 px-4 space-y-3 overflow-y-scroll no-scrollbar h-[calc(100vh-4.5rem)] ${className}`}>
-        <div className={`h-2 ${extraElementClassNames}`}></div>
+      <div className={`col-span-2 relative lg:px-0 px-4 space-y-3 overflow-y-scroll no-scrollbar h-[calc(100vh-4.5rem)] md:h-auto lg:h-[calc(100vh-4.5rem)] md:grid md:grid-cols-2 md:space-x-0 md:space-y-0 md:p-4 !gap-2 md:justify-start md:items-start 2xl:grid-cols-1 ${className}`}>
+        <div className={`h-2 md:hidden ${extraElementClassNames}`}></div>
         {lists.map((list, index) => (
           <ListCard
             key={index}
@@ -92,7 +91,7 @@ const Lists = ({ className, extraElementClassNames }: ListsProps) => {
             toggleModal={toggleModal}
           />
         ))}
-        <div className="lg:h-2 h-16"></div>
+        <div className="lg:h-2 h-16 md:hidden"></div>
       </div>
     </>
   );

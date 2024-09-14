@@ -116,16 +116,11 @@ export default function HorizontalTabs() {
       <DrawerMenu
         title="Profile"
         trigger={
-          <label
-            htmlFor="profile-tab"
-            className="menu-label !text-2xl !w-auto h-auto m-0 p-0"
-          >
-            <img
-              className="rounded-full h-9 w-9 object-cover border-zinc-700 border-2 hover:border-zinc-200 transition-colors"
-              src={profile.avatarImage}
-              alt="Profile pic"
-            />
-          </label>
+          <img
+            className="rounded-full !h-9 !w-9 object-cover border-zinc-700 border-2 hover:border-zinc-200 transition-colors"
+            src={profile.avatarImage}
+            alt="Profile pic"
+          />
         }
       >
         <div className="w-full px-2 flex flex-col">
