@@ -52,7 +52,7 @@ export default function HorizontalTabs() {
   };
 
   return (
-    <div className="flex md:justify-between justify-evenly dark:bg-zinc-800 w-full px-5 bg-zinc-200 h-full md:px-24 sm:px-16 sm:!rounded-t-xl items-center sm:w-6/12">
+    <div className="flex md:justify-between justify-evenly dark:bg-zinc-800 w-full px-5 bg-zinc-200 h-full md:px-12 sm:px-2 sm:!rounded-t-xl items-center sm:w-6/12">
       <NavLink
         to="/"
         className={({ isActive }) =>
@@ -126,11 +126,16 @@ export default function HorizontalTabs() {
       <DrawerMenu
         title="Profile"
         trigger={
-          <img
-            className="rounded-full !h-9 !w-9 object-cover border-zinc-700 border-2 hover:border-zinc-200 transition-colors"
-            src={profile.avatarImage}
-            alt="Profile pic"
-          />
+          <label
+            htmlFor="create-tab"
+            className="menu-label !text-3xl bg-transparent !w-auto"
+          >
+            <img
+              className="rounded-full !h-9 !w-9 object-cover border-zinc-700 border-2 hover:border-zinc-200 transition-colors"
+              src={profile.avatarImage}
+              alt="Profile pic"
+            />
+          </label>
         }
       >
         <div className="w-full px-2 flex flex-col">

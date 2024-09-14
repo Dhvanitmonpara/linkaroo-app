@@ -51,10 +51,10 @@ const HomePage = () => {
 
     return (
         <div className={`${theme !== "light" ? "text-zinc-100" : "text-zinc-900"} no-scrollbar select-none h-[calc(100vh-4.5rem)] overflow-y-scroll`}>
-            <div className="flex justify-center items-center flex-col space-y-12 pt-36">
-                <div className="flex md:justify-center md:items-center flex-col px-5 md:p-0 space-y-3">
-                    <h1 className="text-5xl font-semibold">Welcome back, {fullName}</h1>
-                    <p className={`mt-4 text-lg ${theme !== "light" ? "text-zinc-400" : "text-zinc-500"}`}>Ready to capture your links?</p>
+            <div className="flex justify-center items-center flex-col space-y-12 pt-12 sm:pt-36">
+                <div className="flex w-full sm:justify-center sm:items-center flex-col px-5 md:px-24 md:p-0 space-y-3">
+                    <h1 className="text-4xl md:text-5xl font-semibold">Welcome back, {fullName}</h1>
+                    <p className={`mt-4 md:text-lg ${theme !== "light" ? "text-zinc-400" : "text-zinc-500"}`}>Ready to capture your links?</p>
                 </div>
                 <form onSubmit={(e) => {
                     e.preventDefault();
@@ -80,7 +80,7 @@ const HomePage = () => {
                     </Button>
                 </form>
             </div>
-            <div className="px-0 sm:px-24 xl:px-56 2xl-px-64 py-8 pt-6 md:pt-24">
+            <div className="px-0 sm:px-24 xl:px-56 2xl-px-64 py-8 pt-6 sm:pt-12 md:pt-24">
                 <Lists className="!h-auto 2xl:!grid-cols-3" extraElementClassNames="hidden" />
             </div>
         </div>
