@@ -1,4 +1,4 @@
-import { fetchedListType } from "@/lib/types";
+import { fetchedDocType, fetchedListType } from "@/lib/types";
 import { create } from "zustand";
 
 import { devtools, persist } from "zustand/middleware";
@@ -12,7 +12,11 @@ interface ListState {
   updateListTags: (list: fetchedListType) => void;
   toggleIsPublic: (list: fetchedListType) => void;
   inbox: fetchedListType | null;
+  inboxDocs: fetchedDocType[] | []
   setInbox: (inbox: fetchedListType | null) => void;
+  setInboxDocs: (docs: fetchedDocType[] | []) => void
+  addInboxDocItem: (doc: fetchedDocType) => void;
+  removeInboxDocItem: (docId: string) => void
 }
 
 const useListStore = create<ListState>()(
@@ -68,7 +72,17 @@ const useListStore = create<ListState>()(
           }));
         },
         inbox: null,
-        setInbox(inbox) { set({ inbox }) },
+        inboxDocs: [],
+        setInbox: (inbox) => set({ inbox }),
+        setInboxDocs: (docs) => set({ inboxDocs: docs }),
+        addInboxDocItem: (doc) => {
+          set((state) => ({ inboxDocs: [...state.inboxDocs, doc] }));
+        },
+        removeInboxDocItem: (docId) => {
+          set((state) => ({
+            inboxDocs: state.inboxDocs.filter((doc) => doc._id !== docId),
+          }));
+        }
       }),
       {
         name: "lists",
