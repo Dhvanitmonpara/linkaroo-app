@@ -62,14 +62,14 @@ const InboxPage = () => {
     }
 
     return (
-        <div className={`${theme !== "light" ? "text-zinc-100" : "text-zinc-900"} no-scrollbar select-none h-[calc(100vh-4.5rem)] overflow-y-scroll`}>
+        <div className={`${theme !== "light" ? "text-zinc-100" : "text-zinc-900"} no-scrollbar select-none h-[calc(100vh-4.5rem)] overflow-y-scroll `}>
             <div className="flex justify-center items-center flex-col space-y-12 pt-36">
                 <div className="flex justify-center items-center flex-col space-y-3">
                     <h1 className="text-5xl font-semibold">Inbox</h1>
                     <p className={`mt-4 text-lg ${theme !== "light" ? "text-zinc-400" : "text-zinc-500"}`}>Ready to capture your links?</p>
                 </div>
             </div>
-            <div className="px-24 xl:px-56 2xl-px-64 py-8 pt-24">
+            <div className="px-4 md:px-24 xl:px-56 2xl-px-64 py-8 pt-24 grid sm:grid-cols-2 gap-2">
                 {inboxDocs?.length > 0 && inboxDocs.map(doc => (
                     <DocCard
                         key={doc._id}
@@ -83,6 +83,7 @@ const InboxPage = () => {
                     />
                 ))}
             </div>
+            <div className="lg:h-2 h-16"></div>
         </div>
     )
 }

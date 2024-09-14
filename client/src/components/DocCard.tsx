@@ -77,7 +77,7 @@ const DocCard = ({
           className={`${
             isChecked
               ? ""
-              : "group-hover:opacity-100 ease-in-out duration-300 opacity-0"
+              : "group-hover:opacity-100 ease-in-out duration-300 lg:opacity-0"
           } ${color}`}
           id={id}
         />
