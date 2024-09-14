@@ -37,7 +37,6 @@ import { handleAxiosError } from "@/utils/handlerAxiosError";
 import { AddCollaborator } from "./ActionButtons";
 import { FaLock } from "react-icons/fa";
 import { FaLockOpen } from "react-icons/fa";
-import { useMediaQuery } from "react-responsive";
 
 type Checked = boolean;
 
