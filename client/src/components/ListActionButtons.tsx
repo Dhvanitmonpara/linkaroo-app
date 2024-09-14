@@ -63,7 +63,6 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
   const [newTagSubmitLoading, setNewTagSubmitLoading] = useState(false);
 
   const navigate = useNavigate();
-  const isSmallScreen = useMediaQuery({ query: "(max-width: 1024px)" });
   const { listId } = useParams();
 
   useEffect(() => {
