@@ -21,7 +21,7 @@ const InboxPage = () => {
 
     useEffect(() => {
         (async () => {
-            if (location.includes("/inbox")) {
+            if (location.includes("/inbox") && inboxDocs.length == 0) {
                 try {
                     setLoading(true);
 

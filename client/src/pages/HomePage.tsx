@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 const HomePage = () => {
 
     const { theme, fullName } = useProfileStore().profile
-    const { inbox } = useListStore()
+    const { inbox, addInboxDocItem } = useListStore()
     const navigate = useNavigate()
     const [input, setInput] = useState("")
 
@@ -23,13 +23,9 @@ const HomePage = () => {
         try {
             setLoading(true);
 
-            // const metaData = await axios.get("https://www.amazon.in/")
-            // console.log(metaData);
-
             const response = await axios.post(
-                `${import.meta.env.VITE_SERVER_API_URL}/cards/${inbox?._id}`,
+                `${import.meta.env.VITE_SERVER_API_URL}/cards/quick-add/${inbox?._id}`,
                 {
-                    title: url,
                     link: url,
                 },
                 { withCredentials: true }
@@ -38,6 +34,8 @@ const HomePage = () => {
             if (response.status !== 201) {
                 toast.error("Failed to create card");
             }
+
+            addInboxDocItem(response.data.data)
 
             toast.success("Doc created successfully")
 

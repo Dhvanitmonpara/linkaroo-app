@@ -1,7 +1,11 @@
 import { Router } from "express";
 import {
-    createCard, getCardsByList, updateCard, deleteCard,
-    toggleIsChecked
+    createCard,
+    getCardsByList,
+    updateCard,
+    deleteCard,
+    toggleIsChecked,
+    createCardWithMetadata
 } from "../controllers/card.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 
@@ -13,7 +17,9 @@ router.use(verifyJWT)
 router.route("/:listId")
     .post(createCard)
     .get(getCardsByList)
-    
+
+router.route("/quick-add/:listId").post(createCardWithMetadata)
+
 router.route("/:cardId")
     .patch(updateCard)
     .delete(deleteCard)

@@ -131,7 +131,7 @@ export default function HorizontalTabs() {
             className="menu-label !text-3xl bg-transparent !w-auto"
           >
             <img
-              className="rounded-full !h-9 !w-9 object-cover border-zinc-700 border-2 hover:border-zinc-200 transition-colors"
+              className="rounded-full !h-8 !w-8 object-cover border-zinc-700 border-2 hover:border-zinc-200 transition-colors"
               src={profile.avatarImage}
               alt="Profile pic"
             />
