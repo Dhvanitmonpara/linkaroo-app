@@ -21,7 +21,7 @@ const App = () => {
   const { isModalOpen, setModalContent, toggleModal, modalContent, prevPath } =
     useMethodStore();
   const { addProfile, profile } = useProfileStore();
-  const { setLists, setInboxDocs } = useListStore();
+  const { setLists, setInboxDocs, setInbox } = useListStore();
   const { setDocs, setCurrentListItem, setCachedDocs } = useDocStore();
 
   const closeModal = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -48,6 +48,7 @@ const App = () => {
     (async () => {
       try {
         setLists([]);
+        setInbox(null);
         setDocs([]);
         setInboxDocs([])
         setCachedDocs([]);

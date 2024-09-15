@@ -69,7 +69,6 @@ const DocCard = ({
       : "text-black"
   } select-none group relative px-5 h-14 flex-col transition-all rounded-md flex justify-center items-center`;
 
-
   const addToListHandler = async (listId: string) => {
     let loaderId = "";
     try {
@@ -88,17 +87,15 @@ const DocCard = ({
         },
         { withCredentials: true }
       );
-      
 
       if (response.status !== 200) {
         toast.error("Failed to move to list");
-        return
+        return;
       }
 
       toast.success("Moved to list successfully");
       removeInboxDocItem(id);
       addCachedDocItem(listId, response.data.data);
-      
     } catch (error) {
       handleAxiosError(error as AxiosError, navigate);
     } finally {
@@ -158,7 +155,7 @@ const DocCard = ({
                   : ""
               }
             >
-              {lists.length > 0 &&
+              {lists.length > 0 ?
                 lists.map((list) => (
                   <DropdownMenuItem
                     key={list._id}
@@ -169,7 +166,11 @@ const DocCard = ({
                   >
                     {list.title}
                   </DropdownMenuItem>
-                ))}
+                )) : (
+                  <div className="h-14 flex justify-center items-center">
+                    No lists
+                  </div>
+                ) }
             </DropdownMenuContent>
           </DropdownMenu>
         )}
