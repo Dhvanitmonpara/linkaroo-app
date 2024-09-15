@@ -5,6 +5,7 @@ import {
     updateCard,
     deleteCard,
     toggleIsChecked,
+    moveCardFromInbox,
     createCardWithMetadata
 } from "../controllers/card.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
@@ -19,6 +20,8 @@ router.route("/:listId")
     .get(getCardsByList)
 
 router.route("/quick-add/:listId").post(createCardWithMetadata)
+
+router.route("/move-card").patch(moveCardFromInbox)
 
 router.route("/:cardId")
     .patch(updateCard)

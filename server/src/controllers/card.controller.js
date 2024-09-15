@@ -2,6 +2,7 @@ import { asyncHandler } from "../utils/asyncHandler.js"
 import { ApiError } from "../utils/ApiError.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
 import { Card } from "../models/card.model.js"
+import { List } from "../models/list.model.js"
 import fetchMetadata from "../utils/fetchMetadata.js"
 
 const createCard = asyncHandler(async (req, res) => {
@@ -200,4 +201,41 @@ const toggleIsChecked = asyncHandler(async (req, res) => {
         ))
 })
 
-export { createCard, createCardWithMetadata, getCardsByList, updateCard, deleteCard, toggleIsChecked }
+const moveCardFromInbox = asyncHandler(async (req, res) => {
+
+    const { listId, cardId } = req.body
+
+    if (!listId) {
+        throw new ApiError(400, "List ID is required")
+    }
+
+    const list = await List.findById(listId)
+
+    if (!list) {
+        throw new ApiError(404, "List not found")
+    }
+
+    const card = await Card.findByIdAndUpdate(
+        cardId,
+        {
+            $set: {
+                listId: listId
+            }
+        },
+        { new: true }
+    )
+
+    if (!card) {
+        throw new ApiError(404, "Card not found")
+    }
+
+    return res
+        .status(200)
+        .json(new ApiResponse(
+            200,
+            card,
+            "Card moved successfully"
+        ))
+})
+
+export { createCard, createCardWithMetadata, getCardsByList, updateCard, deleteCard, toggleIsChecked, moveCardFromInbox }
