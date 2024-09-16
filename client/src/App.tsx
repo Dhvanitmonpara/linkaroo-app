@@ -55,7 +55,7 @@ const App = () => {
   useEffect(() => {
     const socket = initializeSocket(profile._id);
 
-    socket.on("connect", () => {
+    socket.on("userConnected", () => {
       console.log("Socket connected");
     });
 
