@@ -81,6 +81,13 @@ type cachedDocs = {
   docs: fetchedDocType[];
 };
 
+type NotificationType = {
+  id: string;
+  title: string;
+  description: string;
+  time: string;
+}
+
 export type {
   colorOptions,
   themeType,
@@ -92,4 +99,5 @@ export type {
   fetchedDocType,
   fetchedTagType,
   cachedDocs,
+  NotificationType
 };

@@ -9,6 +9,7 @@ import { Header, HorizontalTabs, Loading, Modal } from "./components";
 import useListStore from "./store/listStore";
 import useDocStore from "./store/docStore";
 import { handleAxiosError } from "./utils/handlerAxiosError";
+import socketConnection from "./Hooks/useSocketConnection";
 
 const App = () => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -18,8 +19,16 @@ const App = () => {
   const modalRef = useRef<HTMLDivElement | null>(null);
   const [progress, setProgress] = useState<number>(33);
 
-  const { isModalOpen, setModalContent, toggleModal, modalContent, prevPath } =
-    useMethodStore();
+  const {
+    isModalOpen,
+    setModalContent,
+    toggleModal,
+    modalContent,
+    prevPath,
+    setSocket,
+    notifications,
+    setNotifications,
+  } = useMethodStore();
   const { addProfile, profile } = useProfileStore();
   const { setLists, setInboxDocs, setInbox } = useListStore();
   const { setDocs, setCurrentListItem, setCachedDocs } = useDocStore();
@@ -50,7 +59,7 @@ const App = () => {
         setLists([]);
         setInbox(null);
         setDocs([]);
-        setInboxDocs([])
+        setInboxDocs([]);
         setCachedDocs([]);
         addProfile({
           _id: "",
@@ -78,6 +87,15 @@ const App = () => {
         if (currentUser.data.data) {
           addProfile(currentUser.data.data);
         }
+
+        const socketRes = await socketConnection({
+          userId: currentUser.data.data._id,
+          setNotifications,
+          setSocket,
+          notifications,
+        });
+
+        console.log(socketRes);
       } catch (error) {
         handleAxiosError(error as AxiosError, navigate);
       } finally {
@@ -146,8 +164,8 @@ const App = () => {
         toastOptions={{
           style: {
             background: `${theme !== "light" ? "#333" : "#fff"}`,
-            color: `${theme !== "light" ? "#fff" : "#333"}`
-          }
+            color: `${theme !== "light" ? "#fff" : "#333"}`,
+          },
         }}
       />
     </div>
