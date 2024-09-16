@@ -79,7 +79,7 @@ const registerUser = asyncHandler(async (req, res) => {
         username: username.toLowerCase()
     })
 
-    if(!response){
+    if (!response) {
         throw new ApiError(500, "Something went wrong while creating user")
     }
 
@@ -89,7 +89,7 @@ const registerUser = asyncHandler(async (req, res) => {
         isInbox: true,
     })
 
-    if(!inbox){
+    if (!inbox) {
         throw new ApiError(500, "Something went wrong while creating inbox")
     }
 
@@ -104,7 +104,7 @@ const registerUser = asyncHandler(async (req, res) => {
         .json(
             new ApiResponse(
                 201,
-                {user, inbox},
+                { user, inbox },
                 "User registered successfully"
             )
         )
@@ -652,25 +652,20 @@ const passwordRecovery = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Email and Password are required")
     }
 
-    const user = await User.findOneAndUpdate(
-        { email },
-        {
-            $set: {
-                password: password
-            }
-        },
-        { new: true }
-    )
+    const user = await User.findOne({ email })
 
     if (!user) {
         throw new ApiError(404, "User not found")
     }
 
+    user.password = password
+    const updatedUser = await user.save()
+
     return res
         .status(200)
         .json(new ApiResponse(
             200,
-            user,
+            updatedUser,
             "Password recovered successfully"
         ))
 
