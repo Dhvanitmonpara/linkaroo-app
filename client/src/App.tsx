@@ -9,7 +9,7 @@ import { Header, HorizontalTabs, Loading, Modal } from "./components";
 import useListStore from "./store/listStore";
 import useDocStore from "./store/docStore";
 import { handleAxiosError } from "./utils/handlerAxiosError";
-import socketConnection from "./Hooks/useSocketConnection";
+import { initializeSocket } from "./utils/initializeSocket";
 
 const App = () => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -25,7 +25,6 @@ const App = () => {
     toggleModal,
     modalContent,
     prevPath,
-    setSocket,
     notifications,
     setNotifications,
   } = useMethodStore();
@@ -52,6 +51,26 @@ const App = () => {
       }
     }
   });
+
+  useEffect(() => {
+    const socket = initializeSocket(profile._id);
+
+    socket.on("connect", () => {
+      console.log("Socket connected");
+    });
+
+    socket.on("pendingNotifications", (newNotifications) => {
+      setNotifications([...notifications, ...newNotifications]);
+    });
+
+    socket.on("userDisconnected", (data) => {
+      console.log(`User ${data.userId} is offline`);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, [profile._id, notifications,setNotifications]);
 
   useEffect(() => {
     (async () => {
@@ -87,15 +106,6 @@ const App = () => {
         if (currentUser.data.data) {
           addProfile(currentUser.data.data);
         }
-
-        const socketRes = await socketConnection({
-          userId: currentUser.data.data._id,
-          setNotifications,
-          setSocket,
-          notifications,
-        });
-
-        console.log(socketRes);
       } catch (error) {
         handleAxiosError(error as AxiosError, navigate);
       } finally {
