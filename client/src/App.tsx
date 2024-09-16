@@ -127,7 +127,7 @@ const App = () => {
   const showBars =
     location.pathname.includes("/login") ||
     location.pathname.includes("/signup") ||
-    location.pathname.includes("/forgot-password");
+    location.pathname.includes("/password-recovery");
 
   if (loading) {
     return <Loading progress={progress} />;

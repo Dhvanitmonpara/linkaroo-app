@@ -14,6 +14,7 @@ import {
     updateProfileSettings,
     uploadUserCoverImage,
     updateUserCoverImage,
+    passwordRecovery,
     toggleTheme,
     sendOtp
 } from "../controllers/user.controller.js";
@@ -29,6 +30,7 @@ router.route("/register/avatar").post(
 router.route("/register").post(registerUser)
 router.route("/login").post(loginUser)
 router.route("/send-otp").post(sendOtp)
+router.route("/recover-password").patch(passwordRecovery)
 router.route("/refresh-token").post(refreshAccessToken)
 
 // secure routes

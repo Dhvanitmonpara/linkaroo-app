@@ -144,7 +144,7 @@ const LoginPage = () => {
                 to="/password-recovery"
                 className="hover:underline text-blue-500 cursor-pointer"
               >
-                Forget password
+                Forgot password
               </Link>
             </div>
           </div>

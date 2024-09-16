@@ -645,6 +645,36 @@ const updateProfileSettings = asyncHandler(async (req, res) => {
     );
 });
 
+const passwordRecovery = asyncHandler(async (req, res) => {
+    const { email, password } = req.body
+
+    if (!email || !password) {
+        throw new ApiError(400, "Email and Password are required")
+    }
+
+    const user = await User.findOneAndUpdate(
+        { email },
+        {
+            $set: {
+                password: password
+            }
+        },
+        { new: true }
+    )
+
+    if (!user) {
+        throw new ApiError(404, "User not found")
+    }
+
+    return res
+        .status(200)
+        .json(new ApiResponse(
+            200,
+            user,
+            "Password recovered successfully"
+        ))
+
+})
 
 export {
     registerUser,
@@ -661,6 +691,7 @@ export {
     updateUserCoverImage,
     uploadUserCoverImage,
     toggleTheme,
+    passwordRecovery,
     updateProfileSettings,
     sendOtp
 }

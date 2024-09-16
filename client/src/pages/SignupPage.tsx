@@ -7,9 +7,11 @@ import { Loader2 } from "lucide-react";
 import { Stepper } from "@/components/index.js";
 import { IoArrowBack } from "react-icons/io5";
 import { useMultistepForm } from "@/Hooks/useMultistepForm.js";
-import EmailSignup from "@/components/Forms/EmailSignup.js";
-import ProfileSetup from "@/components/Forms/ProfileSetup.js";
-import EmailVerification from "@/components/Forms/EmailVerification.js";
+import {
+  EmailSignup,
+  EmailVerification,
+  ProfileSetup,
+} from "@/components/Forms/index.ts";
 import toast from "react-hot-toast";
 import { handleAxiosError } from "@/utils/handlerAxiosError.js";
 
