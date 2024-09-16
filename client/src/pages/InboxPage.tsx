@@ -14,7 +14,8 @@ const InboxPage = () => {
   const profile = useProfileStore().profile;
   const location = useLocation().pathname;
   const navigate = useNavigate();
-  const { inbox, setInboxDocs, inboxDocs, setLists, setInbox, lists } = useListStore();
+  const { inbox, setInboxDocs, inboxDocs, setLists, setInbox, lists } =
+    useListStore();
   const { toggleModal } = useMethodStore();
 
   const [loading, setLoading] = useState(false);
@@ -26,7 +27,7 @@ const InboxPage = () => {
           setLoading(true);
 
           const inboxId = inbox?._id;
-          
+
           if (!inboxId) {
             if (profile._id !== "") {
               try {
@@ -110,7 +111,7 @@ const InboxPage = () => {
         </div>
       </div>
       <div className="px-4 md:px-24 xl:px-56 2xl-px-64 py-8 pt-24 grid sm:grid-cols-2 gap-2">
-        {inboxDocs?.length > 0 &&
+        {inboxDocs?.length > 0 ? (
           inboxDocs.map((doc) => (
             <DocCard
               key={doc._id}
@@ -122,7 +123,12 @@ const InboxPage = () => {
               currentListId={inbox?._id}
               toggleModal={toggleModal}
             />
-          ))}
+          ))
+        ) : (
+          <p className="text-lg font-semibold text-center">
+            No docs found in inbox
+          </p>
+        )}
       </div>
       <div className="lg:h-2 h-16"></div>
     </div>

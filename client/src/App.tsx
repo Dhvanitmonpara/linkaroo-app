@@ -143,6 +143,12 @@ const App = () => {
       )}
       <Toaster
         position={window.innerWidth >= 1024 ? "bottom-right" : "top-center"}
+        toastOptions={{
+          style: {
+            background: `${theme !== "light" ? "#333" : "#fff"}`,
+            color: `${theme !== "light" ? "#fff" : "#333"}`
+          }
+        }}
       />
     </div>
   );

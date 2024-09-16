@@ -93,7 +93,7 @@ const DocCard = ({
         return;
       }
 
-      toast.success("Moved to list successfully");
+      toast.success(`${title} moved to ${existingList.title} successfully`);
       removeInboxDocItem(id);
       addCachedDocItem(listId, response.data.data);
     } catch (error) {
@@ -155,7 +155,7 @@ const DocCard = ({
                   : ""
               }
             >
-              {lists.length > 0 ?
+              {lists.length > 0 ? (
                 lists.map((list) => (
                   <DropdownMenuItem
                     key={list._id}
@@ -166,11 +166,12 @@ const DocCard = ({
                   >
                     {list.title}
                   </DropdownMenuItem>
-                )) : (
-                  <div className="h-14 flex justify-center items-center">
-                    No lists
-                  </div>
-                ) }
+                ))
+              ) : (
+                <div className="h-14 flex justify-center items-center">
+                  No lists
+                </div>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         )}
