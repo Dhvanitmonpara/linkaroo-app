@@ -77,9 +77,9 @@ const HomePage = () => {
                         {loading ? (<Loader2 className="animate-spin" />) : "Add"}
                     </Button>
                 </form>
-            </div>
+            </div> 
             <div className="px-0 sm:px-24 xl:px-56 2xl-px-64 py-8 pt-6 sm:pt-12 md:pt-24">
-                <Lists className="!h-auto 2xl:!grid-cols-3" extraElementClassNames="hidden" />
+                <Lists className="!h-auto md:grid md:grid-cols-2 2xl:!grid-cols-3" extraElementClassNames="hidden" />
             </div>
         </div>
     )

@@ -74,7 +74,7 @@ const Lists = ({ className, extraElementClassNames }: ListsProps) => {
 
   return (
     <>
-      <div className={`col-span-2 relative lg:px-0 px-4 space-y-3 overflow-y-scroll no-scrollbar h-[calc(100vh-4.5rem)] md:h-auto lg:h-[calc(100vh-4.5rem)] md:grid md:grid-cols-2 md:space-x-0 md:space-y-0 md:p-4 !gap-2 md:justify-start md:items-start 2xl:grid-cols-1 ${className}`}>
+      <div className={`col-span-2 relative lg:px-0 px-4 space-y-3 overflow-y-scroll no-scrollbar h-[calc(100vh-4.5rem)] md:h-auto lg:h-[calc(100vh-4.5rem)] md:space-x-0 md:space-y-2 md:p-4 !gap-2 md:justify-start md:items-start 2xl:grid-cols-1 ${className}`}>
         <div className={`h-2 md:hidden ${extraElementClassNames}`}></div>
         {lists.map((list, index) => (
           <ListCard
