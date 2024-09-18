@@ -19,14 +19,14 @@ import {
   DropdownMenuContent,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { backgroundImageUrls } from "@/lib/constants";
 
 const Docs = () => {
   const { toggleModal } = useMethodStore();
   const [loading, setLoading] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState("");
   const location = useLocation().pathname;
 
   const {
@@ -43,11 +43,24 @@ const Docs = () => {
   const { currentCardColor, setPrevPath, setModalContent } = useMethodStore();
   const navigate = useNavigate();
 
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  // const [uploadImage, setUploadImage] = useState(false);
+  const [saveChangesLoading, setSaveChangesLoading] = useState(false);
+
   // TODO: create a dropdown along with images and custom image function
-  const handleSaveChanges = () => {
-    // Implement your save logic here
-    console.log("Saving changes:", selectedImage);
-    setDropdownOpen(false);
+  const handleSaveChanges = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    let toastId = "";
+    try {
+      setSaveChangesLoading(true)
+      toastId = toast.loading("Changing the list banner...");
+      console.log(e);
+    } catch (error) {
+      handleAxiosError(error as AxiosError, navigate);
+    } finally {
+      toast.dismiss(toastId);
+    }
   };
 
   useEffect(() => {
@@ -238,29 +251,75 @@ const Docs = () => {
         >
           <div className="h-full w-full bg-black bg-opacity-40 text-zinc-200 p-4">
             <div className="flex justify-end items-center">
-              <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
+              <DropdownMenu
+                open={dropdownOpen}
+                onOpenChange={() => {
+                  setDropdownOpen(!dropdownOpen);
+                }}
+                modal={false} // Keeps dropdown within the context of the parent
+              >
                 <DropdownMenuTrigger className="h-12 w-12 opacity-0 group-hover:opacity-100 bg-[#00000030] hover:bg-[#00000060] transition-all flex justify-center items-center rounded-full text-xl">
                   <BiSolidPencil />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
-                  onCloseAutoFocus={(event) => event.preventDefault()}
-                  onInteractOutside={(event) => event.preventDefault()}
+                  className={`w-96 ${
+                    theme !== "light"
+                      ? "!bg-black !text-white border-zinc-800"
+                      : ""
+                  }`}
+                  onCloseAutoFocus={(event) => {
+                    event.preventDefault(); // Prevents auto focus when closing the dropdown
+                  }}
+                  onPointerDownOutside={(event) => {
+                    if (
+                      event.target instanceof HTMLElement &&
+                      !event.target.closest("input")
+                    ) {
+                      setDropdownOpen(false);
+                    }
+                  }}
                 >
-                  <DropdownMenuRadioGroup
-                    value={selectedImage}
-                    onValueChange={setSelectedImage}
-                  >
-                    <DropdownMenuRadioItem value="top">
-                      Top
-                    </DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value="bottom">
-                      Bottom
-                    </DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value="right">
-                      Right
-                    </DropdownMenuRadioItem>
-                  </DropdownMenuRadioGroup>
-                  <Button onClick={handleSaveChanges}>Save Changes</Button>
+                  {loading ? (
+                    <div className="w-full h-28 flex justify-center items-center">
+                      <Loader2 className="animate-spin" size={16} />
+                    </div>
+                  ) : (
+                    <>
+                      <DropdownMenuRadioGroup className="grid grid-cols-3">
+                        {backgroundImageUrls.map((link, index) => (
+                          <DropdownMenuRadioItem
+                            value={link}
+                            key={index}
+                            onSelect={(e) => e.preventDefault()}
+                            className="flex justify-center items-center w-full h-12 cursor-default" // Set height and disable pointer events
+                          >
+                            <img
+                              className="w-full h-12 object-cover" // Fit the image inside the container
+                              src={link} 
+                              alt={`Background ${index}`}
+                            />
+                          </DropdownMenuRadioItem>
+                        ))}
+                      </DropdownMenuRadioGroup>
+                      <DropdownMenuSeparator
+                        className={theme !== "light" ? "bg-zinc-800" : ""}
+                      />
+                      <Button
+                        onClick={handleSaveChanges}
+                        className={`mt-2 w-full ${
+                          theme !== "light"
+                            ? "text-zinc-200 bg-zinc-800 hover:bg-zinc-700"
+                            : "bg-zinc-100 hover:bg-zinc-200 text-zinc-950"
+                        }`}
+                      >
+                        {saveChangesLoading ? (
+                          <Loader2 className="animate-spin" />
+                        ) : (
+                          "Save Changes"
+                        )}
+                      </Button>
+                    </>
+                  )}
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
