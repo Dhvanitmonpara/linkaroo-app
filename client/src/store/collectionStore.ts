@@ -1,0 +1,102 @@
+import { fetchedLinkType, fetchedCollectionType } from "@/lib/types";
+import { create } from "zustand";
+
+import { devtools, persist } from "zustand/middleware";
+
+interface CollectionsState {
+  collections: fetchedCollectionType[] | [];
+  setCollections: (collections: fetchedCollectionType[]) => void;
+  addCollectionsItem: (item: fetchedCollectionType) => void;
+  removeCollectionsItem: (collectionId: string) => void;
+  updateCollectionsItem: (collection: fetchedCollectionType) => void;
+  updateCollectionsTags: (collection: fetchedCollectionType) => void;
+  toggleIsPublic: (collection: fetchedCollectionType) => void;
+  inbox: fetchedCollectionType | null;
+  inboxDocs: fetchedLinkType[] | []
+  setInbox: (inbox: fetchedCollectionType | null) => void;
+  setInboxLink: (links: fetchedLinkType[] | []) => void
+  addInboxLinkItem: (link: fetchedLinkType) => void;
+  removeInboxLinkItem: (linkId: string) => void
+}
+
+const useCollectionsStore = create<CollectionsState>()(
+  devtools(
+    persist(
+      (set) => ({
+        collections: [],
+        setCollections: (collections) => set({ collections }),
+        addCollectionsItem: (collection) => {
+          set((state) => ({ collections: [...state.collections, collection] }));
+        },
+        removeCollectionsItem: (collectionId) => {
+          set((state) => ({
+            collections: state.collections.filter((collection) => collection._id !== collectionId),
+          }));
+        },
+        updateCollectionsItem: (collection) => {
+          set((state) => ({
+            collections: state.collections.map((existingCollection) =>
+              existingCollection._id === collection._id
+                ? { ...existingCollection, ...collection }
+                : existingCollection
+            ),
+          }));
+        },
+        updateCollectionsTags: (collection) => {
+          set((state) => {
+            const existingCollectionIndex = state.collections.findIndex(
+              (existingCollection) => existingCollection._id === collection._id
+            );
+
+            if (existingCollectionIndex !== -1) {
+              const updatedCollections = [...state.collections];
+              const updatedCollection = { ...updatedCollections[existingCollectionIndex] };
+
+              updatedCollection.tags = [...collection.tags];
+
+              updatedCollections[existingCollectionIndex] = updatedCollection;
+
+              return { ...state, collections: updatedCollections };
+            }
+
+            return state;
+          });
+        },
+        toggleIsPublic: (collection) => {
+          set((state) => ({
+            collections: state.collections.map((existingCollection) =>
+              existingCollection._id === collection._id
+                ? { ...existingCollection, isPublic: !collection.isPublic }
+                : existingCollection
+            ),
+          }));
+        },
+        inbox: null,
+        inboxDocs: [],
+        setInbox: (inbox) => set({ inbox }),
+        setInboxLink: (links) => set({ inboxDocs: links }),
+        addInboxLinkItem: (link) => {
+          set((state) => ({ inboxDocs: [...state.inboxDocs, link] }));
+        },
+        removeInboxLinkItem: (linkId) => {
+          set((state) => ({
+            inboxDocs: state.inboxDocs.filter((doc) => doc._id !== linkId),
+          }));
+        }
+      }),
+      {
+        name: "collections",
+      }
+    )
+  )
+);
+
+export default useCollectionsStore;
+
+// usage
+
+// import useCollectionStore from "./collectionStore"
+
+// const addCollectionItem = useCollectionStore((state) => state.addCollectionItem)
+
+// const { addCollectionItem, removeCollectionItem } = useCollectionStore(state => photo me dekhle)

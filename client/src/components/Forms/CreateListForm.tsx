@@ -14,13 +14,13 @@ import { useForm, Controller } from "react-hook-form";
 import { colorOptions, themeType } from "@/lib/types";
 import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
-import useListStore from "@/store/listStore";
+import useListStore from "@/store/collectionStore";
 import { Textarea } from "../ui/textarea";
 import { cn } from "@/lib/utils";
 import { backgroundImageUrls, themeOptionsArray } from "@/lib/constants";
 import { useNavigate } from "react-router-dom";
 import { handleAxiosError } from "@/utils/handlerAxiosError";
-import useDocStore from "@/store/docStore";
+import useDocStore from "@/store/linkStore";
 
 type CreateListFormProps = {
   theme: themeType | undefined;

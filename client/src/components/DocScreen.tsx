@@ -1,5 +1,5 @@
 import { fetchedDocType } from "@/lib/types";
-import useDocStore from "@/store/docStore";
+import useDocStore from "@/store/linkStore";
 import useMethodStore from "@/store/MethodStore";
 import useProfileStore from "@/store/profileStore";
 import { handleAxiosError } from "@/utils/handlerAxiosError";

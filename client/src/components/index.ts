@@ -1,5 +1,5 @@
 import Tag from "./Tag";
-import DocCard from "./DocCard";
+import LinkCard from "./LinkCard";
 import ListCard from "./ListCard";
 import Header from "./Header";
 import Stepper from "./Stepper";
@@ -7,7 +7,7 @@ import HorizontalTabs from "./HorizontalTabs/HorizontalTabs";
 import ProfileCard from "./ProfileCard";
 import DocScreen from "./DocScreen";
 import Lists from "./Lists";
-import Docs from "./Docs";
+import Docs from "./Links";
 import Loading from "./Loading";
 import Modal from "./Modal";
 import CommandMenu from "./CommandMenu";
@@ -18,7 +18,7 @@ import Notifications from "./Notifications";
 export {
   ListCard,
   Tag,
-  DocCard,
+  LinkCard,
   Header,
   Stepper,
   HorizontalTabs,

@@ -1,7 +1,7 @@
 import { Lists } from "@/components";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import useListStore from "@/store/listStore";
+import useListStore from "@/store/collectionStore";
 import useProfileStore from "@/store/profileStore"
 import { handleAxiosError } from "@/utils/handlerAxiosError";
 import axios, { AxiosError } from "axios";

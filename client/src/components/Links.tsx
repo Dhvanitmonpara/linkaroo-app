@@ -1,6 +1,4 @@
-import { DocCard, ListActionButtons, Tag } from "@/components";
-import useDocStore from "@/store/docStore";
-import useListStore from "@/store/listStore";
+import { LinkCard, ListActionButtons, Tag } from "@/components";
 import useMethodStore from "@/store/MethodStore";
 import useProfileStore from "@/store/profileStore";
 import axios, { AxiosError, AxiosResponse } from "axios";
@@ -23,21 +21,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { backgroundImageUrls } from "@/lib/constants";
 import { BsXLg } from "react-icons/bs";
+import useLinkStore from "@/store/linkStore";
+import useCollectionsStore from "@/store/collectionStore";
 
 const Docs = () => {
   const { toggleModal } = useMethodStore();
   const [loading, setLoading] = useState(false);
   const location = useLocation().pathname;
 
-  const {
-    docs,
-    setDocs,
-    currentListItem,
-    setCurrentListItem,
-    cachedDocs,
-    addCachedDocList,
-  } = useDocStore();
-  const { lists } = useListStore();
+  const { links, cachedLinks, setLinks, addCachedLinkCollection, setCurrentCollectionItem, currentCollectionItem } = useLinkStore()
+  const { collections } = useCollectionsStore()
   const { profile } = useProfileStore();
   const { theme, font } = profile;
   const { currentCardColor, setPrevPath, setModalContent } = useMethodStore();
@@ -69,15 +62,15 @@ const Docs = () => {
       if (location.includes("/lists")) {
         try {
           setLoading(true);
-          const listId = location.split("/")[2];
+          const collectionId = location.split("/")[2];
 
-          const cache = cachedDocs.filter((doc) => doc.listId === listId)[0];
+          const cache = cachedLinks.filter((list) => list.collectionId === collectionId)[0];
 
           if (cache) {
-            setDocs(cache.docs);
+            setLinks(cache.links);
           } else {
             const response: AxiosResponse = await axios.get(
-              `${import.meta.env.VITE_SERVER_API_URL}/cards/${listId}`,
+              `${import.meta.env.VITE_SERVER_API_URL}/cards/${collectionId}`,
               { withCredentials: true }
             );
 
@@ -85,14 +78,14 @@ const Docs = () => {
               toast.error("Failed to fetch list details");
               return;
             }
-            setDocs(response.data.data);
-            addCachedDocList({ listId, docs: response.data.data });
+            setLinks(response.data.data);
+            addCachedLinkCollection({ collectionId, links: response.data.data });
           }
 
-          const currentListRes = await lists.filter(
-            (list) => list._id === listId
+          const currentListRes = await collections.filter(
+            (collection) => collection._id === collectionId
           )[0];
-          setCurrentListItem(currentListRes);
+          setCurrentCollectionItem(currentListRes);
         } catch (error) {
           handleAxiosError(error as AxiosError, navigate);
         } finally {
@@ -100,11 +93,11 @@ const Docs = () => {
         }
       }
     })();
-  }, [lists, currentCardColor, location, setDocs, setCurrentListItem]);
+  }, [collections, currentCardColor, location, setLinks, setCurrentCollectionItem]);
 
   const tags: string[] = [];
 
-  currentListItem?.tags?.forEach((tag) => {
+  currentCollectionItem?.tags?.forEach((tag) => {
     const tagname = removeUsernameTag(tag.tagname);
     if (tagname != undefined) {
       tags.push(tagname);
@@ -122,12 +115,12 @@ const Docs = () => {
   }
 
   const coverImageStyle = {
-    backgroundImage: `url('${currentListItem?.coverImage}')`,
+    backgroundImage: `url('${currentCollectionItem?.coverImage}')`,
     backgroundSize: "cover",
     backgroundPosition: "center",
   };
 
-  if (!currentListItem?._id) {
+  if (!currentCollectionItem?._id) {
     return (
       <div>
         <div className="md:h-[calc(100vh-5rem)] h-[calc(100vh-8rem)] lg:h-[calc(100vh-4.5rem)] overflow-y-scroll w-full flex flex-col justify-center items-center space-y-6 p-4">
@@ -169,7 +162,7 @@ const Docs = () => {
     );
   }
 
-  if (docs.length == 0) {
+  if (links.length == 0) {
     return (
       <div
         className={`md:h-[calc(100vh-5rem)] select-none h-[calc(100vh-8rem)] overflow-y-hidden lg:h-[calc(100vh-4.5rem)]  w-full space-y-2 no-scrollbar ${font}`}
@@ -188,20 +181,20 @@ const Docs = () => {
             <div className="h-20 flex flex-col justify-start">
               <div className="flex justify-between items-center w-full">
                 <h1 className="text-2xl font-semibold">
-                  {currentListItem?.title}
+                  {currentCollectionItem?.title}
                 </h1>
-                <ListActionButtons listTitle={currentListItem?.title} />
+                <ListActionButtons listTitle={currentCollectionItem?.title} />
               </div>
               <div className="text-xs space-x-2">
-                <span>@{currentListItem?.createdBy?.username}</span>
+                <span>@{currentCollectionItem?.createdBy?.username}</span>
                 <span>
-                  {currentListItem?.createdAt &&
-                    convertMongoDBDate(currentListItem?.createdAt)}
+                  {currentCollectionItem?.createdAt &&
+                    convertMongoDBDate(currentCollectionItem?.createdAt)}
                 </span>
               </div>
             </div>
             <div className="pt-4">
-              <p>{currentListItem?.description}</p>
+              <p>{currentCollectionItem?.description}</p>
             </div>
           </div>
         </div>
@@ -220,7 +213,7 @@ const Docs = () => {
                 <CreateDocForm
                   theme={theme}
                   toggleModal={toggleModal}
-                  listTitle={currentListItem?.title}
+                  listTitle={currentCollectionItem?.title}
                 />
               );
             }}
@@ -229,7 +222,7 @@ const Docs = () => {
               : "bg-zinc-300 hover:bg-zinc-400"
               } px-6 py-2`}
           >
-            Create a Doc
+            Add a Link
           </Button>
         </div>
         <div className="lg:h-2 h-16"></div>
@@ -307,20 +300,20 @@ const Docs = () => {
           <div className="h-20 flex flex-col justify-start">
             <div className="flex justify-between items-center w-full">
               <h1 className="text-2xl font-semibold">
-                {currentListItem?.title}
+                {currentCollectionItem?.title}
               </h1>
-              <ListActionButtons listTitle={currentListItem?.title} />
+              <ListActionButtons listTitle={currentCollectionItem?.title} />
             </div>
             <div className="text-xs space-x-2">
-              <span>@{currentListItem?.createdBy?.username}</span>
+              <span>@{currentCollectionItem?.createdBy?.username}</span>
               <span>
-                {currentListItem?.createdAt &&
-                  convertMongoDBDate(currentListItem?.createdAt)}
+                {currentCollectionItem?.createdAt &&
+                  convertMongoDBDate(currentCollectionItem?.createdAt)}
               </span>
             </div>
           </div>
           <div className="pt-4 space-y-4">
-            <p>{currentListItem?.description}</p>
+            <p>{currentCollectionItem?.description}</p>
             <div className="flex space-x-1">
               {tags.length > 0 &&
                 tags.map((tag, index) => (
@@ -338,15 +331,15 @@ const Docs = () => {
         className={`grid grid-cols-1 gap-2 ${location.includes("/doc") ? "" : "lg:grid-cols-2"
           }`}
       >
-        {docs?.map((doc) => (
-          <DocCard
-            key={doc._id}
-            id={doc._id}
-            title={doc.title}
+        {links?.map((link) => (
+          <LinkCard
+            key={link._id}
+            id={link._id}
+            title={link.title}
             color={theme == "black" ? "bg-black" : currentCardColor}
-            link={doc.link}
-            isChecked={doc.isChecked}
-            currentListId={currentListItem?._id}
+            link={link.link}
+            isChecked={link.isChecked}
+            currentListId={currentCollectionItem?._id}
             toggleModal={toggleModal}
           />
         ))}

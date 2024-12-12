@@ -16,8 +16,8 @@ import { useForm, Controller } from "react-hook-form";
 import { themeType } from "@/lib/types";
 import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
-import useListStore from "@/store/listStore";
-import useDocStore from "@/store/docStore";
+import useListStore from "@/store/collectionStore";
+import useDocStore from "@/store/linkStore";
 import { useNavigate } from "react-router-dom";
 import { handleAxiosError } from "@/utils/handlerAxiosError";
 

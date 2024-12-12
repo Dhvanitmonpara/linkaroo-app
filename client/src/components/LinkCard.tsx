@@ -4,7 +4,6 @@ import { FiArrowUpRight } from "react-icons/fi";
 import useMethodStore from "@/store/MethodStore";
 import { useMediaQuery } from "react-responsive";
 import { Checkbox } from "./ui/checkbox";
-import useDocStore from "@/store/docStore";
 import { BiListPlus } from "react-icons/bi";
 import {
   DropdownMenu,
@@ -12,12 +11,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import useListStore from "@/store/listStore";
 import toast from "react-hot-toast";
 import { handleAxiosError } from "@/utils/handlerAxiosError";
 import axios, { AxiosError } from "axios";
+import useCollectionsStore from "@/store/collectionStore";
+import useLinkStore from "@/store/linkStore";
 
-type DocCardProps = {
+type LinkCardProps = {
   id: string;
   title: string;
   color: colorOptions;
@@ -27,7 +27,7 @@ type DocCardProps = {
   toggleModal: (isOpen: boolean) => void;
 };
 
-const DocCard = ({
+const LinkCard = ({
   id,
   title,
   color,
@@ -35,11 +35,11 @@ const DocCard = ({
   currentListId,
   isChecked,
   toggleModal,
-}: DocCardProps) => {
+}: LinkCardProps) => {
   const navigate = useNavigate();
   const { setModalContent, setPrevPath } = useMethodStore();
-  const { toggleIsChecked, addCachedDocItem } = useDocStore();
-  const { lists, removeInboxDocItem } = useListStore();
+  const { addCachedLinkItem, toggleIsChecked } = useLinkStore()
+  const { collections, removeInboxLinkItem } = useCollectionsStore();
   const isSmallScreen = useMediaQuery({ query: "(max-width: 1024px)" });
 
   const handleNavigate = (listId?: string) => {
@@ -63,17 +63,16 @@ const DocCard = ({
     window.open(link, "_blank");
   };
 
-  const cardClass = `${color} ${
-    color === "bg-black"
+  const cardClass = `${color} ${color === "bg-black"
       ? "!text-zinc-300 border-zinc-500 !bg-zinc-900 border-[1px]"
       : "text-black"
-  } select-none group relative px-5 h-14 flex-col transition-all rounded-md flex justify-center items-center`;
+    } select-none group relative px-5 h-14 flex-col transition-all rounded-md flex justify-center items-center`;
 
-  const addToListHandler = async (listId: string) => {
+  const addToListHandler = async (collectionId: string) => {
     let loaderId = "";
     try {
       loaderId = toast.loading("Adding to list...");
-      const existingList = lists.find((list) => list._id === listId);
+      const existingList = collections.find((collection) => collection._id === collectionId);
       if (!existingList) {
         toast.error("List not found");
         return;
@@ -83,7 +82,7 @@ const DocCard = ({
         `${import.meta.env.VITE_SERVER_API_URL}/cards/move-card`,
         {
           cardId: id,
-          listId: existingList._id,
+          collectionId: existingList._id,
         },
         { withCredentials: true }
       );
@@ -94,8 +93,8 @@ const DocCard = ({
       }
 
       toast.success(`${title} moved to ${existingList.title} successfully`);
-      removeInboxDocItem(id);
-      addCachedDocItem(listId, response.data.data);
+      removeInboxLinkItem(id);
+      addCachedLinkItem(collectionId, response.data.data);
     } catch (error) {
       handleAxiosError(error as AxiosError, navigate);
     } finally {
@@ -121,17 +120,15 @@ const DocCard = ({
             e.stopPropagation();
             toggleIsChecked(id, isChecked);
           }}
-          className={`${
-            isChecked
+          className={`${isChecked
               ? ""
               : "group-hover:opacity-100 ease-in-out duration-300 lg:opacity-0"
-          } ${color}`}
+            } ${color}`}
           id={id}
         />
         <span
-          className={`hover:underline ${
-            location.pathname === "/inbox" ? "max-w-[75%]" : "max-w-[80%]"
-          } overflow-hidden text-ellipsis whitespace-nowrap`}
+          className={`hover:underline ${location.pathname === "/inbox" ? "max-w-[75%]" : "max-w-[80%]"
+            } overflow-hidden text-ellipsis whitespace-nowrap`}
           onClick={openLink}
         >
           {title}
@@ -140,11 +137,10 @@ const DocCard = ({
           <DropdownMenu>
             <DropdownMenuTrigger
               onClick={(e) => e.stopPropagation()}
-              className={`md:opacity-0 absolute text-xl right-16 opacity-100 ${
-                color === "bg-black"
+              className={`md:opacity-0 absolute text-xl right-16 opacity-100 ${color === "bg-black"
                   ? "hover:bg-[#b2b2b220]"
                   : "hover:bg-[#00000020]"
-              } active:scale-95 rounded-full p-2 group-hover:opacity-100 transition-all ease-in-out duration-300`}
+                } active:scale-95 rounded-full p-2 group-hover:opacity-100 transition-all ease-in-out duration-300`}
             >
               <BiListPlus />
             </DropdownMenuTrigger>
@@ -155,16 +151,16 @@ const DocCard = ({
                   : ""
               }
             >
-              {lists.length > 0 ? (
-                lists.map((list) => (
+              {collections.length > 0 ? (
+                collections.map((collection) => (
                   <DropdownMenuItem
-                    key={list._id}
+                    key={collection._id}
                     onClick={(e) => {
                       e.stopPropagation();
-                      addToListHandler(list._id);
+                      addToListHandler(collection._id);
                     }}
                   >
-                    {list.title}
+                    {collection.title}
                   </DropdownMenuItem>
                 ))
               ) : (
@@ -177,11 +173,10 @@ const DocCard = ({
         )}
         <span
           onClick={openLink}
-          className={`md:opacity-0 absolute right-6 opacity-100 ${
-            color === "bg-black"
+          className={`md:opacity-0 absolute right-6 opacity-100 ${color === "bg-black"
               ? "hover:bg-[#b2b2b220]"
               : "hover:bg-[#00000020]"
-          } active:scale-95 rounded-full p-2 group-hover:opacity-100 transition-all ease-in-out duration-300`}
+            } active:scale-95 rounded-full p-2 group-hover:opacity-100 transition-all ease-in-out duration-300`}
         >
           <FiArrowUpRight />
         </span>
@@ -190,4 +185,4 @@ const DocCard = ({
   );
 };
 
-export default DocCard;
+export default LinkCard;

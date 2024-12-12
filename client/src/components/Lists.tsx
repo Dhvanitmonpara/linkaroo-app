@@ -1,6 +1,5 @@
 import { ListCard } from "@/components";
-import { fetchedListType } from "@/lib/types";
-import useListStore from "@/store/listStore";
+import { fetchedCollectionType } from "@/lib/types";
 import useMethodStore from "@/store/MethodStore";
 import useProfileStore from "@/store/profileStore";
 import { handleAxiosError } from "@/utils/handlerAxiosError";
@@ -9,15 +8,16 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { Skeleton } from "@/components/ui/skeleton"
+import useCollectionsStore from "@/store/collectionStore";
 
-type ListsProps = {
+type CollectionsProps = {
   className?: string;
   extraElementClassNames?: string
 }
 
-const Lists = ({ className, extraElementClassNames }: ListsProps) => {
+const Collections = ({ className, extraElementClassNames }: CollectionsProps) => {
   const [loading, setLoading] = useState(true);
-  const { setLists, lists, setInbox } = useListStore();
+  const { setCollections, collections, setInbox } = useCollectionsStore();
   const { toggleModal } = useMethodStore();
   const { profile } = useProfileStore();
   const { theme, font } = profile;
@@ -29,23 +29,23 @@ const Lists = ({ className, extraElementClassNames }: ListsProps) => {
         try {
           setLoading(true);
 
-          if (!lists.length) {
+          if (!collections.length) {
             const response: AxiosResponse = await axios({
               method: "GET",
-              url: `${import.meta.env.VITE_SERVER_API_URL}/lists/u`,
+              url: `${import.meta.env.VITE_SERVER_API_URL}/collection/u`,
               withCredentials: true,
             });
 
             if (!response) {
-              toast.error("Failed to fetch user's lists.");
+              toast.error("Failed to fetch user's collections.");
               return;
             }
-            const allLists = response.data.data;
-            const inboxList = allLists.find((list: fetchedListType) => list.isInbox === true);
-            const regularLists = allLists.filter((list: fetchedListType) => list.isInbox === false);
+            const allCollections = response.data.data;
+            const inboxCollection = allCollections.find((collection: fetchedCollectionType) => collection.isInbox === true);
+            const regularCollections = allCollections.filter((collection: fetchedCollectionType) => collection.isInbox === false);
 
-            setLists(regularLists);
-            setInbox(inboxList)
+            setCollections(regularCollections);
+            setInbox(inboxCollection)
           }
         } catch (error) {
           handleAxiosError(error as AxiosError, navigate);
@@ -54,7 +54,7 @@ const Lists = ({ className, extraElementClassNames }: ListsProps) => {
         }
       }
     })();
-  }, [setLists]);
+  }, [setCollections]);
 
   if (loading) {
     return (
@@ -66,10 +66,10 @@ const Lists = ({ className, extraElementClassNames }: ListsProps) => {
     );
   }
 
-  if (lists.length == 0) {
+  if (collections.length == 0) {
     return (
       <div className={`dark:text-zinc-200 select-none text-zinc-900 h-[calc(100vh-4.5rem)] lg:h-[calc(100vh-5rem)] w-full flex justify-center items-center ${className}`}>
-        No lists found. Please create a new one.
+        No Collections found. Please create a new one.
       </div>
     );
   }
@@ -78,16 +78,16 @@ const Lists = ({ className, extraElementClassNames }: ListsProps) => {
     <>
       <div className={`col-span-2 relative lg:px-0 px-4 space-y-3 overflow-y-scroll no-scrollbar h-[calc(100vh-4.5rem)] md:h-auto lg:h-[calc(100vh-4.5rem)] md:space-x-0 md:space-y-2 md:p-4 !gap-2 md:justify-start md:items-start 2xl:grid-cols-1 ${className}`}>
         <div className={`h-2 md:hidden ${extraElementClassNames}`}></div>
-        {lists.map((list, index) => (
+        {collections.map((collections, index) => (
           <ListCard
             key={index}
-            id={list._id}
-            title={list.title}
-            description={list.description}
-            tagname={list.tags}
-            collaborators={list.collaborators}
-            createdBy={list.createdBy}
-            theme={list.theme}
+            id={collections._id}
+            title={collections.title}
+            description={collections.description}
+            tagname={collections.tags}
+            collaborators={collections.collaborators}
+            createdBy={collections.createdBy}
+            theme={collections.theme}
             font={font}
             isBlackMode={theme == "black" ? true : false}
             toggleModal={toggleModal}
@@ -99,4 +99,4 @@ const Lists = ({ className, extraElementClassNames }: ListsProps) => {
   );
 };
 
-export default Lists;
+export default Collections;

@@ -1,6 +1,6 @@
 import { DocCard } from "@/components";
 import { fetchedListType } from "@/lib/types";
-import useListStore from "@/store/listStore";
+import useListStore from "@/store/collectionStore";
 import useMethodStore from "@/store/MethodStore";
 import useProfileStore from "@/store/profileStore";
 import { handleAxiosError } from "@/utils/handlerAxiosError";

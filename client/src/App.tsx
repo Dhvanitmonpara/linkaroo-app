@@ -6,10 +6,10 @@ import useProfileStore from "./store/profileStore";
 import axios, { AxiosError } from "axios";
 import toggleThemeModeAtRootElem from "./utils/toggleThemeMode";
 import { Header, HorizontalTabs, Loading, Modal } from "./components";
-import useListStore from "./store/listStore";
-import useDocStore from "./store/docStore";
+import useDocStore from "./store/linkStore";
 import { handleAxiosError } from "./utils/handlerAxiosError";
 import { initializeSocket } from "./utils/initializeSocket";
+import useCollectionsStore from "./store/collectionStore";
 
 const App = () => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -29,8 +29,8 @@ const App = () => {
     setNotifications,
   } = useMethodStore();
   const { addProfile, profile } = useProfileStore();
-  const { setLists, setInboxDocs, setInbox } = useListStore();
-  const { setDocs, setCurrentListItem, setCachedDocs } = useDocStore();
+  const { setCollections, setInboxLink, setInbox } = useCollectionsStore();
+  const { setLinks, setCurrentCollectionItem, setCachedLinks } = useDocStore();
 
   const closeModal = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (modalRef.current === e.target) {
@@ -75,11 +75,11 @@ const App = () => {
   useEffect(() => {
     (async () => {
       try {
-        setLists([]);
+        setCollections([]);
         setInbox(null);
-        setDocs([]);
-        setInboxDocs([]);
-        setCachedDocs([]);
+        setLinks([]);
+        setInboxLink([]);
+        setCachedLinks([]);
         addProfile({
           _id: "",
           username: "",
@@ -93,7 +93,7 @@ const App = () => {
           updatedAt: "",
           _v: 0,
         });
-        setCurrentListItem(null);
+        setCurrentCollectionItem(null);
 
         const currentUser = await axios({
           method: "GET",

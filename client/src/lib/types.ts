@@ -48,7 +48,7 @@ type fetchedTagType = {
   updatedAt: string;
 };
 
-type fetchedDocType = {
+type fetchedLinkType = {
   _id: string;
   title: string;
   description: string;
@@ -61,7 +61,7 @@ type fetchedDocType = {
   __v: number;
 };
 
-type fetchedListType = {
+type fetchedCollectionType = {
   _id: string;
   collaborators: Collaborator[];
   createdBy: Collaborator;
@@ -76,9 +76,9 @@ type fetchedListType = {
   updatedAt: string;
 };
 
-type cachedDocs = {
-  listId: string;
-  docs: fetchedDocType[];
+type cachedLinks = {
+  collectionId: string;
+  links: fetchedLinkType[];
 };
 
 type NotificationType = {
@@ -93,11 +93,11 @@ export type {
   themeType,
   profileOptions,
   TagType,
-  fetchedListType,
+  fetchedCollectionType,
   Collaborator,
   fontOptions,
-  fetchedDocType,
+  fetchedLinkType,
   fetchedTagType,
-  cachedDocs,
+  cachedLinks,
   NotificationType
 };
