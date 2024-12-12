@@ -5,10 +5,10 @@ import useMethodStore from "@/store/MethodStore";
 import useProfileStore from "@/store/profileStore";
 import { handleAxiosError } from "@/utils/handlerAxiosError";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { Skeleton } from "@/components/ui/skeleton"
 
 type ListsProps = {
   className?: string;
@@ -58,8 +58,10 @@ const Lists = ({ className, extraElementClassNames }: ListsProps) => {
 
   if (loading) {
     return (
-      <div className={`dark:text-zinc-200 text-zinc-900 h-[calc(100vh-4.5rem)] lg:h-[calc(100vh-5rem)] w-full flex justify-center items-center ${className}`}>
-        <Loader2 className="animate-spin" />
+      <div className={`col-span-2 relative lg:px-0 px-4 space-y-3 overflow-y-scroll no-scrollbar h-[calc(100vh-4.5rem)] md:h-auto lg:h-[calc(100vh-4.5rem)] md:space-x-0 md:space-y-2 md:p-4 !gap-2 md:justify-start md:items-start 2xl:grid-cols-1 ${className}`}>
+        <Skeleton className={`w-full h-64`} />
+        <Skeleton className={`w-full h-64`} />
+        <Skeleton className={`w-full h-64`} />
       </div>
     );
   }

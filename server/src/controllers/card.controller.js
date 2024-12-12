@@ -36,7 +36,7 @@ const createCard = asyncHandler(async (req, res) => {
     if (!card) {
         throw new ApiError(500, "Failed to create card")
     }
-    
+
     return res
         .status(201)
         .json(new ApiResponse(

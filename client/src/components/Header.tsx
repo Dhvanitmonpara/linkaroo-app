@@ -57,14 +57,18 @@ const Header = () => {
           <span className="hidden sm:inline">Linkaroo</span>
         </Link>
         <div className="lg:h-20 h-[4.5rem] lg:py-5 pt-4 pb-[1rem] flex space-x-2 md:w-2/5">
-          <Input
-            onClick={() => setOpen(true)}
-            className="dark:bg-zinc-900 dark:text-white hidden md:inline-block dark:border-zinc-600"
-            placeholder="Create or Search something..."
-          />
-
+          <div className="w-full relative">
+            <Input
+              onClick={() => setOpen(true)}
+              className="dark:bg-zinc-900 dark:text-white hidden md:inline-block dark:border-zinc-800"
+              placeholder="Create or Search something..."
+            />
+            <div className="absolute top-2.5 right-2.5 border-1 border-zinc-600 text-zinc-200 w-fit py-0.5 px-1 text-xs rounded-md">
+              ⌘K
+            </div>
+          </div>
           <DropdownMenu>
-            <DropdownMenuTrigger className="w-12 lg:flex hidden justify-center items-center dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-white rounded-sm border-2 dark:border-zinc-700 border-zinc-200 hover:bg-zinc-200">
+            <DropdownMenuTrigger className="w-12 transition-colors duration-200 lg:flex hidden justify-center items-center dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-white rounded-sm border-2 dark:border-zinc-800 border-zinc-200 hover:bg-zinc-200">
               <IoMdAdd />
             </DropdownMenuTrigger>
             <DropdownMenuContent
@@ -99,41 +103,40 @@ const Header = () => {
           </DropdownMenu>
           <div
             onClick={() => setOpen(true)}
-            className="md:w-12 w-10 text-xl md:text-base md:hidden flex justify-center items-center md:dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-zinc-300 rounded-sm md:border-2 md:dark:border-zinc-700 md:border-zinc-200 hover:bg-zinc-200"
+            className="md:w-12 cursor-pointer transition-colors duration-200 w-10 text-xl md:text-base md:hidden flex justify-center items-center md:dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-zinc-300 rounded-sm md:border-2 md:dark:border-zinc-800 md:border-zinc-200 hover:bg-zinc-200"
           >
             <IoSearchSharp />
           </div>
-          <div className="md:w-12 w-10 text-xl md:text-base flex justify-center items-center md:dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-white rounded-sm md:border-2 md:dark:border-zinc-700 md:border-zinc-200 hover:bg-zinc-200">
+          <div className="md:w-12 cursor-pointer transition-colors duration-200 w-10 text-xl md:text-base flex justify-center items-center md:dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-white rounded-sm md:border-2 md:dark:border-zinc-800 md:border-zinc-200 hover:bg-zinc-200">
             <IoFilterOutline />
           </div>
           <Popover>
-            <PopoverTrigger className="md:w-12 w-10 text-xl md:text-base hidden lg:flex">
-              <div className="w-full h-full flex justify-center items-center text-zinc-400 dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-white rounded-sm border-2 dark:border-zinc-700 border-zinc-200 hover:bg-zinc-200">
+            <PopoverTrigger className="md:w-12 cursor-pointer transition-colors duration-200 w-10 text-xl md:text-base hidden lg:flex">
+              <div className="w-full h-full flex justify-center items-center text-zinc-400 dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-white rounded-sm border-2 dark:border-zinc-800 border-zinc-200 hover:bg-zinc-200">
                 <IoMdNotificationsOutline />
               </div>
             </PopoverTrigger>
             <PopoverContent
-              className={`${
-                theme == "dark" || theme == "black"
-                  ? "bg-zinc-900 border-zinc-700 text-zinc-100"
-                  : "bg-zinc-200 border-zinc-300 text-zinc-950"
-              } space-y-2 overflow-y-scroll h-[32rem] p-0`}
+              className={`${theme == "dark" || theme == "black"
+                ? "bg-zinc-900 border-zinc-700 text-zinc-100"
+                : "bg-zinc-200 border-zinc-300 text-zinc-950"
+                } space-y-2 overflow-y-scroll h-[32rem] p-0`}
             >
               <Notifications />
             </PopoverContent>
           </Popover>
         </div>
         <div className="text-zinc-400 md:flex justify-center items-center hidden space-x-7 font-semibold">
-          <NavLink to="/" className={({isActive})=>(`${isActive ? "text-zinc-100" : ""} hover:text-zinc-100 cursor-pointer transition-colors`)}>
+          <NavLink to="/" className={({ isActive }) => (`${isActive ? "text-zinc-100" : ""} hover:text-zinc-100 cursor-pointer transition-colors`)}>
             Home
           </NavLink>
-          <NavLink to="/dashboard" className={({isActive})=>(`${isActive ? "text-zinc-100" : ""} hover:text-zinc-100 cursor-pointer transition-colors`)}>
+          <NavLink to="/dashboard" className={({ isActive }) => (`${isActive ? "text-zinc-100" : ""} hover:text-zinc-100 cursor-pointer transition-colors`)}>
             Dashboard
           </NavLink>
           {/* <NavLink to="pinned" className={({isActive})=>(`${isActive ? "text-zinc-100" : ""} hover:text-zinc-100 cursor-pointer transition-colors`)}>
             Pinned
           </NavLink> */}
-          <NavLink to="/inbox" className={({isActive})=>(`${isActive ? "text-zinc-100" : ""} hover:text-zinc-100 cursor-pointer transition-colors`)}>
+          <NavLink to="/inbox" className={({ isActive }) => (`${isActive ? "text-zinc-100" : ""} hover:text-zinc-100 cursor-pointer transition-colors`)}>
             Inbox
           </NavLink>
           <div className="hidden lg:inline-block">

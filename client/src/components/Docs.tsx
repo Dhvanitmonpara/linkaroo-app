@@ -19,10 +19,10 @@ import {
   DropdownMenuContent,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { backgroundImageUrls } from "@/lib/constants";
+import { BsXLg } from "react-icons/bs";
 
 const Docs = () => {
   const { toggleModal } = useMethodStore();
@@ -49,7 +49,7 @@ const Docs = () => {
 
   // TODO: create a dropdown along with images and custom image function
   const handleSaveChanges = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    e: Event
   ) => {
     let toastId = "";
     try {
@@ -141,11 +141,10 @@ const Docs = () => {
           <div className="flex flex-col sm:flex-row gap-4">
             <Button
               onClick={() => navigate("/lists")}
-              className={`${
-                theme !== "light"
-                  ? "bg-zinc-900 hover:bg-zinc-800 text-zinc-200"
-                  : "bg-zinc-300 hover:bg-zinc-400 px-6 py-2"
-              } `}
+              className={`${theme !== "light"
+                ? "bg-zinc-900 hover:bg-zinc-800 text-zinc-200"
+                : "bg-zinc-300 hover:bg-zinc-400 px-6 py-2"
+                } `}
             >
               View Your Lists
             </Button>
@@ -157,11 +156,10 @@ const Docs = () => {
                   <CreateListForm toggleModal={toggleModal} theme={theme} />
                 );
               }}
-              className={`${
-                theme !== "light"
-                  ? "bg-zinc-900 hover:bg-zinc-800 text-zinc-200"
-                  : "bg-zinc-300 hover:bg-zinc-400 px-6 py-2"
-              } `}
+              className={`${theme !== "light"
+                ? "bg-zinc-900 hover:bg-zinc-800 text-zinc-200"
+                : "bg-zinc-300 hover:bg-zinc-400 px-6 py-2"
+                } `}
             >
               Create New List
             </Button>
@@ -209,9 +207,8 @@ const Docs = () => {
         </div>
         <div className="flex justify-center flex-col gap-4 items-center w-full h-2/6">
           <span
-            className={`${
-              theme !== "light" ? "text-zinc-200" : "text-zinc-800"
-            } `}
+            className={`${theme !== "light" ? "text-zinc-200" : "text-zinc-800"
+              } `}
           >
             You don't have any documents on this list.
           </span>
@@ -227,11 +224,10 @@ const Docs = () => {
                 />
               );
             }}
-            className={`${
-              theme !== "light"
-                ? "bg-zinc-900 hover:bg-zinc-800 text-zinc-200"
-                : "bg-zinc-300 hover:bg-zinc-400"
-            } px-6 py-2`}
+            className={`${theme !== "light"
+              ? "bg-zinc-900 hover:bg-zinc-800 text-zinc-200"
+              : "bg-zinc-300 hover:bg-zinc-400"
+              } px-6 py-2`}
           >
             Create a Doc
           </Button>
@@ -258,17 +254,16 @@ const Docs = () => {
                 }}
                 modal={false} // Keeps dropdown within the context of the parent
               >
-                <DropdownMenuTrigger className="h-12 w-12 opacity-0 group-hover:opacity-100 bg-[#00000030] hover:bg-[#00000060] transition-all flex justify-center items-center rounded-full text-xl">
-                  <BiSolidPencil />
+                <DropdownMenuTrigger disabled={saveChangesLoading} className={`h-12 w-12 ${dropdownOpen ? "opacity-100" : "opacity-0 group-hover:opacity"}-100 bg-[#00000030] hover:bg-[#00000060] transition-all flex justify-center items-center rounded-full text-xl`}>
+                  {dropdownOpen ? <BsXLg /> : (saveChangesLoading ? <Loader2 className="animate-spin" /> : <BiSolidPencil />)}
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
-                  className={`w-96 ${
-                    theme !== "light"
-                      ? "!bg-black !text-white border-zinc-800"
-                      : ""
-                  }`}
+                  className={`w-96 p-2 ${theme !== "light"
+                    ? "!bg-black !text-white border-zinc-800"
+                    : ""
+                    }`}
                   onCloseAutoFocus={(event) => {
-                    event.preventDefault(); // Prevents auto focus when closing the dropdown
+                    event.preventDefault()
                   }}
                   onPointerDownOutside={(event) => {
                     if (
@@ -284,41 +279,24 @@ const Docs = () => {
                       <Loader2 className="animate-spin" size={16} />
                     </div>
                   ) : (
-                    <>
-                      <DropdownMenuRadioGroup className="grid grid-cols-3">
-                        {backgroundImageUrls.map((link, index) => (
-                          <DropdownMenuRadioItem
-                            value={link}
-                            key={index}
-                            onSelect={(e) => e.preventDefault()}
-                            className="flex justify-center items-center w-full h-12 cursor-default" // Set height and disable pointer events
-                          >
-                            <img
-                              className="w-full h-12 object-cover" // Fit the image inside the container
-                              src={link} 
-                              alt={`Background ${index}`}
-                            />
-                          </DropdownMenuRadioItem>
-                        ))}
-                      </DropdownMenuRadioGroup>
-                      <DropdownMenuSeparator
-                        className={theme !== "light" ? "bg-zinc-800" : ""}
-                      />
-                      <Button
-                        onClick={handleSaveChanges}
-                        className={`mt-2 w-full ${
-                          theme !== "light"
-                            ? "text-zinc-200 bg-zinc-800 hover:bg-zinc-700"
-                            : "bg-zinc-100 hover:bg-zinc-200 text-zinc-950"
-                        }`}
-                      >
-                        {saveChangesLoading ? (
-                          <Loader2 className="animate-spin" />
-                        ) : (
-                          "Save Changes"
-                        )}
-                      </Button>
-                    </>
+                    <DropdownMenuRadioGroup className="grid grid-cols-3 gap-1">
+                      {backgroundImageUrls.map((link, index) => (
+                        <DropdownMenuRadioItem
+                          isShowCheckbox={false}
+                          isFullControl
+                          value={link}
+                          key={index}
+                          onSelect={handleSaveChanges}
+                          className="flex justify-center items-center data-[checked]:border-4 border-zinc-200 w-full h-24 cursor-default transition-colors duration-200 hover:brightness-110"
+                        >
+                          <img
+                            className="w-full h-24 object-cover" // Fit the image inside the container
+                            src={link}
+                            alt={`Background ${index}`}
+                          />
+                        </DropdownMenuRadioItem>
+                      ))}
+                    </DropdownMenuRadioGroup>
                   )}
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -357,9 +335,8 @@ const Docs = () => {
         </div>
       </div>
       <div
-        className={`grid grid-cols-1 gap-2 ${
-          location.includes("/doc") ? "" : "lg:grid-cols-2"
-        }`}
+        className={`grid grid-cols-1 gap-2 ${location.includes("/doc") ? "" : "lg:grid-cols-2"
+          }`}
       >
         {docs?.map((doc) => (
           <DocCard

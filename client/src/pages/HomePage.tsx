@@ -48,7 +48,7 @@ const HomePage = () => {
     }
 
     return (
-        <div className={`${theme !== "light" ? "text-zinc-100" : "text-zinc-900"} no-scrollbar select-none h-[calc(100vh-4.5rem)] overflow-y-scroll`}>
+        <div className={`${theme !== "light" ? "text-zinc-100" : "text-zinc-900"} no-scrollbar w-full select-none h-[calc(100vh-4.5rem)] overflow-y-scroll`}>
             <div className="flex justify-center items-center flex-col space-y-12 pt-12 sm:pt-36">
                 <div className="flex w-full sm:justify-center sm:items-center flex-col px-5 md:px-24 md:p-0 space-y-3">
                     <h1 className="text-4xl md:text-5xl font-semibold">Welcome back, {fullName}</h1>
@@ -72,13 +72,13 @@ const HomePage = () => {
                     />
                     <Button
                         type="submit"
-                        className={`${theme !== "light" ? "bg-zinc-700 hover:bg-zinc-600 text-zinc-200" : "bg-zinc-300 hover:bg-zinc-400"} rounded-full px-8 py-5 absolute top-1 right-1 transition-all ease-in-out ${input !== "" ? "scale-100" : "scale-0"}`}
+                        className={`${theme !== "light" ? "bg-zinc-300 hover:bg-zinc-200 text-zinc-800" : "bg-zinc-300 hover:bg-zinc-400"} rounded-full px-8 py-5 absolute top-1 right-1 transition-all ease-in-out ${input !== "" ? "scale-100" : "scale-0"}`}
                     >
                         {loading ? (<Loader2 className="animate-spin" />) : "Add"}
                     </Button>
                 </form>
             </div>
-            <div className="px-0 sm:px-24 xl:px-56 2xl-px-64 py-8 pt-6 sm:pt-12 md:pt-24">
+            <div className="px-0 w-full sm:px-24 xl:px-56 2xl-px-64 py-8 pt-6 sm:pt-12 md:pt-24">
                 <Lists className="!h-auto md:grid md:grid-cols-2 2xl:!grid-cols-3" extraElementClassNames="hidden" />
             </div>
         </div>

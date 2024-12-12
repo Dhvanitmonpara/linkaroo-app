@@ -94,15 +94,15 @@ const ListCard = ({
         <div>
           <HoverCard>
             <HoverCardTrigger>
-              <p
+              <span
                 className={`${isBlackMode ? "text-zinc-300" : "text-slate-800"
                   } font-semibold w-fit text-sm pb-3 hover:underline`}
               >
                 @{createdBy?.username}
-              </p>
+              </span>
             </HoverCardTrigger>
             <HoverCardContent>
-              <div className="w-full h-full flex justify-center items-center space-x-4">
+              <div className="w-full h-full flex justify-start items-center space-x-4">
                 <div>
                   <img className="rounded-full h-12 w-12 object-cover" src={createdBy.avatarImage} alt="avatar" />
                 </div>
