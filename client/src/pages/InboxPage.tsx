@@ -1,6 +1,6 @@
-import { DocCard } from "@/components";
-import { fetchedListType } from "@/lib/types";
-import useListStore from "@/store/collectionStore";
+import {LinkCard } from "@/components";
+import { fetchedCollectionType } from "@/lib/types";
+import useCollectionsStore from "@/store/collectionStore";
 import useMethodStore from "@/store/MethodStore";
 import useProfileStore from "@/store/profileStore";
 import { handleAxiosError } from "@/utils/handlerAxiosError";
@@ -14,15 +14,15 @@ const InboxPage = () => {
   const profile = useProfileStore().profile;
   const location = useLocation().pathname;
   const navigate = useNavigate();
-  const { inbox, setInboxDocs, inboxDocs, setLists, setInbox, lists } =
-    useListStore();
+  const { inbox, setInboxLink, inboxLinks, setCollections, setInbox, collections } =
+    useCollectionsStore();
   const { toggleModal } = useMethodStore();
 
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     (async () => {
-      if (location.includes("/inbox") && inboxDocs.length == 0) {
+      if (location.includes("/inbox") && inboxLinks.length == 0) {
         try {
           setLoading(true);
 
@@ -33,7 +33,7 @@ const InboxPage = () => {
               try {
                 setLoading(true);
 
-                if (!lists.length) {
+                if (!collections.length) {
                   const response: AxiosResponse = await axios({
                     method: "GET",
                     url: `${import.meta.env.VITE_SERVER_API_URL}/lists/u`,
@@ -46,13 +46,13 @@ const InboxPage = () => {
                   }
                   const allLists = response.data.data;
                   const inboxList = allLists.find(
-                    (list: fetchedListType) => list.isInbox === true
+                    (list: fetchedCollectionType) => list.isInbox === true
                   );
                   const regularLists = allLists.filter(
-                    (list: fetchedListType) => list.isInbox === false
+                    (list: fetchedCollectionType) => list.isInbox === false
                   );
 
-                  setLists(regularLists);
+                  setCollections(regularLists);
                   setInbox(inboxList);
                 }
               } catch (error) {
@@ -71,7 +71,7 @@ const InboxPage = () => {
               toast.error("Failed to fetch list details");
               return;
             }
-            setInboxDocs(response.data.data);
+            setInboxLink(response.data.data);
           }
         } catch (error) {
           handleAxiosError(error as AxiosError, navigate);
@@ -80,7 +80,7 @@ const InboxPage = () => {
         }
       }
     })();
-  }, [setInboxDocs, location, inbox?._id, navigate]);
+  }, [setInboxLink, location, inbox?._id, navigate]);
 
   if (loading) {
     return (
@@ -111,9 +111,9 @@ const InboxPage = () => {
         </div>
       </div>
       <div className="px-4 md:px-24 xl:px-56 2xl-px-64 py-8 pt-24 grid sm:grid-cols-2 gap-2">
-        {inboxDocs?.length > 0 ? (
-          inboxDocs.map((doc) => (
-            <DocCard
+        {inboxLinks?.length > 0 ? (
+          inboxLinks.map((doc) => (
+            <LinkCard
               key={doc._id}
               id={doc._id}
               title={doc.title}

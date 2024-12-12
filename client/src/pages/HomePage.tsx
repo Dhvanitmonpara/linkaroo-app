@@ -1,7 +1,7 @@
-import { Lists } from "@/components";
+import { Collections } from "@/components";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import useListStore from "@/store/collectionStore";
+import useCollectionsStore from "@/store/collectionStore";
 import useProfileStore from "@/store/profileStore"
 import { handleAxiosError } from "@/utils/handlerAxiosError";
 import axios, { AxiosError } from "axios";
@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 const HomePage = () => {
 
     const { theme, fullName } = useProfileStore().profile
-    const { inbox, addInboxDocItem } = useListStore()
+    const { inbox, addInboxLinkItem } = useCollectionsStore()
     const navigate = useNavigate()
     const [input, setInput] = useState("")
 
@@ -35,7 +35,7 @@ const HomePage = () => {
                 toast.error("Failed to create card");
             }
 
-            addInboxDocItem(response.data.data)
+            addInboxLinkItem(response.data.data)
 
             toast.success("Doc created successfully")
 
@@ -79,7 +79,7 @@ const HomePage = () => {
                 </form>
             </div>
             <div className="px-0 w-full sm:px-24 xl:px-56 2xl-px-64 py-8 pt-6 sm:pt-12 md:pt-24">
-                <Lists className="!h-auto md:grid md:grid-cols-2 2xl:!grid-cols-3" extraElementClassNames="hidden" />
+                <Collections className="!h-auto md:grid md:grid-cols-2 2xl:!grid-cols-3" extraElementClassNames="hidden" />
             </div>
         </div>
     )

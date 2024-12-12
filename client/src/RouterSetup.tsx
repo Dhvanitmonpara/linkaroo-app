@@ -12,7 +12,7 @@ import App from "./App";
 import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
 import PasswordRecoveryPage from "./pages/PasswordRecoveryPage";
-import { Docs, Notifications } from "@/components";
+import { Links, Notifications } from "@/components";
 import NotFound from "@/pages/NotFound"; // Import your NotFound component
 import HomePage from "./pages/HomePage";
 import InboxPage from "./pages/InboxPage";
@@ -26,8 +26,8 @@ const RouterSetup: React.FC = () => {
       createRoutesFromElements(
         <Route path="/" element={<App />}>
           <Route path="" element={<HomePage />} />
-          <Route path="/lists/:listId" element={<Docs />} />
-          <Route path="/lists/:listId/docs/:docId" element={<Docs />} />
+          <Route path="/collections/:listId" element={<Links />} />
+          <Route path="/collections/:listId/docs/:docId" element={<Links />} />
           <Route path="/notifications" element={<Notifications />} />
           <Route path="/inbox" element={<InboxPage />} />
           <Route path="/login" element={<LoginPage />} />
@@ -53,9 +53,9 @@ const RouterSetup: React.FC = () => {
             path="/password-recovery"
             element={<PasswordRecoveryPage />}
           />
-          <Route path="/list" element={<DashboardPage />} />
-          <Route path="/lists/:listId" element={<DashboardPage />} />
-          <Route path="/lists/:listId/docs/:docId" element={<DashboardPage />} />
+          <Route path="/collections" element={<DashboardPage />} />
+          <Route path="/collections/:listId" element={<DashboardPage />} />
+          <Route path="/collections/:listId/docs/:docId" element={<DashboardPage />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       )

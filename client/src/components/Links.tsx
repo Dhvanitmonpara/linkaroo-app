@@ -24,7 +24,7 @@ import { BsXLg } from "react-icons/bs";
 import useLinkStore from "@/store/linkStore";
 import useCollectionsStore from "@/store/collectionStore";
 
-const Docs = () => {
+const Links = () => {
   const { toggleModal } = useMethodStore();
   const [loading, setLoading] = useState(false);
   const location = useLocation().pathname;
@@ -59,7 +59,7 @@ const Docs = () => {
   useEffect(() => {
     (async () => {
       // if (location.pathname.includes("/lists") && prevPath !== location.pathname) {
-      if (location.includes("/lists")) {
+      if (location.includes("/collections")) {
         try {
           setLoading(true);
           const collectionId = location.split("/")[2];
@@ -70,7 +70,7 @@ const Docs = () => {
             setLinks(cache.links);
           } else {
             const response: AxiosResponse = await axios.get(
-              `${import.meta.env.VITE_SERVER_API_URL}/cards/${collectionId}`,
+              `${import.meta.env.VITE_SERVER_API_URL}/links/${collectionId}`,
               { withCredentials: true }
             );
 
@@ -349,4 +349,4 @@ const Docs = () => {
   );
 };
 
-export default Docs;
+export default Links;

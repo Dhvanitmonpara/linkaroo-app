@@ -86,7 +86,7 @@ const Header = () => {
                 }}
               >
                 <IoMdAdd />
-                <span className="pl-2">List</span>
+                <span className="pl-2">Collection</span>
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => {
@@ -97,7 +97,7 @@ const Header = () => {
                   );
                 }}
               >
-                <IoMdAdd /> <span className="pl-2">Doc</span>
+                <IoMdAdd /> <span className="pl-2">Link</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

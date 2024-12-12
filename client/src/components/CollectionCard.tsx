@@ -18,7 +18,7 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 
-type ListCardProps = {
+type CollectionCardProps = {
   id: string;
   tagname: TagType[];
   description: string;
@@ -31,7 +31,7 @@ type ListCardProps = {
   toggleModal: (isOpen: boolean) => void;
 };
 
-const ListCard = ({
+const CollectionCard = ({
   id,
   tagname,
   description,
@@ -42,7 +42,7 @@ const ListCard = ({
   font,
   createdBy,
   toggleModal,
-}: ListCardProps) => {
+}: CollectionCardProps) => {
   const navigate = useNavigate();
 
   const collaboratorAvatars: string[] = [];
@@ -78,7 +78,7 @@ const ListCard = ({
 
   const openList = () => {
     setCurrentCardColor(theme);
-    navigate(`/lists/${id}`);
+    navigate(`/collections/${id}`);
   };
 
   return (
@@ -148,4 +148,4 @@ const ListCard = ({
   );
 };
 
-export default ListCard;
+export default CollectionCard;

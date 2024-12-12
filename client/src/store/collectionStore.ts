@@ -12,7 +12,7 @@ interface CollectionsState {
   updateCollectionsTags: (collection: fetchedCollectionType) => void;
   toggleIsPublic: (collection: fetchedCollectionType) => void;
   inbox: fetchedCollectionType | null;
-  inboxDocs: fetchedLinkType[] | []
+  inboxLinks: fetchedLinkType[] | []
   setInbox: (inbox: fetchedCollectionType | null) => void;
   setInboxLink: (links: fetchedLinkType[] | []) => void
   addInboxLinkItem: (link: fetchedLinkType) => void;
@@ -72,15 +72,15 @@ const useCollectionsStore = create<CollectionsState>()(
           }));
         },
         inbox: null,
-        inboxDocs: [],
+        inboxLinks: [],
         setInbox: (inbox) => set({ inbox }),
-        setInboxLink: (links) => set({ inboxDocs: links }),
+        setInboxLink: (links) => set({ inboxLinks: links }),
         addInboxLinkItem: (link) => {
-          set((state) => ({ inboxDocs: [...state.inboxDocs, link] }));
+          set((state) => ({ inboxLinks: [...state.inboxLinks, link] }));
         },
         removeInboxLinkItem: (linkId) => {
           set((state) => ({
-            inboxDocs: state.inboxDocs.filter((doc) => doc._id !== linkId),
+            inboxLinks: state.inboxLinks.filter((doc) => doc._id !== linkId),
           }));
         }
       }),
