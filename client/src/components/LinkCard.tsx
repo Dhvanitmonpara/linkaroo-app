@@ -64,7 +64,7 @@ const LinkCard = ({
   };
 
   const cardClass = `${color} ${color === "bg-black"
-      ? "!text-zinc-300 border-zinc-500 !bg-zinc-900 border-[1px]"
+      ? "!text-zinc-300 border-zinc-700 !bg-zinc-900 border-[1px]"
       : "text-black"
     } select-none group relative px-5 h-14 flex-col transition-all rounded-md flex justify-center items-center`;
 

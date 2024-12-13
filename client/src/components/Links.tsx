@@ -247,7 +247,7 @@ const Links = () => {
                 }}
                 modal={false} // Keeps dropdown within the context of the parent
               >
-                <DropdownMenuTrigger disabled={saveChangesLoading} className={`h-12 w-12 ${dropdownOpen ? "opacity-100" : "opacity-0 group-hover:opacity"}-100 bg-[#00000030] hover:bg-[#00000060] transition-all flex justify-center items-center rounded-full text-xl`}>
+                <DropdownMenuTrigger disabled={saveChangesLoading} className={`h-12 w-12 ${dropdownOpen || saveChangesLoading ? "opacity-100" : "opacity-0 group-hover:opacity-100"} bg-[#00000030] hover:bg-[#00000060] disabled:bg-[#00000030] transition-all flex justify-center items-center rounded-full text-xl`}>
                   {dropdownOpen ? <BsXLg /> : (saveChangesLoading ? <Loader2 className="animate-spin" /> : <BiSolidPencil />)}
                 </DropdownMenuTrigger>
                 <DropdownMenuContent

@@ -9,7 +9,7 @@ import DocScreen from "./DocScreen";
 import Collections from "./Collections";
 import Links from "./Links";
 import Loading from "./Loading";
-import Modal from "./Modal";
+import ResponsiveDialog from "./ResponsiveDialog";
 import CommandMenu from "./CommandMenu";
 import ListActionButtons from "./ListActionButtons";
 import NotificationCard from "./NotificationCard";
@@ -27,7 +27,7 @@ export {
   Collections,
   Links,
   Loading,
-  Modal,
+  ResponsiveDialog,
   CommandMenu,
   ListActionButtons,
   NotificationCard,

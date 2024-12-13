@@ -1,11 +1,11 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import useMethodStore from "./store/MethodStore";
 import useProfileStore from "./store/profileStore";
 import axios, { AxiosError } from "axios";
 import toggleThemeModeAtRootElem from "./utils/toggleThemeMode";
-import { Header, HorizontalTabs, Loading, Modal } from "./components";
+import { Header, HorizontalTabs, Loading } from "./components";
 import { handleAxiosError } from "./utils/handlerAxiosError";
 import { initializeSocket } from "./utils/initializeSocket";
 import useCollectionsStore from "./store/collectionStore";
@@ -16,14 +16,12 @@ const App = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const modalRef = useRef<HTMLDivElement | null>(null);
   const [progress, setProgress] = useState<number>(33);
 
   const {
     isModalOpen,
     setModalContent,
     toggleModal,
-    modalContent,
     prevPath,
     notifications,
     setNotifications,
@@ -31,16 +29,6 @@ const App = () => {
   const { addProfile, profile } = useProfileStore();
   const { setCollections, setInboxLink, setInbox } = useCollectionsStore();
   const { setLinks, setCurrentCollectionItem, setCachedLinks } = useLinkStore();
-
-  const closeModal = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    if (modalRef.current === e.target) {
-      toggleModal(false);
-      setModalContent(null);
-      if (prevPath !== null) {
-        navigate(prevPath);
-      }
-    }
-  };
 
   document.addEventListener("keydown", ({ key }) => {
     if (key == "Escape" && isModalOpen) {
@@ -160,15 +148,6 @@ const App = () => {
       >
         <HorizontalTabs />
       </div>
-      {isModalOpen && (
-        <Modal
-          isOpen={isModalOpen}
-          closeModal={closeModal}
-          modalContent={modalContent}
-          modalRef={modalRef}
-          className="xl:h-auto w-full max-w-4xl"
-        />
-      )}
       <Toaster
         position={window.innerWidth >= 1024 ? "bottom-right" : "top-center"}
         toastOptions={{

@@ -86,7 +86,7 @@ const CollectionCard = ({
       onClick={openList}
       className={`group select-none transition-all h-64 w-full p-6 rounded-md flex justify-between flex-col ${isBlackMode ? "" : theme
         } ${isBlackMode
-          ? "!text-zinc-300 border-zinc-500 !bg-zinc-900 border-[1px]"
+          ? "!text-zinc-300 border-zinc-700 !bg-zinc-900 border-[1px]"
           : "text-black"
         }`}
     >
