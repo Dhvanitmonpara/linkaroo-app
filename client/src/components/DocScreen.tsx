@@ -1,5 +1,5 @@
-import { fetchedDocType } from "@/lib/types";
-import useDocStore from "@/store/linkStore";
+import { fetchedLinkType } from "@/lib/types";
+import useLinkStore from "@/store/linkStore";
 import useMethodStore from "@/store/MethodStore";
 import useProfileStore from "@/store/profileStore";
 import { handleAxiosError } from "@/utils/handlerAxiosError";
@@ -9,8 +9,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 const DocScreen = () => {
   const [loading, setLoading] = useState(true);
-  const { docs } = useDocStore();
-  const [currentCard, setCurrentCard] = useState<fetchedDocType | null>(null);
+  const { links } = useLinkStore();
+  const [currentCard, setCurrentCard] = useState<fetchedLinkType | null>(null);
   const navigate = useNavigate();
   const location = useLocation().pathname;
   const { currentCardColor } = useMethodStore();
@@ -20,7 +20,7 @@ const DocScreen = () => {
   useEffect(() => {
     try {
       setLoading(true);
-      const card = docs.filter((card) => card._id == cardId)[0];
+      const card = links.filter((card) => card._id == cardId)[0];
 
       setCurrentCard(card);
     } catch (error) {

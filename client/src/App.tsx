@@ -6,10 +6,10 @@ import useProfileStore from "./store/profileStore";
 import axios, { AxiosError } from "axios";
 import toggleThemeModeAtRootElem from "./utils/toggleThemeMode";
 import { Header, HorizontalTabs, Loading, Modal } from "./components";
-import useDocStore from "./store/linkStore";
 import { handleAxiosError } from "./utils/handlerAxiosError";
 import { initializeSocket } from "./utils/initializeSocket";
 import useCollectionsStore from "./store/collectionStore";
+import useLinkStore from "./store/linkStore";
 
 const App = () => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -30,7 +30,7 @@ const App = () => {
   } = useMethodStore();
   const { addProfile, profile } = useProfileStore();
   const { setCollections, setInboxLink, setInbox } = useCollectionsStore();
-  const { setLinks, setCurrentCollectionItem, setCachedLinks } = useDocStore();
+  const { setLinks, setCurrentCollectionItem, setCachedLinks } = useLinkStore();
 
   const closeModal = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (modalRef.current === e.target) {

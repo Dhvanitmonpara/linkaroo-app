@@ -18,7 +18,7 @@ function DashboardPage() {
         </div>
         <div
           className={`xl:px-0 lg:px-0 lg:pr-5 px-5 h-full select-none ${
-            !location.includes("/docs")
+            !location.includes("/links")
               ? "lg:col-span-3 xl:col-span-5 !pr-5"
               : "col-span-3"
           }`}
@@ -27,10 +27,10 @@ function DashboardPage() {
         </div>
         <div
           className={`col-span-2 hidden xl:inline-block relative px-5 pt-5 space-y-3 overflow-y-scroll max-h-screen no-scrollbar ${
-            !location.includes("/docs") ? "!hidden" : ""
+            !location.includes("/links") ? "!hidden" : ""
           }`}
         >
-          {location.includes("/docs") ? (
+          {location.includes("/links") ? (
             <div className="h-full w-full border-2 dark:border-zinc-600 rounded-md overflow-hidden">
               <DocScreen/>
             </div>

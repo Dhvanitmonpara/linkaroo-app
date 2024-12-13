@@ -37,7 +37,7 @@ const HomePage = () => {
 
             addInboxLinkItem(response.data.data)
 
-            toast.success("Doc created successfully")
+            toast.success("Link created successfully")
 
         } catch (error) {
             handleAxiosError(error as AxiosError, navigate);
@@ -64,7 +64,7 @@ const HomePage = () => {
                         type="text"
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
-                        placeholder="Quick add a new doc..."
+                        placeholder="Quick add a new Link..."
                         className={`w-full px-6 py-6 text-lg rounded-md ${theme !== "light"
                             ? "bg-zinc-800 text-zinc-100 placeholder-zinc-400"
                             : "bg-white text-zinc-900 placeholder-zinc-500"

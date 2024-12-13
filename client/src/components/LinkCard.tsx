@@ -43,10 +43,10 @@ const LinkCard = ({
   const isSmallScreen = useMediaQuery({ query: "(max-width: 1024px)" });
 
   const handleNavigate = (listId?: string) => {
-    if (location.pathname.includes("/docs")) {
-      navigate(`/lists/${listId || currentListId}/docs/${id}`);
+    if (location.pathname.includes("/links")) {
+      navigate(`/collections/${listId || currentListId}/links/${id}`);
     } else {
-      navigate(`docs/${id}`);
+      navigate(`links/${id}`);
     }
   };
 

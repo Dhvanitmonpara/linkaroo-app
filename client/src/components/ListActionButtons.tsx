@@ -29,14 +29,14 @@ import { fetchedTagType } from "@/lib/types";
 import useProfileStore from "@/store/profileStore";
 import { removeUsernameTag } from "@/utils/toggleUsernameInTag";
 import { useNavigate, useParams } from "react-router-dom";
-import useListStore from "@/store/collectionStore";
-import useDocStore from "@/store/linkStore";
 import { CreateDocForm, EditListForm } from "./Forms";
 import { Input } from "./ui/input";
 import { handleAxiosError } from "@/utils/handlerAxiosError";
 import { AddCollaborator } from "./ActionButtons";
 import { FaLock } from "react-icons/fa";
 import { FaLockOpen } from "react-icons/fa";
+import useLinkStore from "@/store/linkStore";
+import useCollectionsStore from "@/store/collectionStore";
 
 type Checked = boolean;
 
@@ -51,8 +51,8 @@ type ListActionButtonsProps = {
 const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
   const { toggleModal, setModalContent, setPrevPath } = useMethodStore();
   const { profile, setTags } = useProfileStore();
-  const { removeListItem, updateListTags, toggleIsPublic } = useListStore();
-  const { setDocs, currentListItem, setCurrentListItem, removeCachedDocList } = useDocStore();
+  const { removeCollectionsItem, updateCollectionsTags, toggleIsPublic } = useCollectionsStore();
+  const { setLinks, currentCollectionItem, setCurrentCollectionItem, removeCachedLinkCollection } = useLinkStore()
   const theme = profile.theme;
   const [loading, setLoading] = useState(false);
   const [saveChangesLoading, setSaveChangesLoading] = useState(false);
@@ -173,7 +173,7 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
       const listTags = checkedTags.filter((tag) => tag.isChecked === true);
       const updatedList = { ...saveResponse.data.data, tags: listTags };
 
-      updateListTags(updatedList);
+      updateCollectionsTags(updatedList);
 
       setDropdownOpen(false);
       toast.success("Changes saved successfully");
@@ -192,7 +192,7 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
       return "Updating list...";
     });
 
-    if (!currentListItem) {
+    if (!currentCollectionItem) {
       toast.error("List not found");
       return;
     }
@@ -208,7 +208,7 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
         return;
       }
 
-      toggleIsPublic(currentListItem);
+      toggleIsPublic(currentCollectionItem);
     } catch (error) {
       handleAxiosError(error as AxiosError, navigate);
     } finally {
@@ -246,27 +246,27 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
       }
 
       if (listId !== undefined) {
-        removeListItem(listId);
+        removeCollectionsItem(listId);
       } else {
         toast.error("List id not found");
         return;
       }
 
-      setDocs([]);
-      removeCachedDocList(listId);
+      setLinks([]);
+      removeCachedLinkCollection(listId);
       toast.success("List deleted successfully");
       setLoading(false);
     } catch (error) {
       handleAxiosError(error as AxiosError, navigate);
     } finally {
       navigate("/")
-      setCurrentListItem(null)
+      setCurrentCollectionItem(null)
       toast.dismiss(loadingId);
     }
   };
 
   {
-    currentListItem?.isPublic;
+    currentCollectionItem?.isPublic;
   }
 
   const actionButtons = [
@@ -278,7 +278,7 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
               className="h-12 w-12 bg-transparent hover:bg-transparent border-none flex justify-center items-center rounded-full text-xl"
               aria-label="Tag Options"
             >
-              {currentListItem?.isPublic ? <FaLockOpen /> : <FaLock />}
+              {currentCollectionItem?.isPublic ? <FaLockOpen /> : <FaLock />}
             </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -289,7 +289,7 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
           >
             <span className="text-sm text-zinc-200">
               Are you sure to make your list{" "}
-              {currentListItem?.isPublic ? "private" : "public"}?
+              {currentCollectionItem?.isPublic ? "private" : "public"}?
             </span>
             <div className="flex gap-2 w-full justify-center items-center">
               <DropdownMenuItem

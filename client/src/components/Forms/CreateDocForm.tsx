@@ -16,10 +16,10 @@ import { useForm, Controller } from "react-hook-form";
 import { themeType } from "@/lib/types";
 import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
-import useListStore from "@/store/collectionStore";
-import useDocStore from "@/store/linkStore";
 import { useNavigate } from "react-router-dom";
 import { handleAxiosError } from "@/utils/handlerAxiosError";
+import useLinkStore from "@/store/linkStore";
+import useCollectionsStore from "@/store/collectionStore";
 
 type CreateDocFormProps = {
   theme: themeType | undefined;
@@ -42,13 +42,13 @@ const CreateDocForm: React.FC<CreateDocFormProps> = ({
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const { lists } = useListStore();
-  const { addDocItem, docs, addCachedDocItem } = useDocStore();
+  const { collections } = useCollectionsStore();
+  const { addLinkItem, links, addCachedLinkItem } = useLinkStore();
 
   const { control, handleSubmit, register } = useForm<HandleDocCreationType>({
     defaultValues: {
       list: listTitle
-        ? lists.find((list) => list.title === listTitle)?._id
+        ? collections.find((collection) => collection.title === listTitle)?._id
         : "",
     },
   });
@@ -57,7 +57,7 @@ const CreateDocForm: React.FC<CreateDocFormProps> = ({
     try {
       setLoading(true);
 
-      const parentList = lists.find((list) => list._id === data.list);
+      const parentList = collections.find((list) => list._id === data.list);
 
       if (!data.list || !parentList) {
         toast.error("Invalid list");
@@ -80,11 +80,11 @@ const CreateDocForm: React.FC<CreateDocFormProps> = ({
         toast.error("Failed to create doc");
       }
 
-      if (data.list == docs[0].listId) {
-        addDocItem(doc.data.data);
+      if (data.list == links[0].listId) {
+        addLinkItem(doc.data.data);
       }
 
-      addCachedDocItem(data.list, doc.data.data);
+      addCachedLinkItem(data.list, doc.data.data);
 
     } catch (error) {
       handleAxiosError(error as AxiosError, navigate);
@@ -155,7 +155,7 @@ const CreateDocForm: React.FC<CreateDocFormProps> = ({
                 >
                   <SelectGroup>
                     <SelectLabel>Lists</SelectLabel>
-                    {lists.map((list) => (
+                    {collections.map((list) => (
                       <SelectItem key={list._id} value={list._id}>
                         {list.title}
                       </SelectItem>
@@ -166,7 +166,7 @@ const CreateDocForm: React.FC<CreateDocFormProps> = ({
             )}
           />
         </div>
-
+        
         {loading ? (
           <Button
             disabled

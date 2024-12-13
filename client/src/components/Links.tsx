@@ -133,13 +133,13 @@ const Links = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <Button
-              onClick={() => navigate("/lists")}
+              onClick={() => navigate("/collections")}
               className={`${theme !== "light"
                 ? "bg-zinc-900 hover:bg-zinc-800 text-zinc-200"
                 : "bg-zinc-300 hover:bg-zinc-400 px-6 py-2"
                 } `}
             >
-              View Your Lists
+              View Your Collections
             </Button>
             <Button
               onClick={() => {
@@ -328,7 +328,7 @@ const Links = () => {
         </div>
       </div>
       <div
-        className={`grid grid-cols-1 gap-2 ${location.includes("/doc") ? "" : "lg:grid-cols-2"
+        className={`grid grid-cols-1 gap-2 ${location.includes("/links") ? "" : "lg:grid-cols-2"
           }`}
       >
         {links?.map((link) => (

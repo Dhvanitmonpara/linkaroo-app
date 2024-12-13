@@ -27,7 +27,7 @@ const RouterSetup: React.FC = () => {
         <Route path="/" element={<App />}>
           <Route path="" element={<HomePage />} />
           <Route path="/collections/:listId" element={<Links />} />
-          <Route path="/collections/:listId/docs/:docId" element={<Links />} />
+          <Route path="/collections/:listId/links/:docId" element={<Links />} />
           <Route path="/notifications" element={<Notifications />} />
           <Route path="/inbox" element={<InboxPage />} />
           <Route path="/login" element={<LoginPage />} />
@@ -55,7 +55,7 @@ const RouterSetup: React.FC = () => {
           />
           <Route path="/collections" element={<DashboardPage />} />
           <Route path="/collections/:listId" element={<DashboardPage />} />
-          <Route path="/collections/:listId/docs/:docId" element={<DashboardPage />} />
+          <Route path="/collections/:listId/links/:docId" element={<DashboardPage />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       )
