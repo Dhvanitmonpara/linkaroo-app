@@ -71,6 +71,7 @@ type fetchedCollectionType = {
   theme: colorOptions;
   isPublic: boolean;
   title: string;
+  icon: string
   coverImage: string;
   createdAt: string;
   updatedAt: string;

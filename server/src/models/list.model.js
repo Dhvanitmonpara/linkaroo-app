@@ -17,6 +17,10 @@ const listSchema = new Schema({
         type: String,
         default: ""
     },
+    icon: {
+        type: String,
+        default: ""
+    },
     theme: {
         type: String,
         default: "bg-zinc-200"

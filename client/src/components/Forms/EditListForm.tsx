@@ -40,6 +40,7 @@ const EditListForm: React.FC<EditListFormProps> = ({ theme, toggleModal }) => {
   const [loading, setLoading] = useState(false);
   const { updateCollectionsItem } = useCollectionsStore();
   const { currentCollectionItem, setCurrentCollectionItem } = useLinkStore();
+  // const [icon, setIcon] = useState(currentCollectionItem?.icon || "");
   const { setCurrentCardColor } = useMethodStore();
   const navigate = useNavigate()
 
@@ -116,45 +117,86 @@ const EditListForm: React.FC<EditListFormProps> = ({ theme, toggleModal }) => {
             required: "Description is required",
           })}
         />
-        <Controller
-          name="theme"
-          control={control}
-          render={({ field: { onChange, value } }) => (
-            <Select value={value} onValueChange={onChange}>
-              <SelectTrigger className="text-white bg-zinc-800 border-zinc-800 max-w-96">
-                <SelectValue placeholder="Change theme" />
-              </SelectTrigger>
-              <SelectContent
-                className={cn(
-                  theme !== "light"
-                    ? "!bg-zinc-900 !text-white border-zinc-800"
-                    : "",
-                  "[&_[role=option]]:p-0"
-                )}
-              >
-                <SelectGroup>
-                  <div className="grid grid-cols-4 gap-1 p-2">
-                    {themeOptionsArray.map((themeOption) => (
-                      <SelectItem
-                        key={themeOption.value}
-                        value={themeOption.value}
-                        className={cn(
-                          themeOption.value,
-                          "text-transparent p-4 h-16 text-center flex justify-center items-center rounded border border-none hover:text-black dark:hover:text-black active:text-black focus:outline-none",
-                          "data-[state=checked]:font-semibold data-[state=checked]:!text-zinc-900",
-                          "[&>span>span]:hidden",
-                          `focus:${themeOption.value} focus:brightness-110 transition-colors duration-75`
-                        )}
-                      >
-                        {themeOption.label}
-                      </SelectItem>
-                    ))}
-                  </div>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          )}
-        />
+        <div className="flex justify-center items-center space-x-2">
+          {/* <Controller
+            name="theme"
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <Select value={value} onValueChange={onChange}>
+                <SelectTrigger className="text-white bg-zinc-800 border-zinc-800 max-w-96">
+                  <SelectValue placeholder="Change icon" />
+                </SelectTrigger>
+                <SelectContent
+                  className={cn(
+                    theme !== "light"
+                      ? "!bg-zinc-900 !text-white border-zinc-800"
+                      : "",
+                    "[&_[role=option]]:p-0"
+                  )}
+                >
+                  <SelectGroup>
+                    <div className="grid grid-cols-4 gap-1 p-2">
+                      {themeOptionsArray.map((themeOption) => (
+                        <SelectItem
+                          key={themeOption.value}
+                          value={themeOption.value}
+                          className={cn(
+                            themeOption.value,
+                            "text-transparent p-4 h-16 text-center flex justify-center items-center rounded border border-none hover:text-black dark:hover:text-black active:text-black focus:outline-none",
+                            "data-[state=checked]:font-semibold data-[state=checked]:!text-zinc-900",
+                            "[&>span>span]:hidden",
+                            `focus:${themeOption.value} focus:brightness-110 transition-colors duration-75`
+                          )}
+                        >
+                          {themeOption.label}
+                        </SelectItem>
+                      ))}
+                    </div>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            )}
+          /> */}
+          <Controller
+            name="theme"
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <Select value={value} onValueChange={onChange}>
+                <SelectTrigger className="text-white bg-zinc-800 border-zinc-800 max-w-96">
+                  <SelectValue placeholder="Change theme" />
+                </SelectTrigger>
+                <SelectContent
+                  className={cn(
+                    theme !== "light"
+                      ? "!bg-zinc-900 !text-white border-zinc-800"
+                      : "",
+                    "[&_[role=option]]:p-0"
+                  )}
+                >
+                  <SelectGroup>
+                    <div className="grid grid-cols-4 gap-1 p-2">
+                      {themeOptionsArray.map((themeOption) => (
+                        <SelectItem
+                          key={themeOption.value}
+                          value={themeOption.value}
+                          className={cn(
+                            themeOption.value,
+                            "text-transparent p-4 h-16 text-center flex justify-center items-center rounded border border-none hover:text-black dark:hover:text-black active:text-black focus:outline-none",
+                            "data-[state=checked]:font-semibold data-[state=checked]:!text-zinc-900",
+                            "[&>span>span]:hidden",
+                            `focus:${themeOption.value} focus:brightness-110 transition-colors duration-75`
+                          )}
+                        >
+                          {themeOption.label}
+                        </SelectItem>
+                      ))}
+                    </div>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            )}
+          />
+        </div>
 
         {loading ? (
           <Button

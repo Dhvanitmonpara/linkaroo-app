@@ -13,7 +13,7 @@ function DashboardPage() {
       <div
         className={`grid xl:grid-cols-7 lg:grid-cols-5 grid-cols-3 ${checkThemeStatus}`}
       >
-        <div className="col-span-2 lg:inline-block hidden relative pb-5 px-7 space-y-3 no-scrollbar max-h-[calc(100vh-5rem)]">
+        <div className="col-span-2 lg:inline-block hidden relative px-7 pb-5 lg:pl-7 lg:pr-4 space-y-3 no-scrollbar max-h-[calc(100vh-5rem)]">
           <Collections />
         </div>
         <div

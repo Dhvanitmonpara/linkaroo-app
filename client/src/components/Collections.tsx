@@ -14,6 +14,7 @@ import CollectionListCard from "./general/CollectionListCard";
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 import { IoGrid } from "react-icons/io5";
 import { FaThList } from "react-icons/fa";
+import { Button } from "./ui/button";
 
 type CollectionsProps = {
   className?: string;
@@ -85,13 +86,13 @@ const Collections = ({ className, extraElementClassNames }: CollectionsProps) =>
 
   return (
     <>
-      <div className={`col-span-2 relative lg:px-0 px-4 space-y-3 overflow-y-scroll no-scrollbar border-r-[1px] !pr-2 border-zinc-700 h-[calc(100vh-4.5rem)] md:h-auto lg:h-[calc(100vh-4.5rem)] md:space-x-0 md:space-y-2 md:p-4 !gap-2 md:justify-start md:items-start 2xl:grid-cols-1 ${className}`}>
+      <div className={`col-span-2 relative lg:px-0 px-4 space-y-3 overflow-y-scroll no-scrollbar lg:border-r-[1px] !pr-2 lg:border-zinc-700 h-[calc(100vh-4.5rem)] md:h-auto lg:h-[calc(100vh-4.5rem)] md:space-x-0 md:space-y-2 md:p-4 !gap-2 md:justify-start md:items-start 2xl:grid-cols-1 ${className}`}>
         <div className={`h-2 md:hidden ${extraElementClassNames}`}></div>
         <h2 className="pt-8 pb-3 flex justify-between items-center">
           <span className="text-zinc-100 text-2xl">
             Collections
           </span>
-          <div className="flex items-center">
+          <div className="flex items-center space-x-1">
             <Tabs
               defaultValue="list"
               onValueChange={(value) => setCollectionView(value as CollectionView)}
@@ -114,7 +115,9 @@ const Collections = ({ className, extraElementClassNames }: CollectionsProps) =>
                 </TabsTrigger>
               </TabsList>
             </Tabs>
-            <IoMdAdd />
+            <Button className="bg-zinc-800 hover:bg-zinc-800/70 text-zinc-100 w-10 h-10 !text-xl !p-0 flex justify-center items-center">
+              <IoMdAdd />
+            </Button>
           </div>
         </h2>
         {collectionView === "grid" ? collections.map((collections, index) => (
