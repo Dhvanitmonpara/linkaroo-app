@@ -1,6 +1,6 @@
 import Tag from "./Tag";
 import LinkCard from "./LinkCard";
-import CollectionCard from "./CollectionCard";
+import CollectionCard from "./CollectionGridCard";
 import Header from "./Header";
 import Stepper from "./Stepper";
 import HorizontalTabs from "./HorizontalTabs/HorizontalTabs";

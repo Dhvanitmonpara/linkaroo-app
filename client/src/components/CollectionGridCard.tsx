@@ -31,7 +31,7 @@ type CollectionCardProps = {
   toggleModal: (isOpen: boolean) => void;
 };
 
-const CollectionCard = ({
+const CollectionGridCard = ({
   id,
   tagname,
   description,
@@ -113,7 +113,6 @@ const CollectionCard = ({
               </div>
             </HoverCardContent>
           </HoverCard>
-
           <span
             onClick={(e) => {
               openModal(e);
@@ -148,4 +147,4 @@ const CollectionCard = ({
   );
 };
 
-export default CollectionCard;
+export default CollectionGridCard;
