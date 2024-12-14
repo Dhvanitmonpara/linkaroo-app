@@ -96,77 +96,62 @@ const CreateDocForm: React.FC<CreateDocFormProps> = ({
   };
 
   return (
-    <div className="dark:text-white p-5 flex flex-col justify-center items-center space-y-3">
-      <h1 className="text-3xl">Create a new Doc</h1>
+    <div className="dark:text-white flex flex-col sm:w-96 justify-center items-center space-y-3">
       <form
-        className="h-4/5 flex flex-col space-y-6 sm:w-96 w-72 justify-center items-center"
+        className="h-4/5 flex flex-col space-y-4 sm:w-96 w-72 justify-center items-center"
         onSubmit={handleSubmit(handleDocCreation)}
       >
-        <div className="w-full space-y-2">
-          <label htmlFor="title">Title</label>
-          <Input
-            id="title"
-            type="text"
-            placeholder="Enter title"
-            className="dark:bg-zinc-700 bg-zinc-200"
-            {...register("title", { required: "Title is required" })}
-          />
-        </div>
-        <div className="w-full space-y-2">
-          <label htmlFor="description">Link</label>
-          <Input
-            id="link"
-            type="text"
-            placeholder="Enter link"
-            className="dark:bg-zinc-700 bg-zinc-200"
-            {...register("link", {
-              required: "link is required",
-            })}
-          />
-        </div>
-        <div className="w-full space-y-2">
-          <label htmlFor="description">Description</label>
-          <Textarea
-            id="description"
-            placeholder="Enter description"
-            className="dark:bg-zinc-700 bg-zinc-200"
-            {...register("description", {
-              required: "Description is required",
-            })}
-          />
-        </div>
-        <div className="w-full space-y-2">
-          <span>List</span>
-          <Controller
-            name="list"
-            control={control}
-            rules={{ required: "Please select a list" }}
-            render={({ field: { onChange, value } }) => (
-              <Select value={value} onValueChange={onChange}>
-                <SelectTrigger className="dark:text-white dark:bg-zinc-700 max-w-96">
-                  <SelectValue placeholder="Select list" />
-                </SelectTrigger>
-                <SelectContent
-                  className={
-                    theme !== "light"
-                      ? "!bg-zinc-900 !text-white border-zinc-800"
-                      : ""
-                  }
-                >
-                  <SelectGroup>
-                    <SelectLabel>Lists</SelectLabel>
-                    {collections.map((list) => (
-                      <SelectItem key={list._id} value={list._id}>
-                        {list.title}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            )}
-          />
-        </div>
-        
+        <Input
+          id="title"
+          type="text"
+          placeholder="Enter title"
+          {...register("title", { required: "Title is required" })}
+        />
+        <Input
+          id="link"
+          type="text"
+          placeholder="Enter link"
+          {...register("link", {
+            required: "link is required",
+          })}
+        />
+
+        <Textarea
+          id="description"
+          placeholder="Enter description"
+          {...register("description", {
+            required: "Description is required",
+          })}
+        />
+        <Controller
+          name="list"
+          control={control}
+          rules={{ required: "Please select a list" }}
+          render={({ field: { onChange, value } }) => (
+            <Select value={value} onValueChange={onChange}>
+              <SelectTrigger className="dark:text-white dark:bg-zinc-700 max-w-96">
+                <SelectValue placeholder="Select list" />
+              </SelectTrigger>
+              <SelectContent
+                className={
+                  theme !== "light"
+                    ? "!bg-zinc-900 !text-white border-zinc-800"
+                    : ""
+                }
+              >
+                <SelectGroup>
+                  <SelectLabel>Lists</SelectLabel>
+                  {collections.map((list) => (
+                    <SelectItem key={list._id} value={list._id}>
+                      {list.title}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          )}
+        />
+
         {loading ? (
           <Button
             disabled

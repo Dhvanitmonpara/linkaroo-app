@@ -67,6 +67,9 @@ export default {
       borderWidth: {
         1: "1px",
       },
+      height: {
+        110: "28rem",
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",

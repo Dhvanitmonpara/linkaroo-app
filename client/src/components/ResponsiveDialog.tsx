@@ -26,11 +26,11 @@ function ResponsiveDialog({
   trigger,
   title,
   description,
-  isOpen,
+  isOpen=false,
   cancelText = "Cancel"
 }: {
   children: React.ReactNode;
-  isOpen: boolean;
+  isOpen?: boolean;
   trigger: React.ReactNode;
   title: string;
   description: string,
@@ -45,7 +45,7 @@ function ResponsiveDialog({
         <DialogTrigger asChild>
           {trigger}
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[27.2rem]" showCloseButton>
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
             <DialogDescription>

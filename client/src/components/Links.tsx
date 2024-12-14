@@ -233,9 +233,9 @@ const Links = () => {
   return (
     <div className="md:h-[calc(100vh-5rem)] lg:px-0 px-4 h-[calc(100vh-8rem)] lg:h-[calc(100vh-4.5rem)] overflow-y-scroll w-full space-y-2 no-scrollbar">
       <div className="lg:h-2"></div>
-      <div className="h-96 w-full py-2">
+      <div className="h-110 w-full py-2">
         <div
-          className="group h-3/6 w-full relative overflow-hidden rounded-t-md"
+          className="group h-2/6 w-full relative overflow-hidden rounded-t-md"
           style={coverImageStyle}
         >
           <div className="h-full w-full bg-black bg-opacity-40 text-zinc-200 p-4">
@@ -296,15 +296,23 @@ const Links = () => {
             </div>
           </div>
         </div>
-        <div className="w-full h-3/6 rounded-b-md dark:text-zinc-300 p-4 dark:bg-neutral-800">
-          <div className="h-20 flex flex-col justify-start">
+        <div className="w-full h-4/6 rounded-b-md dark:text-zinc-300 p-4 dark:bg-zinc-900">
+          <div className="min-h-20 flex flex-col justify-start">
+            <div className="py-4">
+              <img
+                src="/linkaroo.png"
+                alt="Linkaroo-logo"
+                width="40px"
+                className="h-[40px] active:animate-spin"
+              />
+            </div>
             <div className="flex justify-between items-center w-full">
               <h1 className="text-2xl font-semibold">
                 {currentCollectionItem?.title}
               </h1>
               <ListActionButtons listTitle={currentCollectionItem?.title} />
             </div>
-            <div className="text-xs space-x-2">
+            <div className="text-xs text-zinc-400/90 space-x-2">
               <span>@{currentCollectionItem?.createdBy?.username}</span>
               <span>
                 {currentCollectionItem?.createdAt &&
@@ -312,8 +320,8 @@ const Links = () => {
               </span>
             </div>
           </div>
-          <div className="pt-4 space-y-4">
-            <p>{currentCollectionItem?.description}</p>
+          <div className="pb-4 pt-6 space-y-4">
+            <p className="text-sm text-zinc-300/70 line-clamp-2 h-10">{currentCollectionItem?.description}</p>
             <div className="flex space-x-1">
               {tags.length > 0 &&
                 tags.map((tag, index) => (

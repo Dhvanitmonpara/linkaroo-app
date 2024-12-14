@@ -13,17 +13,11 @@ import {
   DropdownMenuTrigger,
   DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu";
-// import {
-//   Tooltip,
-//   TooltipContent,
-//   TooltipProvider,
-//   TooltipTrigger,
-// } from "@/components/ui/tooltip";
 import { PiDotsThreeOutlineFill } from "react-icons/pi";
 import { Button } from "@/components/ui/button";
 import { FormEventHandler, useEffect, useState } from "react";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import toast, { Toast } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { Loader2 } from "lucide-react";
 import { fetchedTagType } from "@/lib/types";
 import useProfileStore from "@/store/profileStore";
@@ -37,6 +31,8 @@ import { FaLock } from "react-icons/fa";
 import { FaLockOpen } from "react-icons/fa";
 import useLinkStore from "@/store/linkStore";
 import useCollectionsStore from "@/store/collectionStore";
+import TooltipContainer from "./general/Tooltip";
+import ResponsiveDialog from "./ResponsiveDialog";
 
 type Checked = boolean;
 
@@ -227,10 +223,9 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
     );
   };
 
-  const handleDeleteList = async (toastId: string) => {
+  const handleDeleteCollection = async () => {
     const loadingId = Date.now().toString();
     try {
-      toast.dismiss(toastId);
       toast.loading("Deleting list...", {
         id: loadingId,
       });
@@ -283,12 +278,12 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
           </DropdownMenuTrigger>
           <DropdownMenuContent
             className={`w-56 ${theme !== "light"
-                ? "!bg-black !text-zinc-200 border-zinc-800"
-                : ""
+              ? "!bg-black !text-zinc-200 border-zinc-800"
+              : ""
               } p-4 space-y-2`}
           >
             <span className="text-sm text-zinc-200">
-              Are you sure to make your list{" "}
+              Are you sure to make your Collection{" "}
               {currentCollectionItem?.isPublic ? "private" : "public"}?
             </span>
             <div className="flex gap-2 w-full justify-center items-center">
@@ -296,11 +291,11 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
                 onClick={() => {
                   handleToggleIsPublic();
                 }}
-                className="w-full bg-zinc-800 h-10 flex justify-center items-center"
+                className="w-full cursor-pointer bg-red-500 hover:!bg-red-500/70 h-10 hover:!text-zinc-50 flex justify-center items-center"
               >
                 <span>Yes</span>
               </DropdownMenuItem>
-              <DropdownMenuItem className="w-full bg-zinc-800 h-10 flex justify-center items-center">
+              <DropdownMenuItem className="w-full cursor-pointer bg-zinc-800 hover:!bg-zinc-800/70 hover:!text-zinc-50 h-10 flex justify-center items-center">
                 No
               </DropdownMenuItem>
             </div>
@@ -308,31 +303,27 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
         </DropdownMenu>
       ),
       action: () => { },
-      tooltip: "toggle card visibility",
+      tooltip: `Make this collection ${currentCollectionItem?.isPublic ? "private" : "public"}`,
     },
     {
       element: <AddCollaborator />,
       action: () => { },
-      tooltip: "Add User",
+      tooltip: "Add Collaborators",
     },
     {
       element: (
-        <div className="flex justify-center items-center !text-xl">
-          <FaPlus />
-        </div>
-      ),
-      action: () => {
-        setPrevPath(location.pathname);
-        toggleModal(true);
-        setModalContent(
+        <ResponsiveDialog title="Add New Link" trigger={<div className="flex justify-center items-center !text-xl"> <FaPlus /> </div>} description="Add a new link to your collection" cancelText="Cancel">
           <CreateDocForm
             theme={theme}
             toggleModal={toggleModal}
             listTitle={listTitle}
           />
-        );
+        </ResponsiveDialog>
+      ),
+      action: () => {
+        setPrevPath(location.pathname);
       },
-      tooltip: "Add New Doc",
+      tooltip: "Add New Link",
     },
     {
       element: (
@@ -341,7 +332,7 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
         </div>
       ),
       action: handleEditList,
-      tooltip: "Edit List",
+      tooltip: "Edit Collection",
     },
     {
       element: (
@@ -409,8 +400,8 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
                       <Button
                         type="submit"
                         className={`w-12 px-2 ${theme !== "light"
-                            ? "text-zinc-200 bg-zinc-800 hover:bg-zinc-700"
-                            : "bg-zinc-100 hover:bg-zinc-200 text-zinc-950"
+                          ? "text-zinc-200 bg-zinc-800 hover:bg-zinc-700"
+                          : "bg-zinc-100 hover:bg-zinc-200 text-zinc-950"
                           }`}
                       >
                         <FaPlus />
@@ -421,8 +412,8 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
                   <Button
                     onClick={() => setNewTagInput(true)}
                     className={`w-full px-2 ${theme !== "light"
-                        ? "text-zinc-200 bg-zinc-950 hover:bg-zinc-800"
-                        : "bg-zinc-100 hover:bg-zinc-200 text-zinc-950"
+                      ? "text-zinc-200 bg-zinc-950 hover:bg-zinc-800"
+                      : "bg-zinc-100 hover:bg-zinc-200 text-zinc-950"
                       }`}
                   >
                     <span className="flex w-full justify-start items-center space-x-[0.65rem]">
@@ -454,8 +445,8 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
                 <Button
                   onClick={handleSaveChanges}
                   className={`mt-2 w-full ${theme !== "light"
-                      ? "text-zinc-200 bg-zinc-800 hover:bg-zinc-700"
-                      : "bg-zinc-100 hover:bg-zinc-200 text-zinc-950"
+                    ? "text-zinc-200 bg-zinc-800 hover:bg-zinc-700"
+                    : "bg-zinc-100 hover:bg-zinc-200 text-zinc-950"
                     }`}
                   disabled={saveChangesLoading}
                 >
@@ -473,35 +464,41 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
       tooltip: "Edit tags",
     },
     {
-      element: <RiDeleteBinFill />,
-      action: () => {
-        toast((t: Toast) => {
-          return (
-            <div>
-              <h1>Are you sure you want to delete this list?</h1>
-              <div className="flex justify-center mt-4">
-                <Button
-                  onClick={() => {
-                    handleDeleteList(t.id);
-                  }}
-                  className="w-24 text-zinc-50 font-semibold bg-red-500 hover:bg-red-600"
-                >
-                  Yes
-                </Button>
-                <Button
-                  onClick={() => {
-                    toast.dismiss(t.id);
-                  }}
-                  className="ml-4 w-24 font-semibold bg-zinc-200 hover:bg-zinc-300"
-                >
-                  No
-                </Button>
-              </div>
-            </div>
-          );
-        });
-      },
-      tooltip: "Delete Tag",
+      element: <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <div
+            className="h-12 w-12 bg-transparent hover:bg-transparent border-none flex justify-center items-center rounded-full text-xl"
+            aria-label="Tag Options"
+          >
+            <RiDeleteBinFill />
+          </div>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent
+          className={`w-56 ${theme !== "light"
+            ? "!bg-black !text-zinc-200 border-zinc-800"
+            : ""
+            } p-4 space-y-2`}
+        >
+          <span className="text-sm text-zinc-200">
+            Are you sure you want to delete this Collection?
+          </span>
+          <div className="flex gap-2 w-full justify-center items-center">
+            <DropdownMenuItem
+              onClick={() => {
+                handleToggleIsPublic();
+              }}
+              className="w-full cursor-pointer bg-red-500 hover:!bg-red-500/70 h-10 hover:!text-zinc-50 flex justify-center items-center"
+            >
+              <span onClick={handleDeleteCollection}>Yes</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem className="w-full cursor-pointer bg-zinc-800 hover:!bg-zinc-800/70 hover:!text-zinc-50 h-10 flex justify-center items-center">
+              No
+            </DropdownMenuItem>
+          </div>
+        </DropdownMenuContent>
+      </DropdownMenu>,
+      action: () => { },
+      tooltip: "Delete Collection",
     },
   ];
 
@@ -509,29 +506,14 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
     <div className="flex justify-center items-center">
       <div className="hidden md:flex justify-center items-center space-x-3 !relative">
         {actionButtons.map((actionButton, index) => (
-          <button
-            key={index}
-            onClick={actionButton.action}
-            className="h-12 w-12 bg-[#6d6d6d20] hover:bg-[#6d6d6d50] transition-colors flex justify-center items-center rounded-full text-xl"
-          >
-            {actionButton.element}
-          </button>
-          // <TooltipProvider key={index}>
-          //   <Tooltip>
-          //     <TooltipTrigger asChild>
-          //       <button
-          //         onClick={actionButton.action}
-          //         className="h-12 w-12 bg-[#00000010] hover:bg-[#00000025] transition-colors flex justify-center items-center rounded-full text-xl"
-          //         // variant="outline"
-          //       >
-          //         {actionButton.element}
-          //       </button>
-          //     </TooltipTrigger>
-          //     <TooltipContent>
-          //       <p>{actionButton.tooltip}</p>
-          //     </TooltipContent>
-          //   </Tooltip>
-          // </TooltipProvider>
+          <TooltipContainer tooltip={actionButton.tooltip} key={index}>
+            <button
+              onClick={actionButton.action}
+              className="h-12 w-12 bg-[#6d6d6d20] hover:bg-[#6d6d6d50] transition-colors flex justify-center items-center rounded-full text-xl"
+            >
+              {actionButton.element}
+            </button>
+          </TooltipContainer>
         ))}
       </div>
       <div>

@@ -16,8 +16,6 @@ const App = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const [progress, setProgress] = useState<number>(33);
-
   const {
     isModalOpen,
     setModalContent,
@@ -89,8 +87,6 @@ const App = () => {
           withCredentials: true,
         });
 
-        setProgress(78);
-
         if (currentUser.data.data) {
           addProfile(currentUser.data.data);
         }
@@ -118,7 +114,7 @@ const App = () => {
     location.pathname.includes("/password-recovery");
 
   if (loading) {
-    return <Loading progress={progress} />;
+    return <Loading isLoading={loading} />;
   }
 
   return (
