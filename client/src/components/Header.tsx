@@ -63,7 +63,7 @@ const Header = () => {
               className="dark:bg-zinc-900 dark:text-white hidden md:inline-block dark:border-zinc-800"
               placeholder="Create or Search something..."
             />
-            <div className="absolute top-2.5 right-2.5 border-1 border-zinc-600 text-zinc-200 w-fit py-0.5 px-1 text-xs rounded-md">
+            <div className="absolute top-2 right-2 border-1 bg-zinc-900 border-zinc-800 text-zinc-300 w-fit py-1 px-2 text-xs rounded-md">
               ⌘K
             </div>
           </div>

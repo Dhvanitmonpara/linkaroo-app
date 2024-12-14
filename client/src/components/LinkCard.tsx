@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { FiArrowUpRight } from "react-icons/fi";
 import useMethodStore from "@/store/MethodStore";
 import { useMediaQuery } from "react-responsive";
-import { Checkbox } from "./ui/checkbox";
+// import { Checkbox } from "./ui/checkbox";
 import { BiListPlus } from "react-icons/bi";
 import {
   DropdownMenu,
@@ -16,6 +16,7 @@ import { handleAxiosError } from "@/utils/handlerAxiosError";
 import axios, { AxiosError } from "axios";
 import useCollectionsStore from "@/store/collectionStore";
 import useLinkStore from "@/store/linkStore";
+import TaskBox from "./ui/TaskBox";
 
 type LinkCardProps = {
   id: string;
@@ -64,9 +65,9 @@ const LinkCard = ({
   };
 
   const cardClass = `${color} ${color === "bg-black"
-      ? "!text-zinc-300 border-zinc-700 !bg-zinc-900 border-[1px]"
-      : "text-black"
-    } select-none group relative px-5 h-14 flex-col transition-all rounded-md flex justify-center items-center`;
+    ? "!text-zinc-300 border-zinc-800 !bg-zinc-900 border-[1px]"
+    : "text-black"
+    } select-none group hover:!bg-zinc-800/80 relative px-5 h-14 flex-col transition-all duration-300 rounded-md flex justify-center items-center`;
 
   const addToListHandler = async (collectionId: string) => {
     let loaderId = "";
@@ -115,31 +116,16 @@ const LinkCard = ({
         }}
         className={`font-semibold decoration-2 cursor-pointer text-lg flex justify-start items-center w-full space-x-6 ${""}`}
       >
-        <Checkbox
-          onClick={(e) => {
-            e.stopPropagation();
-            toggleIsChecked(id, isChecked);
-          }}
-          className={`${isChecked
-              ? ""
-              : "group-hover:opacity-100 ease-in-out duration-300 lg:opacity-0"
-            } ${color}`}
-          id={id}
-        />
-        <span
-          className={`hover:underline ${location.pathname === "/inbox" ? "max-w-[75%]" : "max-w-[80%]"
-            } overflow-hidden text-ellipsis whitespace-nowrap`}
-          onClick={openLink}
-        >
-          {title}
-        </span>
+        <TaskBox id={id} defineMaxWidth={location.pathname.includes("/links") ? "max-w-[39rem]" : "max-w-[31rem]"} title={title} key={id} defaultChecked={isChecked} onToggle={() => {
+          toggleIsChecked(id, isChecked)
+        }} />
         {location.pathname === "/inbox" && (
           <DropdownMenu>
             <DropdownMenuTrigger
               onClick={(e) => e.stopPropagation()}
               className={`md:opacity-0 absolute text-xl right-16 opacity-100 ${color === "bg-black"
-                  ? "hover:bg-[#b2b2b220]"
-                  : "hover:bg-[#00000020]"
+                ? "hover:bg-[#b2b2b220]"
+                : "hover:bg-[#00000020]"
                 } active:scale-95 rounded-full p-2 group-hover:opacity-100 transition-all ease-in-out duration-300`}
             >
               <BiListPlus />
@@ -174,8 +160,8 @@ const LinkCard = ({
         <span
           onClick={openLink}
           className={`md:opacity-0 absolute right-6 opacity-100 ${color === "bg-black"
-              ? "hover:bg-[#b2b2b220]"
-              : "hover:bg-[#00000020]"
+            ? "hover:bg-[#b2b2b220]"
+            : "hover:bg-[#00000020]"
             } active:scale-95 rounded-full p-2 group-hover:opacity-100 transition-all ease-in-out duration-300`}
         >
           <FiArrowUpRight />

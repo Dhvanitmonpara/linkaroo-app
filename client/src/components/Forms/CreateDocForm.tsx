@@ -115,7 +115,6 @@ const CreateDocForm: React.FC<CreateDocFormProps> = ({
             required: "link is required",
           })}
         />
-
         <Textarea
           id="description"
           placeholder="Enter description"
@@ -129,7 +128,7 @@ const CreateDocForm: React.FC<CreateDocFormProps> = ({
           rules={{ required: "Please select a list" }}
           render={({ field: { onChange, value } }) => (
             <Select value={value} onValueChange={onChange}>
-              <SelectTrigger className="dark:text-white dark:bg-zinc-700 max-w-96">
+              <SelectTrigger className="text-zinc-100 bg-zinc-800 border-zinc-800 max-w-96">
                 <SelectValue placeholder="Select list" />
               </SelectTrigger>
               <SelectContent
@@ -155,14 +154,14 @@ const CreateDocForm: React.FC<CreateDocFormProps> = ({
         {loading ? (
           <Button
             disabled
-            className="dark:bg-zinc-700 dark:hover:bg-zinc-600 hover:bg-zinc-300 text-zinc-900 bg-zinc-200 w-full dark:text-white cursor-wait"
+            className="dark:bg-zinc-700 dark:hover:bg-zinc-600 hover:bg-zinc-300/70 text-zinc-900 bg-zinc-200 w-full dark:text-white cursor-wait"
           >
             <Loader2 className="mr-2 h-4 w-4 animate-spin dark:text-white" />
             Please wait
           </Button>
         ) : (
           <Button className="dark:bg-zinc-700 bg-zinc-200 font-semibold text-zinc-950 dark:text-white hover:bg-zinc-300 dark:hover:bg-zinc-600 w-full">
-            Create Doc
+            Add Link
           </Button>
         )}
       </form>

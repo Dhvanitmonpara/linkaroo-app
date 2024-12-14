@@ -45,7 +45,7 @@ type ListActionButtonsProps = {
 };
 
 const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
-  const { toggleModal, setModalContent, setPrevPath } = useMethodStore();
+  const { toggleModal, setPrevPath } = useMethodStore();
   const { profile, setTags } = useProfileStore();
   const { removeCollectionsItem, updateCollectionsTags, toggleIsPublic } = useCollectionsStore();
   const { setLinks, currentCollectionItem, setCurrentCollectionItem, removeCachedLinkCollection } = useLinkStore()
@@ -101,12 +101,6 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
       }
     })();
   }, [setTags, listId]);
-
-  const handleEditList = () => {
-    setPrevPath(location.pathname);
-    toggleModal(true);
-    setModalContent(<EditListForm theme={theme} toggleModal={toggleModal} />);
-  };
 
   const HandleAddNewTag: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
@@ -327,11 +321,18 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
     },
     {
       element: (
-        <div className="flex justify-center items-center !text-xl">
+        <ResponsiveDialog title="Edit collection" trigger={<div className="flex justify-center items-center !text-xl">
           <BiSolidPencil />
-        </div>
+        </div>} description="Edit your collection details" cancelText="Cancel">
+          <EditListForm
+            theme={theme}
+            toggleModal={toggleModal}
+          />
+        </ResponsiveDialog>
       ),
-      action: handleEditList,
+      action: () => {
+        setPrevPath(location.pathname);
+      },
       tooltip: "Edit Collection",
     },
     {
