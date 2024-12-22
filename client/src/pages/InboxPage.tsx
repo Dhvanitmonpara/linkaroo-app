@@ -1,4 +1,4 @@
-import {LinkCard } from "@/components";
+import { LinkCard } from "@/components";
 import { fetchedCollectionType } from "@/lib/types";
 import useCollectionsStore from "@/store/collectionStore";
 import useMethodStore from "@/store/MethodStore";
@@ -80,7 +80,7 @@ const InboxPage = () => {
         }
       }
     })();
-  }, [setInboxLink, location, inbox?._id, navigate]);
+  }, [setInboxLink, location, inbox?._id, navigate, inboxLinks.length, profile._id, collections.length, setCollections, setInbox]);
 
   if (loading) {
     return (
@@ -94,17 +94,15 @@ const InboxPage = () => {
 
   return (
     <div
-      className={`${
-        profile.theme !== "light" ? "text-zinc-100" : "text-zinc-900"
-      } no-scrollbar select-none h-[calc(100vh-4.5rem)] overflow-y-scroll `}
+      className={`${profile.theme !== "light" ? "text-zinc-100" : "text-zinc-900"
+        } no-scrollbar select-none h-[calc(100vh-4.5rem)] overflow-y-scroll `}
     >
       <div className="flex justify-center items-center flex-col space-y-12 pt-36">
         <div className="flex justify-center items-center flex-col space-y-3">
           <h1 className="text-5xl font-semibold">Inbox</h1>
           <p
-            className={`mt-4 text-lg ${
-              profile.theme !== "light" ? "text-zinc-400" : "text-zinc-500"
-            }`}
+            className={`mt-4 text-lg ${profile.theme !== "light" ? "text-zinc-400" : "text-zinc-500"
+              }`}
           >
             Ready to capture your links?
           </p>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   InputOTP,
   InputOTPGroup,
@@ -26,7 +26,7 @@ const EmailVerification = ({ email, updateFields }: EmailVerificationProps) => {
     }
   }, [timeLeft]);
 
-  const sendOtp = async () => {
+  const sendOtp = useCallback(async () => {
     try {
       const mailResponse: AxiosResponse = await axios.post(
         `${import.meta.env.VITE_SERVER_API_URL}/users/send-otp`,
@@ -40,7 +40,7 @@ const EmailVerification = ({ email, updateFields }: EmailVerificationProps) => {
     } catch (error) {
       console.error("Error sending OTP:", error);
     }
-  };
+  }, [email])
 
   const handleResendOTP = () => {
     setTimeLeft(60);
@@ -56,11 +56,11 @@ const EmailVerification = ({ email, updateFields }: EmailVerificationProps) => {
         toast.error("wrong otp try again");
       }
     }
-  }, [otp]);
+  }, [clientOtp, otp, updateFields]);
 
   useEffect(() => {
     sendOtp();
-  }, [email]);
+  }, [email, sendOtp]);
 
   return (
     <>
