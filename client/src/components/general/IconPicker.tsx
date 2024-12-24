@@ -202,6 +202,7 @@ import {
   FaMobileAlt
 } from 'react-icons/fa';
 import { FaAnchorCircleCheck } from "react-icons/fa6";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 const allIcons: string[] = [
   "FaBeer",
@@ -767,43 +768,50 @@ const IconPicker: React.FC<IconPickerProps> = ({ activeIcon, setActiveIcon, defa
   }, [loadedIcons, searchQuery]);
 
   return (
-    <form className="icon-picker w-full max-w-xl p-4 bg-zinc-900 text-white border border-zinc-700 rounded-lg shadow-lg">
-      <input
-        ref={inputRef}
-        type="text"
-        placeholder="Search icons..."
-        value={searchQuery}
-        autoComplete="off"
-        onChange={handleSearch}
-        className="w-full py-2 px-4 mb-4 border border-zinc-600 bg-zinc-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-      <div
-        ref={listRef} // Attach ref to the scrollable container
-        className="icon-list grid grid-cols-4 gap-4 overflow-y-auto overflow-x-hidden no-scrollbar max-h-72 scrollbar-thin scrollbar-thumb-zinc-600 scrollbar-track-zinc-800"
-        onScroll={handleScroll}
-      >
-        {filteredIcons.slice(0, loadedIcons).map((iconName, index) => {
-          const IconComponent = iconMap[iconName as keyof typeof iconMap]; // Get the icon component from the map
-          const isActive = iconName === activeIcon;
-          return (
-            <button
-              key={index}
-              className={`icon-item rounded-full text-center cursor-pointer p-2 transition duration-150 ease-in-out ${isActive ? 'bg-zinc-700/80' : 'hover:bg-zinc-800/80'}`}
-              onClick={(e) => { e.preventDefault(); setActiveIcon(iconName) }}
-            >
-              <div className={`icon flex items-center py-1.5 justify-center text-xl ${isActive ? '!text-white' : 'text-zinc-400 hover:!text-white'}`}>
-                <IconComponent />
-              </div>
-            </button>
-          );
-        })}
+    <Popover>
+      <PopoverTrigger className="text-5xl">
+        {React.createElement(iconMap[activeIcon as keyof typeof iconMap])}
+      </PopoverTrigger>
+      <PopoverContent className="!p-0 !border-none !w-auto !rounded-xl">
+        <form className="icon-picker w-full max-w-xl p-4 bg-zinc-900 text-white border border-zinc-700 rounded-lg shadow-lg">
+          <input
+            ref={inputRef}
+            type="text"
+            placeholder="Search icons..."
+            value={searchQuery}
+            autoComplete="off"
+            onChange={handleSearch}
+            className="w-full py-2 px-4 mb-4 border border-zinc-600 bg-zinc-800 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <div
+            ref={listRef} // Attach ref to the scrollable container
+            className="icon-list grid grid-cols-4 gap-4 overflow-y-auto overflow-x-hidden no-scrollbar max-h-72 scrollbar-thin scrollbar-thumb-zinc-600 scrollbar-track-zinc-800"
+            onScroll={handleScroll}
+          >
+            {filteredIcons.slice(0, loadedIcons).map((iconName, index) => {
+              const IconComponent = iconMap[iconName as keyof typeof iconMap]; // Get the icon component from the map
+              const isActive = iconName === activeIcon;
+              return (
+                <button
+                  key={index}
+                  className={`icon-item rounded-full text-center cursor-pointer p-2 transition duration-150 ease-in-out ${isActive ? 'bg-zinc-700/80' : 'hover:bg-zinc-800/80'}`}
+                  onClick={(e) => { e.preventDefault(); setActiveIcon(iconName) }}
+                >
+                  <div className={`icon flex items-center py-1.5 justify-center text-xl ${isActive ? '!text-white' : 'text-zinc-400 hover:!text-white'}`}>
+                    <IconComponent />
+                  </div>
+                </button>
+              );
+            })}
 
-        {/* Invisible div to trigger scroll event */}
-        <div className="w-full flex items-center justify-center" style={{ height: `${loadedIcons < filteredIcons.length ? 32 : 0}px` }}>
-          {/* <Loader2 className="animate-spin text-sm" /> */}
-        </div>
-      </div>
-    </form>
+            {/* Invisible div to trigger scroll event */}
+            <div className="w-full flex items-center justify-center" style={{ height: `${loadedIcons < filteredIcons.length ? 32 : 0}px` }}>
+              {/* <Loader2 className="animate-spin text-sm" /> */}
+            </div>
+          </div>
+        </form>
+      </PopoverContent>
+    </Popover>
   );
 };
 
