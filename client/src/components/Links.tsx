@@ -19,10 +19,16 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import { backgroundImageUrls } from "@/lib/constants";
 import { BsXLg } from "react-icons/bs";
 import useLinkStore from "@/store/linkStore";
 import useCollectionsStore from "@/store/collectionStore";
+import IconPicker from "./general/IconPicker";
 
 const Links = () => {
   const { toggleModal } = useMethodStore();
@@ -103,6 +109,13 @@ const Links = () => {
       tags.push(tagname);
     }
   });
+
+  const handleChangeIcon = (icon: string) => {
+    if (!currentCollectionItem) return
+    const collection = currentCollectionItem
+    collection.icon = icon
+    setCurrentCollectionItem(collection)
+  }
 
   if (loading) {
     return (
@@ -299,12 +312,19 @@ const Links = () => {
         <div className="w-full h-4/6 rounded-b-md dark:text-zinc-300 p-4 dark:bg-zinc-900">
           <div className="min-h-20 flex flex-col justify-start">
             <div className="py-4">
-              <img
-                src="/linkaroo.png"
-                alt="Linkaroo-logo"
-                width="40px"
-                className="h-[40px] active:animate-spin"
-              />
+              <Popover>
+                <PopoverTrigger>
+                  <img
+                    src="/linkaroo.png"
+                    alt="Linkaroo-logo"
+                    width="40px"
+                    className="h-[40px] active:animate-spin"
+                  />
+                </PopoverTrigger>
+                <PopoverContent className="!p-0 !border-none !w-auto !rounded-xl">
+                  <IconPicker activeIcon={currentCollectionItem.icon} defaultLoadedIcons={20} setActiveIcon={handleChangeIcon} />
+                </PopoverContent>
+              </Popover>
             </div>
             <div className="flex justify-between items-center w-full">
               <h1 className="text-2xl font-semibold">

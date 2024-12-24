@@ -779,7 +779,7 @@ const IconPicker: React.FC<IconPickerProps> = ({ activeIcon, setActiveIcon, defa
       />
       <div
         ref={listRef} // Attach ref to the scrollable container
-        className="icon-list grid grid-cols-6 gap-4 overflow-y-auto overflow-x-hidden no-scrollbar max-h-72 scrollbar-thin scrollbar-thumb-zinc-600 scrollbar-track-zinc-800"
+        className="icon-list grid grid-cols-4 gap-4 overflow-y-auto overflow-x-hidden no-scrollbar max-h-72 scrollbar-thin scrollbar-thumb-zinc-600 scrollbar-track-zinc-800"
         onScroll={handleScroll}
       >
         {filteredIcons.slice(0, loadedIcons).map((iconName, index) => {

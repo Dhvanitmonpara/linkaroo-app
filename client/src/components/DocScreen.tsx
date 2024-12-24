@@ -6,7 +6,6 @@ import { handleAxiosError } from "@/utils/handlerAxiosError";
 import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import IconPicker from "./general/IconPicker";
 
 const DocScreen = () => {
   const [loading, setLoading] = useState(true);
@@ -16,7 +15,6 @@ const DocScreen = () => {
   const location = useLocation().pathname;
   const { currentCardColor } = useMethodStore();
   const { theme } = useProfileStore().profile;
-  const [activeIcon, setActiveIcon] = useState("FaApple")
 
   const cardId = location.split("/").slice(-1)[0];
   useEffect(() => {
@@ -57,7 +55,6 @@ const DocScreen = () => {
       >
         {currentCard?.link}
       </span>
-      <IconPicker activeIcon={activeIcon} defaultLoadedIcons={30} setActiveIcon={setActiveIcon} />
       <p className="pt-5">{currentCard?.description}</p>
     </div>
   );
