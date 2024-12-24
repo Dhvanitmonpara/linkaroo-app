@@ -57,7 +57,7 @@ const DocScreen = () => {
       >
         {currentCard?.link}
       </span>
-      <IconPicker activeIcon={activeIcon} setActiveIcon={setActiveIcon} />
+      <IconPicker activeIcon={activeIcon} defaultLoadedIcons={30} setActiveIcon={setActiveIcon} />
       <p className="pt-5">{currentCard?.description}</p>
     </div>
   );
