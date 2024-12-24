@@ -53,7 +53,7 @@ const IconPicker: React.FC<IconPickerProps> = ({ activeIcon, setActiveIcon, defa
     const Icon = iconMap[activeIcon as keyof typeof iconMap];
     if (!Icon) {
       console.error(`Icon "${activeIcon}" does not exist in iconMap.`);
-      return <BsFillCollectionFill/>; // Fallback
+      return <BsFillCollectionFill />; // Fallback
     }
     return <Icon />;
   };
@@ -77,11 +77,11 @@ const IconPicker: React.FC<IconPickerProps> = ({ activeIcon, setActiveIcon, defa
 
   return (
     <Popover>
-      <PopoverTrigger className="text-5xl">
-        <TooltipContainer tooltip="Change icon">
+      <TooltipContainer tooltip="Change icon">
+        <PopoverTrigger className="text-5xl transition-colors duration-200 hover:text-white">
           {checkIconAvailability()}
-        </TooltipContainer>
-      </PopoverTrigger>
+        </PopoverTrigger>
+      </TooltipContainer>
       <PopoverContent className="!p-0 !border-none !w-auto !rounded-xl">
         <form className="icon-picker w-full max-w-lg p-4 bg-zinc-900 text-white border border-zinc-700 rounded-lg shadow-lg">
           <input
