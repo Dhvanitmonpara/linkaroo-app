@@ -11,6 +11,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu"
 import toast from "react-hot-toast";
 import { handleAxiosError } from "@/utils/handlerAxiosError";
 import axios, { AxiosError } from "axios";
@@ -104,70 +110,80 @@ const LinkCard = ({
   };
 
   return (
-    <div className={cardClass}>
-      <h2
-        onClick={(e) => {
-          e.stopPropagation();
-          if (isSmallScreen) {
-            openModal(e);
-          } else {
-            handleNavigate();
-          }
-        }}
-        className={`font-semibold decoration-2 cursor-pointer text-lg flex justify-start items-center w-full space-x-6 ${""}`}
-      >
-        <TaskBox id={id} defineMaxWidth={location.pathname.includes("/links") ? "max-w-[39rem]" : "max-w-[31rem]"} title={title} key={id} defaultChecked={isChecked} onToggle={() => {
-          toggleIsChecked(id, isChecked)
-        }} />
-        {location.pathname === "/inbox" && (
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              onClick={(e) => e.stopPropagation()}
-              className={`md:opacity-0 absolute text-xl right-16 opacity-100 ${color === "bg-black"
+    <ContextMenu>
+      <ContextMenuTrigger>
+        <div className={cardClass}>
+          <h2
+            onClick={(e) => {
+              e.stopPropagation();
+              if (isSmallScreen) {
+                openModal(e);
+              } else {
+                handleNavigate();
+              }
+            }}
+            className={`font-semibold decoration-2 cursor-pointer text-lg flex justify-start items-center w-full space-x-6 ${""}`}
+          >
+            <TaskBox id={id} defineMaxWidth={location.pathname.includes("/links") ? "max-w-[39rem]" : "max-w-[31rem]"} title={title} key={id} defaultChecked={isChecked} onToggle={() => {
+              toggleIsChecked(id, isChecked)
+            }} />
+            {location.pathname === "/inbox" && (
+              <DropdownMenu>
+                <DropdownMenuTrigger
+                  onClick={(e) => e.stopPropagation()}
+                  className={`md:opacity-0 absolute text-xl right-16 opacity-100 ${color === "bg-black"
+                    ? "hover:bg-[#b2b2b220]"
+                    : "hover:bg-[#00000020]"
+                    } active:scale-95 rounded-full p-2 group-hover:opacity-100 transition-all ease-in-out duration-300`}
+                >
+                  <BiListPlus />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  className={
+                    color === "bg-black"
+                      ? "!bg-black !text-white border-zinc-800"
+                      : ""
+                  }
+                >
+                  {collections.length > 0 ? (
+                    collections.map((collection) => (
+                      <DropdownMenuItem
+                        key={collection._id}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          addToListHandler(collection._id);
+                        }}
+                      >
+                        {collection.title}
+                      </DropdownMenuItem>
+                    ))
+                  ) : (
+                    <div className="h-14 flex justify-center items-center">
+                      No lists
+                    </div>
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+            <span
+              onClick={openLink}
+              className={`md:opacity-0 absolute right-6 opacity-100 ${color === "bg-black"
                 ? "hover:bg-[#b2b2b220]"
                 : "hover:bg-[#00000020]"
                 } active:scale-95 rounded-full p-2 group-hover:opacity-100 transition-all ease-in-out duration-300`}
             >
-              <BiListPlus />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent
-              className={
-                color === "bg-black"
-                  ? "!bg-black !text-white border-zinc-800"
-                  : ""
-              }
-            >
-              {collections.length > 0 ? (
-                collections.map((collection) => (
-                  <DropdownMenuItem
-                    key={collection._id}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      addToListHandler(collection._id);
-                    }}
-                  >
-                    {collection.title}
-                  </DropdownMenuItem>
-                ))
-              ) : (
-                <div className="h-14 flex justify-center items-center">
-                  No lists
-                </div>
-              )}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        )}
-        <span
-          onClick={openLink}
-          className={`md:opacity-0 absolute right-6 opacity-100 ${color === "bg-black"
-            ? "hover:bg-[#b2b2b220]"
-            : "hover:bg-[#00000020]"
-            } active:scale-95 rounded-full p-2 group-hover:opacity-100 transition-all ease-in-out duration-300`}
-        >
-          <FiArrowUpRight />
-        </span>
-      </h2>
-    </div>
+              <FiArrowUpRight />
+            </span>
+          </h2>
+        </div>
+      </ContextMenuTrigger>
+      <ContextMenuContent>
+        <ContextMenuItem>Edit</ContextMenuItem>
+        <ContextMenuItem>Open link</ContextMenuItem>
+        <ContextMenuItem>Mark as completed</ContextMenuItem>
+        <ContextMenuItem>Move to</ContextMenuItem>
+      </ContextMenuContent>
+    </ContextMenu>
   );
 };
 

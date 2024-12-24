@@ -3,6 +3,7 @@ import { debounce } from 'lodash';
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import TooltipContainer from './Tooltip';
+import { BsFillCollectionFill } from 'react-icons/bs';
 
 interface IconPickerProps {
   activeIcon: string;
@@ -52,7 +53,7 @@ const IconPicker: React.FC<IconPickerProps> = ({ activeIcon, setActiveIcon, defa
     const Icon = iconMap[activeIcon as keyof typeof iconMap];
     if (!Icon) {
       console.error(`Icon "${activeIcon}" does not exist in iconMap.`);
-      return <span className="text-gray-500">Icon not found</span>; // Fallback
+      return <BsFillCollectionFill/>; // Fallback
     }
     return <Icon />;
   };
