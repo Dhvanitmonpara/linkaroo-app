@@ -120,14 +120,10 @@ const App = () => {
   return (
     <div className="min-h-screen w-screen">
       <div
-        className={`p-0 w-full min-h-[calc(100vh-env(safe-area-inset-top))] ${
-          theme === "black" ? "bg-black" : "dark:bg-[#1e1e22]"
-        }`}
+        className={`p-0 w-full min-h-[calc(100vh-env(safe-area-inset-top))] bg-black`}
       >
         <div
-          className={`w-full ${
-            theme === "black" ? "bg-black" : "dark:bg-[#1e1e22]"
-          } ${showBars ? "hidden" : ""}`}
+          className={`w-full bg-black ${showBars ? "hidden" : ""}`}
           style={{ paddingTop: "env(safe-area-inset-top)" }}
         >
           <Header />
@@ -135,9 +131,7 @@ const App = () => {
         <Outlet />
       </div>
       <div
-        className={`fixed z-30 bottom-0 px-0 dark:text-zinc-400 ${
-          theme === "black" ? "bg-black" : "dark:bg-zinc-800"
-        } sm:!bg-transparent justify-center items-center flex w-screen h-16 ${
+        className={`fixed z-30 bottom-0 px-0 dark:text-zinc-400 bg-black sm:!bg-transparent justify-center items-center flex w-screen h-16 ${
           showBars ? "hidden" : ""
         } lg:hidden`}
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}

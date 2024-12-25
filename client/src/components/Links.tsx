@@ -24,6 +24,7 @@ import { BsXLg } from "react-icons/bs";
 import useLinkStore from "@/store/linkStore";
 import useCollectionsStore from "@/store/collectionStore";
 import IconPicker from "./general/IconPicker";
+import { FaPlus } from "react-icons/fa";
 
 const Links = () => {
   const { toggleModal } = useMethodStore();
@@ -343,8 +344,13 @@ const Links = () => {
         <ResponsiveDialog
           title="Add New Link"
           trigger={
-            <div className="flex justify-center items-center !text-xl">
-              <p>Add a new link</p>
+            <div className="flex justify-start items-center text-zinc-300 text-start">
+              <p className="py-3 px-6 flex justify-normal items-center space-x-2 border-1 border-zinc-600 hover:bg-zinc-800 cursor-pointer rounded-md w-full">
+                <span>
+                  <FaPlus />
+                </span>
+                <span className="pt-1">Add a new link...</span>
+              </p>
             </div>
           }
           description="Add a new link to your collection"

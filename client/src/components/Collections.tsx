@@ -131,7 +131,7 @@ const Collections = ({ className, extraElementClassNames }: CollectionsProps) =>
             createdBy={collections.createdBy}
             theme={collections.theme}
             font={font}
-            isBlackMode={theme == "black" ? true : false}
+            isBlackMode={theme == "black" || theme == "dark" ? true : false}
             toggleModal={toggleModal}
           />
         )) : collections.map((collections, index) => (
@@ -145,7 +145,7 @@ const Collections = ({ className, extraElementClassNames }: CollectionsProps) =>
             createdBy={collections.createdBy}
             theme={collections.theme}
             font={font}
-            isBlackMode={theme == "black" ? true : false}
+            isBlackMode={theme == "black" || theme == "dark" ? true : false}
             toggleModal={toggleModal}
           />
         ))}

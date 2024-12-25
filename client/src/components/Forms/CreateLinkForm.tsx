@@ -84,6 +84,7 @@ const CreateLinkForm: React.FC<CreateLinkFormProps> = ({
       addCachedLinkItem(data.collection, link.data.data);
 
     } catch (error) {
+      console.log(error)
       handleAxiosError(error as AxiosError, navigate);
     } finally {
       setLoading(false);

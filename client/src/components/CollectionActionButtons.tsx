@@ -41,11 +41,10 @@ type checkedTagsType = fetchedTagType & {
 };
 
 const CollectionActionButtons = () => {
-  const { toggleModal, setPrevPath } = useMethodStore();
-  const { profile, setTags } = useProfileStore();
+  const { setPrevPath } = useMethodStore();
+  const { setTags } = useProfileStore();
   const { removeCollectionsItem, updateCollectionsTags, toggleIsPublic } = useCollectionsStore();
   const { setLinks, currentCollectionItem, setCurrentCollectionItem, removeCachedLinkCollection } = useLinkStore()
-  const theme = profile.theme;
   const [loading, setLoading] = useState(false);
   const [saveChangesLoading, setSaveChangesLoading] = useState(false);
   const [checkedTags, setCheckedTags] = useState<checkedTagsType[]>([]);
@@ -267,10 +266,7 @@ const CollectionActionButtons = () => {
             </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            className={`w-56 ${theme !== "light"
-              ? "!bg-black !text-zinc-200 border-zinc-800"
-              : ""
-              } p-4 space-y-2`}
+            className={`w-56 !bg-black !text-zinc-200 border-zinc-800 p-4 space-y-2`}
           >
             <span className="text-sm text-zinc-200">
               Are you sure to make your Collection{" "}
@@ -305,10 +301,7 @@ const CollectionActionButtons = () => {
         <ResponsiveDialog title="Edit collection" trigger={<div className="flex justify-center items-center !text-xl">
           <BiSolidPencil />
         </div>} description="Edit your collection details" cancelText="Cancel">
-          <EditListForm
-            theme={theme}
-            toggleModal={toggleModal}
-          />
+          <EditListForm/>
         </ResponsiveDialog>
       ),
       action: () => {
@@ -335,8 +328,7 @@ const CollectionActionButtons = () => {
             </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            className={`w-56 ${theme !== "light" ? "!bg-black !text-white border-zinc-800" : ""
-              }`}
+            className={`w-56 !bg-black !text-white border-zinc-800`}
             onCloseAutoFocus={(event) => {
               event.preventDefault(); // Prevents auto focus when closing the dropdown
             }}
@@ -351,7 +343,7 @@ const CollectionActionButtons = () => {
           >
             <DropdownMenuLabel>Tags</DropdownMenuLabel>
             <DropdownMenuSeparator
-              className={theme !== "light" ? "bg-zinc-800" : ""}
+              className="bg-zinc-800"
             />
             {loading ? (
               <div className="w-full h-28 flex justify-center items-center">
@@ -370,8 +362,7 @@ const CollectionActionButtons = () => {
                       name="title"
                       type="text"
                       placeholder="Enter title"
-                      className={`${theme !== "light" ? "bg-zinc-800" : "bg-zinc-200"
-                        } border-none border-spacing-0`}
+                      className={`bg-zinc-800 border-none border-spacing-0`}
                       onFocus={(event) => event.stopPropagation()} // Ensure focus stays on the input
                     />
                     {newTagSubmitLoading ? (
@@ -381,10 +372,7 @@ const CollectionActionButtons = () => {
                     ) : (
                       <Button
                         type="submit"
-                        className={`w-12 px-2 ${theme !== "light"
-                          ? "text-zinc-200 bg-zinc-800 hover:bg-zinc-700"
-                          : "bg-zinc-100 hover:bg-zinc-200 text-zinc-950"
-                          }`}
+                        className={`w-12 px-2 dark:text-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 bg-zinc-100 hover:bg-zinc-200 text-zinc-950`}
                       >
                         <FaPlus />
                       </Button>
@@ -393,10 +381,7 @@ const CollectionActionButtons = () => {
                 ) : (
                   <Button
                     onClick={() => setNewTagInput(true)}
-                    className={`w-full px-2 ${theme !== "light"
-                      ? "text-zinc-200 bg-zinc-950 hover:bg-zinc-800"
-                      : "bg-zinc-100 hover:bg-zinc-200 text-zinc-950"
-                      }`}
+                    className={`w-full px-2 dark:text-zinc-200 dark:bg-zinc-950 dark:hover:bg-zinc-800 bg-zinc-100 hover:bg-zinc-200 text-zinc-950`}
                   >
                     <span className="flex w-full justify-start items-center space-x-[0.65rem]">
                       <FaPlus />{" "}
@@ -405,7 +390,7 @@ const CollectionActionButtons = () => {
                   </Button>
                 )}
                 <DropdownMenuSeparator
-                  className={theme !== "light" ? "bg-zinc-800" : ""}
+                  className={"bg-zinc-800"}
                 />
                 <DropdownMenuGroup>
                   {checkedTags.map((tag, index) => (
@@ -422,14 +407,11 @@ const CollectionActionButtons = () => {
                   ))}
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator
-                  className={theme !== "light" ? "bg-zinc-800" : ""}
+                  className={"bg-zinc-800"}
                 />
                 <Button
                   onClick={handleSaveChanges}
-                  className={`mt-2 w-full ${theme !== "light"
-                    ? "text-zinc-200 bg-zinc-800 hover:bg-zinc-700"
-                    : "bg-zinc-100 hover:bg-zinc-200 text-zinc-950"
-                    }`}
+                  className={`mt-2 w-full dark:text-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 bg-zinc-100 hover:bg-zinc-200 text-zinc-950`}
                   disabled={saveChangesLoading}
                 >
                   {saveChangesLoading ? (
@@ -456,10 +438,7 @@ const CollectionActionButtons = () => {
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent
-          className={`w-56 ${theme !== "light"
-            ? "!bg-black !text-zinc-200 border-zinc-800"
-            : ""
-            } p-4 space-y-2`}
+          className={`w-56 !bg-black !text-zinc-200 border-zinc-800 p-4 space-y-2`}
         >
           <span className="text-sm text-zinc-200">
             Are you sure you want to delete this Collection?

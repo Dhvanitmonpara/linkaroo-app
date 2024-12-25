@@ -70,10 +70,7 @@ const LinkCard = ({
     window.open(link, "_blank");
   };
 
-  const cardClass = `${color} ${color === "bg-black"
-    ? "!text-zinc-300 border-zinc-800 !bg-zinc-900 border-[1px]"
-    : "text-black"
-    } select-none group hover:!bg-zinc-800/80 relative px-5 h-14 flex-col transition-all duration-300 rounded-md flex justify-center items-center`;
+  const cardClass = `${color} !text-zinc-300 border-zinc-800 !bg-zinc-900 border-[1px] select-none group hover:!bg-zinc-800/80 relative px-5 h-14 flex-col transition-all duration-300 rounded-md flex justify-center items-center`;
 
   const addToListHandler = async (collectionId: string) => {
     let loaderId = "";

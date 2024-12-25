@@ -1,17 +1,13 @@
 import { useLocation } from "react-router-dom";
 import { DocScreen, Collections, Links } from "../components";
-import useProfileStore from "@/store/profileStore";
 
 function DashboardPage() {
-  const { profile } = useProfileStore();
-  const { theme } = profile;
-  const checkThemeStatus = theme == "black" ? "!bg-black !text-while" : "";
   const location = useLocation().pathname;
 
   return (
     <>
       <div
-        className={`grid xl:grid-cols-7 lg:grid-cols-5 grid-cols-3 ${checkThemeStatus}`}
+        className={`grid xl:grid-cols-7 lg:grid-cols-5 grid-cols-3 !bg-black !text-while`}
       >
         <div className="col-span-2 lg:inline-block hidden relative px-7 pb-5 lg:pl-7 lg:pr-4 space-y-3 no-scrollbar max-h-[calc(100vh-5rem)]">
           <Collections />

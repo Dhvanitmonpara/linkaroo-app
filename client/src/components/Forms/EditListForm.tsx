@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useForm, Controller } from "react-hook-form";
-import { colorOptions, themeType } from "@/lib/types";
+import { colorOptions } from "@/lib/types";
 import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import { Textarea } from "../ui/textarea";
@@ -24,18 +24,13 @@ import { handleAxiosError } from "@/utils/handlerAxiosError";
 import useLinkStore from "@/store/linkStore";
 import useCollectionsStore from "@/store/collectionStore";
 
-type EditListFormProps = {
-  theme: themeType | undefined;
-  toggleModal: (isOpen: boolean) => void;
-};
-
 type HandleListEditType = {
   title: string;
   description: string;
   theme: colorOptions;
 };
 
-const EditListForm: React.FC<EditListFormProps> = ({ theme, toggleModal }) => {
+const EditListForm = () => {
 
   const [loading, setLoading] = useState(false);
   const { updateCollectionsItem } = useCollectionsStore();
@@ -92,7 +87,6 @@ const EditListForm: React.FC<EditListFormProps> = ({ theme, toggleModal }) => {
       handleAxiosError(error as AxiosError, navigate);
     } finally {
       setLoading(false);
-      toggleModal(false);
     }
   };
 
@@ -166,11 +160,7 @@ const EditListForm: React.FC<EditListFormProps> = ({ theme, toggleModal }) => {
                   <SelectValue placeholder="Change theme" />
                 </SelectTrigger>
                 <SelectContent
-                  className={cn(
-                    theme !== "light"
-                      ? "!bg-zinc-900 !text-white border-zinc-800"
-                      : "",
-                    "[&_[role=option]]:p-0"
+                  className={cn("!bg-zinc-900 !text-white border-zinc-800 [&_[role=option]]:p-0"
                   )}
                 >
                   <SelectGroup>
