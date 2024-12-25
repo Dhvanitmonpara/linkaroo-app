@@ -56,7 +56,7 @@ const EmailVerification = ({ email, updateFields }: EmailVerificationProps) => {
         toast.error("wrong otp try again");
       }
     }
-  }, [clientOtp, otp, updateFields]);
+  }, [otp]);
 
   useEffect(() => {
     sendOtp();

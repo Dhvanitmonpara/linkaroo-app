@@ -1,14 +1,14 @@
 import { asyncHandler } from "../utils/asyncHandler.js"
 import { ApiError } from "../utils/ApiError.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
-import { List } from "../models/list.model.js"
+import { Collection } from "../models/collection.model.js"
 import { uploadOnCloudinary, deleteFromCloudinary } from "../utils/cloudinary.js"
 import getPublicId from "../utils/getPublicId.js"
-import listOwnerVerification from "../utils/listOwnerVerification.js"
+import collectionOwnerVerification from "../utils/collectionOwnerVerification.js"
 import { ObjectId } from "mongodb"
-import { Card } from "../models/card.model.js"
+import { Link } from "../models/link.model.js"
 
-const createList = asyncHandler(async (req, res) => {
+const createCollection = asyncHandler(async (req, res) => {
 
     const { title, description, theme = "bg-zinc-200", coverImage, isInbox = false } = req.body
 
@@ -16,16 +16,16 @@ const createList = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Title and description are required")
     }
 
-    const listOnDatabase = await List.findOne({
+    const collectionOnDatabase = await Collection.findOne({
         title,
         createdBy: req.user._id
     })
 
-    if (listOnDatabase) {
-        throw new ApiError(400, "List with the same title already exists")
+    if (collectionOnDatabase) {
+        throw new ApiError(400, "Collection with the same title already exists")
     }
 
-    const list = await List.create({
+    const collection = await Collection.create({
         createdBy: req.user._id,
         title,
         description,
@@ -35,30 +35,30 @@ const createList = asyncHandler(async (req, res) => {
         collaborators: []
     })
 
-    if (!list) {
-        throw new ApiError(500, "Failed to create list")
+    if (!collection) {
+        throw new ApiError(500, "Failed to create collection")
     }
 
     return res
         .status(200)
         .json(new ApiResponse(
             200,
-            list,
-            "List created successfully"
+            collection,
+            "Collection created successfully"
         ))
 })
 
 const addCollaborator = asyncHandler(async (req, res) => {
 
-    const listId = req.params.listId
+    const collectionId = req.params.collectionId
 
-    const list = await List.findById(listId)
+    const collection = await Collection.findById(collectionId)
 
-    if (!list) {
-        throw new ApiError(404, "List not found")
+    if (!collection) {
+        throw new ApiError(404, "Collection not found")
     }
 
-    listOwnerVerification(list.createdBy, req.user, res)
+    collectionOwnerVerification(collection.createdBy, req.user, res)
 
     const { userId } = req.body
 
@@ -70,33 +70,33 @@ const addCollaborator = asyncHandler(async (req, res) => {
         throw new ApiError(400, "You cannot add yourself as a collaborator")
     }
 
-    if (list.collaborators.includes(userId)) {
+    if (collection.collaborators.includes(userId)) {
         throw new ApiError(400, "User is already a collaborator")
     }
 
-    list.collaborators.push(userId)
-    await list.save()
+    collection.collaborators.push(userId)
+    await collection.save()
 
     return res
         .status(200)
         .json(new ApiResponse(
             200,
-            list,
+            collection,
             "Collaborator added successfully"
         ))
 })
 
 const deleteCollaborator = asyncHandler(async (req, res) => {
 
-    const listId = req.params.listId
+    const collectionId = req.params.collectionId
 
-    const list = await List.findById(listId)
+    const collection = await Collection.findById(collectionId)
 
-    if (!list) {
-        throw new ApiError(404, "List not found")
+    if (!collection) {
+        throw new ApiError(404, "Collection not found")
     }
 
-    listOwnerVerification(list.createdBy, req.user, res)
+    collectionOwnerVerification(collection.createdBy, req.user, res)
 
     const { userId } = req.body
 
@@ -104,33 +104,33 @@ const deleteCollaborator = asyncHandler(async (req, res) => {
         throw new ApiError(400, "User ID is required")
     }
 
-    const newCollaborators = list.collaborators.filter(collaborator => (
+    const newCollaborators = collection.collaborators.filter(collaborator => (
         (typeof collaborator == "object" ? collaborator.valueOf().toString() : collaborator.toString()) !== userId.toString()
     ))
-    list.collaborators = newCollaborators
-    await list.save()
+    collection.collaborators = newCollaborators
+    await collection.save()
 
     return res
         .status(200)
         .json(new ApiResponse(
             200,
-            list,
+            collection,
             "Collaborator deleted successfully"
         ))
 })
 
-const getListById = asyncHandler(async (req, res) => {
-    const listId = req.params.listId
+const getCollectionById = asyncHandler(async (req, res) => {
+    const collectionId = req.params.collectionId
 
-    if (!listId) {
-        throw new ApiError(400, "List ID is required")
+    if (!collectionId) {
+        throw new ApiError(400, "Collection ID is required")
     }
 
-    const listIdObject = new ObjectId(listId);
+    const collectionIdObject = new ObjectId(collectionId);
 
-    const list = await List.aggregate([
+    const collection = await Collection.aggregate([
         {
-            $match: { _id: listIdObject }
+            $match: { _id: collectionIdObject }
         },
         {
             $lookup: {
@@ -188,31 +188,31 @@ const getListById = asyncHandler(async (req, res) => {
         }
     ])
 
-    if (!list) {
-        throw new ApiError(404, "List not found")
+    if (!collection) {
+        throw new ApiError(404, "Collection not found")
     }
 
     return res
         .status(200)
         .json(new ApiResponse(
             200,
-            list[0],
-            "List retrieved successfully"
+            collection[0],
+            "Collection retrieved successfully"
         ))
 
 })
 
-const updateList = asyncHandler(async (req, res) => {
+const updateCollection = asyncHandler(async (req, res) => {
 
-    const listId = req.params.listId
+    const collectionId = req.params.collectionId
 
-    if (!listId) {
-        throw new ApiError(400, "List ID is required")
+    if (!collectionId) {
+        throw new ApiError(400, "Collection ID is required")
     }
 
-    const list = await List.findById(listId)
+    const collection = await Collection.findById(collectionId)
 
-    listOwnerVerification(list.createdBy, req.user, res)
+    collectionOwnerVerification(collection.createdBy, req.user, res)
 
     const { title, description, theme = "dark" } = req.body
 
@@ -220,8 +220,8 @@ const updateList = asyncHandler(async (req, res) => {
         throw new ApiError(400, "At least one field needs to be updated")
     }
 
-    const updatedList = await List.findByIdAndUpdate(
-        listId,
+    const updatedCollection = await Collection.findByIdAndUpdate(
+        CollectionId,
         {
             $set: {
                 title,
@@ -236,84 +236,83 @@ const updateList = asyncHandler(async (req, res) => {
         .status(200)
         .json(new ApiResponse(
             200,
-            updatedList,
-            "List updated successfully"
+            updatedCollection,
+            "Collection updated successfully"
         ))
 })
 
-const deleteList = asyncHandler(async (req, res) => {
+const deleteCollection = asyncHandler(async (req, res) => {
 
-    const listId = req.params.listId
+    const collectionId = req.params.CollectionId
 
-    if (!listId) {
-        throw new ApiError(400, "List ID is required")
+    if (!collectionId) {
+        throw new ApiError(400, "Collection ID is required")
     }
 
-    const list = await List.findById(listId)
+    const collection = await Collection.findById(collectionId)
 
-    if (!list) {
-        throw new ApiError(404, "List not found")
+    if (!collection) {
+        throw new ApiError(404, "Collection not found")
     }
 
-    listOwnerVerification(list.createdBy, req.user, res)
+    collectionOwnerVerification(collection.createdBy, req.user, res)
 
-    const listCards = Card.deleteMany({ listId })
+    const collectionLinks = Link.deleteMany({ collectionId })
 
-    if (!listCards) {
-        throw new ApiError(500, "Failed to delete list cards")
+    if (!collectionLinks) {
+        throw new ApiError(500, "Failed to delete Collection links")
     }
 
-    await list.deleteOne()
+    await Collection.deleteOne()
 
     return res
         .status(200)
         .json(new ApiResponse(
             200,
-            list,
-            "List deleted successfully"
+            "Collection deleted successfully"
         ))
 
 
 })
 
-const getListsByOwner = asyncHandler(async (req, res) => {
+const getCollectionsByOwner = asyncHandler(async (req, res) => {
 
-    const lists = await List.find({ createdBy: req.user?._id })
+    const collections = await Collection.find({ createdBy: req.user?._id })
 
-    if (!lists) {
-        throw new ApiError(404, "No lists found for this user")
-    }
-
-    return res
-        .status(200)
-        .json(new ApiResponse(
-            200,
-            lists,
-            "Lists fetched successfully"
-        ))
-})
-
-const getListsByCollaborator = asyncHandler(async (req, res) => {
-
-    const lists = await List.find({ collaborators: req.user._id })
-
-    if (!lists) {
-        throw new ApiError(404, "No lists found for this user")
+    if (!collections) {
+        throw new ApiError(404, "No collections found for this user")
     }
 
     return res
         .status(200)
         .json(new ApiResponse(
             200,
-            lists,
-            "Lists fetched successfully"
+            collections,
+            "Collections fetched successfully"
+        ))
+})
+
+const getCollectionsByCollaborator = asyncHandler(async (req, res) => {
+
+    const collections = await Collection.find({ collaborators: req.user._id })
+
+    if (!collections) {
+        throw new ApiError(404, "No collections found for this user")
+    }
+
+    return res
+        .status(200)
+        .json(new ApiResponse(
+            200,
+            collections,
+            "Collections fetched successfully"
         ))
 
 })
 
-const getListsByUser = asyncHandler(async (req, res) => {
+const getCollectionsByUser = asyncHandler(async (req, res) => {
 
-    const lists = await List.aggregate([
+    const collections = await Collection.aggregate([
         {
             $match: {
                 $or: [
@@ -379,20 +378,20 @@ const getListsByUser = asyncHandler(async (req, res) => {
         }
     ])
 
-    if (!lists) {
-        throw new ApiError(404, "No lists found")
+    if (!collections) {
+        throw new ApiError(404, "No collections found")
     }
 
     return res
         .status(200)
         .json(new ApiResponse(
             200,
-            lists,
-            "Lists fetched successfully"
+            collections,
+            "Collections fetched successfully"
         ))
 })
 
-const getListsByTagId = asyncHandler(async (req, res) => {
+const getCollectionsByTagId = asyncHandler(async (req, res) => {
 
     const tagId = req.params.tagId
 
@@ -400,36 +399,36 @@ const getListsByTagId = asyncHandler(async (req, res) => {
         throw new ApiError(404, "Tag id is required")
     }
 
-    const lists = await List.find({ tags: tagId })
+    const collections = await Collection.find({ tags: tagId })
 
-    if (!lists) {
-        throw new ApiError(404, "No lists found for this tag")
+    if (!collections) {
+        throw new ApiError(404, "No collections found for this tag")
     }
 
     return res
         .status(200)
         .json(new ApiResponse(
             200,
-            lists,
-            "Lists fetched successfully"
+            collections,
+            "Collections fetched successfully"
         ))
 
 })
 
 const uploadCoverImage = asyncHandler(async (req, res) => {
-    const listId = req.params.listId
+    const collectionId = req.params.collectionId
 
-    if (!listId) {
-        throw new ApiError(400, "List ID is required")
+    if (!collectionId) {
+        throw new ApiError(400, "Collection ID is required")
     }
 
-    const list = await List.findById(listId)
+    const collection = await Collection.findById(CollectionId)
 
-    if (!list) {
-        throw new ApiError(404, "List not found")
+    if (!collection) {
+        throw new ApiError(404, "Collection not found")
     }
 
-    listOwnerVerification(list.createdBy, req.user, res)
+    collectionOwnerVerification(collection.createdBy, req.user, res)
 
     const coverImageLocalPath = req.file?.path
 
@@ -443,15 +442,15 @@ const uploadCoverImage = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Error while uploading on cover image")
     }
 
-    list.coverImage = coverImage.url;
-    await list.save();
+    collection.coverImage = coverImage.url;
+    await collection.save();
 
     return res
         .status(200)
         .json(new ApiResponse(
             200,
             {
-                list,
+                collectionId: collection._id,
                 coverImage: coverImage.url,
             },
             "Cover image uploaded successfully"
@@ -459,25 +458,25 @@ const uploadCoverImage = asyncHandler(async (req, res) => {
 })
 
 const updateCoverImage = asyncHandler(async (req, res) => {
-    const listId = req.params.listId
+    const collectionId = req.params.collectionId
 
-    if (!listId) {
-        throw new ApiError(400, "List ID is required")
+    if (!collectionId) {
+        throw new ApiError(400, "Collection ID is required")
     }
 
-    const list = await List.findById(listId);
+    const collection = await Collection.findById(CollectionId);
 
-    if (!list) {
-        throw new ApiError(404, "List not found")
+    if (!collection) {
+        throw new ApiError(404, "Collection not found")
     }
 
-    listOwnerVerification(list.createdBy, req.user, res)
+    collectionOwnerVerification(collection.createdBy, req.user, res)
 
-    if (!list.coverImage) {
-        throw new ApiError(400, "No cover image currently attached to this list")
+    if (!collection.coverImage) {
+        throw new ApiError(400, "No cover image currently attached to this Collection")
     }
 
-    const coverImageName = getPublicId(list.coverImage);
+    const coverImageName = getPublicId(collection.coverImage);
 
     if (!coverImageName) {
         throw new ApiError(500, "Error while extracting image name from image URL")
@@ -495,38 +494,38 @@ const updateCoverImage = asyncHandler(async (req, res) => {
 
     const cloudinaryRes = await deleteFromCloudinary(coverImageName);
 
-    list.coverImage = coverImage.url;
-    await list.save();
+    collection.coverImage = coverImage.url;
+    await collection.save();
 
     return res
         .status(200)
         .json(new ApiResponse(
             200,
-            { list, cloudinaryRes },
+            { collection, cloudinaryRes },
             "Cover image updated successfully"
         ))
 });
 
 const deleteCoverImage = asyncHandler(async (req, res) => {
-    const listId = req.params.listId
+    const collectionId = req.params.collectionId
 
-    if (!listId) {
-        throw new ApiError(400, "List ID is required")
+    if (!collectionId) {
+        throw new ApiError(400, "Collection ID is required")
     }
 
-    const list = await List.findById(listId);
+    const collection = await Collection.findById(collectionId);
 
-    if (!list) {
-        throw new ApiError(404, "List not found")
+    if (!collection) {
+        throw new ApiError(404, "Collection not found")
     }
 
-    listOwnerVerification(list.createdBy, req.user, res)
+    collectionOwnerVerification(collection.createdBy, req.user, res)
 
-    if (!list.coverImage) {
+    if (!collection.coverImage) {
         return res.status(400).json(new ApiResponse(400, "No cover image found"))
     }
 
-    const coverImageName = getPublicId(list.coverImage);
+    const coverImageName = getPublicId(collection.coverImage);
 
     const coverImage = deleteFromCloudinary(coverImageName);
 
@@ -534,14 +533,14 @@ const deleteCoverImage = asyncHandler(async (req, res) => {
         throw new ApiError(500, "Error while deleting cover image from Cloudinary")
     }
 
-    list.coverImage = "";
-    await list.save();
+    collection.coverImage = "";
+    await collection.save();
 
     return res
         .status(200)
         .json(new ApiResponse(
             200,
-            { list, coverImage },
+            { collection, coverImage },
             "Cover image deleted successfully"
         ))
 
@@ -549,40 +548,40 @@ const deleteCoverImage = asyncHandler(async (req, res) => {
 
 const toggleIsPublic = asyncHandler(async (req, res) => {
 
-    const listId = req.params.listId
+    const collectionId = req.params.collectionId
 
-    if (!listId) {
-        throw new ApiError(400, "List ID is required")
+    if (!collectionId) {
+        throw new ApiError(400, "Collection ID is required")
     }
 
-    const list = await List.findById(listId)
+    const collection = await Collection.findById(collectionId)
 
-    if (!list) {
-        throw new ApiError(404, "List not found")
+    if (!collection) {
+        throw new ApiError(404, "Collection not found")
     }
 
-    list.isPublic = !list.isPublic;
-    await list.save()
+    collection.isPublic = !collection.isPublic;
+    await collection.save()
 
     return res
         .status(200)
         .json(new ApiResponse(
             200,
-            list,
-            "List visibility toggled successfully"
+            collection,
+            "Collection visibility toggled successfully"
         ))
 
 })
 
 export {
-    createList,
-    getListById,
-    getListsByOwner,
-    getListsByCollaborator,
-    getListsByTagId,
-    getListsByUser,
-    updateList,
-    deleteList,
+    createCollection,
+    getCollectionById,
+    getCollectionsByOwner,
+    getCollectionsByCollaborator,
+    getCollectionsByTagId,
+    getCollectionsByUser,
+    updateCollection,
+    deleteCollection,
     addCollaborator,
     deleteCollaborator,
     updateCoverImage,

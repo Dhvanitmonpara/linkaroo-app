@@ -2,8 +2,8 @@ import { asyncHandler } from "../utils/asyncHandler.js"
 import { ApiError } from "../utils/ApiError.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
 import { Tag } from "../models/tag.model.js"
-import { List } from "../models/list.model.js"
-import listOwnerVerification from "../utils/listOwnerVerification.js"
+import { Collection } from "../models/collection.model.js"
+import collectionOwnerVerification from "../utils/collectionOwnerVerification.js"
 
 const addUsernameInTag = (tag, username) => {
     const addedUserTag = username + "/" + tag
@@ -46,7 +46,7 @@ const createTag = asyncHandler(async (req, res) => {
 
 const removeTag = asyncHandler(async (req, res) => {
 
-    const listId = req.params.listId
+    const collectionId = req.params.collectionId
 
     const { tag } = req.body
 
@@ -54,13 +54,13 @@ const removeTag = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Tag is required")
     }
 
-    const list = await List.findById(listId)
+    const collection = await Collection.findById(collectionId)
 
-    if (!list) {
-        throw new ApiError(404, "List not found")
+    if (!collection) {
+        throw new ApiError(404, "Collection not found")
     }
 
-    listOwnerVerification(list.createdBy, req.user, res)
+    collectionOwnerVerification(collection.createdBy, req.user, res)
 
     const userTag = addUsernameInTag(tag, req.user.username)
 
@@ -76,14 +76,14 @@ const removeTag = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Tag ID is required")
     }
 
-    list.tags = list.tags.filter(t => t.toString() !== tagId.toString())
-    await list.save()
+    collection.tags = collection.tags.filter(t => t.toString() !== tagId.toString())
+    await collection.save()
 
     return res
         .status(200)
         .json(new ApiResponse(
             200,
-            list,
+            collection,
             "Tag deleted successfully"
         ))
 
@@ -97,13 +97,13 @@ const deleteTag = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Tag ID is required")
     }
 
-    const tagOnLists = await List.updateMany(
+    const tagOnCollections = await Collection.updateMany(
         { tags: tagId },
         { $pull: { tags: tagId } }
     );
 
-    if (tagOnLists.length > 0) {
-        throw new ApiError(400, "Tag is used on a list")
+    if (tagOnCollections.length > 0) {
+        throw new ApiError(400, "Tag is used on a collection")
     }
 
     const tag = await Tag.findByIdAndDelete(tagId)
@@ -120,7 +120,7 @@ const deleteTag = asyncHandler(async (req, res) => {
             200,
             {
                 tagname: removedUserTag,
-                tagOnLists
+                tagOnCollections
             },
             "Tag deleted successfully"
         ))
@@ -129,15 +129,15 @@ const deleteTag = asyncHandler(async (req, res) => {
 
 const addTag = asyncHandler(async (req, res) => {
 
-    const listId = req.params.listId
+    const collectionId = req.params.collectionId
 
-    const listOnDatabase = await List.findById(listId)
+    const collectionOnDatabase = await Collection.findById(collectionId)
 
-    if (!listOnDatabase) {
-        throw new ApiError(404, "List not found")
+    if (!collectionOnDatabase) {
+        throw new ApiError(404, "Collection not found")
     }
 
-    listOwnerVerification(listOnDatabase.createdBy, req.user, res)
+    collectionOwnerVerification(collectionOnDatabase.createdBy, req.user, res)
 
     const { tag } = req.body
 
@@ -153,37 +153,37 @@ const addTag = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Tag not found")
     }
 
-    const tagAlreadyExists = listOnDatabase.tags.includes(existingTag._id)
+    const tagAlreadyExists = collectionOnDatabase.tags.includes(existingTag._id)
 
     if (tagAlreadyExists) {
         throw new ApiError(400, "Tag already exists")
     }
 
-    listOnDatabase.tags.push(existingTag._id)
-    await listOnDatabase.save()
+    collectionOnDatabase.tags.push(existingTag._id)
+    await collectionOnDatabase.save()
 
     return res
         .status(200)
         .json(new ApiResponse(
             200,
-            listOnDatabase,
+            collectionOnDatabase,
             "Tag added successfully"
         ))
 
 })
 
-const getTagsByList = asyncHandler(async (req, res) => {
+const getTagsByCollection = asyncHandler(async (req, res) => {
 
-    const listId = req.params.listId
+    const collectionId = req.params.collectionId
 
-    if (!listId) {
-        throw new ApiError(400, "List ID is required")
+    if (!collectionId) {
+        throw new ApiError(400, "Collection ID is required")
     }
 
-    const tagIds = await List.findById(listId).select("tags")
+    const tagIds = await Collection.findById(collectionId).select("tags")
 
     if (!tagIds) {
-        throw new ApiError(404, "List not found")
+        throw new ApiError(404, "Collection not found")
     }
 
     const tags = await Tag.find({ _id: { $in: tagIds.tags } })
@@ -230,7 +230,7 @@ const getTagsByOwner = asyncHandler(async (req, res) => {
 
 const getTagsByCollaborator = asyncHandler(async (req, res) => {
 
-    const tags = await List.aggregate([
+    const tags = await Collection.aggregate([
         {
             $match: { collaborators: req.user?._id }
         },
@@ -259,7 +259,7 @@ const getTagsByCollaborator = asyncHandler(async (req, res) => {
         {
             $project: {
                 _id: 1,
-                listTitle: "$title",
+                collectionTitle: "$title",
                 collaborators: 1,
                 tagname: '$tagname.tagname',
                 tagId: '$tagname._id',
@@ -318,29 +318,29 @@ const renameTag = asyncHandler(async (req, res) => {
 
 })
 
-const customizeListTag = asyncHandler(async (req, res) => {
-    const listId = req.params.listId
+const customizeCollectionTag = asyncHandler(async (req, res) => {
+    const collectionId = req.params.collectionId
     const tagArray = req.body.tagArray
 
-    if (!listId || !tagArray) {
-        throw new ApiError(400, "List ID and tag array are required")
+    if (!collectionId || !tagArray) {
+        throw new ApiError(400, "Collection ID and tag array are required")
     }
 
-    const list = await List.findByIdAndUpdate(
-        listId,
+    const collection = await Collection.findByIdAndUpdate(
+        collectionId,
         { tags: tagArray },
         { new: true }
     )
 
-    if (!list) {
-        throw new ApiError(404, "List not found")
+    if (!collection) {
+        throw new ApiError(404, "Collection not found")
     }
 
     return res
         .status(200)
         .json(new ApiResponse(
             200,
-            list,
+            collection,
             "Tags updated successfully"
         ))
 
@@ -351,11 +351,11 @@ export {
     deleteTag,
     addTag,
     removeTag,
-    getTagsByList,
+    getTagsByCollection,
     getTagsByOwner,
     getTagsByCollaborator,
     renameTag,
-    customizeListTag,
+    customizeCollectionTag,
     removeUsernameTag,
     addUsernameInTag,
 }

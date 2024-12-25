@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken"
 import { uploadOnCloudinary, deleteFromCloudinary } from "../utils/cloudinary.js"
 import getPublicId from "../utils/getPublicId.js"
 import sendMail from "../utils/sendMail.js"
-import { List } from "../models/list.model.js"
+import { Collection } from "../models/collection.model.js"
 
 const refreshTokenMaxAge = 3600 * 24 * 10 * 1000;
 const accessTokenMaxAge = 3600 * 24 * 1000;
@@ -83,7 +83,7 @@ const registerUser = asyncHandler(async (req, res) => {
         throw new ApiError(500, "Something went wrong while creating user")
     }
 
-    const inbox = await List.create({
+    const inbox = await Collection.create({
         createdBy: response._doc._id,
         title: username + "/inbox",
         isInbox: true,

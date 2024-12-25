@@ -1,13 +1,13 @@
 import { Router } from "express";
 import {
-    createCard,
-    getCardsByList,
-    updateCard,
-    deleteCard,
+    createLink,
+    getLinksByCollection,
+    updateLink,
+    deleteLink,
     toggleIsChecked,
-    moveCardFromInbox,
-    createCardWithMetadata
-} from "../controllers/card.controller.js";
+    moveLinkFromInbox,
+    createLinkWithMetadata
+} from "../controllers/link.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 
 const router = Router()
@@ -15,18 +15,18 @@ const router = Router()
 router.use(verifyJWT)
 
 // secure routes
-router.route("/:listId")
-    .post(createCard)
-    .get(getCardsByList)
+router.route("/:collectionId")
+    .post(createLink)
+    .get(getLinksByCollection)
 
-router.route("/quick-add/:listId").post(createCardWithMetadata)
+router.route("/quick-add/:collectionId").post(createLinkWithMetadata)
 
-router.route("/move-card").patch(moveCardFromInbox)
+router.route("/move-card").patch(moveLinkFromInbox)
 
 router.route("/:cardId")
-    .patch(updateCard)
-    .delete(deleteCard)
+    .patch(updateLink)
+    .delete(deleteLink)
 
-router.route("/:cardId/toggle-checked").patch(toggleIsChecked)
+router.route("/:linkId/toggle-checked").patch(toggleIsChecked)
 
 export default router

@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const cardSchema = new Schema({
+const linkSchema = new Schema({
 
     title: {
         type: String,
@@ -23,12 +23,12 @@ const cardSchema = new Schema({
         ref: "User",
         required: true
     },
-    listId: {
+    collectionId: {
         type: Schema.Types.ObjectId,
-        ref: "List",
+        ref: "Collection",
         required: true
     },
     
 }, { timestamps: true })
 
-export const Card = mongoose.model("Card", cardSchema)
+export const Link = mongoose.model("Link", linkSchema)

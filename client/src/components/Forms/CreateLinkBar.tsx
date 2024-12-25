@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectContent,
   SelectGroup,
+  SelectLabel,
   SelectValue,
 } from "@/components/ui/select";
 import { useForm, Controller } from "react-hook-form";
@@ -20,7 +21,7 @@ import { handleAxiosError } from "@/utils/handlerAxiosError";
 import useLinkStore from "@/store/linkStore";
 import useCollectionsStore from "@/store/collectionStore";
 
-type CreateLinkFormProps = {
+type CreateLinkBarProps = {
   theme: themeType | undefined;
   collectionTitle?: string;
 };
@@ -32,7 +33,7 @@ type HandleLinkCreationType = {
   collection: string;
 };
 
-const CreateLinkForm: React.FC<CreateLinkFormProps> = ({
+const CreateLinkBar: React.FC<CreateLinkBarProps> = ({
   theme,
   collectionTitle,
 }) => {
@@ -68,7 +69,7 @@ const CreateLinkForm: React.FC<CreateLinkFormProps> = ({
       };
 
       const link = await axios.post(
-        `${import.meta.env.VITE_SERVER_API_URL}/links/${parentList._id}`,
+        `${import.meta.env.VITE_SERVER_API_URL}/cards/${data.collection}`,
         newData,
         { withCredentials: true }
       );
@@ -135,6 +136,7 @@ const CreateLinkForm: React.FC<CreateLinkFormProps> = ({
                 }
               >
                 <SelectGroup>
+                  <SelectLabel>Lists</SelectLabel>
                   {collections.map((list) => (
                     <SelectItem key={list._id} value={list._id}>
                       {list.title}
@@ -164,4 +166,4 @@ const CreateLinkForm: React.FC<CreateLinkFormProps> = ({
   );
 };
 
-export default CreateLinkForm;
+export default CreateLinkBar;

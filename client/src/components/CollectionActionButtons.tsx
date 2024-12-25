@@ -23,7 +23,7 @@ import { fetchedTagType } from "@/lib/types";
 import useProfileStore from "@/store/profileStore";
 import { removeUsernameTag } from "@/utils/toggleUsernameInTag";
 import { useNavigate, useParams } from "react-router-dom";
-import { CreateLinkForm, EditListForm } from "./Forms";
+import { EditListForm } from "./Forms";
 import { Input } from "./ui/input";
 import { handleAxiosError } from "@/utils/handlerAxiosError";
 import { AddCollaborator } from "./ActionButtons";
@@ -40,11 +40,7 @@ type checkedTagsType = fetchedTagType & {
   isChecked?: Checked;
 };
 
-type ListActionButtonsProps = {
-  listTitle: string | undefined;
-};
-
-const CollectionActionButtons = ({ listTitle }: ListActionButtonsProps) => {
+const CollectionActionButtons = () => {
   const { toggleModal, setPrevPath } = useMethodStore();
   const { profile, setTags } = useProfileStore();
   const { removeCollectionsItem, updateCollectionsTags, toggleIsPublic } = useCollectionsStore();
@@ -303,20 +299,6 @@ const CollectionActionButtons = ({ listTitle }: ListActionButtonsProps) => {
       element: <AddCollaborator />,
       action: () => { },
       tooltip: "Add Collaborators",
-    },
-    {
-      element: (
-        <ResponsiveDialog title="Add New Link" trigger={<div className="flex justify-center items-center !text-xl"> <FaPlus /> </div>} description="Add a new link to your collection" cancelText="Cancel">
-          <CreateLinkForm
-            theme={theme}
-            collectionTitle={listTitle}
-          />
-        </ResponsiveDialog>
-      ),
-      action: () => {
-        setPrevPath(location.pathname);
-      },
-      tooltip: "Add New Link",
     },
     {
       element: (

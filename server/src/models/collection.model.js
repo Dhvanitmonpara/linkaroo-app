@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const listSchema = new Schema({
+const collectionSchema = new Schema({
 
     createdBy: {
         type: Schema.Types.ObjectId,
@@ -48,4 +48,4 @@ const listSchema = new Schema({
 
 }, { timestamps: true })
 
-export const List = mongoose.model("List", listSchema)
+export const Collection = mongoose.model("Collection", collectionSchema)

@@ -1,4 +1,4 @@
-const listOwnerVerification = (list, user, res) => {
+const collectionOwnerVerification = (list, user, res) => {
     if ((typeof list == 'object' ? list.valueOf() : list) !== (typeof user._id == "object" ? user._id.valueOf() : user._id)) {
         return res
             .status(403)
@@ -9,4 +9,4 @@ const listOwnerVerification = (list, user, res) => {
     }
 }
 
-export default listOwnerVerification
+export default collectionOwnerVerification

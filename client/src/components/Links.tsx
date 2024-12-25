@@ -1,4 +1,4 @@
-import { LinkCard, CollectionActionButtons, Tag } from "@/components";
+import { LinkCard, CollectionActionButtons, Tag, ResponsiveDialog } from "@/components";
 import useMethodStore from "@/store/MethodStore";
 import useProfileStore from "@/store/profileStore";
 import axios, { AxiosError, AxiosResponse } from "axios";
@@ -10,7 +10,7 @@ import { BiSolidPencil } from "react-icons/bi";
 import { handleAxiosError } from "@/utils/handlerAxiosError";
 import convertMongoDBDate from "@/utils/convertMongoDBDate";
 import { Button } from "./ui/button";
-import { CreateCollectionForm, CreateLinkForm } from "./Forms";
+import { CreateCollectionForm, CreateLinkBar, CreateLinkForm } from "./Forms";
 import { removeUsernameTag } from "@/utils/toggleUsernameInTag";
 import {
   DropdownMenu,
@@ -191,7 +191,7 @@ const Links = () => {
                 <h1 className="text-2xl font-semibold">
                   {currentCollectionItem?.title}
                 </h1>
-                <CollectionActionButtons listTitle={currentCollectionItem?.title} />
+                <CollectionActionButtons />
               </div>
               <div className="text-xs space-x-2">
                 <span>@{currentCollectionItem?.createdBy?.username}</span>
@@ -213,24 +213,22 @@ const Links = () => {
           >
             You don't have any documents on this list.
           </span>
-          <Button
+          <ResponsiveDialog title="Add New Link" description="Add a new link to your collection" trigger={<div
             onClick={() => {
               setPrevPath(location);
-              toggleModal(true);
-              setModalContent(
-                <CreateLinkForm
-                  theme={theme}
-                  collectionTitle={currentCollectionItem?.title}
-                />
-              );
             }}
             className={`${theme !== "light"
               ? "bg-zinc-900 hover:bg-zinc-800 text-zinc-200"
               : "bg-zinc-300 hover:bg-zinc-400"
-              } px-6 py-2`}
+              } px-6 py-2 cursor-pointer rounded-md`}
           >
             Add a Link
-          </Button>
+          </div>}>
+            <CreateLinkForm
+              theme={theme}
+              collectionTitle={currentCollectionItem?.title}
+            />
+          </ResponsiveDialog>
         </div>
         <div className="lg:h-2 h-16"></div>
       </div>
@@ -312,7 +310,7 @@ const Links = () => {
               <h1 className="text-2xl font-semibold">
                 {currentCollectionItem?.title}
               </h1>
-              <CollectionActionButtons listTitle={currentCollectionItem?.title} />
+              <CollectionActionButtons />
             </div>
             <div className="text-xs text-zinc-400/90 space-x-2">
               <span>@{currentCollectionItem?.createdBy?.username}</span>
@@ -338,9 +336,23 @@ const Links = () => {
         </div>
       </div>
       <div
-        className={`grid grid-cols-1 gap-2 ${location.includes("/links") ? "" : "lg:grid-cols-2"
+        className={`grid grid-cols-1 gap-2 ${location.includes("/collections") ? "" : "lg:grid-cols-2"
           }`}
       >
+        <ResponsiveDialog
+          title="Add New Link"
+          trigger={
+            <div className="flex justify-center items-center !text-xl">
+              <p>Add a new link</p>
+            </div>
+          }
+          description="Add a new link to your collection"
+        >
+          <CreateLinkBar
+            theme={theme}
+            collectionTitle={currentCollectionItem?.title}
+          />
+        </ResponsiveDialog>
         {links?.map((link) => (
           <LinkCard
             key={link._id}
