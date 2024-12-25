@@ -65,7 +65,7 @@ const Links = () => {
           setLoading(true);
           const collectionId = location.split("/")[2];
 
-          const cache = cachedLinks.filter((list) => list.collectionId === collectionId)[0];
+          const cache = cachedLinks.filter((collection) => collection.collectionId === collectionId)[0];
 
           if (cache) {
             setLinks(cache.links);
@@ -76,7 +76,7 @@ const Links = () => {
             );
 
             if (!response.data.data) {
-              toast.error("Failed to fetch list details");
+              toast.error("Failed to fetch collection details");
               return;
             }
             setLinks(response.data.data);
@@ -88,6 +88,7 @@ const Links = () => {
           )[0];
           setCurrentCollectionItem(currentListRes);
         } catch (error) {
+          console.log(error)
           handleAxiosError(error as AxiosError, navigate);
         } finally {
           setLoading(false);
@@ -361,7 +362,7 @@ const Links = () => {
             color={theme == "black" ? "bg-black" : currentCardColor}
             link={link.link}
             isChecked={link.isChecked}
-            currentListId={currentCollectionItem?._id}
+            currentCollectionId={currentCollectionItem?._id}
             toggleModal={toggleModal}
           />
         ))}

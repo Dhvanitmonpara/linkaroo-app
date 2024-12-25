@@ -25,11 +25,11 @@ router.use(verifyJWT)
 // secure routes
 router.route("/").post(createCollection)
 
-router.route("/u/:listId").get(getCollectionById)
+router.route("/u/:collectionId").get(getCollectionById)
 
 router.route("/o").get(getCollectionsByOwner)
 
-router.route("/o/:listId")
+router.route("/o/:collectionId")
     .delete(deleteCollection)
     .patch(updateCollection)
 
@@ -37,15 +37,15 @@ router.route("/c").get(getCollectionsByCollaborator)
 
 router.route("/u").all(getCollectionsByUser)
 
-router.route("/o/c/:listId")
+router.route("/o/c/:collectionId")
     .patch(addCollaborator)
     .delete(deleteCollaborator)
 
 router.route("/t/:tagId").get(getCollectionsByTagId)
 
-router.route("/status/:listId").patch(toggleIsPublic)
+router.route("/status/:collectionId").patch(toggleIsPublic)
 
-router.route("/o/:listId/cover-image")
+router.route("/o/:collectionId/cover-image")
     .delete(deleteCoverImage)
     .post(upload.single("coverImage"), uploadCoverImage)
     .patch(upload.single("coverImage"), updateCoverImage)

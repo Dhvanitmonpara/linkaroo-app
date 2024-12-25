@@ -67,7 +67,7 @@ const CollectionActionButtons = () => {
               withCredentials: true,
             }),
             axios.get(
-              `${import.meta.env.VITE_SERVER_API_URL}/tags/get/list/${listId}`,
+              `${import.meta.env.VITE_SERVER_API_URL}/tags/get/collections/${listId}`,
               { withCredentials: true }
             ),
           ]);

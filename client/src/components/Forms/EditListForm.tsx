@@ -68,15 +68,15 @@ const EditListForm: React.FC<EditListFormProps> = ({ theme, toggleModal }) => {
         return;
       }
 
-      const listId = response.data.data._id;
+      const collectionId = response.data.data._id;
 
-      if (!listId) {
+      if (!collectionId) {
         toast.error("Failed to update list");
         return;
       }
 
       const list = await axios.get(
-        `${import.meta.env.VITE_SERVER_API_URL}/lists/u/${listId}`,
+        `${import.meta.env.VITE_SERVER_API_URL}/lists/u/${collectionId}`,
         { withCredentials: true }
       );
 

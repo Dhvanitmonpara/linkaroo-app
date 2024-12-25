@@ -10,7 +10,7 @@ const createLink = asyncHandler(async (req, res) => {
     const { collectionId } = req.params
 
     if (!collectionId) {
-        throw new ApiError(400, "List ID is required")
+        throw new ApiError(400, "Collection ID is required")
     }
 
     const { title, description, link } = req.body
@@ -19,7 +19,7 @@ const createLink = asyncHandler(async (req, res) => {
         throw new ApiError(400, "title and link are required")
     }
 
-    const links = await Link.find({ userId: req.user.id, listId: listId })
+    const links = await Link.find({ userId: req.user.id, collectionId })
 
     if (links.some(link => link.title == title)) {
         throw new ApiError(400, "Link with the same title already exists")
@@ -66,7 +66,7 @@ const createLinkWithMetadata = asyncHandler(async (req, res) => {
     const title = data.title
     const description = data.description
 
-    const links = await Link.find({ userId: req.user.id, listId: listId })
+    const links = await Link.find({ userId: req.user.id, collectionId })
 
     if (links.some(link => link.title == title)) {
         throw new ApiError(400, "Link with the same title already exists")
@@ -96,15 +96,15 @@ const createLinkWithMetadata = asyncHandler(async (req, res) => {
 
 const getLinksByCollection = asyncHandler(async (req, res) => {
 
-    const collectionId = req.params.listId
+    const collectionId = req.params.collectionId
 
     if (!collectionId) {
-        throw new ApiError(400, "List ID is required")
+        throw new ApiError(400, "Collection ID is required")
     }
 
     const links = await Link.find({ collectionId })
 
-    if (!link) {
+    if (!links) {
         throw new ApiError(404, "Link not found for the given collection")
     }
 

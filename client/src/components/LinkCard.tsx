@@ -30,7 +30,7 @@ type LinkCardProps = {
   color: colorOptions;
   link: string;
   isChecked: boolean;
-  currentListId: string | undefined;
+  currentCollectionId: string | undefined;
   toggleModal: (isOpen: boolean) => void;
 };
 
@@ -39,7 +39,7 @@ const LinkCard = ({
   title,
   color,
   link,
-  currentListId,
+  currentCollectionId,
   isChecked,
   toggleModal,
 }: LinkCardProps) => {
@@ -49,9 +49,9 @@ const LinkCard = ({
   const { collections, removeInboxLinkItem } = useCollectionsStore();
   const isSmallScreen = useMediaQuery({ query: "(max-width: 1024px)" });
 
-  const handleNavigate = (listId?: string) => {
+  const handleNavigate = (collectionId?: string) => {
     if (location.pathname.includes("/links")) {
-      navigate(`/collections/${listId || currentListId}/links/${id}`);
+      navigate(`/collections/${collectionId || currentCollectionId}/links/${id}`);
     } else {
       navigate(`links/${id}`);
     }
@@ -61,7 +61,7 @@ const LinkCard = ({
     toggleModal(true);
     e.stopPropagation();
     setPrevPath(location.pathname);
-    handleNavigate(currentListId);
+    handleNavigate(currentCollectionId);
     setModalContent(<div className="text-5xl text-white">Hello</div>);
   };
 
