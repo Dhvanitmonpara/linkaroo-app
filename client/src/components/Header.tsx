@@ -1,12 +1,7 @@
 import { Input } from "./ui/input";
 import { IoMdAdd } from "react-icons/io";
 import { IoFilterOutline } from "react-icons/io5";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   Popover,
   PopoverContent,
@@ -14,7 +9,7 @@ import {
 } from "@/components/ui/popover";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { IoSearchSharp } from "react-icons/io5";
-import { CreateDocForm, CreateListForm } from "./Forms";
+import { CreateCollectionForm, CreateLinkForm } from "./Forms";
 import useMethodStore from "@/store/MethodStore";
 import useProfileStore from "@/store/profileStore";
 import { useEffect, useState } from "react";
@@ -22,12 +17,14 @@ import CommandMenu from "./CommandMenu";
 import { Link, NavLink } from "react-router-dom";
 import ProfileCard from "./ProfileCard";
 import Notifications from "./Notifications";
+import ResponsiveDialog from "./ResponsiveDialog";
 
 const Header = () => {
-  const { toggleModal, setModalContent, setPrevPath } = useMethodStore();
+  const { setPrevPath } = useMethodStore();
   const { profile } = useProfileStore();
   const { theme } = profile;
 
+  const [creationTab, setCreationTab] = useState("collection");
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -67,40 +64,29 @@ const Header = () => {
               ⌘K
             </div>
           </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger className="w-12 transition-colors duration-200 lg:flex hidden justify-center items-center dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-white rounded-sm border-2 dark:border-zinc-800 border-zinc-200 hover:bg-zinc-200">
-              <IoMdAdd />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent
-              className={
-                theme !== "light" ? "!bg-black !text-white border-zinc-800" : ""
-              }
+          <ResponsiveDialog
+            title={`${creationTab === "collection" ? "Create new Collection" : "Add new Link"}`}
+            trigger={<button
+              className="w-12 transition-colors duration-200 lg:flex hidden justify-center items-center dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-white rounded-sm border-2 dark:border-zinc-800 border-zinc-200 hover:bg-zinc-200"
+              onClick={() => {
+                setPrevPath(location.pathname);
+              }}
             >
-              <DropdownMenuItem
-                onClick={() => {
-                  setPrevPath(location.pathname);
-                  toggleModal(true);
-                  setModalContent(
-                    <CreateListForm toggleModal={toggleModal} theme={theme} />
-                  );
-                }}
-              >
-                <IoMdAdd />
-                <span className="pl-2">Collection</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => {
-                  toggleModal(true);
-                  setPrevPath(location.pathname);
-                  setModalContent(
-                    <CreateDocForm toggleModal={toggleModal} theme={theme} />
-                  );
-                }}
-              >
-                <IoMdAdd /> <span className="pl-2">Link</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+              <IoMdAdd />
+            </button>} description={`${creationTab === "collection" ? "Create a new collection" : "Add a new link"} by filling all the required fields`} cancelText="Cancel">
+            <Tabs onValueChange={(value) => setCreationTab(value)} value={creationTab} className="w-[400px]">
+              <TabsList className="w-full mb-4">
+                <TabsTrigger className="w-full" value="collection">Collection</TabsTrigger>
+                <TabsTrigger className="w-full" value="link">Link</TabsTrigger>
+              </TabsList>
+              <TabsContent value="collection">
+                <CreateCollectionForm theme={theme} />
+              </TabsContent>
+              <TabsContent value="link">
+                <CreateLinkForm theme={theme} />
+              </TabsContent>
+            </Tabs>
+          </ResponsiveDialog>
           <div
             onClick={() => setOpen(true)}
             className="md:w-12 cursor-pointer transition-colors duration-200 w-10 text-xl md:text-base md:hidden flex justify-center items-center md:dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-zinc-300 rounded-sm md:border-2 md:dark:border-zinc-800 md:border-zinc-200 hover:bg-zinc-200"

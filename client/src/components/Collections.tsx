@@ -64,7 +64,7 @@ const Collections = ({ className, extraElementClassNames }: CollectionsProps) =>
         }
       }
     })();
-  }, [setCollections]);
+  }, [collections.length, navigate, profile._id, setCollections, setInbox]);
 
   if (loading) {
     return (
@@ -79,7 +79,7 @@ const Collections = ({ className, extraElementClassNames }: CollectionsProps) =>
   if (collections.length == 0) {
     return (
       <div className={`dark:text-zinc-200 select-none text-zinc-900 h-[calc(100vh-4.5rem)] lg:h-[calc(100vh-5rem)] w-full flex justify-center items-center ${className}`}>
-        No Collections found. Please create a new one.
+        <p className="text-center pt-24 md:pt-4 lg:pt-0 md:col-span-2 2xl:col-span-3">No Collections found. Please create a new one.</p>
       </div>
     );
   }

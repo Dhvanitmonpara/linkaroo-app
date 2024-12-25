@@ -10,13 +10,14 @@ import { IoMdAdd } from "react-icons/io";
 import Tag from "./Tag";
 import { removeUsernameTag } from "@/utils/toggleUsernameInTag";
 import useMethodStore from "@/store/MethodStore";
-import { CreateDocForm } from "./Forms";
+import { CreateLinkForm } from "./Forms";
 import useProfileStore from "@/store/profileStore";
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import ResponsiveDialog from "./ResponsiveDialog";
 
 type CollectionCardProps = {
   id: string;
@@ -41,31 +42,16 @@ const CollectionGridCard = ({
   theme,
   font,
   createdBy,
-  toggleModal,
 }: CollectionCardProps) => {
   const navigate = useNavigate();
 
   const collaboratorAvatars: string[] = [];
-  const { setModalContent, setCurrentCardColor, setPrevPath } = useMethodStore();
+  const { setCurrentCardColor, setPrevPath } = useMethodStore();
   const { profile } = useProfileStore();
 
   collaborators?.forEach((collaborator) => {
     collaboratorAvatars.push(collaborator.avatarImage);
   });
-
-  const openModal = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
-    toggleModal(true);
-    e.stopPropagation();
-    setPrevPath(location.pathname);
-    navigate(`/list?listid=${title}`, { replace: true });
-    setModalContent(
-      <CreateDocForm
-        theme={profile.theme}
-        toggleModal={toggleModal}
-        listTitle={title}
-      />
-    );
-  };
 
   const tags: string[] = [];
 
@@ -113,14 +99,21 @@ const CollectionGridCard = ({
               </div>
             </HoverCardContent>
           </HoverCard>
-          <span
+          <ResponsiveDialog title="Add link" description="Add a new link to current collection" trigger={<span
             onClick={(e) => {
-              openModal(e);
+              e.stopPropagation();
+              setPrevPath(location.pathname);
+              navigate(`/list?listid=${title}`, { replace: true });
             }}
             className={`group-hover:opacity-100 text-xl transition-all ease-in-out duration-300 absolute right-3 opacity-0 active:scale-95 ${isBlackMode ? "hover:bg-[#b2b2b220]" : "hover:bg-[#00000015]"} cursor-pointer p-3 rounded-full`}
           >
             <IoMdAdd />
-          </span>
+          </span>}>
+            <CreateLinkForm
+              theme={profile.theme}
+              collectionTitle={title}
+            />
+          </ResponsiveDialog>
           <h1 className={`text-2xl py-1 font-bold hover:underline ${font}`}>
             {title}
           </h1>

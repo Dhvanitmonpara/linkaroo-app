@@ -23,7 +23,7 @@ import { fetchedTagType } from "@/lib/types";
 import useProfileStore from "@/store/profileStore";
 import { removeUsernameTag } from "@/utils/toggleUsernameInTag";
 import { useNavigate, useParams } from "react-router-dom";
-import { CreateDocForm, EditListForm } from "./Forms";
+import { CreateLinkForm, EditListForm } from "./Forms";
 import { Input } from "./ui/input";
 import { handleAxiosError } from "@/utils/handlerAxiosError";
 import { AddCollaborator } from "./ActionButtons";
@@ -44,7 +44,7 @@ type ListActionButtonsProps = {
   listTitle: string | undefined;
 };
 
-const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
+const CollectionActionButtons = ({ listTitle }: ListActionButtonsProps) => {
   const { toggleModal, setPrevPath } = useMethodStore();
   const { profile, setTags } = useProfileStore();
   const { removeCollectionsItem, updateCollectionsTags, toggleIsPublic } = useCollectionsStore();
@@ -100,7 +100,7 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
         }
       }
     })();
-  }, [setTags, listId]);
+  }, [setTags, listId, navigate]);
 
   const HandleAddNewTag: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
@@ -225,7 +225,7 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
       });
 
       const deleteDBResponse: AxiosResponse = await axios.delete(
-        `${import.meta.env.VITE_SERVER_API_URL}/lists/o/${listId}`,
+        `${import.meta.env.VITE_SERVER_API_URL}/collections/o/${listId}`,
         { withCredentials: true }
       );
 
@@ -307,10 +307,9 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
     {
       element: (
         <ResponsiveDialog title="Add New Link" trigger={<div className="flex justify-center items-center !text-xl"> <FaPlus /> </div>} description="Add a new link to your collection" cancelText="Cancel">
-          <CreateDocForm
+          <CreateLinkForm
             theme={theme}
-            toggleModal={toggleModal}
-            listTitle={listTitle}
+            collectionTitle={listTitle}
           />
         </ResponsiveDialog>
       ),
@@ -543,4 +542,4 @@ const ListActionButtons = ({ listTitle }: ListActionButtonsProps) => {
   );
 };
 
-export default ListActionButtons;
+export default CollectionActionButtons;

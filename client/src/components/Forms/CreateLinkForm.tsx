@@ -21,23 +21,21 @@ import { handleAxiosError } from "@/utils/handlerAxiosError";
 import useLinkStore from "@/store/linkStore";
 import useCollectionsStore from "@/store/collectionStore";
 
-type CreateDocFormProps = {
+type CreateLinkFormProps = {
   theme: themeType | undefined;
-  toggleModal: (isOpen: boolean) => void;
-  listTitle?: string;
+  collectionTitle?: string;
 };
 
-type HandleDocCreationType = {
+type HandleLinkCreationType = {
   title: string;
   description: string;
   link: string;
-  list: string;
+  collection: string;
 };
 
-const CreateDocForm: React.FC<CreateDocFormProps> = ({
+const CreateLinkForm: React.FC<CreateLinkFormProps> = ({
   theme,
-  toggleModal,
-  listTitle,
+  collectionTitle,
 }) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -45,21 +43,21 @@ const CreateDocForm: React.FC<CreateDocFormProps> = ({
   const { collections } = useCollectionsStore();
   const { addLinkItem, links, addCachedLinkItem } = useLinkStore();
 
-  const { control, handleSubmit, register } = useForm<HandleDocCreationType>({
+  const { control, handleSubmit, register } = useForm<HandleLinkCreationType>({
     defaultValues: {
-      list: listTitle
-        ? collections.find((collection) => collection.title === listTitle)?._id
+      collection: collectionTitle
+        ? collections.find((collection) => collection.title === collectionTitle)?._id
         : "",
     },
   });
 
-  const handleDocCreation = async (data: HandleDocCreationType) => {
+  const handleLinkCreation = async (data: HandleLinkCreationType) => {
     try {
       setLoading(true);
 
-      const parentList = collections.find((list) => list._id === data.list);
+      const parentList = collections.find((list) => list._id === data.collection);
 
-      if (!data.list || !parentList) {
+      if (!data.collection || !parentList) {
         toast.error("Invalid list");
         return;
       }
@@ -70,28 +68,27 @@ const CreateDocForm: React.FC<CreateDocFormProps> = ({
         link: data.link,
       };
 
-      const doc = await axios.post(
-        `${import.meta.env.VITE_SERVER_API_URL}/cards/${data.list}`,
+      const link = await axios.post(
+        `${import.meta.env.VITE_SERVER_API_URL}/cards/${data.collection}`,
         newData,
         { withCredentials: true }
       );
 
-      if (!doc.data.data) {
-        toast.error("Failed to create doc");
+      if (!link.data.data) {
+        toast.error("Failed to add link");
       }
 
-      if (data.list == links[0].listId) {
-        addLinkItem(doc.data.data);
+      if (data.collection == links[0].collectionId) {
+        addLinkItem(link.data.data);
       }
 
-      addCachedLinkItem(data.list, doc.data.data);
+      addCachedLinkItem(data.collection, link.data.data);
 
     } catch (error) {
       handleAxiosError(error as AxiosError, navigate);
     } finally {
       setLoading(false);
-      toggleModal(false);
-      navigate(`/lists/${data.list}`);
+      navigate(`/collections/${data.collection}`);
     }
   };
 
@@ -99,7 +96,7 @@ const CreateDocForm: React.FC<CreateDocFormProps> = ({
     <div className="dark:text-white flex flex-col sm:w-96 justify-center items-center space-y-3">
       <form
         className="h-4/5 flex flex-col space-y-4 sm:w-96 w-72 justify-center items-center"
-        onSubmit={handleSubmit(handleDocCreation)}
+        onSubmit={handleSubmit(handleLinkCreation)}
       >
         <Input
           id="title"
@@ -123,7 +120,7 @@ const CreateDocForm: React.FC<CreateDocFormProps> = ({
           })}
         />
         <Controller
-          name="list"
+          name="collection"
           control={control}
           rules={{ required: "Please select a list" }}
           render={({ field: { onChange, value } }) => (
@@ -169,4 +166,4 @@ const CreateDocForm: React.FC<CreateDocFormProps> = ({
   );
 };
 
-export default CreateDocForm;
+export default CreateLinkForm;

@@ -11,7 +11,7 @@ import Links from "./Links";
 import Loading from "./Loading";
 import ResponsiveDialog from "./ResponsiveDialog";
 import CommandMenu from "./CommandMenu";
-import ListActionButtons from "./ListActionButtons";
+import CollectionActionButtons from "./CollectionActionButtons";
 import NotificationCard from "./NotificationCard";
 import Notifications from "./Notifications";
 
@@ -29,7 +29,7 @@ export {
   Loading,
   ResponsiveDialog,
   CommandMenu,
-  ListActionButtons,
+  CollectionActionButtons,
   NotificationCard,
   Notifications,
 };

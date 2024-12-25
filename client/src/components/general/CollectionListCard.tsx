@@ -10,7 +10,7 @@ import { IoMdAdd } from "react-icons/io";
 import Tag from "@/components/Tag";
 import { removeUsernameTag } from "@/utils/toggleUsernameInTag";
 import useMethodStore from "@/store/MethodStore";
-import { CreateDocForm } from "@/components/Forms";
+import { CreateLinkForm } from "@/components/Forms";
 import useProfileStore from "@/store/profileStore";
 
 type CollectionCardProps = {
@@ -54,10 +54,9 @@ const CollectionListCard = ({
     setPrevPath(location.pathname);
     navigate(`/list?listid=${title}`, { replace: true });
     setModalContent(
-      <CreateDocForm
+      <CreateLinkForm
         theme={profile.theme}
-        toggleModal={toggleModal}
-        listTitle={title}
+        collectionTitle={title}
       />
     );
   };

@@ -6,7 +6,7 @@ import "./HorizontalTabs.css";
 import { useLocation, NavLink, useNavigate } from "react-router-dom";
 import useProfileStore from "@/store/profileStore";
 import useMethodStore from "@/store/MethodStore";
-import { CreateDocForm, CreateListForm, SettingsForm } from "../Forms";
+import { CreateLinkForm, CreateCollectionForm, SettingsForm } from "../Forms";
 import DrawerMenu from "../DrawerMenu";
 import { Button } from "../ui/button";
 import { DrawerClose } from "../ui/drawer";
@@ -88,7 +88,7 @@ export default function HorizontalTabs() {
               className="w-full flex justify-normal bg-zinc-900 hover:bg-zinc-800 text-zinc-200"
               onClick={() => {
                 setModalContent(
-                  <CreateListForm theme={theme} toggleModal={toggleModal} />
+                  <CreateCollectionForm theme={theme} />
                 );
                 toggleModal(true);
               }}
@@ -102,7 +102,7 @@ export default function HorizontalTabs() {
               className="w-full flex justify-normal bg-zinc-900 hover:bg-zinc-800 text-zinc-200"
               onClick={() => {
                 setModalContent(
-                  <CreateDocForm theme={theme} toggleModal={toggleModal} />
+                  <CreateLinkForm theme={theme} />
                 );
                 toggleModal(true);
               }}

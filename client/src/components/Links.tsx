@@ -1,4 +1,4 @@
-import { LinkCard, ListActionButtons, Tag } from "@/components";
+import { LinkCard, CollectionActionButtons, Tag } from "@/components";
 import useMethodStore from "@/store/MethodStore";
 import useProfileStore from "@/store/profileStore";
 import axios, { AxiosError, AxiosResponse } from "axios";
@@ -10,7 +10,7 @@ import { BiSolidPencil } from "react-icons/bi";
 import { handleAxiosError } from "@/utils/handlerAxiosError";
 import convertMongoDBDate from "@/utils/convertMongoDBDate";
 import { Button } from "./ui/button";
-import { CreateDocForm, CreateListForm } from "./Forms";
+import { CreateCollectionForm, CreateLinkForm } from "./Forms";
 import { removeUsernameTag } from "@/utils/toggleUsernameInTag";
 import {
   DropdownMenu,
@@ -94,7 +94,7 @@ const Links = () => {
         }
       }
     })();
-  }, [collections, currentCardColor, location, setLinks, setCurrentCollectionItem]);
+  }, [collections, currentCardColor, location, setLinks, setCurrentCollectionItem, cachedLinks, addCachedLinkCollection, navigate]);
 
   const tags: string[] = [];
 
@@ -154,7 +154,7 @@ const Links = () => {
                 setPrevPath(location);
                 toggleModal(true);
                 setModalContent(
-                  <CreateListForm toggleModal={toggleModal} theme={theme} />
+                  <CreateCollectionForm theme={theme} />
                 );
               }}
               className={`${theme !== "light"
@@ -191,7 +191,7 @@ const Links = () => {
                 <h1 className="text-2xl font-semibold">
                   {currentCollectionItem?.title}
                 </h1>
-                <ListActionButtons listTitle={currentCollectionItem?.title} />
+                <CollectionActionButtons listTitle={currentCollectionItem?.title} />
               </div>
               <div className="text-xs space-x-2">
                 <span>@{currentCollectionItem?.createdBy?.username}</span>
@@ -218,10 +218,9 @@ const Links = () => {
               setPrevPath(location);
               toggleModal(true);
               setModalContent(
-                <CreateDocForm
+                <CreateLinkForm
                   theme={theme}
-                  toggleModal={toggleModal}
-                  listTitle={currentCollectionItem?.title}
+                  collectionTitle={currentCollectionItem?.title}
                 />
               );
             }}
@@ -313,7 +312,7 @@ const Links = () => {
               <h1 className="text-2xl font-semibold">
                 {currentCollectionItem?.title}
               </h1>
-              <ListActionButtons listTitle={currentCollectionItem?.title} />
+              <CollectionActionButtons listTitle={currentCollectionItem?.title} />
             </div>
             <div className="text-xs text-zinc-400/90 space-x-2">
               <span>@{currentCollectionItem?.createdBy?.username}</span>

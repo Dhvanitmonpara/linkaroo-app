@@ -52,7 +52,6 @@ const IconPicker: React.FC<IconPickerProps> = ({ activeIcon, setActiveIcon, defa
   const checkIconAvailability = () => {
     const Icon = iconMap[activeIcon as keyof typeof iconMap];
     if (!Icon) {
-      console.error(`Icon "${activeIcon}" does not exist in iconMap.`);
       return <BsFillCollectionFill />; // Fallback
     }
     return <Icon />;
@@ -62,13 +61,13 @@ const IconPicker: React.FC<IconPickerProps> = ({ activeIcon, setActiveIcon, defa
     const IconComponent = iconMap[iconName as keyof typeof iconMap];
     return (
       <button
-        className={`icon-item rounded-full text-center cursor-pointer p-2 transition duration-150 ease-in-out ${isActive ? 'bg-zinc-700/80' : 'hover:bg-zinc-800/80'}`}
+        className={`icon-item rounded-full text-center cursor-pointer p-2 transition duration-150 ease-in-out ${isActive ? 'bg-zinc-700/80' : 'hover:bg-zinc-800/80 text-zinc-400 hover:!text-white'}`}
         onClick={(e) => {
           e.preventDefault();
           onClick();
         }}
       >
-        <div className={`icon flex items-center py-1.5 justify-center text-xl ${isActive ? '!text-white' : 'text-zinc-400 hover:!text-white'}`}>
+        <div className={`icon flex items-center py-1.5 justify-center text-xl ${isActive && '!text-white'}`}>
           <IconComponent />
         </div>
       </button>
@@ -78,7 +77,7 @@ const IconPicker: React.FC<IconPickerProps> = ({ activeIcon, setActiveIcon, defa
   return (
     <Popover>
       <TooltipContainer tooltip="Change icon">
-        <PopoverTrigger className="text-5xl transition-colors duration-200 hover:text-white">
+        <PopoverTrigger className="text-5xl transition-colors duration-200 hover:text-white/90">
           {checkIconAvailability()}
         </PopoverTrigger>
       </TooltipContainer>

@@ -54,7 +54,7 @@ type fetchedLinkType = {
   description: string;
   link: string;
   userId: string;
-  listId: string;
+  collectionId: string;
   createdAt: string;
   isChecked: boolean;
   updatedAt: string;
