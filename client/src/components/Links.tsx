@@ -342,6 +342,8 @@ const Links = () => {
           }`}
       >
         <ResponsiveDialog
+          prebuildForm={false}
+          className="sm:max-w-2xl p-0 bg-transparent border-none"
           title="Add New Link"
           trigger={
             <div className="flex justify-start items-center text-zinc-300 text-start">

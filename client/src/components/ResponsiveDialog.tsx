@@ -26,14 +26,20 @@ function ResponsiveDialog({
   trigger,
   title,
   description,
-  isOpen=false,
+  isOpen = false,
+  className = "",
+  showCloseButton = true,
+  prebuildForm = true,
   cancelText = "Cancel"
 }: {
   children: React.ReactNode;
   isOpen?: boolean;
   trigger: React.ReactNode;
   title: string;
-  description: string,
+  description: string;
+  className?: string;
+  showCloseButton?: boolean;
+  prebuildForm?: boolean;
   cancelText?: string
 }) {
   const [open, setOpen] = React.useState(isOpen)
@@ -45,13 +51,13 @@ function ResponsiveDialog({
         <DialogTrigger asChild>
           {trigger}
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[27.2rem]" showCloseButton>
-          <DialogHeader>
+        <DialogContent className={`sm:max-w-[27.2rem] ${className}`} showCloseButton={showCloseButton && prebuildForm}>
+          {prebuildForm && <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
             <DialogDescription>
               {description}
             </DialogDescription>
-          </DialogHeader>
+          </DialogHeader>}
           {children}
         </DialogContent>
       </Dialog>
@@ -63,13 +69,13 @@ function ResponsiveDialog({
       <DrawerTrigger asChild>
         {trigger}
       </DrawerTrigger>
-      <DrawerContent>
-        <DrawerHeader className="text-left">
+      <DrawerContent className={className}>
+        {prebuildForm && <DrawerHeader className="text-left">
           <DrawerTitle>{title}</DrawerTitle>
           <DrawerDescription>
             {description}
           </DrawerDescription>
-        </DrawerHeader>
+        </DrawerHeader>}
         {children}
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
