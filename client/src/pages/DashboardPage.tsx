@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { DocScreen, Collections, Links } from "../components";
+import { LinkScreen, Collections, Links } from "../components";
 
 function DashboardPage() {
   const location = useLocation().pathname;
@@ -28,7 +28,7 @@ function DashboardPage() {
         >
           {location.includes("/links") ? (
             <div className="h-full w-full border-2 dark:border-zinc-600 rounded-md overflow-hidden">
-              <DocScreen/>
+              <LinkScreen/>
             </div>
           ) : (
             ""
