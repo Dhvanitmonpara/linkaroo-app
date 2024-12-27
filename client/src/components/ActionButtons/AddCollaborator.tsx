@@ -96,12 +96,12 @@ const AddCollaborator: React.FC = () => {
   };
 
   const getSharableLink = () => {
-    if (!window.location.href.includes("lists")) {
+    if (!window.location.href.includes("/collections")) {
       toast.error("Please select a list");
       return;
     }
     let link = window.location.href;
-    if (link.includes("docs")) link = link.split("doc")[0];
+    if (link.includes("/link")) link = link.split("link")[0];
     navigator.clipboard.writeText(link);
     setOpen(false);
     toast(

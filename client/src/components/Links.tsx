@@ -34,7 +34,7 @@ const Links = () => {
   const { links, cachedLinks, setLinks, addCachedLinkCollection, setCurrentCollectionItem, currentCollectionItem } = useLinkStore()
   const { collections } = useCollectionsStore()
   const { profile } = useProfileStore();
-  const { theme, font } = profile;
+  const { font } = profile;
   const { currentCardColor, setPrevPath, setModalContent } = useMethodStore();
   const navigate = useNavigate();
 
@@ -144,10 +144,7 @@ const Links = () => {
           <div className="flex flex-col sm:flex-row gap-4">
             <Button
               onClick={() => navigate("/collections")}
-              className={`${theme !== "light"
-                ? "bg-zinc-900 hover:bg-zinc-800 text-zinc-200"
-                : "bg-zinc-300 hover:bg-zinc-400 px-6 py-2"
-                } `}
+              className={`bg-zinc-300 hover:bg-zinc-400 px-6 py-2 dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-zinc-200`}
             >
               View Your Collections
             </Button>
@@ -156,13 +153,10 @@ const Links = () => {
                 setPrevPath(location);
                 toggleModal(true);
                 setModalContent(
-                  <CreateCollectionForm theme={theme} />
+                  <CreateCollectionForm />
                 );
               }}
-              className={`${theme !== "light"
-                ? "bg-zinc-900 hover:bg-zinc-800 text-zinc-200"
-                : "bg-zinc-300 hover:bg-zinc-400 px-6 py-2"
-                } `}
+              className={`bg-zinc-300 hover:bg-zinc-400 px-6 py-2 dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-zinc-200`}
             >
               Create New List
             </Button>
@@ -210,8 +204,7 @@ const Links = () => {
         </div>
         <div className="flex justify-center flex-col gap-4 items-center w-full h-2/6">
           <span
-            className={`${theme !== "light" ? "text-zinc-200" : "text-zinc-800"
-              } `}
+            className={`dark:text-zinc-200 text-zinc-800`}
           >
             You don't have any documents on this list.
           </span>
@@ -219,15 +212,11 @@ const Links = () => {
             onClick={() => {
               setPrevPath(location);
             }}
-            className={`${theme !== "light"
-              ? "bg-zinc-900 hover:bg-zinc-800 text-zinc-200"
-              : "bg-zinc-300 hover:bg-zinc-400"
-              } px-6 py-2 cursor-pointer rounded-md`}
+            className={`dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-zinc-200 bg-zinc-300 hover:bg-zinc-400 px-6 py-2 cursor-pointer rounded-md`}
           >
             Add a Link
           </div>}>
             <CreateLinkForm
-              theme={theme}
               collectionTitle={currentCollectionItem?.title}
             />
           </ResponsiveDialog>
@@ -258,10 +247,7 @@ const Links = () => {
                   {dropdownOpen ? <BsXLg /> : (saveChangesLoading ? <Loader2 className="animate-spin" /> : <BiSolidPencil />)}
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
-                  className={`w-96 p-2 ${theme !== "light"
-                    ? "!bg-black !text-white border-zinc-800"
-                    : ""
-                    }`}
+                  className={`w-96 p-2 dark:bg-zinc-900 dark:text-white dark:border-zinc-800`}
                   onCloseAutoFocus={(event) => {
                     event.preventDefault()
                   }}
@@ -357,7 +343,6 @@ const Links = () => {
           description="Add a new link to your collection"
         >
           <CreateLinkBar
-            theme={theme}
             collectionTitle={currentCollectionItem?.title}
           />
         </ResponsiveDialog>

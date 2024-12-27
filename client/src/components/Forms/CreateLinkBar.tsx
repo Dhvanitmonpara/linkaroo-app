@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Input } from "../ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
@@ -12,7 +12,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useForm, Controller } from "react-hook-form";
-import { themeType } from "@/lib/types";
 import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -40,7 +39,6 @@ const dummies = [
 ]
 
 type CreateLinkBarProps = {
-  theme: themeType | undefined;
   collectionTitle?: string;
 };
 
@@ -52,7 +50,6 @@ type HandleLinkCreationType = {
 };
 
 const CreateLinkBar: React.FC<CreateLinkBarProps> = ({
-  theme,
   collectionTitle,
 }) => {
   const [loading, setLoading] = useState(false);
@@ -61,6 +58,7 @@ const CreateLinkBar: React.FC<CreateLinkBarProps> = ({
   const [isDescriptionActive, setIsDescriptionActive] = useState(false)
 
   const navigate = useNavigate();
+  const formRef = useRef<HTMLFormElement>(null);
 
   const { collections } = useCollectionsStore();
   const { addLinkItem, links, addCachedLinkItem } = useLinkStore();
@@ -76,7 +74,7 @@ const CreateLinkBar: React.FC<CreateLinkBarProps> = ({
   const handleLinkCreation = async (data: HandleLinkCreationType) => {
     try {
       setLoading(true);
-
+      console.log("runnnnn")
       const parentList = collections.find((list) => list._id === data.collection);
 
       if (!data.collection || !parentList) {
@@ -122,16 +120,31 @@ const CreateLinkBar: React.FC<CreateLinkBarProps> = ({
           const newTabIndex = (prevTabIndex + 1) % dummies.length;
           return newTabIndex;
         });
+      } else if (e.key === "Enter") {
+        // TODO: fix the enter to submit form issue
+        if (tabIndex !== -1) {
+          e.preventDefault();
+          setIdentifier(dummies[tabIndex].title); // Set identifier
+        }
+        
+        // Submit the form if `Enter` is pressed outside the list
+        const activeElement = document.activeElement as HTMLElement;
+        if (activeElement?.tagName === "INPUT" || activeElement?.tagName === "TEXTAREA") {
+          return; // Allow default input behavior
+        }
+
+        formRef.current?.dispatchEvent(
+          new Event("submit", { cancelable: true, bubbles: true }) // Simulate form submission
+        );
       }
     };
 
     document.addEventListener("keydown", handleKeyDown);
 
-    // Cleanup the event listener on component unmount
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, []);
+  }, [tabIndex]);
 
   useEffect(() => {
     if (tabIndex !== -1) {
@@ -142,6 +155,7 @@ const CreateLinkBar: React.FC<CreateLinkBarProps> = ({
   return (
     <div className="dark:text-white flex flex-col w-full justify-center items-center">
       <form
+        ref={formRef}
         className="flex flex-col w-full justify-center items-center bg-zinc-800/70 rounded-3xl"
         onSubmit={handleSubmit(handleLinkCreation)}
       >
@@ -160,13 +174,17 @@ const CreateLinkBar: React.FC<CreateLinkBarProps> = ({
             {loading ? (
               <Button
                 disabled
+                id="submit-form"
                 className="dark:bg-zinc-700 h-8 rounded-full dark:hover:bg-zinc-600 hover:bg-zinc-300/70 text-zinc-900 bg-zinc-200 w-full dark:text-white cursor-wait"
               >
                 <Loader2 className="mr-2 h-4 w-4 animate-spin dark:text-white" />
                 Please wait
               </Button>
             ) : (
-              <Button className={`dark:bg-zinc-700 h-8 rounded-full bg-zinc-200 font-semibold text-zinc-950 dark:text-white hover:bg-zinc-300 dark:hover:bg-zinc-600 w-full transition-all duration-300 ${identifier ? "scale-100" : "scale-0"}`}>
+              <Button
+                type="submit"
+                id="submit-form"
+                className={`dark:bg-zinc-700 h-8 rounded-full bg-zinc-200 font-semibold text-zinc-950 dark:text-white hover:bg-zinc-300 dark:hover:bg-zinc-600 w-full transition-all duration-300 ${identifier ? "scale-100" : "scale-0"}`}>
                 Add
               </Button>
             )}
@@ -183,11 +201,7 @@ const CreateLinkBar: React.FC<CreateLinkBarProps> = ({
                   <SelectValue placeholder="Select list" />
                 </SelectTrigger>
                 <SelectContent
-                  className={
-                    theme !== "light"
-                      ? "!bg-zinc-900 !text-white border-zinc-800"
-                      : ""
-                  }
+                  className="dark:bg-zinc-900 dark:text-white dark:border-zinc-800"
                 >
                   <SelectGroup>
                     {collections.map((list) => (

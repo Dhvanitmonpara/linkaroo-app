@@ -301,7 +301,7 @@ const CollectionActionButtons = () => {
         <ResponsiveDialog title="Edit collection" trigger={<div className="flex justify-center items-center !text-xl">
           <BiSolidPencil />
         </div>} description="Edit your collection details" cancelText="Cancel">
-          <EditListForm/>
+          <EditListForm />
         </ResponsiveDialog>
       ),
       action: () => {

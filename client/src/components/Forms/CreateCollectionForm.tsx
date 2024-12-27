@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Input } from "../ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useForm, Controller } from "react-hook-form";
-import { colorOptions, themeType } from "@/lib/types";
+import { colorOptions } from "@/lib/types";
 import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import { Textarea } from "../ui/textarea";
@@ -22,19 +22,13 @@ import { handleAxiosError } from "@/utils/handlerAxiosError";
 import useDocStore from "@/store/linkStore";
 import useCollectionsStore from "@/store/collectionStore";
 
-type CreateCollectionFormProps = {
-  theme: themeType | undefined;
-};
-
 type HandleCollectionCreationType = {
   title: string;
   description: string;
   theme: colorOptions;
 };
 
-const CreateCollectionForm: React.FC<CreateCollectionFormProps> = ({
-  theme,
-}) => {
+const CreateCollectionForm = () => {
   const [loading, setLoading] = useState(false);
   const { addCollectionsItem } = useCollectionsStore();
   const navigate = useNavigate()
@@ -124,9 +118,7 @@ const CreateCollectionForm: React.FC<CreateCollectionFormProps> = ({
               </SelectTrigger>
               <SelectContent
                 className={cn(
-                  theme !== "light"
-                    ? "!bg-zinc-900 !text-white border-zinc-800"
-                    : "",
+                  "dark:bg-zinc-900 dark:text-white dark:border-zinc-800",
                   "[&_[role=option]]:p-0"
                 )}
               >

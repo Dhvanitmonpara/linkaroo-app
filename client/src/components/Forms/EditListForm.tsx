@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Input } from "../ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react"; // Import Check icon
@@ -111,52 +111,13 @@ const EditListForm = () => {
             required: "Description is required",
           })}
         />
-        <div className="flex justify-center items-center space-x-2">
-          {/* <Controller
-            name="theme"
-            control={control}
-            render={({ field: { onChange, value } }) => (
-              <Select value={value} onValueChange={onChange}>
-                <SelectTrigger className="text-white bg-zinc-800 border-zinc-800 max-w-96">
-                  <SelectValue placeholder="Change icon" />
-                </SelectTrigger>
-                <SelectContent
-                  className={cn(
-                    theme !== "light"
-                      ? "!bg-zinc-900 !text-white border-zinc-800"
-                      : "",
-                    "[&_[role=option]]:p-0"
-                  )}
-                >
-                  <SelectGroup>
-                    <div className="grid grid-cols-4 gap-1 p-2">
-                      {themeOptionsArray.map((themeOption) => (
-                        <SelectItem
-                          key={themeOption.value}
-                          value={themeOption.value}
-                          className={cn(
-                            themeOption.value,
-                            "text-transparent p-4 h-16 text-center flex justify-center items-center rounded border border-none hover:text-black dark:hover:text-black active:text-black focus:outline-none",
-                            "data-[state=checked]:font-semibold data-[state=checked]:!text-zinc-900",
-                            "[&>span>span]:hidden",
-                            `focus:${themeOption.value} focus:brightness-110 transition-colors duration-75`
-                          )}
-                        >
-                          {themeOption.label}
-                        </SelectItem>
-                      ))}
-                    </div>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            )}
-          /> */}
+        <div className="flex justify-center items-center w-full space-x-2">
           <Controller
             name="theme"
             control={control}
             render={({ field: { onChange, value } }) => (
               <Select value={value} onValueChange={onChange}>
-                <SelectTrigger className="text-white bg-zinc-800 border-zinc-800 max-w-96">
+                <SelectTrigger className="text-white bg-zinc-800 w-full border-zinc-800 max-w-96">
                   <SelectValue placeholder="Change theme" />
                 </SelectTrigger>
                 <SelectContent

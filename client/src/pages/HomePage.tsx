@@ -79,7 +79,7 @@ const HomePage = () => {
                 </form>
             </div>
             <div className="px-0 w-full sm:px-24 xl:px-56 2xl-px-64 py-8 pt-6 sm:pt-12 md:pt-24">
-                <Collections className="!h-auto md:grid md:grid-cols-2 2xl:!grid-cols-3" extraElementClassNames="hidden" />
+                <Collections defaultView="grid" className="!h-auto md:grid md:grid-cols-2 2xl:!grid-cols-3" extraElementClassNames="hidden" />
             </div>
         </div>
     )

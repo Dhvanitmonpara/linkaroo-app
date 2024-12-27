@@ -12,7 +12,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useForm, Controller } from "react-hook-form";
-import { themeType } from "@/lib/types";
 import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -21,7 +20,6 @@ import useLinkStore from "@/store/linkStore";
 import useCollectionsStore from "@/store/collectionStore";
 
 type CreateLinkFormProps = {
-  theme: themeType | undefined;
   collectionTitle?: string;
 };
 
@@ -33,7 +31,6 @@ type HandleLinkCreationType = {
 };
 
 const CreateLinkForm: React.FC<CreateLinkFormProps> = ({
-  theme,
   collectionTitle,
 }) => {
   const [loading, setLoading] = useState(false);
@@ -129,11 +126,7 @@ const CreateLinkForm: React.FC<CreateLinkFormProps> = ({
                 <SelectValue placeholder="Select list" />
               </SelectTrigger>
               <SelectContent
-                className={
-                  theme !== "light"
-                    ? "!bg-zinc-900 !text-white border-zinc-800"
-                    : ""
-                }
+                className="dark:bg-zinc-900 dark:text-white dark:border-zinc-800"
               >
                 <SelectGroup>
                   {collections.map((list) => (

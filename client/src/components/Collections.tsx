@@ -14,19 +14,21 @@ import CollectionListCard from "./general/CollectionListCard";
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 import { IoGrid } from "react-icons/io5";
 import { FaThList } from "react-icons/fa";
-import { Button } from "./ui/button";
+import ResponsiveDialog from "./ResponsiveDialog";
+import { CreateCollectionForm } from "./Forms";
 
 type CollectionsProps = {
   className?: string;
+  defaultView?: CollectionView
   extraElementClassNames?: string
 }
 type CollectionView = "list" | "grid";
 const tabTriggerClass =
   "bg-zinc-900 text-zinc-300 !h-10 !w-10 data-[state=active]:text-zinc-300 data-[state=active]:bg-zinc-800 h-full";
 
-const Collections = ({ className, extraElementClassNames }: CollectionsProps) => {
+const Collections = ({ className, extraElementClassNames, defaultView = "list" }: CollectionsProps) => {
   const [loading, setLoading] = useState(true);
-  const [collectionView, setCollectionView] = useState<CollectionView>("list");
+  const [collectionView, setCollectionView] = useState<CollectionView>(defaultView);
   const { setCollections, collections, setInbox } = useCollectionsStore();
   const { toggleModal } = useMethodStore();
   const { profile } = useProfileStore();
@@ -88,7 +90,7 @@ const Collections = ({ className, extraElementClassNames }: CollectionsProps) =>
     <>
       <div className={`col-span-2 relative lg:px-0 px-4 space-y-3 overflow-y-scroll no-scrollbar lg:border-r-[1px] !pr-2 lg:border-zinc-700 h-[calc(100vh-4.5rem)] md:h-auto lg:h-[calc(100vh-4.5rem)] md:space-x-0 md:space-y-2 md:p-4 !gap-2 md:justify-start md:items-start 2xl:grid-cols-1 ${className}`}>
         <div className={`h-2 md:hidden ${extraElementClassNames}`}></div>
-        <h2 className="pt-8 pb-3 flex justify-between items-center">
+        {(location.pathname.includes("/dashboard") || location.pathname.includes("/collections")) && <h2 className="pt-8 pb-3 flex justify-between items-center">
           <span className="text-zinc-100 text-2xl">
             Collections
           </span>
@@ -115,11 +117,16 @@ const Collections = ({ className, extraElementClassNames }: CollectionsProps) =>
                 </TabsTrigger>
               </TabsList>
             </Tabs>
-            <Button className="bg-zinc-800 hover:bg-zinc-800/70 text-zinc-100 w-10 h-10 !text-xl !p-0 flex justify-center items-center">
-              <IoMdAdd />
-            </Button>
+            <ResponsiveDialog title="Create a Collection" description="Create a new collection by filling all the fields" trigger={
+              <span className="bg-zinc-800 rounded-md cursor-pointer hover:bg-zinc-800/70 text-zinc-100 w-10 h-10 !text-xl !p-0 flex justify-center items-center">
+                <IoMdAdd />
+              </span>
+            }>
+              <CreateCollectionForm />
+            </ResponsiveDialog>
           </div>
         </h2>
+        }
         {collectionView === "grid" ? collections.map((collections, index) => (
           <CollectionGridCard
             key={index}

@@ -11,7 +11,6 @@ import Tag from "./Tag";
 import { removeUsernameTag } from "@/utils/toggleUsernameInTag";
 import useMethodStore from "@/store/MethodStore";
 import { CreateLinkForm } from "./Forms";
-import useProfileStore from "@/store/profileStore";
 import {
   HoverCard,
   HoverCardContent,
@@ -47,7 +46,6 @@ const CollectionGridCard = ({
 
   const collaboratorAvatars: string[] = [];
   const { setCurrentCardColor, setPrevPath } = useMethodStore();
-  const { profile } = useProfileStore();
 
   collaborators?.forEach((collaborator) => {
     collaboratorAvatars.push(collaborator.avatarImage);
@@ -110,7 +108,6 @@ const CollectionGridCard = ({
             <IoMdAdd />
           </span>}>
             <CreateLinkForm
-              theme={profile.theme}
               collectionTitle={title}
             />
           </ResponsiveDialog>
@@ -133,7 +130,7 @@ const CollectionGridCard = ({
         )}
         {tags.length > 0 &&
           tags.map((tag, index) => (
-            <Tag isBlackEnable={isBlackMode} key={index} text={tag} />
+            <Tag key={index} text={tag} />
           ))}
       </div>
     </div>

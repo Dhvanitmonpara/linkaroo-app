@@ -20,6 +20,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer"
 import { useMediaQuery } from "react-responsive"
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden"
 
 function ResponsiveDialog({
   children,
@@ -52,12 +53,21 @@ function ResponsiveDialog({
           {trigger}
         </DialogTrigger>
         <DialogContent className={`sm:max-w-[27.2rem] ${className}`} showCloseButton={showCloseButton && prebuildForm}>
-          {prebuildForm && <DialogHeader>
+          {prebuildForm ? <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
             <DialogDescription>
               {description}
             </DialogDescription>
-          </DialogHeader>}
+          </DialogHeader> :
+            <VisuallyHidden>
+              <DialogHeader>
+                <DialogTitle>{title}</DialogTitle>
+                <DialogDescription>
+                  {description}
+                </DialogDescription>
+              </DialogHeader>
+            </VisuallyHidden>
+          }
           {children}
         </DialogContent>
       </Dialog>
