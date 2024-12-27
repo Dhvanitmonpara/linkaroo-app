@@ -16,7 +16,6 @@ import { useNavigate } from "react-router-dom";
 const ProfileCard = () => {
   const { setPrevPath } = useMethodStore();
   const { profile } = useProfileStore();
-  const theme = profile.theme;
   const { toggleModal, setModalContent } = useMethodStore();
   const navigate = useNavigate()
 
@@ -53,11 +52,7 @@ const ProfileCard = () => {
         />
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        className={`
-          ${
-            theme != "light" ? "!bg-black !text-white border-zinc-800" : ""
-          } !w-64 mt-1
-        `}
+        className="dark:bg-black dark:text-white dark:border-zinc-800 !w-64 mt-1"
       >
         {/* <DropdownMenuItem className="py-2" onClick={() => {}}> */}
         <div className="flex justify-start items-center px-2 py-4">
@@ -96,7 +91,7 @@ const ProfileCard = () => {
             setPrevPath(location.pathname);
             toggleModal(true);
             setModalContent(
-              <SettingsForm theme={theme} toggleModal={toggleModal} />
+              <SettingsForm toggleModal={toggleModal} />
             );
           }}
         >
