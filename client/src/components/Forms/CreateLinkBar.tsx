@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Input } from "../ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
@@ -20,6 +20,25 @@ import { handleAxiosError } from "@/utils/handlerAxiosError";
 import useLinkStore from "@/store/linkStore";
 import useCollectionsStore from "@/store/collectionStore";
 
+const dummies = [
+  {
+    title: "Google",
+    link: "https://www.google.com",
+  },
+  {
+    title: "Amazon",
+    link: "https://www.amazon.com",
+  },
+  {
+    title: "Youtube",
+    link: "https://www.youtube.com",
+  },
+  {
+    title: "wiki",
+    link: "https://www.wikipedia.com"
+  }
+]
+
 type CreateLinkBarProps = {
   theme: themeType | undefined;
   collectionTitle?: string;
@@ -38,6 +57,7 @@ const CreateLinkBar: React.FC<CreateLinkBarProps> = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const [identifier, setIdentifier] = useState("")
+  const [tabIndex, setTabIndex] = useState(-1)
   const [isDescriptionActive, setIsDescriptionActive] = useState(false)
 
   const navigate = useNavigate();
@@ -94,8 +114,33 @@ const CreateLinkBar: React.FC<CreateLinkBarProps> = ({
     }
   };
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Tab") {
+        e.preventDefault();
+        setTabIndex((prevTabIndex) => {
+          const newTabIndex = (prevTabIndex + 1) % dummies.length;
+          return newTabIndex;
+        });
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    // Cleanup the event listener on component unmount
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (tabIndex !== -1) {
+      setIdentifier(dummies[tabIndex].title); // Update identifier when tabIndex changes
+    }
+  }, [tabIndex]); // Dependency ensures the effect runs when tabIndex changes  
+
   return (
-    <div className="dark:text-white flex flex-col w-full justify-center items-center space-y-3">
+    <div className="dark:text-white flex flex-col w-full justify-center items-center">
       <form
         className="flex flex-col w-full justify-center items-center bg-zinc-800/70 rounded-3xl"
         onSubmit={handleSubmit(handleLinkCreation)}
@@ -105,10 +150,11 @@ const CreateLinkBar: React.FC<CreateLinkBarProps> = ({
             id="identifier"
             type="text"
             autoFocus
+            autoComplete="off"
             onChange={(e) => setIdentifier(e.target.value)}
             value={identifier}
             placeholder="Enter a title or link"
-            className="rounded-3xl py-4 px-6 text-base"
+            className="rounded-3xl dark:border-zinc-300 focus-visible:!border-transparent py-4 px-6 text-base"
           />
           <div className="absolute top-1 right-1">
             {loading ? (
@@ -171,6 +217,28 @@ const CreateLinkBar: React.FC<CreateLinkBarProps> = ({
           />
         </div>
       </form>
+      <div className="w-full mt-6 space-y-2 rounded-3xl bg-zinc-800/70 p-4">
+        {dummies.length > 0 ? (
+          dummies.map(({ title, link }, index) => (
+            <button
+              key={index}
+              onClick={(e) => {
+                e.preventDefault();
+                setTabIndex(index); // Manually set the tab index on click
+              }}
+              className={`flex flex-col w-full py-2 px-4 rounded-lg space-y-1 ${tabIndex === index ? "bg-zinc-700/70" : "bg-zinc-800/70 hover:bg-zinc-700/70"
+                }`}
+            >
+              <h1 className="dark:text-zinc-300 text-lg font-semibold">{title}</h1>
+              <p className="text-xs text-zinc-300">{link}</p>
+            </button>
+          ))
+        ) : (
+          <div className="flex flex-col py-2 px-4 rounded-lg space-y-1 bg-zinc-800/70">
+            <h1>No search result found</h1>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

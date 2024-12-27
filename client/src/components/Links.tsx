@@ -328,7 +328,6 @@ const Links = () => {
               {tags.length > 0 &&
                 tags.map((tag, index) => (
                   <Tag
-                    isBlackEnable={theme === "black"}
                     key={index}
                     text={tag}
                   />
@@ -347,7 +346,7 @@ const Links = () => {
           title="Add New Link"
           trigger={
             <div className="flex justify-start items-center text-zinc-300 text-start">
-              <p className="py-3 px-6 flex justify-normal items-center space-x-2 border-1 border-zinc-600 hover:bg-zinc-800 cursor-pointer rounded-md w-full">
+              <p className="py-3 px-6 flex justify-normal items-center space-x-2 border-1 border-zinc-800 bg-zinc-900 hover:bg-zinc-800/80 cursor-pointer rounded-md w-full">
                 <span>
                   <FaPlus />
                 </span>
@@ -367,7 +366,7 @@ const Links = () => {
             key={link._id}
             id={link._id}
             title={link.title}
-            color={theme == "black" ? "bg-black" : currentCardColor}
+            color={currentCardColor}
             link={link.link}
             isChecked={link.isChecked}
             currentCollectionId={currentCollectionItem?._id}

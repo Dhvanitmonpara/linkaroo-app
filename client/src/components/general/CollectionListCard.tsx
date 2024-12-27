@@ -18,7 +18,6 @@ type CollectionCardProps = {
   tagname: TagType[];
   description: string;
   title: string;
-  isBlackMode?: boolean;
   createdBy: Collaborator;
   theme: colorOptions;
   font: fontOptions;
@@ -31,7 +30,6 @@ const CollectionListCard = ({
   tagname,
   description,
   title,
-  isBlackMode = false,
   collaborators,
   theme,
   font,
@@ -78,11 +76,7 @@ const CollectionListCard = ({
   return (
     <div
       onClick={openList}
-      className={`group relative select-none overflow-hidden transition-all h-32 w-full p-4 rounded-md flex space-x-3 ${isBlackMode ? "" : theme
-        } ${isBlackMode
-          ? "!text-zinc-300 border-zinc-800 !bg-zinc-900 border-[1px]"
-          : "text-black"
-        }`}
+      className={`group relative select-none overflow-hidden transition-all h-32 w-full p-4 rounded-md flex space-x-3 dark:text-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:bg-zinc-800/80 border-1 text-black`}
     >
       <div className={`absolute top-0 left-0 ${!location.pathname.includes(id) && "opacity-0 group-hover:opacity-100"} ${theme || "bg-zinc-100"} h-full w-1 transition-opacity duration-200`}></div>
       <div className="pt-1">
@@ -100,7 +94,7 @@ const CollectionListCard = ({
               onClick={(e) => {
                 openModal(e);
               }}
-              className={`group-hover:opacity-100 text-xl transition-all ease-in-out duration-300 absolute right-3 opacity-0 active:scale-95 ${isBlackMode ? "hover:bg-[#b2b2b220]" : "hover:bg-[#00000015]"} cursor-pointer p-3 rounded-full`}
+              className={`group-hover:opacity-100 text-xl transition-all ease-in-out duration-300 absolute right-3 opacity-0 active:scale-95 dark:hover:bg-[#b2b2b220] hover:bg-[#00000015] cursor-pointer p-3 rounded-full`}
             >
               <IoMdAdd />
             </span>
@@ -118,7 +112,7 @@ const CollectionListCard = ({
           />
           {tags.length > 0 &&
             tags.map((tag, index) => (
-              <Tag isBlackEnable={isBlackMode} key={index} text={tag} />
+              <Tag key={index} text={tag} />
             ))}
         </div>
       </div>

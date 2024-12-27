@@ -6,12 +6,9 @@ export default {
   daisyui: {
     themes: []
   },
-  darkMode: ["class"],
+  darkMode: "class",
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
+    './src/**/*.{js,ts,jsx,tsx}', // Ensure all component paths are included
   ],
   prefix: "",
   theme: {

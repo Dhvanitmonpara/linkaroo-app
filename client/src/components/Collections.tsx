@@ -30,7 +30,7 @@ const Collections = ({ className, extraElementClassNames }: CollectionsProps) =>
   const { setCollections, collections, setInbox } = useCollectionsStore();
   const { toggleModal } = useMethodStore();
   const { profile } = useProfileStore();
-  const { theme, font } = profile;
+  const { font } = profile;
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -131,7 +131,6 @@ const Collections = ({ className, extraElementClassNames }: CollectionsProps) =>
             createdBy={collections.createdBy}
             theme={collections.theme}
             font={font}
-            isBlackMode={theme == "black" || theme == "dark" ? true : false}
             toggleModal={toggleModal}
           />
         )) : collections.map((collections, index) => (
@@ -145,7 +144,6 @@ const Collections = ({ className, extraElementClassNames }: CollectionsProps) =>
             createdBy={collections.createdBy}
             theme={collections.theme}
             font={font}
-            isBlackMode={theme == "black" || theme == "dark" ? true : false}
             toggleModal={toggleModal}
           />
         ))}

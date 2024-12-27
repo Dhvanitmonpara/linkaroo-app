@@ -56,7 +56,7 @@ const App = () => {
     return () => {
       socket.disconnect();
     };
-  }, [profile._id, notifications,setNotifications]);
+  }, [profile._id, notifications, setNotifications]);
 
   useEffect(() => {
     (async () => {
@@ -101,11 +101,7 @@ const App = () => {
   const theme = profile?.theme;
 
   useEffect(() => {
-    if (theme === "black") {
-      toggleThemeModeAtRootElem("dark");
-    } else {
-      toggleThemeModeAtRootElem(theme);
-    }
+    toggleThemeModeAtRootElem(theme);
   }, [theme]);
 
   const showBars =
@@ -131,9 +127,8 @@ const App = () => {
         <Outlet />
       </div>
       <div
-        className={`fixed z-30 bottom-0 px-0 dark:text-zinc-400 bg-black sm:!bg-transparent justify-center items-center flex w-screen h-16 ${
-          showBars ? "hidden" : ""
-        } lg:hidden`}
+        className={`fixed z-30 bottom-0 px-0 dark:text-zinc-400 bg-black sm:!bg-transparent justify-center items-center flex w-screen h-16 ${showBars ? "hidden" : ""
+          } lg:hidden`}
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       >
         <HorizontalTabs />

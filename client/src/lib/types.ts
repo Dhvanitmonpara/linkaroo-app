@@ -17,7 +17,7 @@ type colorOptions =
   | "bg-sky-400"
   | "bg-black";
 
-type themeType = "light" | "black" | "dark";
+type themeType = "light" | "dark";
 
 type profileOptions = "profile" | "settings" | "feedback";
 
@@ -71,7 +71,7 @@ type fetchedCollectionType = {
   theme: colorOptions;
   isPublic: boolean;
   title: string;
-  icon: string
+  icon: string;
   coverImage: string;
   createdAt: string;
   updatedAt: string;
@@ -87,7 +87,7 @@ type NotificationType = {
   title: string;
   description: string;
   time: string;
-}
+};
 
 export type {
   colorOptions,
@@ -100,5 +100,5 @@ export type {
   fetchedLinkType,
   fetchedTagType,
   cachedLinks,
-  NotificationType
+  NotificationType,
 };
