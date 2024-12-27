@@ -11,6 +11,7 @@ import Tag from "@/components/Tag";
 import { removeUsernameTag } from "@/utils/toggleUsernameInTag";
 import useMethodStore from "@/store/MethodStore";
 import { CreateLinkForm } from "@/components/Forms";
+import Icon from "../ui/Icon";
 
 type CollectionCardProps = {
   id: string;
@@ -20,6 +21,7 @@ type CollectionCardProps = {
   createdBy: Collaborator;
   theme: colorOptions;
   font: fontOptions;
+  icon: string;
   collaborators: Collaborator[];
   toggleModal: (isOpen: boolean) => void;
 };
@@ -32,6 +34,7 @@ const CollectionListCard = ({
   collaborators,
   theme,
   font,
+  icon,
   createdBy,
   toggleModal,
 }: CollectionCardProps) => {
@@ -77,12 +80,7 @@ const CollectionListCard = ({
     >
       <div className={`absolute top-0 left-0 ${!location.pathname.includes(id) && "opacity-0 group-hover:opacity-100"} ${theme || "bg-zinc-100"} h-full w-1 transition-opacity duration-200`}></div>
       <div className="pt-1">
-        <img
-          src="/linkaroo.png"
-          alt="Linkaroo-logo"
-          width="20px"
-          className="h-[20px]"
-        />
+        <Icon icon={icon} />
       </div>
       <div className="h-full">
         <div className="space-y-2">

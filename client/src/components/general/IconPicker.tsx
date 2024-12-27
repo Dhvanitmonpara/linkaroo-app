@@ -3,7 +3,7 @@ import { debounce } from 'lodash';
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import TooltipContainer from './Tooltip';
-import { BsFillCollectionFill } from 'react-icons/bs';
+import Icon from '../ui/Icon';
 
 interface IconPickerProps {
   activeIcon: string;
@@ -49,14 +49,6 @@ const IconPicker: React.FC<IconPickerProps> = ({ activeIcon, setActiveIcon, defa
     };
   }, [debouncedSearch]);
 
-  const checkIconAvailability = () => {
-    const Icon = iconMap[activeIcon as keyof typeof iconMap];
-    if (!Icon) {
-      return <BsFillCollectionFill />; // Fallback
-    }
-    return <Icon />;
-  };
-
   const IconItem: React.FC<{ iconName: string; isActive: boolean; onClick: () => void }> = ({ iconName, isActive, onClick }) => {
     const IconComponent = iconMap[iconName as keyof typeof iconMap];
     return (
@@ -78,7 +70,7 @@ const IconPicker: React.FC<IconPickerProps> = ({ activeIcon, setActiveIcon, defa
     <Popover>
       <TooltipContainer tooltip="Change icon">
         <PopoverTrigger className="text-5xl transition-colors duration-200 hover:text-white/90">
-          {checkIconAvailability()}
+          <Icon icon={activeIcon} />
         </PopoverTrigger>
       </TooltipContainer>
       <PopoverContent className="!p-0 !border-none !w-auto !rounded-xl">

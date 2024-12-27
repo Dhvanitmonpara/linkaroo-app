@@ -149,6 +149,7 @@ const Collections = ({ className, extraElementClassNames, defaultView = "list" }
             tagname={collections.tags}
             collaborators={collections.collaborators}
             createdBy={collections.createdBy}
+            icon={collections.icon}
             theme={collections.theme}
             font={font}
             toggleModal={toggleModal}
