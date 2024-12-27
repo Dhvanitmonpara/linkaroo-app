@@ -1,20 +1,18 @@
 import { fetchedLinkType } from "@/lib/types";
 import useLinkStore from "@/store/linkStore";
 import useMethodStore from "@/store/MethodStore";
-import useProfileStore from "@/store/profileStore";
 import { handleAxiosError } from "@/utils/handlerAxiosError";
 import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-const DocScreen = () => {
+const LinkScreen = () => {
   const [loading, setLoading] = useState(true);
   const { links } = useLinkStore();
   const [currentCard, setCurrentCard] = useState<fetchedLinkType | null>(null);
   const navigate = useNavigate();
   const location = useLocation().pathname;
   const { currentCardColor } = useMethodStore();
-  const { theme } = useProfileStore().profile;
 
   const cardId = location.split("/").slice(-1)[0];
   useEffect(() => {
@@ -34,10 +32,7 @@ const DocScreen = () => {
 
   return (
     <div
-      className={`h-full w-full relative ${theme == "black"
-          ? "dark:bg-zinc-900 dark:text-zinc-300"
-          : "dark:bg-zinc-800 dark:text-zinc-200"
-        } flex flex-col p-5 select-none`}
+      className={`h-full w-full relative dark:bg-zinc-800 dark:text-zinc-200 flex flex-col p-5 select-none`}
     >
       <div
         className={`${currentCardColor == "bg-black"
@@ -60,4 +55,4 @@ const DocScreen = () => {
   );
 };
 
-export default DocScreen;
+export default LinkScreen

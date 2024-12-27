@@ -5,7 +5,7 @@ import Header from "./Header";
 import Stepper from "./Stepper";
 import HorizontalTabs from "./HorizontalTabs/HorizontalTabs";
 import ProfileCard from "./ProfileCard";
-import DocScreen from "./DocScreen";
+import LinkScreen from "./linkScreen";
 import Collections from "./Collections";
 import Links from "./Links";
 import Loading from "./Loading";
@@ -23,7 +23,7 @@ export {
   Stepper,
   HorizontalTabs,
   ProfileCard,
-  DocScreen,
+  LinkScreen,
   Collections,
   Links,
   Loading,

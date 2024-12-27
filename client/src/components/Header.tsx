@@ -11,7 +11,6 @@ import { IoMdNotificationsOutline } from "react-icons/io";
 import { IoSearchSharp } from "react-icons/io5";
 import { CreateCollectionForm, CreateLinkForm } from "./Forms";
 import useMethodStore from "@/store/MethodStore";
-import useProfileStore from "@/store/profileStore";
 import { useEffect, useState } from "react";
 import CommandMenu from "./CommandMenu";
 import { Link, NavLink } from "react-router-dom";
@@ -21,8 +20,6 @@ import ResponsiveDialog from "./ResponsiveDialog";
 
 const Header = () => {
   const { setPrevPath } = useMethodStore();
-  const { profile } = useProfileStore();
-  const { theme } = profile;
 
   const [creationTab, setCreationTab] = useState("collection");
   const [open, setOpen] = useState(false);
@@ -80,10 +77,10 @@ const Header = () => {
                 <TabsTrigger className="w-full" value="link">Link</TabsTrigger>
               </TabsList>
               <TabsContent value="collection">
-                <CreateCollectionForm theme={theme} />
+                <CreateCollectionForm />
               </TabsContent>
               <TabsContent value="link">
-                <CreateLinkForm theme={theme} />
+                <CreateLinkForm />
               </TabsContent>
             </Tabs>
           </ResponsiveDialog>
@@ -103,10 +100,7 @@ const Header = () => {
               </div>
             </PopoverTrigger>
             <PopoverContent
-              className={`${theme == "dark" || theme == "black"
-                ? "bg-zinc-900 border-zinc-700 text-zinc-100"
-                : "bg-zinc-200 border-zinc-300 text-zinc-950"
-                } space-y-2 overflow-y-scroll h-[32rem] p-0`}
+              className="dark:bg-zinc-900 dark:border-zinc-700 dark:text-zinc-100 bg-zinc-200 border-zinc-300 text-zinc-950 space-y-2 overflow-y-scroll h-[32rem] p-0"
             >
               <Notifications />
             </PopoverContent>

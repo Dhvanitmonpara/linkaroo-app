@@ -11,7 +11,6 @@ import Tag from "@/components/Tag";
 import { removeUsernameTag } from "@/utils/toggleUsernameInTag";
 import useMethodStore from "@/store/MethodStore";
 import { CreateLinkForm } from "@/components/Forms";
-import useProfileStore from "@/store/profileStore";
 
 type CollectionCardProps = {
   id: string;
@@ -40,7 +39,6 @@ const CollectionListCard = ({
 
   const collaboratorAvatars: string[] = [];
   const { setModalContent, setCurrentCardColor, setPrevPath } = useMethodStore();
-  const { profile } = useProfileStore();
 
   collaborators?.forEach((collaborator) => {
     collaboratorAvatars.push(collaborator.avatarImage);
@@ -53,7 +51,6 @@ const CollectionListCard = ({
     navigate(`/list?listid=${title}`, { replace: true });
     setModalContent(
       <CreateLinkForm
-        theme={profile.theme}
         collectionTitle={title}
       />
     );

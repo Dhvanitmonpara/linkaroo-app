@@ -19,7 +19,6 @@ import { useNavigate } from "react-router-dom";
 import { handleAxiosError } from "@/utils/handlerAxiosError";
 
 type SettingsFormProps = {
-  theme: themeType | undefined;
   toggleModal: (isOpen: boolean) => void;
 };
 
@@ -29,7 +28,6 @@ type HandleSettingsType = {
 };
 
 const SettingsForm: React.FC<SettingsFormProps> = ({
-  theme,
   toggleModal,
 }) => {
 
@@ -91,11 +89,7 @@ const SettingsForm: React.FC<SettingsFormProps> = ({
                   <SelectValue placeholder="Change theme" />
                 </SelectTrigger>
                 <SelectContent
-                className={
-                  theme !== "light"
-                    ? "!bg-zinc-900 !text-white border-zinc-800"
-                    : ""
-                }
+                  className="dark:bg-zinc-900 dark:text-white dark:border-zinc-800"
                 >
                   <SelectGroup>
                     <SelectLabel>Themes</SelectLabel>
@@ -123,11 +117,7 @@ const SettingsForm: React.FC<SettingsFormProps> = ({
                   <SelectValue placeholder="Select font" />
                 </SelectTrigger>
                 <SelectContent
-                  className={
-                    theme !== "light"
-                      ? "!bg-zinc-900 !text-white border-zinc-800"
-                      : ""
-                  }
+                  className="dark:bg-zinc-900 dark:text-white dark:border-zinc-800"
                 >
                   <SelectGroup>
                     <SelectLabel>Fonts</SelectLabel>

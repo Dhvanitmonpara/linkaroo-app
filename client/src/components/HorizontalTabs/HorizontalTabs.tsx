@@ -23,7 +23,6 @@ import { FaInbox } from "react-icons/fa6";
 
 export default function HorizontalTabs() {
   const { profile } = useProfileStore();
-  const { theme } = profile;
   const { toggleModal, setModalContent, setPrevPath } = useMethodStore();
   const location = useLocation().pathname;
   const navigate = useNavigate();
@@ -88,7 +87,7 @@ export default function HorizontalTabs() {
               className="w-full flex justify-normal bg-zinc-900 hover:bg-zinc-800 text-zinc-200"
               onClick={() => {
                 setModalContent(
-                  <CreateCollectionForm theme={theme} />
+                  <CreateCollectionForm />
                 );
                 toggleModal(true);
               }}
@@ -102,7 +101,7 @@ export default function HorizontalTabs() {
               className="w-full flex justify-normal bg-zinc-900 hover:bg-zinc-800 text-zinc-200"
               onClick={() => {
                 setModalContent(
-                  <CreateLinkForm theme={theme} />
+                  <CreateLinkForm  />
                 );
                 toggleModal(true);
               }}
@@ -164,7 +163,7 @@ export default function HorizontalTabs() {
                 setPrevPath(location);
                 toggleModal(true);
                 setModalContent(
-                  <SettingsForm theme={theme} toggleModal={toggleModal} />
+                  <SettingsForm toggleModal={toggleModal} />
                 );
               }}
             >
