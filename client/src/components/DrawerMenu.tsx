@@ -14,20 +14,24 @@ type DrawerMenuProps = {
   children: ReactNode;
   trigger: ReactNode;
   className?: string;
+  triggerClassNames?: string
+  contentClassName?: string;
   title?: string;
 };
 
 export default function DrawerMenu({
   children,
   trigger,
+  triggerClassNames = "",
+  contentClassName = "",
   className = "",
   title,
 }: DrawerMenuProps) {
   return (
     <Drawer>
-      <DrawerTrigger asChild>{trigger}</DrawerTrigger>
+      <DrawerTrigger className={triggerClassNames} asChild>{trigger}</DrawerTrigger>
       <DrawerContent
-        className={`sm:w-[400px] w-11/12  m-auto bg-zinc-900 text-white border-zinc-700 ${className}`}
+        className={`sm:w-[400px] w-11/12 m-auto dark:bg-zinc-900 text-white border-zinc-700 ${className}`}
       >
         {title && (
           <DrawerHeader className="flex w-full justify-between items-center">
@@ -39,7 +43,7 @@ export default function DrawerMenu({
             </DrawerClose>
           </DrawerHeader>
         )}
-        <div className="flex-1 overflow-auto py-4">{children}</div>
+        <div className={`flex-1 overflow-auto py-4 ${contentClassName}`}>{children}</div>
       </DrawerContent>
     </Drawer>
   );

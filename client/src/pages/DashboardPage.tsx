@@ -27,7 +27,7 @@ function DashboardPage() {
           }`}
         >
           {location.includes("/links") ? (
-            <div className="h-full w-full border-2 dark:border-zinc-600 rounded-md overflow-hidden">
+            <div className="h-full w-full border-2 dark:border-zinc-800 rounded-md overflow-hidden">
               <LinkScreen/>
             </div>
           ) : (

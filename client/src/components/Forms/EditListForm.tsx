@@ -91,10 +91,10 @@ const EditListForm = () => {
   };
 
   return (
-    <div className="dark:text-white flex flex-col sm:w-96 justify-center items-center space-y-3">
+    <div className="dark:text-white flex flex-col sm:w-96 px-4 sm:px-0 justify-center items-center space-y-3">
 
       <form
-        className="h-4/5 flex flex-col space-y-4 sm:w-96 w-72 justify-center items-center"
+        className="h-4/5 flex flex-col space-y-4 sm:w-96 w-full justify-center items-center"
         onSubmit={handleSubmit(handleListCreation)}
       >
         <Input
@@ -117,7 +117,7 @@ const EditListForm = () => {
             control={control}
             render={({ field: { onChange, value } }) => (
               <Select value={value} onValueChange={onChange}>
-                <SelectTrigger className="text-white bg-zinc-800 w-full border-zinc-800 max-w-96">
+                <SelectTrigger className="text-white bg-zinc-800 w-full border-zinc-800 sm:max-w-96">
                   <SelectValue placeholder="Change theme" />
                 </SelectTrigger>
                 <SelectContent
@@ -152,13 +152,13 @@ const EditListForm = () => {
         {loading ? (
           <Button
             disabled
-            className="dark:bg-zinc-700 dark:hover:bg-zinc-600 hover:bg-zinc-300 text-zinc-900 bg-zinc-200 w-full dark:text-white cursor-wait"
+            className="dark:bg-zinc-300 bg-zinc-900 dark:text-zinc-950 text-zinc-200 hover:bg-zinc-800 dark:hover:bg-zinc-400/90 font-semibold w-full cursor-wait"
           >
             <Loader2 className="mr-2 h-4 w-4 animate-spin dark:text-white" />
             Please wait
           </Button>
         ) : (
-          <Button className="dark:bg-zinc-700 bg-zinc-200 font-semibold text-zinc-950 dark:text-white hover:bg-zinc-300 dark:hover:bg-zinc-600 w-full">
+          <Button className="dark:bg-zinc-300 bg-zinc-900 dark:text-zinc-950 text-zinc-200 hover:bg-zinc-800 dark:hover:bg-zinc-400/90 font-semibold w-full">
             Save changes
           </Button>
         )}

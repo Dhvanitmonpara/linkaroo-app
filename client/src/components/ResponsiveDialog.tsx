@@ -79,7 +79,7 @@ function ResponsiveDialog({
       <DrawerTrigger asChild>
         {trigger}
       </DrawerTrigger>
-      <DrawerContent className={className}>
+      <DrawerContent className={`dark:bg-zinc-900 ${className}`}>
         {prebuildForm && <DrawerHeader className="text-left">
           <DrawerTitle>{title}</DrawerTitle>
           <DrawerDescription>
@@ -89,7 +89,7 @@ function ResponsiveDialog({
         {children}
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
-            <Button variant="outline">{cancelText}</Button>
+            <Button variant="ghost">{cancelText}</Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>

@@ -32,13 +32,10 @@ const LinkScreen = () => {
 
   return (
     <div
-      className={`h-full w-full relative dark:bg-zinc-800 dark:text-zinc-200 flex flex-col p-5 select-none`}
+      className={`h-full w-full relative dark:bg-zinc-900 dark:text-zinc-200 flex flex-col p-5 select-none`}
     >
       <div
-        className={`${currentCardColor == "bg-black"
-            ? "bg-zinc-900 text-zinc-300"
-            : currentCardColor + " text-zinc-900"
-          } h-1.5 w-full absolute top-0 left-0`}
+        className={`${currentCardColor} text-zinc-900 h-1.5 w-full absolute top-0 left-0`}
       ></div>
       <h1 className="text-4xl font-semibold pt-3">{currentCard?.title}</h1>
       <span
@@ -55,4 +52,4 @@ const LinkScreen = () => {
   );
 };
 
-export default LinkScreen
+export default LinkScreen;

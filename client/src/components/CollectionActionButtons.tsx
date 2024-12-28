@@ -33,6 +33,7 @@ import useLinkStore from "@/store/linkStore";
 import useCollectionsStore from "@/store/collectionStore";
 import TooltipContainer from "./general/Tooltip";
 import ResponsiveDialog from "./ResponsiveDialog";
+import DrawerMenu from "./DrawerMenu";
 
 type Checked = boolean;
 
@@ -256,51 +257,69 @@ const CollectionActionButtons = () => {
   const actionButtons = [
     {
       element: (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <div
-              className="h-12 w-12 bg-transparent hover:bg-transparent border-none flex justify-center items-center rounded-full text-xl"
-              aria-label="Tag Options"
-            >
-              {currentCollectionItem?.isPublic ? <FaLockOpen /> : <FaLock />}
-            </div>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            className={`w-56 !bg-black !text-zinc-200 border-zinc-800 p-4 space-y-2`}
-          >
-            <span className="text-sm text-zinc-200">
-              Are you sure to make your Collection{" "}
-              {currentCollectionItem?.isPublic ? "private" : "public"}?
-            </span>
-            <div className="flex gap-2 w-full justify-center items-center">
-              <DropdownMenuItem
-                onClick={() => {
-                  handleToggleIsPublic();
-                }}
-                className="w-full cursor-pointer bg-red-500 hover:!bg-red-500/70 h-10 hover:!text-zinc-50 flex justify-center items-center"
+        <>
+          <DropdownMenu>
+            <DropdownMenuTrigger className="hidden md:flex" asChild>
+              <div
+                className="h-12 w-12 bg-transparent hover:bg-transparent border-none flex justify-center items-center rounded-full text-xl"
+                aria-label="Tag Options"
               >
-                <span>Yes</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="w-full cursor-pointer bg-zinc-800 hover:!bg-zinc-800/70 hover:!text-zinc-50 h-10 flex justify-center items-center">
-                No
-              </DropdownMenuItem>
+                {currentCollectionItem?.isPublic ? <FaLockOpen /> : <FaLock />}
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              className={`w-56 !bg-black !text-zinc-200 border-zinc-800 p-4 space-y-2`}
+            >
+              <span className="text-sm text-zinc-200">
+                Are you sure to make your Collection{" "}
+                {currentCollectionItem?.isPublic ? "private" : "public"}?
+              </span>
+              <div className="flex gap-2 w-full justify-center items-center">
+                <DropdownMenuItem
+                  onClick={() => {
+                    handleToggleIsPublic();
+                  }}
+                  className="w-full cursor-pointer bg-red-500 hover:!bg-red-500/70 h-10 hover:!text-zinc-50 flex justify-center items-center"
+                >
+                  <span>Yes</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem className="w-full cursor-pointer bg-zinc-800 hover:!bg-zinc-800/70 hover:!text-zinc-50 h-10 flex justify-center items-center">
+                  No
+                </DropdownMenuItem>
+              </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <DrawerMenu triggerClassNames="md:hidden" trigger={<div
+            className="space-x-3 md:space-x-0 bg-transparent hover:bg-transparent border-none flex justify-center items-center rounded-full text-xl"
+            aria-label="Tag Options"
+          >
+            <span className="h-12 w-12 flex justify-center items-center">
+              {currentCollectionItem?.isPublic ? <FaLockOpen /> : <FaLock />}
+            </span>
+            <span className="text-base">Make this collection {currentCollectionItem?.isPublic ? "private" : "public"}</span>
+          </div>}>
+            <div className="px-4 flex flex-col gap-2">
+              <button className="w-full block font-semibold py-2 px-4 rounded-md bg-red-500 hover:bg-red-600">Yes</button>
+              <button className="w-full block font-semibold py-2 px-4 rounded-md bg-zinc-300 hover:bg-zinc-400 dark:bg-zinc-800 dark:hover:bg-zinc-700">No</button>
             </div>
-          </DropdownMenuContent>
-        </DropdownMenu>
+          </DrawerMenu>
+        </>
       ),
       action: () => { },
       tooltip: `Make this collection ${currentCollectionItem?.isPublic ? "private" : "public"}`,
     },
     {
-      element: <AddCollaborator />,
+      element: <span className="flex justify-center items-center h-12 w-12">
+        <AddCollaborator />
+      </span>,
       action: () => { },
       tooltip: "Add Collaborators",
     },
     {
       element: (
-        <ResponsiveDialog title="Edit collection" trigger={<div className="flex justify-center items-center !text-xl">
+        <ResponsiveDialog title="Edit collection" trigger={<span className="flex justify-center items-center w-12 h-12 !text-xl">
           <BiSolidPencil />
-        </div>} description="Edit your collection details" cancelText="Cancel">
+        </span>} description="Edit your collection details" cancelText="Cancel">
           <EditListForm />
         </ResponsiveDialog>
       ),
@@ -478,26 +497,24 @@ const CollectionActionButtons = () => {
         ))}
       </div>
       <div>
-        <DropdownMenu>
-          <DropdownMenuTrigger>
-            <button className="md:hidden h-12 w-12 bg-[#6d6d6d20] hover:bg-[#6d6d6d50] transition-colors flex justify-center items-center rounded-full text-xl">
-              <PiDotsThreeOutlineFill />
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
-            <DropdownMenuSeparator />
+        <DrawerMenu contentClassName="px-4 !pt-0" title="My Account" trigger={<button className="md:hidden h-12 w-12 bg-[#6d6d6d20] hover:bg-[#6d6d6d50] transition-colors flex justify-center items-center rounded-full text-xl">
+          <PiDotsThreeOutlineFill />
+        </button>}>
+          <div className="flex flex-col space-y-1 rounded-2xl overflow-hidden">
             {actionButtons?.map((actionButton, index) => (
-              <DropdownMenuItem
+              <button
+                onSelect={e => {
+                  e.preventDefault();
+                  actionButton.action ? actionButton.action() : null
+                }}
                 key={index}
-                className="flex justify-start items-center space-x-2"
+                className="flex justify-start items-center px-2 dark:bg-zinc-800 dark:hover:bg-zinc-700/70 bg-zinc-100 hover:bg-zinc-200 w-full space-x-2"
               >
-                {/* <span className="!text-md">{actionButton.element}</span> */}
-                <span>{actionButton.tooltip}</span>
-              </DropdownMenuItem>
+                <span className="text-xl">{actionButton.element}</span>
+              </button>
             ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+          </div>
+        </DrawerMenu>
       </div>
     </div>
   );
