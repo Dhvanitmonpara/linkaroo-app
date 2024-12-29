@@ -289,14 +289,14 @@ const CollectionActionButtons = () => {
               </div>
             </DropdownMenuContent>
           </DropdownMenu>
-          <DrawerMenu triggerClassNames="md:hidden" trigger={<div
-            className="space-x-3 md:space-x-0 bg-transparent hover:bg-transparent border-none flex justify-center items-center rounded-full text-xl"
+          <DrawerMenu triggerClassNames="md:hidden w-full" trigger={<div
+            className="space-x-2 md:space-x-0 w-full bg-transparent hover:bg-transparent border-none flex items-center rounded-full text-xl"
             aria-label="Tag Options"
           >
             <span className="h-12 w-12 flex justify-center items-center">
               {currentCollectionItem?.isPublic ? <FaLockOpen /> : <FaLock />}
             </span>
-            <span className="text-base">Make this collection {currentCollectionItem?.isPublic ? "private" : "public"}</span>
+            <span className="text-lg">Make this collection {currentCollectionItem?.isPublic ? "private" : "public"}</span>
           </div>}>
             <div className="px-4 flex flex-col gap-2">
               <button className="w-full block font-semibold py-2 px-4 rounded-md bg-red-500 hover:bg-red-600">Yes</button>
@@ -309,17 +309,44 @@ const CollectionActionButtons = () => {
       tooltip: `Make this collection ${currentCollectionItem?.isPublic ? "private" : "public"}`,
     },
     {
-      element: <span className="flex justify-center items-center h-12 w-12">
-        <AddCollaborator />
-      </span>,
+      element: <>
+        <span className="hidden md:flex justify-center items-center h-12 w-12">
+          <AddCollaborator />
+        </span>
+        <DrawerMenu triggerClassNames="md:hidden" trigger={<div
+          className="space-x-2 w-full md:space-x-0 bg-transparent hover:bg-transparent border-none flex items-center rounded-full text-xl"
+          aria-label="Tag Options"
+        >
+          <span className="flex md:hidden justify-center items-center h-12 w-12">
+            <AddCollaborator />
+          </span>
+          <span className="text-lg">Add Collaborators</span>
+        </div>}>
+          <div className="px-4 flex flex-col gap-2">
+            <button className="w-full block font-semibold py-2 px-4 rounded-md bg-red-500 hover:bg-red-600">Yes</button>
+            <button className="w-full block font-semibold py-2 px-4 rounded-md bg-zinc-300 hover:bg-zinc-400 dark:bg-zinc-800 dark:hover:bg-zinc-700">No</button>
+          </div>
+        </DrawerMenu>
+      </>,
       action: () => { },
       tooltip: "Add Collaborators",
     },
     {
       element: (
-        <ResponsiveDialog title="Edit collection" trigger={<span className="flex justify-center items-center w-12 h-12 !text-xl">
-          <BiSolidPencil />
-        </span>} description="Edit your collection details" cancelText="Cancel">
+        <ResponsiveDialog
+          title="Edit collection"
+          className="px-4 md:px-0"
+          trigger={
+            <div className="flex space-x-2 items-center w-full md:w-fit">
+              <span className="flex justify-center items-center w-12 h-12 !text-xl">
+                <BiSolidPencil />
+              </span>
+              <span className="md:hidden">Edit Collection</span>
+            </div>
+          }
+          description="Edit your collection details"
+          cancelText="Cancel"
+        >
           <EditListForm />
         </ResponsiveDialog>
       ),
@@ -447,36 +474,52 @@ const CollectionActionButtons = () => {
       tooltip: "Edit tags",
     },
     {
-      element: <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <div
-            className="h-12 w-12 bg-transparent hover:bg-transparent border-none flex justify-center items-center rounded-full text-xl"
-            aria-label="Tag Options"
-          >
-            <RiDeleteBinFill />
-          </div>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent
-          className={`w-56 !bg-black !text-zinc-200 border-zinc-800 p-4 space-y-2`}
-        >
-          <span className="text-sm text-zinc-200">
-            Are you sure you want to delete this Collection?
-          </span>
-          <div className="flex gap-2 w-full justify-center items-center">
-            <DropdownMenuItem
-              onClick={() => {
-                handleToggleIsPublic();
-              }}
-              className="w-full cursor-pointer bg-red-500 hover:!bg-red-500/70 h-10 hover:!text-zinc-50 flex justify-center items-center"
+      element: <>
+        <DropdownMenu>
+          <DropdownMenuTrigger className="hidden md:flex" asChild>
+            <div
+              className="h-12 w-12 bg-transparent hover:bg-transparent border-none flex justify-center items-center rounded-full text-xl"
+              aria-label="Tag Options"
             >
-              <span onClick={handleDeleteCollection}>Yes</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="w-full cursor-pointer bg-zinc-800 hover:!bg-zinc-800/70 hover:!text-zinc-50 h-10 flex justify-center items-center">
-              No
-            </DropdownMenuItem>
+              <RiDeleteBinFill />
+            </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            className={`w-56 !bg-black !text-zinc-200 border-zinc-800 p-4 space-y-2`}
+          >
+            <span className="text-sm text-zinc-200">
+              Are you sure you want to delete this Collection?
+            </span>
+            <div className="flex gap-2 w-full justify-center items-center">
+              <DropdownMenuItem
+                onClick={() => {
+                  handleToggleIsPublic();
+                }}
+                className="w-full cursor-pointer bg-red-500 hover:!bg-red-500/70 h-10 hover:!text-zinc-50 flex justify-center items-center"
+              >
+                <span onClick={handleDeleteCollection}>Yes</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="w-full cursor-pointer bg-zinc-800 hover:!bg-zinc-800/70 hover:!text-zinc-50 h-10 flex justify-center items-center">
+                No
+              </DropdownMenuItem>
+            </div>
+          </DropdownMenuContent>
+        </DropdownMenu>
+        <DrawerMenu triggerClassNames="md:hidden w-full" trigger={<div
+          className="space-x-2 md:space-x-0 w-full bg-transparent hover:bg-transparent border-none flex items-center rounded-full text-xl"
+          aria-label="Tag Options"
+        >
+          <span className="h-12 w-12 flex justify-center items-center">
+            <RiDeleteBinFill />
+          </span>
+          <span className="text-lg">Delete collection</span>
+        </div>}>
+          <div className="px-4 flex flex-col gap-2">
+            <button className="w-full block font-semibold py-2 px-4 rounded-md bg-red-500 hover:bg-red-600">Delete</button>
+            <button className="w-full block font-semibold py-2 px-4 rounded-md bg-zinc-300 hover:bg-zinc-400 dark:bg-zinc-800 dark:hover:bg-zinc-700">Cancel</button>
           </div>
-        </DropdownMenuContent>
-      </DropdownMenu>,
+        </DrawerMenu>
+      </>,
       action: () => { },
       tooltip: "Delete Collection",
     },
@@ -500,7 +543,7 @@ const CollectionActionButtons = () => {
         <DrawerMenu contentClassName="px-4 !pt-0" title="My Account" trigger={<button className="md:hidden h-12 w-12 bg-[#6d6d6d20] hover:bg-[#6d6d6d50] transition-colors flex justify-center items-center rounded-full text-xl">
           <PiDotsThreeOutlineFill />
         </button>}>
-          <div className="flex flex-col space-y-1 rounded-2xl overflow-hidden">
+          <div className="flex flex-col font-helvetica space-y-1 rounded-xl overflow-hidden">
             {actionButtons?.map((actionButton, index) => (
               <button
                 onSelect={e => {
@@ -508,9 +551,9 @@ const CollectionActionButtons = () => {
                   actionButton.action ? actionButton.action() : null
                 }}
                 key={index}
-                className="flex justify-start items-center px-2 dark:bg-zinc-800 dark:hover:bg-zinc-700/70 bg-zinc-100 hover:bg-zinc-200 w-full space-x-2"
+                className="flex flex-col p-2 dark:bg-zinc-800 dark:hover:bg-zinc-700/70 bg-zinc-100 hover:bg-zinc-200 w-full"
               >
-                <span className="text-xl">{actionButton.element}</span>
+                {actionButton.element}
               </button>
             ))}
           </div>

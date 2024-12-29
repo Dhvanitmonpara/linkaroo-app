@@ -31,6 +31,7 @@ function ResponsiveDialog({
   className = "",
   showCloseButton = true,
   prebuildForm = true,
+  triggerStyling = "",
   cancelText = "Cancel"
 }: {
   children: React.ReactNode;
@@ -40,6 +41,7 @@ function ResponsiveDialog({
   description: string;
   className?: string;
   showCloseButton?: boolean;
+  triggerStyling?: string;
   prebuildForm?: boolean;
   cancelText?: string
 }) {
@@ -76,7 +78,7 @@ function ResponsiveDialog({
 
   return (
     <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger asChild>
+      <DrawerTrigger className={triggerStyling} asChild>
         {trigger}
       </DrawerTrigger>
       <DrawerContent className={`dark:bg-zinc-900 ${className}`}>
