@@ -91,7 +91,7 @@ const ProfileCard = () => {
             setPrevPath(location.pathname);
             toggleModal(true);
             setModalContent(
-              <SettingsForm toggleModal={toggleModal} />
+              <SettingsForm />
             );
           }}
         >
