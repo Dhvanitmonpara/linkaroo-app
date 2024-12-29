@@ -5,6 +5,7 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerClose,
+  DrawerDescription,
 } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import { RxCross2 } from "react-icons/rx";
@@ -15,6 +16,7 @@ type DrawerMenuProps = {
   children: ReactNode;
   trigger: ReactNode;
   className?: string;
+  description?: string;
   triggerClassNames?: string;
   contentClassName?: string;
   title?: string;
@@ -23,6 +25,7 @@ type DrawerMenuProps = {
 export default function DrawerMenu({
   children,
   trigger,
+  description = "",
   triggerClassNames = "",
   contentClassName = "",
   className = "",
@@ -38,6 +41,7 @@ export default function DrawerMenu({
         {title && (
           <DrawerHeader className="flex w-full justify-between items-center">
             <DrawerTitle>{title}</DrawerTitle>
+            <DrawerDescription>{description}</DrawerDescription>
             <DrawerClose asChild>
               <Button variant="ghost" size="icon">
                 <RxCross2 className="h-4 w-4" />

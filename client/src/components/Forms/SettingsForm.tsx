@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import {
@@ -18,18 +18,12 @@ import useProfileStore from "@/store/profileStore";
 import { useNavigate } from "react-router-dom";
 import { handleAxiosError } from "@/utils/handlerAxiosError";
 
-type SettingsFormProps = {
-  toggleModal: (isOpen: boolean) => void;
-};
-
 type HandleSettingsType = {
   theme: themeType;
   font: fontOptions;
 };
 
-const SettingsForm: React.FC<SettingsFormProps> = ({
-  toggleModal,
-}) => {
+const SettingsForm = () => {
 
   const [loading, setLoading] = useState(false);
   const { changeTheme, updateProfile, profile, changeFont } = useProfileStore();
@@ -61,7 +55,6 @@ const SettingsForm: React.FC<SettingsFormProps> = ({
       handleAxiosError(error as AxiosError, navigate);
     } finally {
       setLoading(false);
-      toggleModal(false);
     }
   };
 
