@@ -34,6 +34,7 @@ import useCollectionsStore from "@/store/collectionStore";
 import TooltipContainer from "./general/Tooltip";
 import ResponsiveDialog from "./ResponsiveDialog";
 import DrawerMenu from "./DrawerMenu";
+import { DrawerClose } from "./ui/drawer";
 
 type Checked = boolean;
 
@@ -299,8 +300,10 @@ const CollectionActionButtons = () => {
             <span className="text-lg">Make this collection {currentCollectionItem?.isPublic ? "private" : "public"}</span>
           </div>}>
             <div className="px-4 flex flex-col gap-2">
-              <button className="w-full block font-semibold py-2 px-4 rounded-md bg-red-500 hover:bg-red-600">Yes</button>
-              <button className="w-full block font-semibold py-2 px-4 rounded-md bg-zinc-300 hover:bg-zinc-400 dark:bg-zinc-800 dark:hover:bg-zinc-700">No</button>
+              <button className="w-full block font-semibold py-2 px-4 rounded-md bg-red-500 hover:bg-red-600">Make it {currentCollectionItem?.isPublic ? "private" : "public"}</button>
+              <DrawerClose asChild>
+                <button className="w-full block font-semibold py-2 px-4 rounded-md bg-zinc-300 hover:bg-zinc-400 dark:bg-zinc-800 dark:hover:bg-zinc-700">Cancel</button>
+              </DrawerClose>
             </div>
           </DrawerMenu>
         </>
@@ -516,7 +519,9 @@ const CollectionActionButtons = () => {
         </div>}>
           <div className="px-4 flex flex-col gap-2">
             <button className="w-full block font-semibold py-2 px-4 rounded-md bg-red-500 hover:bg-red-600">Delete</button>
-            <button className="w-full block font-semibold py-2 px-4 rounded-md bg-zinc-300 hover:bg-zinc-400 dark:bg-zinc-800 dark:hover:bg-zinc-700">Cancel</button>
+            <DrawerClose asChild>
+              <button className="w-full block font-semibold py-2 px-4 rounded-md bg-zinc-300 hover:bg-zinc-400 dark:bg-zinc-800 dark:hover:bg-zinc-700">Cancel</button>
+            </DrawerClose>
           </div>
         </DrawerMenu>
       </>,
@@ -543,7 +548,7 @@ const CollectionActionButtons = () => {
         <DrawerMenu contentClassName="px-4 !pt-0" title="My Account" trigger={<button className="md:hidden h-12 w-12 bg-[#6d6d6d20] hover:bg-[#6d6d6d50] transition-colors flex justify-center items-center rounded-full text-xl">
           <PiDotsThreeOutlineFill />
         </button>}>
-          <div className="flex flex-col font-helvetica space-y-1 rounded-xl overflow-hidden">
+          <div className="flex flex-col font-helvetica space-y-1 rounded-2xl overflow-hidden">
             {actionButtons?.map((actionButton, index) => (
               <button
                 onSelect={e => {

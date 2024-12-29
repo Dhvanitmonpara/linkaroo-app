@@ -43,7 +43,9 @@ export default function DrawerMenu({
             </DrawerClose>
           </DrawerHeader>
         )}
-        <div className={`flex-1 overflow-auto py-4 ${contentClassName}`}>{children}</div>
+        <div className={`flex-1 overflow-auto py-4 ${contentClassName}`}>
+          {children}
+        </div>
       </DrawerContent>
     </Drawer>
   );
