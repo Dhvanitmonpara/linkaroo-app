@@ -9,15 +9,16 @@ import {
 import { Button } from "@/components/ui/button";
 import { RxCross2 } from "react-icons/rx";
 import { ReactNode } from "react";
+import { Drawer as DrawerPrimitive } from "vaul"
 
 type DrawerMenuProps = {
   children: ReactNode;
   trigger: ReactNode;
   className?: string;
-  triggerClassNames?: string
+  triggerClassNames?: string;
   contentClassName?: string;
   title?: string;
-};
+} & React.ComponentProps<typeof DrawerPrimitive.Root>;
 
 export default function DrawerMenu({
   children,
@@ -26,9 +27,10 @@ export default function DrawerMenu({
   contentClassName = "",
   className = "",
   title,
+  ...props
 }: DrawerMenuProps) {
   return (
-    <Drawer>
+    <Drawer {...props}>
       <DrawerTrigger className={triggerClassNames} asChild>{trigger}</DrawerTrigger>
       <DrawerContent
         className={`sm:w-[400px] w-11/12 m-auto dark:bg-zinc-900 text-white border-zinc-700 ${className}`}

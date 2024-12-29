@@ -1,3 +1,4 @@
+"use client"
 import { MdHome } from "react-icons/md";
 import { FaPlus } from "react-icons/fa6";
 import { IoPerson } from "react-icons/io5";
@@ -20,10 +21,14 @@ import toast from "react-hot-toast";
 import { handleAxiosError } from "@/utils/handlerAxiosError";
 import axios, { AxiosError } from "axios";
 import { FaInbox } from "react-icons/fa6";
+import { useState } from "react";
 
 export default function HorizontalTabs() {
   const { profile } = useProfileStore();
   const { toggleModal, setModalContent, setPrevPath } = useMethodStore();
+
+  const [creationDrawer, setCreationDrawer] = useState(false)
+
   const location = useLocation().pathname;
   const navigate = useNavigate();
 
@@ -71,7 +76,10 @@ export default function HorizontalTabs() {
       </NavLink>
 
       <DrawerMenu
-        title="Create"
+        open={creationDrawer}
+        onOpenChange={() => setCreationDrawer(!creationDrawer)}
+        title="Create something"
+        contentClassName="!pt-0 px-2"
         trigger={
           <label
             htmlFor="create-tab"
@@ -81,35 +89,32 @@ export default function HorizontalTabs() {
           </label>
         }
       >
-        <div className="w-full px-2 flex flex-col">
-          <DrawerClose>
-            <Button
-              className="w-full flex justify-normal bg-zinc-900 hover:bg-zinc-800 text-zinc-200"
-              onClick={() => {
-                setModalContent(
-                  <CreateCollectionForm />
-                );
-                toggleModal(true);
-              }}
-            >
+        <div className="w-full space-y-1 rounded-2xl overflow-hidden flex flex-col">
+          <DrawerMenu onOpenChange={(isOpen) => {
+            if (!isOpen) setCreationDrawer(false)
+          }} title="Create a Collection" trigger={<div className=" flex p-2 justify-normal items-center rounded-sm bg-zinc-800 hover:bg-zinc-700 text-zinc-200">
+            <span className="w-12 h-12 flex justify-center items-center text-xl">
               <IoList />
-              <span className="pl-2">List</span>
-            </Button>
-          </DrawerClose>
-          <DrawerClose>
-            <Button
-              className="w-full flex justify-normal bg-zinc-900 hover:bg-zinc-800 text-zinc-200"
-              onClick={() => {
-                setModalContent(
-                  <CreateLinkForm  />
-                );
-                toggleModal(true);
-              }}
-            >
+            </span>
+            <span>Create a Collection</span>
+          </div>}>
+            <CreateCollectionForm />
+            {/* <div className="px-4 pt-2">
+              <DrawerClose asChild>
+                <button className="w-full block font-semibold py-2 px-4 rounded-md bg-zinc-300 hover:bg-zinc-400 dark:bg-zinc-800 dark:hover:bg-zinc-700">Cancel</button>
+              </DrawerClose>
+            </div> */}
+          </DrawerMenu>
+          <DrawerMenu onOpenChange={(isOpen) => {
+            if (!isOpen) setCreationDrawer(false)
+          }} title="Add a Link" trigger={<div className=" flex p-2 justify-normal items-center rounded-sm bg-zinc-800 hover:bg-zinc-700 text-zinc-200">
+            <span className="w-12 h-12 flex justify-center items-center text-xl">
               <PiCardsBold />
-              <span className="pl-2">Card</span>
-            </Button>
-          </DrawerClose>
+            </span>
+            <span>Add a Link</span>
+          </div>}>
+            <CreateLinkForm />
+          </DrawerMenu>
         </div>
       </DrawerMenu>
 
