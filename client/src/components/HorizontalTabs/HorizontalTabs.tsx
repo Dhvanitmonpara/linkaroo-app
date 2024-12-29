@@ -146,7 +146,7 @@ export default function HorizontalTabs() {
               <span>Profile</span>
             </div>
           </DrawerClose>
-          <DrawerMenu onClose={() => setCreationDrawer(false)} title="Create a Collection" trigger={
+          <DrawerMenu onClose={() => setProfileDrawer(false)} title="Create a Collection" trigger={
             <div className="flex p-2 justify-normal items-center rounded-sm bg-zinc-800 hover:bg-zinc-700 text-zinc-200">
               <span className="w-12 h-12 flex justify-center items-center text-xl">
                 <IoMdSettings />

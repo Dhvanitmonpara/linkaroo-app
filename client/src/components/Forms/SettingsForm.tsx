@@ -59,82 +59,72 @@ const SettingsForm = () => {
   };
 
   return (
-    <div className="dark:text-white p-5 flex flex-col justify-center items-center space-y-3">
-      <h1 className="text-3xl">Settings</h1>
+    <div className="dark:text-white flex flex-col sm:w-96 px-4 sm:px-0 justify-center items-center space-y-3">
       <form
-        className="h-4/5 flex flex-col space-y-6 sm:w-96 w-72 justify-center items-center"
+        className="h-4/5 flex flex-col space-y-4 sm:w-96 w-full justify-center items-center"
         onSubmit={handleSubmit(handleUpdateSettings)}
       >
-        <div className="w-full space-y-2">
-          <span>Theme</span>
-          <Controller
-            name="theme"
-            control={control}
-            render={({ field: { onChange, value } }) => (
-              <Select
-                value={value}
-                onValueChange={(value: themeType) => {
-                  changeTheme(value);
-                  onChange(value);
-                }}
+        <Controller
+          name="theme"
+          control={control}
+          render={({ field: { onChange, value } }) => (
+            <Select
+              value={value}
+              onValueChange={(value: themeType) => {
+                changeTheme(value);
+                onChange(value);
+              }}
+            >
+              <SelectTrigger className="text-zinc-100 bg-zinc-800 border-zinc-800 sm:max-w-96">
+                <SelectValue placeholder="Change theme" />
+              </SelectTrigger>
+              <SelectContent
+                className="dark:bg-zinc-900 dark:text-white dark:border-zinc-800"
               >
-                <SelectTrigger className="dark:text-white dark:bg-zinc-700 max-w-96">
-                  <SelectValue placeholder="Change theme" />
-                </SelectTrigger>
-                <SelectContent
-                  className="dark:bg-zinc-900 dark:text-white dark:border-zinc-800"
-                >
-                  <SelectGroup>
-                    <SelectLabel>Themes</SelectLabel>
-                    <SelectItem value="light">Light</SelectItem>
-                    <SelectItem value="dark">Dark</SelectItem>
-                    <SelectItem value="black">Black</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            )}
-          />
-        </div>
-
-        <div className="w-full space-y-2">
-          <span>Font</span>
-          <Controller
-            name="font"
-            control={control}
-            render={({ field: { onChange, value } }) => (
-              <Select value={value} onValueChange={(value: fontOptions) => {
-                onChange(value)
-                changeFont(value)
-              }}>
-                <SelectTrigger className="dark:text-white dark:bg-zinc-700 max-w-96">
-                  <SelectValue placeholder="Select font" />
-                </SelectTrigger>
-                <SelectContent
-                  className="dark:bg-zinc-900 dark:text-white dark:border-zinc-800"
-                >
-                  <SelectGroup>
-                    <SelectLabel>Fonts</SelectLabel>
-                    <SelectItem value="font-mono">Mono</SelectItem>
-                    <SelectItem value="font-serif">Serif</SelectItem>
-                    <SelectItem value="font-sans">Sans</SelectItem>
-                    <SelectItem value="font-helvetica">Helvetica</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            )}
-          />
-        </div>
+                <SelectGroup>
+                  <SelectItem value="light">Light</SelectItem>
+                  <SelectItem value="dark">Dark</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          )}
+        />
+        <Controller
+          name="font"
+          control={control}
+          render={({ field: { onChange, value } }) => (
+            <Select value={value} onValueChange={(value: fontOptions) => {
+              onChange(value)
+              changeFont(value)
+            }}>
+              <SelectTrigger className="text-zinc-100 bg-zinc-800 border-zinc-800 sm:max-w-96">
+                <SelectValue placeholder="Select font" />
+              </SelectTrigger>
+              <SelectContent
+                className="dark:bg-zinc-900 dark:text-white dark:border-zinc-800"
+              >
+                <SelectGroup>
+                  <SelectLabel>Select font</SelectLabel>
+                  <SelectItem value="font-mono">Mono</SelectItem>
+                  <SelectItem value="font-serif">Serif</SelectItem>
+                  <SelectItem value="font-sans">Sans</SelectItem>
+                  <SelectItem value="font-helvetica">Helvetica</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          )}
+        />
 
         {loading ? (
           <Button
             disabled
-            className="dark:bg-zinc-700 dark:hover:bg-zinc-600 hover:bg-zinc-300 text-zinc-900 bg-zinc-200 w-full dark:text-white cursor-wait"
+            className="dark:bg-zinc-300 bg-zinc-900 dark:text-zinc-950 text-zinc-200 hover:bg-zinc-800 dark:hover:bg-zinc-400/90 font-semibold w-full cursor-wait"
           >
             <Loader2 className="mr-2 h-4 w-4 animate-spin dark:text-white" />
             Please wait
           </Button>
         ) : (
-          <Button className="dark:bg-zinc-700 bg-zinc-200 font-semibold text-zinc-950 dark:text-white hover:bg-zinc-300 dark:hover:bg-zinc-600 w-full">
+          <Button className="dark:bg-zinc-300 bg-zinc-900 dark:text-zinc-950 text-zinc-200 hover:bg-zinc-800 dark:hover:bg-zinc-400/90 font-semibold w-full">
             Save changes
           </Button>
         )}
