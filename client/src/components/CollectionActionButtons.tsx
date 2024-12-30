@@ -312,25 +312,7 @@ const CollectionActionButtons = () => {
       tooltip: `Make this collection ${currentCollectionItem?.isPublic ? "private" : "public"}`,
     },
     {
-      element: <>
-        <span className="hidden md:flex justify-center items-center h-12 w-12">
-          <AddCollaborator />
-        </span>
-        <DrawerMenu triggerClassNames="md:hidden" trigger={<div
-          className="space-x-2 w-full md:space-x-0 bg-transparent hover:bg-transparent border-none flex items-center rounded-full text-xl"
-          aria-label="Tag Options"
-        >
-          <span className="flex md:hidden justify-center items-center h-12 w-12">
-            <AddCollaborator />
-          </span>
-          <span className="text-lg">Add Collaborators</span>
-        </div>}>
-          <div className="px-4 flex flex-col gap-2">
-            <button className="w-full block font-semibold py-2 px-4 rounded-md bg-red-500 hover:bg-red-600">Yes</button>
-            <button className="w-full block font-semibold py-2 px-4 rounded-md bg-zinc-300 hover:bg-zinc-400 dark:bg-zinc-800 dark:hover:bg-zinc-700">No</button>
-          </div>
-        </DrawerMenu>
-      </>,
+      element: <AddCollaborator />,
       action: () => { },
       tooltip: "Add Collaborators",
     },
@@ -545,7 +527,7 @@ const CollectionActionButtons = () => {
         ))}
       </div>
       <div>
-        <DrawerMenu contentClassName="px-4 !pt-0" title="My Account" trigger={<button className="md:hidden h-12 w-12 bg-[#6d6d6d20] hover:bg-[#6d6d6d50] transition-colors flex justify-center items-center rounded-full text-xl">
+        <DrawerMenu contentClassName="px-4 !pt-0" title="Collection options" trigger={<button className="md:hidden h-12 w-12 bg-[#6d6d6d20] hover:bg-[#6d6d6d50] transition-colors flex justify-center items-center rounded-full text-xl">
           <PiDotsThreeOutlineFill />
         </button>}>
           <div className="flex flex-col font-helvetica space-y-1 rounded-2xl overflow-hidden">
