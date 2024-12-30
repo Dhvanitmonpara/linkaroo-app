@@ -1,9 +1,7 @@
-"use client"
 import { MdHome } from "react-icons/md";
 import { FaPlus } from "react-icons/fa6";
 import { IoLink, IoPerson } from "react-icons/io5";
 import { IoMdNotifications } from "react-icons/io";
-import "./HorizontalTabs.css";
 import { useLocation, NavLink, useNavigate } from "react-router-dom";
 import useProfileStore from "@/store/profileStore";
 import useMethodStore from "@/store/MethodStore";
@@ -20,6 +18,7 @@ import axios, { AxiosError } from "axios";
 import { FaInbox } from "react-icons/fa6";
 import { useState } from "react";
 import { BsCollectionFill } from "react-icons/bs";
+import "../components.css"
 
 export default function HorizontalTabs() {
   const { profile } = useProfileStore();
@@ -59,7 +58,7 @@ export default function HorizontalTabs() {
       <NavLink
         to="/"
         className={({ isActive }) =>
-          `menu-label !text-3xl !w-auto ${isActive ? "!text-white" : ""}`
+          `menu-label !text-3xl !w-auto ${isActive ? "!text-white" : "!text-zinc-500"}`
         }
       >
         <MdHome />
@@ -68,7 +67,7 @@ export default function HorizontalTabs() {
       <NavLink
         to="/inbox"
         className={({ isActive }) =>
-          `menu-label !text-2xl !w-auto ${isActive ? "!text-white" : ""}`
+          `menu-label !text-2xl !w-auto ${isActive ? "!text-white" : "!text-zinc-500"}`
         }
       >
         <FaInbox />
@@ -82,7 +81,7 @@ export default function HorizontalTabs() {
         trigger={
           <label
             htmlFor="create-tab"
-            className="menu-label !text-3xl bg-transparent !w-auto"
+            className="menu-label !text-3xl bg-transparent !w-auto !text-zinc-500"
           >
             <FaPlus />
           </label>
@@ -111,7 +110,7 @@ export default function HorizontalTabs() {
       <NavLink
         to="notifications"
         className={({ isActive }) =>
-          `menu-label !text-3xl !w-auto ${isActive ? "!text-white" : ""}`
+          `menu-label !text-3xl !w-auto ${isActive ? "!text-white" : "!text-zinc-500"}`
         }
       >
         <IoMdNotifications />
@@ -125,7 +124,7 @@ export default function HorizontalTabs() {
         trigger={
           <label
             htmlFor="create-tab"
-            className="menu-label !text-3xl bg-transparent !w-auto"
+            className="menu-label !text-3xl bg-transparent !w-auto !text-zinc-500"
           >
             <img
               className="rounded-full !h-8 !w-8 object-cover border-zinc-700 border-2 hover:border-zinc-200 transition-colors"

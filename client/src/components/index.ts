@@ -3,7 +3,7 @@ import LinkCard from "./LinkCard";
 import CollectionCard from "./CollectionGridCard";
 import Header from "./Header";
 import Stepper from "./Stepper";
-import HorizontalTabs from "./HorizontalTabs/HorizontalTabs";
+import HorizontalTabs from "./general/HorizontalTabs";
 import ProfileCard from "./ProfileCard";
 import LinkScreen from "./linkScreen";
 import Collections from "./Collections";

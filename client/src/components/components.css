@@ -1,3 +1,23 @@
+/* HorizontalTabs */
+
+.radio-item {
+  position: absolute;
+  opacity: 0;
+}
+
+.menu-label {
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem; /* rounded-md */
+  display: inline-block;
+  width: 100%;
+  font-size: 18px;
+  transition: color 0.1s;
+  text-align: center;
+}
+
+/* Tag menu */
+
 .radio-item {
   position: absolute;
   opacity: 0;
