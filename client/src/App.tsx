@@ -72,6 +72,7 @@ const App = () => {
           email: "",
           fullName: "",
           avatarImage: "",
+          isSearchShortcutEnabled: false,
           coverImage: "",
           theme: "dark",
           font: "font-sans",
