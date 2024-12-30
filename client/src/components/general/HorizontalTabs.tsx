@@ -5,12 +5,12 @@ import { IoMdNotifications } from "react-icons/io";
 import { useLocation, NavLink, useNavigate } from "react-router-dom";
 import useProfileStore from "@/store/profileStore";
 import useMethodStore from "@/store/MethodStore";
-import { CreateLinkForm, CreateCollectionForm, SettingsForm } from "../Forms";
+import { CreateLinkForm, CreateCollectionForm, SettingsForm, CreateLinkBar } from "../Forms";
 import DrawerMenu from "../DrawerMenu";
 import { DrawerClose } from "../ui/drawer";
 import { IoMdSettings } from "react-icons/io";
 import { MdFeedback } from "react-icons/md";
-import { FaInfoCircle } from "react-icons/fa";
+import { FaInfoCircle, FaSearch } from "react-icons/fa";
 import { IoLogOut } from "react-icons/io5";
 import toast from "react-hot-toast";
 import { handleAxiosError } from "@/utils/handlerAxiosError";
@@ -73,39 +73,49 @@ export default function HorizontalTabs() {
         <FaInbox />
       </NavLink>
 
-      <DrawerMenu
-        open={creationDrawer}
-        onOpenChange={() => setCreationDrawer(!creationDrawer)}
-        title="Create something"
-        contentClassName="!pt-0 px-4"
-        trigger={
+      {profile.isSearchShortcutEnabled ?
+        <DrawerMenu onClose={() => setCreationDrawer(false)} title="Search something" trigger={
           <label
             htmlFor="create-tab"
-            className="menu-label !text-3xl bg-transparent !w-auto !text-zinc-500"
+            className="menu-label !text-2xl bg-transparent !w-auto !text-zinc-500"
           >
-            <FaPlus />
+            <FaSearch />
           </label>
-        }
-      >
-        <div className="w-full space-y-1 rounded-2xl overflow-hidden flex flex-col">
-          <DrawerMenu onClose={() => setCreationDrawer(false)} title="Create a Collection" trigger={<div className=" flex p-2 justify-normal items-center rounded-sm bg-zinc-800 hover:bg-zinc-700 text-zinc-200">
-            <span className="w-12 h-12 flex justify-center items-center text-xl">
-              <BsCollectionFill />
-            </span>
-            <span>Create a Collection</span>
-          </div>}>
-            <CreateCollectionForm />
-          </DrawerMenu>
-          <DrawerMenu onClose={() => setCreationDrawer(false)} title="Add a Link" trigger={<div className=" flex p-2 justify-normal items-center rounded-sm bg-zinc-800 hover:bg-zinc-700 text-zinc-200">
-            <span className="w-12 h-12 flex justify-center items-center text-xl">
-              <IoLink />
-            </span>
-            <span>Add a Link</span>
-          </div>}>
-            <CreateLinkForm />
-          </DrawerMenu>
-        </div>
-      </DrawerMenu>
+        }>
+          <CreateLinkBar />
+        </DrawerMenu> : <DrawerMenu
+          open={creationDrawer}
+          onOpenChange={() => setCreationDrawer(!creationDrawer)}
+          title="Create something"
+          contentClassName="!pt-0 px-4"
+          trigger={
+            <label
+              htmlFor="create-tab"
+              className="menu-label !text-3xl bg-transparent !w-auto !text-zinc-500"
+            >
+              <FaPlus />
+            </label>
+          }
+        >
+          <div className="w-full space-y-1 rounded-2xl overflow-hidden flex flex-col">
+            <DrawerMenu onClose={() => setCreationDrawer(false)} title="Create a Collection" trigger={<div className=" flex p-2 justify-normal items-center rounded-sm bg-zinc-800 hover:bg-zinc-700 text-zinc-200">
+              <span className="w-12 h-12 flex justify-center items-center text-xl">
+                <BsCollectionFill />
+              </span>
+              <span>Create a Collection</span>
+            </div>}>
+              <CreateCollectionForm />
+            </DrawerMenu>
+            <DrawerMenu onClose={() => setCreationDrawer(false)} title="Add a Link" trigger={<div className=" flex p-2 justify-normal items-center rounded-sm bg-zinc-800 hover:bg-zinc-700 text-zinc-200">
+              <span className="w-12 h-12 flex justify-center items-center text-xl">
+                <IoLink />
+              </span>
+              <span>Add a Link</span>
+            </div>}>
+              <CreateLinkForm />
+            </DrawerMenu>
+          </div>
+        </DrawerMenu>}
 
       <NavLink
         to="notifications"

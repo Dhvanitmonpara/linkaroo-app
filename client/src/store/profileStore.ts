@@ -11,6 +11,7 @@ type User = {
   avatarImage: string;
   coverImage: string;
   theme: themeType;
+  isSearchShortcutEnabled: boolean;
   font: fontOptions;
   createdAt: string;
   updatedAt: string;
@@ -23,6 +24,7 @@ interface ProfileState {
   updateProfile: (updatedProfile: User) => void;
   removeProfile: () => void;
   changeTheme: (theme: themeType) => void;
+  toggleIsSearchShortcutEnabled: (value: boolean) => void;
   changeFont: (font: fontOptions) => void;
   tags: fetchedTagType[] | null;
   setTags: (tags: fetchedTagType[]) => void;
@@ -39,6 +41,7 @@ const useProfileStore = create<ProfileState>()(
           fullName: "",
           avatarImage: "",
           coverImage: "",
+          isSearchShortcutEnabled: false,
           theme: "dark",
           font: "font-sans",
           createdAt: "",
@@ -59,6 +62,7 @@ const useProfileStore = create<ProfileState>()(
               fullName: "",
               avatarImage: "",
               coverImage: "",
+              isSearchShortcutEnabled: false,
               theme: "light",
               font: "font-mono",
               createdAt: "",
@@ -69,6 +73,11 @@ const useProfileStore = create<ProfileState>()(
         changeTheme: (theme: themeType) => {
           set((state) => ({
             profile: { ...state.profile, theme },
+          }));
+        },
+        toggleIsSearchShortcutEnabled: (value: boolean) => {
+          set((state) => ({
+            profile: { ...state.profile, isSearchShortcutEnabled: value },
           }));
         },
         changeFont: (font: fontOptions) => {

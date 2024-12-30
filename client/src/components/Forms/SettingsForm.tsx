@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import {
@@ -17,6 +17,8 @@ import toast from "react-hot-toast";
 import useProfileStore from "@/store/profileStore";
 import { useNavigate } from "react-router-dom";
 import { handleAxiosError } from "@/utils/handlerAxiosError";
+import { Label } from "../ui/label";
+import { Switch } from "../ui/switch";
 
 type HandleSettingsType = {
   theme: themeType;
@@ -26,7 +28,7 @@ type HandleSettingsType = {
 const SettingsForm = () => {
 
   const [loading, setLoading] = useState(false);
-  const { changeTheme, updateProfile, profile, changeFont } = useProfileStore();
+  const { changeTheme, updateProfile, profile, changeFont, toggleIsSearchShortcutEnabled } = useProfileStore();
   const navigate = useNavigate()
 
   const { control, handleSubmit } = useForm<HandleSettingsType>({
@@ -58,10 +60,14 @@ const SettingsForm = () => {
     }
   };
 
+  const searchShortcutHandler = useCallback(() => {
+    toggleIsSearchShortcutEnabled(!profile.isSearchShortcutEnabled);
+  }, [toggleIsSearchShortcutEnabled, profile.isSearchShortcutEnabled]);
+
   return (
     <div className="dark:text-white flex flex-col sm:w-96 px-4 sm:px-0 justify-center items-center space-y-3">
       <form
-        className="h-4/5 flex flex-col space-y-4 sm:w-96 w-full justify-center items-center"
+        className="h-4/5 flex flex-col space-y-3 sm:w-96 w-full justify-center items-center"
         onSubmit={handleSubmit(handleUpdateSettings)}
       >
         <Controller
@@ -89,6 +95,15 @@ const SettingsForm = () => {
             </Select>
           )}
         />
+
+        <div className="flex p-3 rounded-md text-zinc-100 bg-zinc-800 border-zinc-800 w-full sm:max-w-96">
+          <Label className="space-y-1" htmlFor="search-shortcut">
+            <span className="text-sm font-medium">Search shortcut</span>
+            <p className="text-xs text-zinc-400">Show search button instead of quick collection/link adder</p>
+          </Label>
+          <Switch id="search-shortcut" checked={profile.isSearchShortcutEnabled} onCheckedChange={searchShortcutHandler} />
+        </div>
+
         <Controller
           name="font"
           control={control}
