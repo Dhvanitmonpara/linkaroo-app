@@ -1,30 +1,20 @@
 import { BiSolidPencil } from "react-icons/bi";
-import { FaTag } from "react-icons/fa6";
-import { FaPlus } from "react-icons/fa6";
 import { RiDeleteBinFill } from "react-icons/ri";
 import useMethodStore from "@/store/MethodStore";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuLabel,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
-  DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu";
 import { PiDotsThreeOutlineFill } from "react-icons/pi";
-import { Button } from "@/components/ui/button";
-import { FormEventHandler, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import toast from "react-hot-toast";
-import { Loader2 } from "lucide-react";
 import { fetchedTagType } from "@/lib/types";
 import useProfileStore from "@/store/profileStore";
-import { removeUsernameTag } from "@/utils/toggleUsernameInTag";
 import { useNavigate, useParams } from "react-router-dom";
 import { EditListForm } from "./Forms";
-import { Input } from "./ui/input";
 import { handleAxiosError } from "@/utils/handlerAxiosError";
 import { FaLock } from "react-icons/fa";
 import { FaLockOpen } from "react-icons/fa";
@@ -37,24 +27,21 @@ import { DrawerClose } from "./ui/drawer";
 import AddCollaboratorForm from "./Forms/AddCollaboratorForm";
 import { IoMdPersonAdd } from "react-icons/io";
 import { cn } from "@/lib/utils";
+import HandleTagForm from "./Forms/HandleTagForm";
 
 type Checked = boolean;
 
-type checkedTagsType = fetchedTagType & {
+export type checkedTagsType = fetchedTagType & {
   isChecked?: Checked;
 };
 
 const CollectionActionButtons = () => {
   const { setPrevPath } = useMethodStore();
   const { setTags } = useProfileStore();
-  const { removeCollectionsItem, updateCollectionsTags, toggleIsPublic } = useCollectionsStore();
+  const { removeCollectionsItem, toggleIsPublic } = useCollectionsStore();
   const { setLinks, currentCollectionItem, setCurrentCollectionItem, removeCachedLinkCollection } = useLinkStore()
   const [loading, setLoading] = useState(false);
-  const [saveChangesLoading, setSaveChangesLoading] = useState(false);
   const [checkedTags, setCheckedTags] = useState<checkedTagsType[]>([]);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [newTagInput, setNewTagInput] = useState(false);
-  const [newTagSubmitLoading, setNewTagSubmitLoading] = useState(false);
 
   const navigate = useNavigate();
   const { listId } = useParams();
@@ -101,78 +88,6 @@ const CollectionActionButtons = () => {
     })();
   }, [setTags, listId, navigate]);
 
-  const HandleAddNewTag: FormEventHandler<HTMLFormElement> = async (event) => {
-    event.preventDefault();
-
-    const formData = new FormData(event.currentTarget);
-    const newTagName = formData.get("title")?.toString();
-
-    if (!newTagName) {
-      toast.error("Tag name cannot be empty");
-      return;
-    }
-
-    try {
-      setNewTagSubmitLoading(true);
-
-      const createTagResponse: AxiosResponse = await axios.post(
-        `${import.meta.env.VITE_SERVER_API_URL}/tags`,
-        { tag: newTagName },
-        { withCredentials: true }
-      );
-
-      if (!createTagResponse.data.success) {
-        toast.error("Failed to create new tag");
-        return;
-      }
-
-      const newTag = createTagResponse.data.data;
-      setCheckedTags((prevTags) => [
-        ...prevTags,
-        { ...newTag, isChecked: true },
-      ]);
-
-      setNewTagInput(false);
-      toast.success("Tag created successfully");
-    } catch (error) {
-      handleAxiosError(error as AxiosError, navigate);
-    } finally {
-      setNewTagSubmitLoading(false);
-    }
-  };
-
-  const handleSaveChanges = async () => {
-    try {
-      setSaveChangesLoading(true);
-
-      const tagIds = checkedTags
-        .filter((tag) => tag.isChecked)
-        .map((tag) => tag._id);
-
-      const saveResponse: AxiosResponse = await axios.patch(
-        `${import.meta.env.VITE_SERVER_API_URL}/tags/${listId}/customize`,
-        { tagArray: tagIds },
-        { withCredentials: true }
-      );
-
-      if (!saveResponse.data.success) {
-        toast.error("Failed to save changes");
-      }
-
-      const listTags = checkedTags.filter((tag) => tag.isChecked === true);
-      const updatedList = { ...saveResponse.data.data, tags: listTags };
-
-      updateCollectionsTags(updatedList);
-
-      setDropdownOpen(false);
-      toast.success("Changes saved successfully");
-    } catch (error) {
-      handleAxiosError(error as AxiosError, navigate);
-    } finally {
-      setSaveChangesLoading(false);
-    }
-  };
-
   const handleToggleIsPublic = async () => {
     let loaderId = "";
 
@@ -203,17 +118,6 @@ const CollectionActionButtons = () => {
     } finally {
       toast.dismiss(loaderId);
     }
-  };
-
-  const handleCheckboxChange = (tag: checkedTagsType, checked: boolean) => {
-    setCheckedTags((state) =>
-      state.map((t) => {
-        if (t.tagname === tag.tagname) {
-          return { ...t, isChecked: checked };
-        }
-        return t;
-      })
-    );
   };
 
   const handleDeleteCollection = async () => {
@@ -343,121 +247,11 @@ const CollectionActionButtons = () => {
       tooltip: "Edit Collection",
     },
     {
-      element: (
-        <DropdownMenu
-          open={dropdownOpen}
-          onOpenChange={() => {
-            setDropdownOpen(!dropdownOpen);
-            setNewTagInput(false);
-          }}
-          modal={false} // Keeps dropdown within the context of the parent
-        >
-          <DropdownMenuTrigger asChild>
-            <div
-              className="h-12 w-12 bg-transparent hover:bg-transparent border-none flex justify-center items-center rounded-full text-xl"
-              aria-label="Tag Options"
-            >
-              <FaTag />
-            </div>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            className={`w-56 !bg-black !text-white border-zinc-800`}
-            onCloseAutoFocus={(event) => {
-              event.preventDefault(); // Prevents auto focus when closing the dropdown
-            }}
-            onPointerDownOutside={(event) => {
-              if (
-                event.target instanceof HTMLElement &&
-                !event.target.closest("input")
-              ) {
-                setDropdownOpen(false);
-              }
-            }}
-          >
-            <DropdownMenuLabel>Tags</DropdownMenuLabel>
-            <DropdownMenuSeparator
-              className="bg-zinc-800"
-            />
-            {loading ? (
-              <div className="w-full h-28 flex justify-center items-center">
-                <Loader2 className="animate-spin" size={16} />
-              </div>
-            ) : (
-              <>
-                {newTagInput ? (
-                  <form
-                    className="flex justify-center items-center space-x-1"
-                    onSubmit={HandleAddNewTag}
-                    onKeyDown={(event) => event.stopPropagation()} // Stop event propagation when typing
-                  >
-                    <Input
-                      id="title"
-                      name="title"
-                      type="text"
-                      placeholder="Enter title"
-                      className={`bg-zinc-800 border-none border-spacing-0`}
-                      onFocus={(event) => event.stopPropagation()} // Ensure focus stays on the input
-                    />
-                    {newTagSubmitLoading ? (
-                      <div className="flex justify-center items-center h-full w-12">
-                        <Loader2 className="animate-spin" size={16} />
-                      </div>
-                    ) : (
-                      <Button
-                        type="submit"
-                        className={`w-12 px-2 dark:text-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 bg-zinc-100 hover:bg-zinc-200 text-zinc-950`}
-                      >
-                        <FaPlus />
-                      </Button>
-                    )}
-                  </form>
-                ) : (
-                  <Button
-                    onClick={() => setNewTagInput(true)}
-                    className={`w-full px-2 dark:text-zinc-200 dark:bg-zinc-950 dark:hover:bg-zinc-800 bg-zinc-100 hover:bg-zinc-200 text-zinc-950`}
-                  >
-                    <span className="flex w-full justify-start items-center space-x-[0.65rem]">
-                      <FaPlus />{" "}
-                      <span className="font-semibold">Create a new tag</span>
-                    </span>
-                  </Button>
-                )}
-                <DropdownMenuSeparator
-                  className={"bg-zinc-800"}
-                />
-                <DropdownMenuGroup>
-                  {checkedTags.map((tag, index) => (
-                    <DropdownMenuCheckboxItem
-                      key={index}
-                      checked={tag.isChecked}
-                      onSelect={(e) => e.preventDefault()} // Prevent dropdown from closing
-                      onCheckedChange={(checked) =>
-                        handleCheckboxChange(tag, checked)
-                      }
-                    >
-                      {removeUsernameTag(tag.tagname)}
-                    </DropdownMenuCheckboxItem>
-                  ))}
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator
-                  className={"bg-zinc-800"}
-                />
-                <Button
-                  onClick={handleSaveChanges}
-                  className={`mt-2 w-full dark:text-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 bg-zinc-100 hover:bg-zinc-200 text-zinc-950`}
-                  disabled={saveChangesLoading}
-                >
-                  {saveChangesLoading ? (
-                    <Loader2 className="animate-spin" />
-                  ) : (
-                    "Save Changes"
-                  )}
-                </Button>
-              </>
-            )}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      ),
+      element: <HandleTagForm
+        loading={loading}
+        checkedTags={checkedTags}
+        setCheckedTags={setCheckedTags}
+      />,
       tooltip: "Edit tags",
     },
     {
