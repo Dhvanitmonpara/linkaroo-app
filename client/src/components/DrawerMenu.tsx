@@ -36,7 +36,7 @@ export default function DrawerMenu({
     <Drawer {...props}>
       <DrawerTrigger className={triggerClassNames} asChild>{trigger}</DrawerTrigger>
       <DrawerContent
-        className={`sm:w-[400px] w-11/12 m-auto dark:bg-zinc-900 text-white border-zinc-700 ${className}`}
+        className={`sm:w-[400px] w-11/12 m-auto dark:bg-zinc-900 text-white border-zinc-800 ${className}`}
       >
         {title && (
           <DrawerHeader className="flex w-full justify-between items-center">

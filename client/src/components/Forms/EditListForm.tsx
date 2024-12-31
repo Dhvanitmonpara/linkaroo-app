@@ -91,10 +91,9 @@ const EditListForm = () => {
   };
 
   return (
-    <div className="dark:text-white flex flex-col sm:w-96 px-4 sm:px-0 justify-center items-center space-y-3">
-
+    <div className="dark:text-white flex flex-col sm:w-full sm:max-w-96 justify-center items-center space-y-3">
       <form
-        className="h-4/5 flex flex-col space-y-4 sm:w-96 w-full justify-center items-center"
+        className="h-4/5 flex flex-col space-y-4 w-full justify-center items-center"
         onSubmit={handleSubmit(handleListCreation)}
       >
         <Input

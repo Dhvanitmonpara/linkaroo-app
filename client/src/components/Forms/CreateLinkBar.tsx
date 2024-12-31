@@ -154,7 +154,7 @@ const CreateLinkBar: React.FC<CreateLinkBarProps> = ({
 
   return (
     <div className="dark:text-white px-4 flex flex-col w-full justify-center items-center">
-      <div className="xl:hidden w-full mb-6 space-y-2 rounded-3xl bg-zinc-800/30 lg:bg-zinc-800/70 p-4">
+      <div className="xl:hidden w-full mb-6 space-y-2 rounded-3xl bg-zinc-800/70 p-4">
         {dummies.length > 0 ? (
           dummies.map(({ title, link }, index) => (
             <button
@@ -163,7 +163,7 @@ const CreateLinkBar: React.FC<CreateLinkBarProps> = ({
                 e.preventDefault();
                 setTabIndex(index); // Manually set the tab index on click
               }}
-              className={`flex flex-col w-full py-2 px-4 rounded-lg space-y-1 ${tabIndex === index ? "bg-zinc-700/30 lg:bg-zinc-700/70" : "bg-zinc-800/30 lg:bg-zinc-800/70 hover:bg-zinc-700/30 lg:hover:bg-zinc-700/70"
+              className={`flex flex-col w-full py-2 px-4 rounded-lg space-y-1 ${tabIndex === index ? "bg-zinc-700/70" : "bg-zinc-800/70 hover:bg-zinc-700/70"
                 }`}
             >
               <h1 className="dark:text-zinc-300 text-lg font-semibold">{title}</h1>
@@ -171,7 +171,7 @@ const CreateLinkBar: React.FC<CreateLinkBarProps> = ({
             </button>
           ))
         ) : (
-          <div className="flex flex-col py-2 px-4 rounded-lg space-y-1 bg-zinc-800/30 lg:bg-zinc-800/70">
+          <div className="flex flex-col py-2 px-4 rounded-lg space-y-1 bg-zinc-800/70">
             <h1>No search result found</h1>
           </div>
         )}

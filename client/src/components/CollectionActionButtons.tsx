@@ -226,7 +226,7 @@ const CollectionActionButtons = () => {
       element: (
         <ResponsiveDialog
           title="Edit collection"
-          className="px-4 md:px-0"
+          className="px-4 mx-auto"
           trigger={
             <div className="flex space-x-2 items-center w-full md:w-fit">
               <span className="flex justify-center items-center w-12 h-12 !text-xl">

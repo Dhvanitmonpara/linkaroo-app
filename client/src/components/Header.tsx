@@ -9,10 +9,9 @@ import {
 } from "@/components/ui/popover";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { IoSearchSharp } from "react-icons/io5";
-import { CreateCollectionForm, CreateLinkForm } from "./Forms";
+import { CreateCollectionForm, CreateLinkBar, CreateLinkForm } from "./Forms";
 import useMethodStore from "@/store/MethodStore";
 import { useEffect, useState } from "react";
-import CommandMenu from "./CommandMenu";
 import { Link, NavLink } from "react-router-dom";
 import ProfileCard from "./ProfileCard";
 import Notifications from "./Notifications";
@@ -84,12 +83,25 @@ const Header = () => {
               </TabsContent>
             </Tabs>
           </ResponsiveDialog>
-          <div
-            onClick={() => setOpen(true)}
-            className="md:w-12 cursor-pointer transition-colors duration-200 w-10 text-xl md:text-base md:hidden flex justify-center items-center md:dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-zinc-300 rounded-sm md:border-2 md:dark:border-zinc-800 md:border-zinc-200 hover:bg-zinc-200"
-          >
-            <IoSearchSharp />
-          </div>
+          <ResponsiveDialog
+            explicitStates={{ isOpen: open, setIsOpen: setOpen }}
+            prebuildForm={false}
+            title="Search"
+            showCloseButton={false}
+            className="sm:max-w-2xl md:p-0 bg-transparent border-none"
+            description="search something"
+            trigger={
+              <div
+                onClick={() => setOpen(true)}
+                className="md:w-12 cursor-pointer transition-colors duration-200 w-10 text-xl md:text-base md:hidden flex justify-center items-center md:dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-zinc-300 rounded-sm md:border-2 md:dark:border-zinc-800 md:border-zinc-200 hover:bg-zinc-200"
+              >
+                <IoSearchSharp />
+              </div>
+            }>
+            <div className="w-full flex-1 overflow-auto py-4 lg:py-0">
+              <CreateLinkBar />
+            </div>
+          </ResponsiveDialog>
           <div className="md:w-12 cursor-pointer transition-colors duration-200 w-10 text-xl md:text-base flex justify-center items-center md:dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-white rounded-sm md:border-2 md:dark:border-zinc-800 md:border-zinc-200 hover:bg-zinc-200">
             <IoFilterOutline />
           </div>
@@ -124,7 +136,6 @@ const Header = () => {
           </div>
         </div>
       </nav>
-      <CommandMenu open={open} setOpen={setOpen} />
     </>
   );
 };
