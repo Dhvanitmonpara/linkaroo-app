@@ -62,15 +62,21 @@ const Header = () => {
           </div>
           <ResponsiveDialog
             title={`${creationTab === "collection" ? "Create new Collection" : "Add new Link"}`}
-            trigger={<button
-              className="w-12 transition-colors duration-200 lg:flex hidden justify-center items-center dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-white rounded-sm border-2 dark:border-zinc-800 border-zinc-200 hover:bg-zinc-200"
-              onClick={() => {
-                setPrevPath(location.pathname);
-              }}
-            >
-              <IoMdAdd />
-            </button>} description={`${creationTab === "collection" ? "Create a new collection" : "Add a new link"} by filling all the required fields`} cancelText="Cancel">
-            <Tabs onValueChange={(value) => setCreationTab(value)} value={creationTab} className="w-[400px]">
+            trigger={
+              <button
+                className="w-12 transition-colors duration-200 lg:flex hidden justify-center items-center dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-white rounded-sm border-2 dark:border-zinc-800 border-zinc-200 hover:bg-zinc-200"
+                onClick={() => {
+                  setPrevPath(location.pathname);
+                }}
+              >
+                <IoMdAdd />
+              </button>
+            }
+            className="px-4"
+            description={`${creationTab === "collection" ? "Create a new collection" : "Add a new link"} by filling all the required fields`}
+            cancelText="Cancel"
+          >
+            <Tabs onValueChange={(value) => setCreationTab(value)} value={creationTab} className="sm:max-w-96 xl:max-w-lg">
               <TabsList className="w-full mb-4">
                 <TabsTrigger className="w-full" value="collection">Collection</TabsTrigger>
                 <TabsTrigger className="w-full" value="link">Link</TabsTrigger>

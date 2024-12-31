@@ -32,6 +32,7 @@ function ResponsiveDialog({
   className = "",
   showCloseButton = true,
   prebuildForm = true,
+  headerStyling = "",
   triggerStyling = "",
   cancelText = "Cancel",
 }: {
@@ -47,6 +48,7 @@ function ResponsiveDialog({
   className?: string;
   showCloseButton?: boolean;
   triggerStyling?: string;
+  headerStyling?: string;
   prebuildForm?: boolean;
   cancelText?: string;
 }) {
@@ -66,14 +68,14 @@ function ResponsiveDialog({
       <Dialog open={isOpen} onOpenChange={handleOpenChange}>
         <DialogTrigger asChild>{trigger}</DialogTrigger>
         <DialogContent
-          className={`sm:max-w-[27.2rem] ${className}`}
+          className={`sm:max-w-[27.2rem] md:max-w-96 xl:max-w-lg ${className}`}
           showCloseButton={showCloseButton && prebuildForm}
         >
           {prebuildForm ? (
-            <DialogHeader>
+            <div>
               <DialogTitle>{title}</DialogTitle>
               <DialogDescription>{description}</DialogDescription>
-            </DialogHeader>
+            </div>
           ) : (
             <VisuallyHidden>
               <DialogHeader>
@@ -93,9 +95,9 @@ function ResponsiveDialog({
       <DrawerTrigger className={triggerStyling} asChild>
         {trigger}
       </DrawerTrigger>
-      <DrawerContent className={`dark:bg-zinc-900/90 border-none sm:max-w-96 ${className}`}>
+      <DrawerContent className={`dark:bg-zinc-900/90 mx-auto border-none sm:max-w-96 ${className}`}>
         {prebuildForm && (
-          <DrawerHeader className="text-left px-0 pt-6">
+          <DrawerHeader className={`text-left px-0 pt-6 ${headerStyling}`}>
             <DrawerTitle>{title}</DrawerTitle>
             <DrawerDescription>{description}</DrawerDescription>
           </DrawerHeader>

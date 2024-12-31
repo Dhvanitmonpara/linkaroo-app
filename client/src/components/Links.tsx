@@ -312,14 +312,16 @@ const Links = () => {
           >
             You don't have any documents on this list.
           </span>
-          <ResponsiveDialog title="Add New Link" description="Add a new link to your collection" trigger={<div
-            onClick={() => {
-              setPrevPath(location);
-            }}
-            className={`dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-zinc-200 bg-zinc-300 hover:bg-zinc-400 px-6 py-2 cursor-pointer rounded-md`}
-          >
-            Add a Link
-          </div>}>
+          <ResponsiveDialog
+            title="Add New Link" description="Add a new link to your collection" trigger={
+              <div
+                onClick={() => {
+                  setPrevPath(location);
+                }}
+              >
+                Add a Link
+              </div>
+            }>
             <CreateLinkForm
               collectionTitle={currentCollectionItem?.title}
             />

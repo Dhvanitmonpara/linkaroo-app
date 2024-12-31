@@ -100,20 +100,32 @@ export default function HorizontalTabs() {
           }
         >
           <div className="w-full space-y-1 rounded-2xl overflow-hidden flex flex-col">
-            <DrawerMenu onClose={() => setCreationDrawer(false)} title="Create a Collection" trigger={<div className=" flex p-2 justify-normal items-center rounded-sm bg-zinc-800 hover:bg-zinc-700 text-zinc-200">
-              <span className="w-12 h-12 flex justify-center items-center text-xl">
-                <BsCollectionFill />
-              </span>
-              <span>Create a Collection</span>
-            </div>}>
+            <DrawerMenu
+              contentClassName="px-4"
+              onClose={() => setCreationDrawer(false)}
+              title="Create a Collection"
+              trigger={
+                <div className=" flex p-2 justify-normal items-center rounded-sm bg-zinc-800 hover:bg-zinc-700 text-zinc-200">
+                  <span className="w-12 h-12 flex justify-center items-center text-xl">
+                    <BsCollectionFill />
+                  </span>
+                  <span>Create a Collection</span>
+                </div>
+              }>
               <CreateCollectionForm />
             </DrawerMenu>
-            <DrawerMenu onClose={() => setCreationDrawer(false)} title="Add a Link" trigger={<div className=" flex p-2 justify-normal items-center rounded-sm bg-zinc-800 hover:bg-zinc-700 text-zinc-200">
-              <span className="w-12 h-12 flex justify-center items-center text-xl">
-                <IoLink />
-              </span>
-              <span>Add a Link</span>
-            </div>}>
+            <DrawerMenu
+              contentClassName="px-4"
+              onClose={() => setCreationDrawer(false)}
+              title="Add a Link"
+              trigger={
+                <div className=" flex p-2 justify-normal items-center rounded-sm bg-zinc-800 hover:bg-zinc-700 text-zinc-200">
+                  <span className="w-12 h-12 flex justify-center items-center text-xl">
+                    <IoLink />
+                  </span>
+                  <span>Add a Link</span>
+                </div>
+              }>
               <CreateLinkForm />
             </DrawerMenu>
           </div>
