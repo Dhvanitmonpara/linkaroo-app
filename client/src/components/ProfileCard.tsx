@@ -12,13 +12,14 @@ import { Button } from "./ui/button";
 import { handleAxiosError } from "@/utils/handlerAxiosError";
 import axios, { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import ResponsiveDialog from "./ResponsiveDialog";
 import { DrawerClose } from "./ui/drawer";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTrigger } from "./ui/dialog";
+import { DialogTitle } from "@radix-ui/react-dialog";
+import { ReactNode, useState } from "react";
 
 const ProfileCard = () => {
 
-  const [open, setOpen] = useState(false);
+  const [open, setIsOpen] = useState(false)
 
   const { setPrevPath } = useMethodStore();
   const { profile } = useProfileStore();
@@ -39,18 +40,12 @@ const ProfileCard = () => {
     } catch (error) {
       handleAxiosError(error as AxiosError, navigate);
     } finally {
-      setOpen(false)
-    }
-  };
-
-  const handleOpenChange = (state: boolean) => {
-    if (open !== state) {
-      setOpen(state); // Update only if the state changes
+      // 
     }
   };
 
   return (
-    <DropdownMenu open={open} onOpenChange={setOpen}>
+    <DropdownMenu open={open} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger className="!w-14 dark:text-white flex justify-center items-center rounded-md focus:outline-none">
         <img
           className="rounded-full h-10 w-10 object-cover border-zinc-700 border-2 hover:border-zinc-200 transition-colors"
@@ -92,51 +87,30 @@ const ProfileCard = () => {
         >
           Profile
         </DropdownMenuItem>
-        <ResponsiveDialog
-          onChangeEvent={handleOpenChange}
-          title="Logout"
+
+        <DialogContainer
+          trigger="Settings"
+          title="Settings"
           description="Are you sure you want to logout?"
-          showCloseButton={false}
-          trigger={
-            <div
-              className="p-2 text-sm hover:bg-zinc-800 w-full rounded-sm cursor-pointer"
-              onClick={() => {
-                setPrevPath(location.pathname);
-              }}
-            >
-              Settings
-            </div>
-          }
         >
           <SettingsForm />
-        </ResponsiveDialog>
+        </DialogContainer>
 
-        <DropdownMenuItem
-          className="py-2"
-          onClick={(e) => {
-            e.preventDefault();
-            setPrevPath(location.pathname);
-            setModalContent(
-              <div className="dark:text-white p-5 flex justify-center items-center space-y-3">
-                <h1 className="text-3xl">Feedback</h1>
-                {/* Add form fields here */}
-              </div>
-            );
-          }}
-        >
-          Feedback
-        </DropdownMenuItem>
-        <ResponsiveDialog
+        <DialogContainer
+          trigger="Feedback"
           title="Logout"
           description="Are you sure you want to logout?"
-          showCloseButton={false}
-          trigger={
-            <div
-              className="p-2 text-sm hover:bg-zinc-800 w-full rounded-sm cursor-pointer"
-            >
-              Logout
-            </div>
-          }
+        >
+          <div className="dark:text-white p-5 flex justify-center items-center space-y-3">
+            <h1 className="text-3xl">Feedback</h1>
+            {/* Add form fields here */}
+          </div>
+        </DialogContainer>
+
+        <DialogContainer
+          trigger="Logout"
+          title="Logout"
+          description="Are you sure you want to logout?"
         >
           <div>
             <h1>Are you sure you want to delete this list?</h1>
@@ -148,19 +122,39 @@ const ProfileCard = () => {
                 Yes
               </Button>
               <DrawerClose
-                onClick={() => {
-                  setOpen(false);
-                }}
                 className="ml-4 w-24 font-semibold dark:bg-zinc-800 dark:hover:bg-zinc-800/60 bg-zinc-200 hover:bg-zinc-300"
               >
                 No
               </DrawerClose>
             </div>
           </div>
-        </ResponsiveDialog>
+        </DialogContainer>
       </DropdownMenuContent>
     </DropdownMenu>
   );
 };
 
 export default ProfileCard;
+
+const DialogContainer = ({ children, trigger, title, description }: {
+  children: ReactNode;
+  trigger: string;
+  title: string;
+  description: string
+}) => {
+  return (
+    <Dialog
+    >
+      <DialogTrigger className="p-2 text-sm text-start hover:bg-zinc-800 w-full rounded-sm cursor-pointer">
+        {trigger}
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-96">
+        <DialogHeader>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription>{description}</DialogDescription>
+        </DialogHeader>
+        {children}
+      </DialogContent>
+    </Dialog>
+  )
+}
