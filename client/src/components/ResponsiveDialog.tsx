@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as DialogPrimitive from "@radix-ui/react-dialog"
 
 import { Button } from "@/components/ui/button";
 import {
@@ -33,8 +34,10 @@ function ResponsiveDialog({
   showCloseButton = true,
   prebuildForm = true,
   headerStyling = "",
+  onChangeEvent = null,
   triggerStyling = "",
   cancelText = "Cancel",
+  ...props
 }: {
   children: React.ReactNode;
   defaultOpen?: boolean;
@@ -49,9 +52,10 @@ function ResponsiveDialog({
   showCloseButton?: boolean;
   triggerStyling?: string;
   headerStyling?: string;
+  onChangeEvent?: ((state: boolean) => void) | null;
   prebuildForm?: boolean;
   cancelText?: string;
-}) {
+} & React.ComponentProps<typeof DialogPrimitive.Root>) {
   const [open, setOpen] = React.useState(defaultOpen);
   const isDesktop = useMediaQuery({ query: "(min-width: 768px)" });
 
@@ -65,10 +69,19 @@ function ResponsiveDialog({
 
   if (isDesktop) {
     return (
-      <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+      <Dialog
+        open={isOpen}
+        onOpenChange={
+          (state) => {
+            typeof onChangeEvent === "function" && onChangeEvent(state)
+            handleOpenChange(state)
+          }
+        }
+        {...props}
+      >
         <DialogTrigger asChild>{trigger}</DialogTrigger>
         <DialogContent
-          className={`sm:max-w-[27.2rem] md:max-w-96 xl:max-w-lg ${className}`}
+          className={`sm:max-w-[27.2rem] md:max-w-96 ${className}`}
           showCloseButton={showCloseButton && prebuildForm}
         >
           {prebuildForm ? (
@@ -86,7 +99,7 @@ function ResponsiveDialog({
           )}
           {children}
         </DialogContent>
-      </Dialog>
+      </Dialog >
     );
   }
 

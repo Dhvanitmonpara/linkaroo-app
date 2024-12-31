@@ -131,9 +131,6 @@ const Header = () => {
           <NavLink to="/dashboard" className={({ isActive }) => (`${isActive ? "text-zinc-100" : ""} hover:text-zinc-100 cursor-pointer transition-colors`)}>
             Dashboard
           </NavLink>
-          {/* <NavLink to="pinned" className={({isActive})=>(`${isActive ? "text-zinc-100" : ""} hover:text-zinc-100 cursor-pointer transition-colors`)}>
-            Pinned
-          </NavLink> */}
           <NavLink to="/inbox" className={({ isActive }) => (`${isActive ? "text-zinc-100" : ""} hover:text-zinc-100 cursor-pointer transition-colors`)}>
             Inbox
           </NavLink>

@@ -65,9 +65,9 @@ const SettingsForm = () => {
   }, [toggleIsSearchShortcutEnabled, profile.isSearchShortcutEnabled]);
 
   return (
-    <div className="dark:text-white flex flex-col sm:w-96 px-4 sm:px-0 justify-center items-center space-y-3">
+    <div className="dark:text-white flex flex-col sm:max-w-96 justify-center items-center space-y-3">
       <form
-        className="h-4/5 flex flex-col space-y-3 sm:w-96 w-full justify-center items-center"
+        className="h-4/5 flex flex-col space-y-3 w-full justify-center items-center"
         onSubmit={handleSubmit(handleUpdateSettings)}
       >
         <Controller

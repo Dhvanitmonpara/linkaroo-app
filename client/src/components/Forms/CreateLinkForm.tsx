@@ -90,7 +90,7 @@ const CreateLinkForm: React.FC<CreateLinkFormProps> = ({
   };
 
   return (
-    <div className="dark:text-white flex flex-col w-full sm:max-w-96 xl:max-w-lg justify-center items-center space-y-3">
+    <div className="dark:text-white flex flex-col w-full sm:max-w-96 justify-center items-center space-y-3">
       <form
         className="h-4/5 flex flex-col space-y-4 w-full justify-center items-center"
         onSubmit={handleSubmit(handleLinkCreation)}
@@ -122,7 +122,7 @@ const CreateLinkForm: React.FC<CreateLinkFormProps> = ({
           rules={{ required: "Please select a list" }}
           render={({ field: { onChange, value } }) => (
             <Select value={value} onValueChange={onChange}>
-              <SelectTrigger className="text-zinc-100 bg-zinc-800 border-zinc-800 sm:max-w-96 xl:max-w-lg">
+              <SelectTrigger className="text-zinc-100 bg-zinc-800 border-zinc-800 sm:max-w-96">
                 <SelectValue placeholder="Select list" />
               </SelectTrigger>
               <SelectContent
