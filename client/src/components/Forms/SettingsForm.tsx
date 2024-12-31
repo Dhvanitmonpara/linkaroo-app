@@ -96,10 +96,10 @@ const SettingsForm = () => {
           )}
         />
 
-        <div className="flex p-3 rounded-md text-zinc-100 bg-zinc-800 border-zinc-800 w-full sm:max-w-96">
+        <div className="flex p-3 space-x-6 rounded-md text-zinc-100 bg-zinc-800 border-zinc-800 w-full sm:max-w-96">
           <Label className="space-y-1" htmlFor="search-shortcut">
             <span className="text-sm font-medium">Search shortcut</span>
-            <p className="text-xs text-zinc-400">Show search button instead of quick collection/link adder</p>
+            <p className="text-xs text-zinc-400">Show search button instead of quick collection/link add button</p>
           </Label>
           <Switch id="search-shortcut" checked={profile.isSearchShortcutEnabled} onCheckedChange={searchShortcutHandler} />
         </div>

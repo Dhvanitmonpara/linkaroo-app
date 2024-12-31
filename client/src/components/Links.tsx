@@ -328,7 +328,7 @@ const Links = () => {
       >
         <ResponsiveDialog
           prebuildForm={false}
-          className="sm:max-w-2xl p-0 bg-transparent border-none"
+          className="sm:max-w-2xl md:p-0 bg-transparent border-none"
           title="Add New Link"
           trigger={
             <div className="flex justify-start items-center text-zinc-300 text-start">
@@ -340,11 +340,14 @@ const Links = () => {
               </p>
             </div>
           }
+          showCloseButton={false}
           description="Add a new link to your collection"
         >
-          <CreateLinkBar
-            collectionTitle={currentCollectionItem?.title}
-          />
+          <div className="w-full flex-1 overflow-auto py-4">
+            <CreateLinkBar
+              collectionTitle={currentCollectionItem?.title}
+            />
+          </div>
         </ResponsiveDialog>
         {links?.map((link) => (
           <LinkCard

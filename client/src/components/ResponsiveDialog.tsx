@@ -89,11 +89,11 @@ function ResponsiveDialog({
           </DrawerDescription>
         </DrawerHeader>}
         {children}
-        <DrawerFooter className="pt-2">
+        {showCloseButton && <DrawerFooter className="pt-2">
           <DrawerClose asChild>
             <Button variant="ghost">{cancelText}</Button>
           </DrawerClose>
-        </DrawerFooter>
+        </DrawerFooter>}
       </DrawerContent>
     </Drawer>
   )

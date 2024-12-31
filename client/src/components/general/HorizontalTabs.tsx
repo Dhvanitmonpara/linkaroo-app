@@ -74,7 +74,7 @@ export default function HorizontalTabs() {
       </NavLink>
 
       {profile.isSearchShortcutEnabled ?
-        <DrawerMenu onClose={() => setCreationDrawer(false)} title="Search something" trigger={
+        <DrawerMenu onClose={() => setCreationDrawer(false)} trigger={
           <label
             htmlFor="create-tab"
             className="menu-label !text-2xl bg-transparent !w-auto !text-zinc-500"
