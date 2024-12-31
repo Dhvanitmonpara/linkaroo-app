@@ -10,7 +10,6 @@ import Collections from "./Collections";
 import Links from "./Links";
 import Loading from "./Loading";
 import ResponsiveDialog from "./ResponsiveDialog";
-import CommandMenu from "./CommandMenu";
 import CollectionActionButtons from "./CollectionActionButtons";
 import NotificationCard from "./NotificationCard";
 import Notifications from "./Notifications";
@@ -28,7 +27,6 @@ export {
   Links,
   Loading,
   ResponsiveDialog,
-  CommandMenu,
   CollectionActionButtons,
   NotificationCard,
   Notifications,

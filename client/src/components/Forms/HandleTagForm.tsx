@@ -250,9 +250,8 @@ function HandleTagForm({ setCheckedTags, loading, checkedTags }: {
               <>
                 <div className='space-y-1 py-2'>
                   {checkedTags.map((tag, index) => (
-                    <div className='space-x-3 flex w-full text-start bg-zinc-800/40 hover:bg-zinc-800/60 p-3 rounded-md'>
+                    <div key={index} className='space-x-3 flex w-full text-start bg-zinc-800/40 hover:bg-zinc-800/60 p-3 rounded-md'>
                       <Checkbox
-                        key={index}
                         checkboxStyling='h-6 w-6'
                         className='border-none data-[state=checked]:bg-transparent data-[state=checked]:text-zinc-100'
                         id={tag.tagname}
