@@ -37,7 +37,6 @@ export default function DrawerMenu({
     <Drawer {...props}>
       <DrawerTrigger className={triggerClassNames} asChild>{trigger}</DrawerTrigger>
       <DrawerContent
-        aria-hidden
         className={`sm:w-[400px] w-11/12 m-auto dark:bg-zinc-900 text-white border-zinc-800 ${className}`}
       >
         {title ? (

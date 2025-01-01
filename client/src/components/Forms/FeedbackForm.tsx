@@ -16,7 +16,6 @@ import { useNavigate } from "react-router-dom";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import { Loader2 } from "lucide-react";
-import useProfileStore from "@/store/profileStore";
 
 type HandleFeedbackType = {
   title: string
@@ -24,11 +23,10 @@ type HandleFeedbackType = {
   type: "bug-report" | "suggest-feature";
 }
 
-function FeedbackForm() {
+function FeedbackForm({ setIsOpen }: { setIsOpen: (value: boolean) => void }) {
 
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { profile } = useProfileStore()
 
   const { control, handleSubmit, register } = useForm<HandleFeedbackType>();
 
@@ -37,7 +35,7 @@ function FeedbackForm() {
       setLoading(true);
 
       const res = await axios.post(
-        `${import.meta.env.VITE_SERVER_API_URL}/users/feedback/${profile._id}`,
+        `${import.meta.env.VITE_SERVER_API_URL}/users/feedback`,
         data,
         { withCredentials: true }
       );
@@ -50,6 +48,7 @@ function FeedbackForm() {
       handleAxiosError(error as AxiosError, navigate);
     } finally {
       setLoading(false);
+      setIsOpen(false)
     }
   };
 
@@ -105,8 +104,11 @@ function FeedbackForm() {
             Please wait
           </Button>
         ) : (
-          <Button className="dark:bg-zinc-300 bg-zinc-900 dark:text-zinc-950 text-zinc-200 hover:bg-zinc-800 dark:hover:bg-zinc-400/90 font-semibold w-full">
-            Add Link
+          <Button
+            type="submit"
+            className="dark:bg-zinc-300 bg-zinc-900 dark:text-zinc-950 text-zinc-200 hover:bg-zinc-800 dark:hover:bg-zinc-400/90 font-semibold w-full"
+          >
+            Submit feedback
           </Button>
         )}
       </form>

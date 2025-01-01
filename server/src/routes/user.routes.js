@@ -16,7 +16,8 @@ import {
     updateUserCoverImage,
     passwordRecovery,
     toggleTheme,
-    sendOtp
+    sendOtp,
+    sendFeedback
 } from "../controllers/user.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import { upload } from "../middlewares/multer.middleware.js";
@@ -42,10 +43,11 @@ router.route("/avatar").patch(verifyJWT, upload.single("avatar"), updateUserAvat
 router.route("/update-bio").patch(verifyJWT, updateBio)
 router.route("/settings/update").post(verifyJWT, updateProfileSettings)
 router.route("/cover-image")
-.post(verifyJWT, upload.single("coverImage"), uploadUserCoverImage)
-.patch(verifyJWT, upload.single("coverImage"), updateUserCoverImage)
+    .post(verifyJWT, upload.single("coverImage"), uploadUserCoverImage)
+    .patch(verifyJWT, upload.single("coverImage"), updateUserCoverImage)
 router.route("/theme").patch(verifyJWT, toggleTheme)
 router.route("/verified-search/email").patch(verifyJWT, searchUserByEmail)
+router.route("/feedback").post(verifyJWT, sendFeedback)
 router.route("/search/email").patch(searchUserByEmail)
 router.route("/verified-search/username").patch(verifyJWT, searchUserByUsername)
 router.route("/search/username").patch(searchUserByUsername)

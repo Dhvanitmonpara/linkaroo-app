@@ -197,7 +197,7 @@ export default function HorizontalTabs() {
                 <span>Feedback</span>
               </div>
             }>
-            <FeedbackForm />
+            <FeedbackForm setIsOpen={() => { }} />
           </DrawerMenu>
           <DrawerClose onClick={() => {
             setPrevPath(location);

@@ -442,7 +442,7 @@ const sendOtp = asyncHandler(async (req, res) => {
     }
 
     try {
-        const mailResponse = await sendMail(email, true);
+        const mailResponse = await sendMail(email, "OTP");
 
         if (!mailResponse.success) {
             console.error("Failed to send OTP:", mailResponse.error);
@@ -671,6 +671,42 @@ const passwordRecovery = asyncHandler(async (req, res) => {
 
 })
 
+const sendFeedback = asyncHandler(async (req, res) => {
+
+    const { title, description } = req.body
+    const sendBy = req.user.email
+
+    if (!sendBy) {
+        throw new ApiError(400, "Email is required")
+    }
+
+    try {
+        const mailResponse = await sendMail(process.env.GMAIL_USER, "FEEDBACK-SENT", {
+            title,
+            description,
+            sendBy
+        });
+
+        if (!mailResponse.success) {
+            console.error("Failed to send Feedback:", mailResponse.error);
+            return res.status(500).json({ message: mailResponse.error || "Failed to send Feedback" });
+        }
+
+        sendMail(sendBy, "FEEDBACK-RECEIVED");
+
+        return res.status(200).json({
+            messageId: mailResponse.messageId,
+            message: "Feedback sent successfully"
+        });
+    } catch (error) {
+        console.error("Error in sendFeedback:", error.message);
+        return res.status(500).json({
+            message: "Failed to send feedback due to server error",
+            error: error.message
+        });
+    }
+})
+
 export {
     registerUser,
     loginUser,
@@ -688,5 +724,6 @@ export {
     toggleTheme,
     passwordRecovery,
     updateProfileSettings,
-    sendOtp
+    sendOtp,
+    sendFeedback
 }

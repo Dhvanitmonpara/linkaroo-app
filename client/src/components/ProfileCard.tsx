@@ -87,7 +87,7 @@ const ProfileCard = () => {
           title="Feedback"
           description="Report a bug or Suggest a feature."
         >
-          <FeedbackForm />
+          <FeedbackForm setIsOpen={setIsOpen} />
         </DialogContainer>
 
         <DialogContainer
