@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { RxCross2 } from "react-icons/rx";
 import { ReactNode } from "react";
 import { Drawer as DrawerPrimitive } from "vaul"
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 type DrawerMenuProps = {
   children: ReactNode;
@@ -36,9 +37,10 @@ export default function DrawerMenu({
     <Drawer {...props}>
       <DrawerTrigger className={triggerClassNames} asChild>{trigger}</DrawerTrigger>
       <DrawerContent
+        aria-hidden
         className={`sm:w-[400px] w-11/12 m-auto dark:bg-zinc-900 text-white border-zinc-800 ${className}`}
       >
-        {title && (
+        {title ? (
           <DrawerHeader className="flex w-full justify-between items-center">
             <DrawerTitle>{title}</DrawerTitle>
             <DrawerDescription>{description}</DrawerDescription>
@@ -48,6 +50,13 @@ export default function DrawerMenu({
               </Button>
             </DrawerClose>
           </DrawerHeader>
+        ) : (
+          <VisuallyHidden>
+            <DrawerHeader className="flex w-full justify-between items-center">
+              <DrawerTitle>{title}</DrawerTitle>
+              <DrawerDescription>{description}</DrawerDescription>
+            </DrawerHeader>
+          </VisuallyHidden>
         )}
         <div className={`flex-1 overflow-auto py-4 ${contentClassName}`}>
           {children}

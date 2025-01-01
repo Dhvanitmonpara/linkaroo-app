@@ -1,29 +1,26 @@
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import useProfileStore from "@/store/profileStore";
 import { SettingsForm } from "./Forms";
-import useMethodStore from "@/store/MethodStore";
 import toast from "react-hot-toast";
 import { Button } from "./ui/button";
 import { handleAxiosError } from "@/utils/handlerAxiosError";
 import axios, { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
-import { DrawerClose } from "./ui/drawer";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTrigger } from "./ui/dialog";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTrigger } from "./ui/dialog";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { ReactNode, useState } from "react";
+import ProfileForm from "./Forms/ProfileForm";
+import FeedbackForm from "./Forms/FeedbackForm";
 
 const ProfileCard = () => {
 
   const [open, setIsOpen] = useState(false)
 
-  const { setPrevPath } = useMethodStore();
   const { profile } = useProfileStore();
-  const { setModalContent } = useMethodStore();
   const navigate = useNavigate()
 
   const handleLogout = async () => {
@@ -54,39 +51,29 @@ const ProfileCard = () => {
         />
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        className="dark:bg-black dark:text-white dark:border-zinc-800 !w-64 mt-1"
+        className="dark:bg-black dark:text-white dark:border-zinc-800 !w-64 space-y-1 p-2 mt-1"
       >
-        {/* <DropdownMenuItem className="py-2" onClick={() => {}}> */}
-        <div className="flex justify-start items-center px-2 py-4">
+        <div className="flex justify-start items-center select-none cursor-pointer px-3 py-3 bg-zinc-800/70 hover:bg-zinc-800 rounded-sm">
           <img
-            className="rounded-full h-12 w-12 object-cover"
+            className="rounded-full h-10 w-10 object-cover"
             src={profile.avatarImage}
             alt="Profile pic"
           />
           <div className="ml-3 text-start">
-            <p className="text-sm dark:text-zinc-200">{profile.fullName}</p>
-            <span className="text-xs text-zinc-500 dark:text-gray-300">
+            <h5 className="text-sm dark:text-zinc-200 font-semibold cursor-pointer">{profile.fullName}</h5>
+            <p className="text-xs text-zinc-500 dark:text-gray-400 cursor-pointer">
               {profile.email}
-            </span>
+            </p>
           </div>
         </div>
-        {/* </DropdownMenuItem> */}
 
-        <DropdownMenuItem
-          className="py-2"
-          onClick={(e) => {
-            e.preventDefault();
-            setPrevPath(location.pathname);
-            setModalContent(
-              <div className="dark:text-white p-5 flex justify-center items-center space-y-3">
-                <h1 className="text-3xl">Profile</h1>
-                {/* Add form fields here */}
-              </div>
-            );
-          }}
+        <DialogContainer
+          trigger="Profile"
+          title="Profile"
+          description="Edit your profile"
         >
-          Profile
-        </DropdownMenuItem>
+          <ProfileForm />
+        </DialogContainer>
 
         <DialogContainer
           trigger="Settings"
@@ -98,35 +85,29 @@ const ProfileCard = () => {
 
         <DialogContainer
           trigger="Feedback"
-          title="Logout"
-          description="Are you sure you want to logout?"
+          title="Feedback"
+          description="Report a bug or Suggest a feature."
         >
-          <div className="dark:text-white p-5 flex justify-center items-center space-y-3">
-            <h1 className="text-3xl">Feedback</h1>
-            {/* Add form fields here */}
-          </div>
+          <FeedbackForm />
         </DialogContainer>
 
         <DialogContainer
           trigger="Logout"
-          title="Logout"
-          description="Are you sure you want to logout?"
+          title="Are you sure you want to logout?"
+          description="Your account will be deleted if there is no activity found for 60 days."
         >
-          <div>
-            <h1>Are you sure you want to delete this list?</h1>
-            <div className="flex justify-center mt-4">
-              <Button
-                onClick={handleLogout}
-                className="w-24 text-zinc-50 font-semibold bg-red-500 hover:bg-red-600"
-              >
-                Yes
-              </Button>
-              <DrawerClose
-                className="ml-4 w-24 font-semibold dark:bg-zinc-800 dark:hover:bg-zinc-800/60 bg-zinc-200 hover:bg-zinc-300"
-              >
-                No
-              </DrawerClose>
-            </div>
+          <div className="flex justify-center">
+            <Button
+              onClick={handleLogout}
+              className="w-full rounded-sm text-zinc-50 font-semibold bg-red-500 hover:bg-red-600"
+            >
+              Yes
+            </Button>
+            <DialogClose
+              className="ml-1.5 rounded-sm w-full font-semibold dark:bg-zinc-800 dark:hover:bg-zinc-800/60 bg-zinc-200 hover:bg-zinc-300"
+            >
+              No
+            </DialogClose>
           </div>
         </DialogContainer>
       </DropdownMenuContent>
@@ -145,10 +126,10 @@ const DialogContainer = ({ children, trigger, title, description }: {
   return (
     <Dialog
     >
-      <DialogTrigger className="p-2 text-sm text-start hover:bg-zinc-800 w-full rounded-sm cursor-pointer">
+      <DialogTrigger className="p-3 text-sm text-start bg-zinc-800/70 hover:bg-zinc-800 w-full rounded-sm cursor-pointer">
         {trigger}
       </DialogTrigger>
-      <DialogContent className="sm:max-w-96">
+      <DialogContent aria-hidden className="sm:max-w-96">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>

@@ -19,6 +19,7 @@ import { FaInbox } from "react-icons/fa6";
 import { useState } from "react";
 import { BsCollectionFill } from "react-icons/bs";
 import "../components.css"
+import FeedbackForm from "../Forms/FeedbackForm";
 
 export default function HorizontalTabs() {
   const { profile } = useProfileStore();
@@ -169,29 +170,34 @@ export default function HorizontalTabs() {
               <span>Profile</span>
             </div>
           </DrawerClose>
-          <DrawerMenu onClose={() => setProfileDrawer(false)} title="Create a Collection" trigger={
-            <div className="flex p-2 justify-normal items-center rounded-sm bg-zinc-800 hover:bg-zinc-700 text-zinc-200">
-              <span className="w-12 h-12 flex justify-center items-center text-xl">
-                <IoMdSettings />
-              </span>
-              <span>Settings</span>
-            </div>
-          }>
+          <DrawerMenu
+            onClose={() => setProfileDrawer(false)}
+            title="Create a Collection"
+            contentClassName="px-4 pt-0 pb-6"
+            trigger={
+              <div className="flex p-2 justify-normal items-center rounded-sm bg-zinc-800 hover:bg-zinc-700 text-zinc-200">
+                <span className="w-12 h-12 flex justify-center items-center text-xl">
+                  <IoMdSettings />
+                </span>
+                <span>Settings</span>
+              </div>
+            }>
             <SettingsForm />
           </DrawerMenu>
-          <DrawerMenu onClose={() => setProfileDrawer(false)} trigger={
-            <div
-              className="flex p-2 justify-normal items-center rounded-sm bg-zinc-800 hover:bg-zinc-700 text-zinc-200">
-              <span className="w-12 h-12 flex justify-center items-center text-xl">
-                <MdFeedback />
-              </span>
-              <span>Feedback</span>
-            </div>
-          }>
-            <div className="dark:text-white p-5 flex justify-center items-center space-y-3">
-              <h1 className="text-3xl">Feedback</h1>
-              {/* Add form fields here */}
-            </div>
+          <DrawerMenu
+            onClose={() => setProfileDrawer(false)}
+            title="Feedback"
+            contentClassName="px-4 pt-0 pb-6"
+            trigger={
+              <div
+                className="flex p-2 justify-normal items-center rounded-sm bg-zinc-800 hover:bg-zinc-700 text-zinc-200">
+                <span className="w-12 h-12 flex justify-center items-center text-xl">
+                  <MdFeedback />
+                </span>
+                <span>Feedback</span>
+              </div>
+            }>
+            <FeedbackForm />
           </DrawerMenu>
           <DrawerClose onClick={() => {
             setPrevPath(location);
