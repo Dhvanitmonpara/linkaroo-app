@@ -1,8 +1,3 @@
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import useProfileStore from "@/store/profileStore";
 import { SettingsForm } from "./Forms";
 import toast from "react-hot-toast";
@@ -15,6 +10,7 @@ import { DialogTitle } from "@radix-ui/react-dialog";
 import { ReactNode, useState } from "react";
 import ProfileForm from "./Forms/ProfileForm";
 import FeedbackForm from "./Forms/FeedbackForm";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 
 const ProfileCard = () => {
 
@@ -37,20 +33,20 @@ const ProfileCard = () => {
     } catch (error) {
       handleAxiosError(error as AxiosError, navigate);
     } finally {
-      // 
+      setIsOpen(false)
     }
   };
 
   return (
-    <DropdownMenu open={open} onOpenChange={setIsOpen}>
-      <DropdownMenuTrigger className="!w-14 dark:text-white flex justify-center items-center rounded-md focus:outline-none">
+    <Popover open={open} onOpenChange={setIsOpen}>
+      <PopoverTrigger className="!w-14 dark:text-white flex justify-center items-center rounded-md focus:outline-none">
         <img
           className="rounded-full h-10 w-10 object-cover border-zinc-700 border-2 hover:border-zinc-200 transition-colors"
           src={profile.avatarImage}
           alt="Profile pic"
         />
-      </DropdownMenuTrigger>
-      <DropdownMenuContent
+      </PopoverTrigger>
+      <PopoverContent
         className="dark:bg-black dark:text-white dark:border-zinc-800 !w-64 space-y-1 p-2 mt-1"
       >
         <div className="flex justify-start items-center select-none cursor-pointer px-3 py-3 bg-zinc-800/70 hover:bg-zinc-800 rounded-sm">
@@ -68,6 +64,7 @@ const ProfileCard = () => {
         </div>
 
         <DialogContainer
+          onClose={(value) => (value !== true && setIsOpen(false))}
           trigger="Profile"
           title="Profile"
           description="Edit your profile"
@@ -76,6 +73,7 @@ const ProfileCard = () => {
         </DialogContainer>
 
         <DialogContainer
+          onClose={(value) => (value !== true && setIsOpen(false))}
           trigger="Settings"
           title="Settings"
           description="Are you sure you want to logout?"
@@ -84,6 +82,7 @@ const ProfileCard = () => {
         </DialogContainer>
 
         <DialogContainer
+          onClose={(value) => (value !== true && setIsOpen(false))}
           trigger="Feedback"
           title="Feedback"
           description="Report a bug or Suggest a feature."
@@ -92,6 +91,7 @@ const ProfileCard = () => {
         </DialogContainer>
 
         <DialogContainer
+          onClose={(value) => (value !== true && setIsOpen(false))}
           trigger="Logout"
           title="Are you sure you want to logout?"
           description="Your account will be deleted if there is no activity found for 60 days."
@@ -110,21 +110,23 @@ const ProfileCard = () => {
             </DialogClose>
           </div>
         </DialogContainer>
-      </DropdownMenuContent>
-    </DropdownMenu>
+      </PopoverContent>
+    </Popover>
   );
 };
 
 export default ProfileCard;
 
-const DialogContainer = ({ children, trigger, title, description }: {
+const DialogContainer = ({ children, trigger, title, description, onClose = null }: {
   children: ReactNode;
   trigger: string;
   title: string;
   description: string
+  onClose?: ((value: boolean) => void) | null
 }) => {
   return (
     <Dialog
+      onOpenChange={(v) => onClose && onClose(v)}
     >
       <DialogTrigger className="p-3 text-sm text-start bg-zinc-800/70 hover:bg-zinc-800 w-full rounded-sm cursor-pointer">
         {trigger}
