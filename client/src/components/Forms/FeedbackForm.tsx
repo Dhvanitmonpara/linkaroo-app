@@ -28,7 +28,13 @@ function FeedbackForm({ setIsOpen }: { setIsOpen: (value: boolean) => void }) {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const { control, handleSubmit, register } = useForm<HandleFeedbackType>();
+  const { control, handleSubmit, register } = useForm<HandleFeedbackType>({
+    defaultValues: {
+      title: "",
+      description: "",
+      type: "bug-report",
+    }
+  });
 
   const handleFeedbackSubmit = async (data: HandleFeedbackType) => {
     try {
@@ -39,9 +45,16 @@ function FeedbackForm({ setIsOpen }: { setIsOpen: (value: boolean) => void }) {
         data,
         { withCredentials: true }
       );
-
-      if (!res.data.data) {
-        toast.error("Failed to add link");
+      
+      if (res.data.success) {
+        toast.success("Feedback sent successfully");
+      } else {
+        if (typeof res.data.data.error === "string") {
+          toast.error(res.data.data.error)
+        } else {
+          console.log(res.data.data.error)
+          toast.error("Failed to send feedback");
+        }
       }
 
     } catch (error) {

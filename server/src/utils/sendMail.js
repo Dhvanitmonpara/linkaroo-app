@@ -22,11 +22,10 @@ const generateOtp = (length = 6) => {
   return otp;
 };
 
-const sendMail = async (user, type, {
-  title = null,
-  description = null,
-  sendBy = null
-}) => {
+const sendMail = async (user, type, details = {}) => {
+
+  const { title = null, description = null, sendBy = null } = details
+
   try {
     // Generate OTP if it's an OTP mail
     const otpCode = type === "OTP" ? generateOtp() : undefined;
@@ -77,7 +76,7 @@ const sendMail = async (user, type, {
           <h6>[[TITLE]]</h6>
           <hr style="border: none; border-top: 1px solid #ccc;" />
           <p style="color: #888;">Best regards,<br />[[DESCRIPTION]]</p>
-        </div>`.replace("[[USER]]", sendBy).replace("[[TITLE]]", title).replace("[[DESCRIPTION]]", description)
+        </div>`.replace("[[USER]]", details.sendBy).replace("[[TITLE]]", details.title).replace("[[DESCRIPTION]]", details.description)
         break;
     }
 

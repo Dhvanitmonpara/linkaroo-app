@@ -672,9 +672,13 @@ const passwordRecovery = asyncHandler(async (req, res) => {
 })
 
 const sendFeedback = asyncHandler(async (req, res) => {
-
+    
     const { title, description } = req.body
     const sendBy = req.user.email
+
+    if(!title || !description) {
+        throw new ApiError(400, "title and description are required")
+    }
 
     if (!sendBy) {
         throw new ApiError(400, "Email is required")
@@ -695,12 +699,14 @@ const sendFeedback = asyncHandler(async (req, res) => {
         sendMail(sendBy, "FEEDBACK-RECEIVED");
 
         return res.status(200).json({
+            success: true,
             messageId: mailResponse.messageId,
             message: "Feedback sent successfully"
         });
     } catch (error) {
         console.error("Error in sendFeedback:", error.message);
         return res.status(500).json({
+            success: false,
             message: "Failed to send feedback due to server error",
             error: error.message
         });
