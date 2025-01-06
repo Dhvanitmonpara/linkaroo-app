@@ -7,7 +7,6 @@ import {
   SelectTrigger,
   SelectContent,
   SelectGroup,
-  SelectLabel,
   SelectValue,
 } from "@/components/ui/select";
 import { useForm, Controller } from "react-hook-form";
@@ -28,7 +27,7 @@ type HandleSettingsType = {
 const SettingsForm = () => {
 
   const [loading, setLoading] = useState(false);
-  const { changeTheme, updateProfile, profile, changeFont, toggleIsSearchShortcutEnabled } = useProfileStore();
+  const { changeTheme, profile, changeFont, toggleIsSearchShortcutEnabled, toggleUseFullTypeFormAdder } = useProfileStore();
   const navigate = useNavigate()
 
   const { control, handleSubmit } = useForm<HandleSettingsType>({
@@ -43,16 +42,21 @@ const SettingsForm = () => {
 
       setLoading(true);
 
+      const newData = {
+        theme: data.theme,
+        font: data.font,
+        isSearchShortcutEnabled: profile.isSearchShortcutEnabled
+      }
+
       const response = await axios.post(
         `${import.meta.env.VITE_SERVER_API_URL}/users/settings/update`,
-        data,
+        newData,
         { withCredentials: true }
       );
 
       if (response.status !== 200) {
         toast.error("Failed to update settings");
       }
-      updateProfile(response.data.data);
     } catch (error) {
       handleAxiosError(error as AxiosError, navigate);
     } finally {
@@ -99,9 +103,17 @@ const SettingsForm = () => {
         <div className="flex p-3 space-x-6 rounded-md text-zinc-100 bg-zinc-800 border-zinc-800 w-full sm:max-w-96">
           <Label className="space-y-1" htmlFor="search-shortcut">
             <span className="text-sm font-medium">Search shortcut</span>
-            <p className="text-xs text-zinc-400">Show search button instead of quick collection/link add button</p>
+            <p className="text-xs text-zinc-400">Show search button instead of quick collection/link add button, this will only work on mobile phones.</p>
           </Label>
           <Switch id="search-shortcut" checked={profile.isSearchShortcutEnabled} onCheckedChange={searchShortcutHandler} />
+        </div>
+
+        <div className="flex p-3 space-x-6 rounded-md text-zinc-100 bg-zinc-800 border-zinc-800 w-full sm:max-w-96">
+          <Label className="space-y-1" htmlFor="search-shortcut">
+            <span className="text-sm font-medium">Quick add link</span>
+            <p className="text-xs text-zinc-400">Add links quickly from inside collection page.</p>
+          </Label>
+          <Switch id="search-shortcut" checked={profile.useFullTypeFormAdder} onCheckedChange={toggleUseFullTypeFormAdder} />
         </div>
 
         <Controller
@@ -119,7 +131,6 @@ const SettingsForm = () => {
                 className="dark:bg-zinc-900 dark:text-white dark:border-zinc-800"
               >
                 <SelectGroup>
-                  <SelectLabel>Select font</SelectLabel>
                   <SelectItem value="font-mono">Mono</SelectItem>
                   <SelectItem value="font-serif">Serif</SelectItem>
                   <SelectItem value="font-sans">Sans</SelectItem>

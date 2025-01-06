@@ -32,9 +32,13 @@ const userSchema = new Schema({
         type: String,
         default: ""
     },
-    coverImage: {
-        type: String,
-        default: ""
+    useFullTypeFormAdder: {
+        type: Boolean,
+        default: true
+    },
+    isQuickSearchEnabled: {
+        type: Boolean,
+        default: true
     },
     theme: {
         type: String,
@@ -43,10 +47,6 @@ const userSchema = new Schema({
     font: {
         type: String,
 
-    },
-    bio: {
-        type: String,
-        trim: true
     },
     refreshToken: {
         type: String

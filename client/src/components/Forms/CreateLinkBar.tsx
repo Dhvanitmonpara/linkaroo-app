@@ -40,6 +40,7 @@ const dummies = [
 
 type CreateLinkBarProps = {
   collectionTitle?: string;
+  afterSubmit?: () => void;
 };
 
 type HandleLinkCreationType = {
@@ -51,6 +52,7 @@ type HandleLinkCreationType = {
 
 const CreateLinkBar: React.FC<CreateLinkBarProps> = ({
   collectionTitle,
+  afterSubmit,
 }) => {
   const [loading, setLoading] = useState(false);
   const [identifier, setIdentifier] = useState("")
@@ -109,6 +111,7 @@ const CreateLinkBar: React.FC<CreateLinkBarProps> = ({
     } finally {
       setLoading(false);
       navigate(`/collections/${data.collection}`);
+      afterSubmit && afterSubmit();
     }
   };
 

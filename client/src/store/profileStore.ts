@@ -9,8 +9,8 @@ type User = {
   email: string;
   fullName: string;
   avatarImage: string;
-  coverImage: string;
   theme: themeType;
+  useFullTypeFormAdder: boolean;
   isSearchShortcutEnabled: boolean;
   font: fontOptions;
   createdAt: string;
@@ -26,6 +26,7 @@ interface ProfileState {
   changeTheme: (theme: themeType) => void;
   toggleIsSearchShortcutEnabled: (value: boolean) => void;
   changeFont: (font: fontOptions) => void;
+  toggleUseFullTypeFormAdder: (value: boolean) => void;
   tags: fetchedTagType[] | null;
   setTags: (tags: fetchedTagType[]) => void;
 }
@@ -40,8 +41,8 @@ const useProfileStore = create<ProfileState>()(
           email: "",
           fullName: "",
           avatarImage: "",
-          coverImage: "",
           isSearchShortcutEnabled: false,
+          useFullTypeFormAdder: false,
           theme: "dark",
           font: "font-sans",
           createdAt: "",
@@ -61,7 +62,7 @@ const useProfileStore = create<ProfileState>()(
               email: "",
               fullName: "",
               avatarImage: "",
-              coverImage: "",
+              useFullTypeFormAdder: false,
               isSearchShortcutEnabled: false,
               theme: "light",
               font: "font-mono",
@@ -77,7 +78,18 @@ const useProfileStore = create<ProfileState>()(
         },
         toggleIsSearchShortcutEnabled: (value: boolean) => {
           set((state) => ({
-            profile: { ...state.profile, isSearchShortcutEnabled: value },
+            profile: {
+              ...state.profile,
+              isSearchShortcutEnabled: value,
+            },
+          }));
+        },
+        toggleUseFullTypeFormAdder: (value: boolean) => {
+          set((state) => ({
+            profile: {
+              ...state.profile,
+              useFullTypeFormAdder: value,
+            },
           }));
         },
         changeFont: (font: fontOptions) => {

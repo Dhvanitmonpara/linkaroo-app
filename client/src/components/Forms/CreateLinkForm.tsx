@@ -21,6 +21,7 @@ import useCollectionsStore from "@/store/collectionStore";
 
 type CreateLinkFormProps = {
   collectionTitle?: string;
+  afterSubmit?: () => void
 };
 
 type HandleLinkCreationType = {
@@ -30,8 +31,25 @@ type HandleLinkCreationType = {
   collection: string;
 };
 
+const isValidUrl = (url: string): string | null => {
+  const urlRegex = /^(https?:\/\/)?([\w\d-]+\.)+[\w-]+(\/[\w-./?%&=]*)?$/i;
+
+  // Determine the protocol
+  if (!/^https?:\/\//i.test(url)) {
+      url = `https://${url}`; // Default to 'https://'
+  }
+
+  // Check if the updated URL matches the regex
+  if (urlRegex.test(url)) {
+      return url; // Return the valid URL
+  }
+
+  return null; // Return null if the URL is invalid
+};
+
 const CreateLinkForm: React.FC<CreateLinkFormProps> = ({
   collectionTitle,
+  afterSubmit
 }) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -58,10 +76,17 @@ const CreateLinkForm: React.FC<CreateLinkFormProps> = ({
         return;
       }
 
+      const validUrl = isValidUrl(data.link);
+
+      if (!validUrl) {
+        toast.error("Invalid URL");
+        return;
+      }validUrl
+
       const newData = {
         title: data.title,
         description: data.description,
-        link: data.link,
+        link: validUrl,
       };
 
       const link = await axios.post(
@@ -72,12 +97,13 @@ const CreateLinkForm: React.FC<CreateLinkFormProps> = ({
 
       if (!link.data.data) {
         toast.error("Failed to add link");
+        return
       }
 
       if (data.collection == links[0].collectionId) {
         addLinkItem(link.data.data);
       }
-
+      console.log(link)
       addCachedLinkItem(data.collection, link.data.data);
 
     } catch (error) {
@@ -86,6 +112,7 @@ const CreateLinkForm: React.FC<CreateLinkFormProps> = ({
     } finally {
       setLoading(false);
       navigate(`/collections/${data.collection}`);
+      afterSubmit && afterSubmit()
     }
   };
 
@@ -98,12 +125,14 @@ const CreateLinkForm: React.FC<CreateLinkFormProps> = ({
         <Input
           id="title"
           type="text"
+          autoComplete="off"
           placeholder="Enter title"
           {...register("title", { required: "Title is required" })}
         />
         <Input
           id="link"
           type="text"
+          autoComplete="off"
           placeholder="Enter link"
           {...register("link", {
             required: "link is required",
@@ -111,6 +140,7 @@ const CreateLinkForm: React.FC<CreateLinkFormProps> = ({
         />
         <Textarea
           id="description"
+          autoComplete="off"
           placeholder="Enter description"
           {...register("description", {
             required: "Description is required",

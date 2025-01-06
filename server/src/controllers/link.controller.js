@@ -3,49 +3,68 @@ import { ApiError } from "../utils/ApiError.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
 import { Collection } from "../models/collection.model.js"
 import { Link } from "../models/link.model.js"
+import axios from "axios"
+import validator from "validator"
 import fetchMetadata from "../utils/fetchMetadata.js"
 
 const createLink = asyncHandler(async (req, res) => {
-
-    const { collectionId } = req.params
+    const { collectionId } = req.params;
 
     if (!collectionId) {
-        throw new ApiError(400, "Collection ID is required")
+        throw new ApiError(400, "Collection ID is required");
     }
 
-    const { title, description, link } = req.body
+    const { title, description, link } = req.body;
 
     if (!title || !link) {
-        throw new ApiError(400, "title and link are required")
+        throw new ApiError(400, "Title and link are required");
     }
 
-    const links = await Link.find({ userId: req.user.id, collectionId })
-
-    if (links.some(link => link.title == title)) {
-        throw new ApiError(400, "Link with the same title already exists")
+    // Check if the link has a valid format
+    if (!validator.isURL(link)) {
+        throw new ApiError(400, "Invalid link format");
     }
 
+    // Check if the link is reachable
+    const isReachable = async (url) => {
+        try {
+            const response = await axios.get(url);
+            return response.status >= 200 && response.status < 400; // Check for successful response
+        } catch {
+            return false; // Link is unreachable
+        }
+    };
+
+    const linkReachable = await isReachable(link);
+    if (!linkReachable) {
+        throw new ApiError(400, "The link is not reachable or invalid");
+    }
+
+    // Check for duplicate titles
+    const links = await Link.find({ userId: req.user.id, collectionId });
+    if (links.some(existingLink => existingLink.title === title)) {
+        throw new ApiError(400, "Link with the same title already exists");
+    }
+
+    // Create the link
     const response = await Link.create({
         title,
         description: description || "",
         link,
         userId: req.user?._id,
-        collectionId
-    })
+        collectionId,
+    });
 
     if (!response) {
-        throw new ApiError(500, "Failed to create link")
+        throw new ApiError(500, "Failed to create link");
     }
 
     return res
         .status(201)
-        .json(new ApiResponse(
-            201,
-            link = response,
-            "Link created successfully"
-        ))
-
-})
+        .json(
+            new ApiResponse(201, response, "Link created successfully")
+        );
+});
 
 const createLinkWithMetadata = asyncHandler(async (req, res) => {
 

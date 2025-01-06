@@ -615,7 +615,7 @@ const toggleTheme = asyncHandler(async (req, res) => {
 
 const updateProfileSettings = asyncHandler(async (req, res) => {
 
-    const { font = "font-mono", theme = "dark" } = req.body;
+    const { font = "font-mono", theme = "dark", isSearchShortcutEnabled } = req.body;
     const userId = req.user?._id;
 
     const user = await User.findByIdAndUpdate(
@@ -623,7 +623,8 @@ const updateProfileSettings = asyncHandler(async (req, res) => {
         {
             $set: {
                 font,
-                theme
+                theme,
+                isSearchShortcutEnabled
             }
         },
         {
@@ -639,7 +640,6 @@ const updateProfileSettings = asyncHandler(async (req, res) => {
     return res.status(200).json(
         new ApiResponse(
             200,
-            user,
             "Profile settings updated successfully"
         )
     );

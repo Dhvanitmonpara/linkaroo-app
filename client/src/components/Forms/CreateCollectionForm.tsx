@@ -28,7 +28,7 @@ type HandleCollectionCreationType = {
   theme: colorOptions;
 };
 
-const CreateCollectionForm = () => {
+const CreateCollectionForm = ({ afterSubmit }: { afterSubmit?: () => void }) => {
   const [loading, setLoading] = useState(false);
   const { addCollectionsItem } = useCollectionsStore();
   const navigate = useNavigate()
@@ -85,6 +85,7 @@ const CreateCollectionForm = () => {
       handleAxiosError(error as AxiosError, navigate);
     } finally {
       setLoading(false);
+      afterSubmit && afterSubmit()
     }
   };
 

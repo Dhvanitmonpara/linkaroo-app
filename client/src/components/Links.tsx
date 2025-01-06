@@ -29,6 +29,7 @@ import { FaPlus } from "react-icons/fa";
 const Links = () => {
   const { toggleModal } = useMethodStore();
   const [loading, setLoading] = useState(false);
+  const [isLinkFormOpen, setIsLinkFormOpen] = useState(false);
   const location = useLocation().pathname;
 
   const { links, cachedLinks, setLinks, addCachedLinkCollection, setCurrentCollectionItem, currentCollectionItem } = useLinkStore()
@@ -96,7 +97,7 @@ const Links = () => {
         }
       }
     })();
-  }, [collections, currentCardColor, location, setLinks, setCurrentCollectionItem, cachedLinks, addCachedLinkCollection, navigate]);
+  }, [collections, currentCardColor, location, setLinks, setCurrentCollectionItem, addCachedLinkCollection, navigate]);
 
   const tags: string[] = [];
 
@@ -134,7 +135,10 @@ const Links = () => {
     return (
       <div>
         <div className="md:h-[calc(100vh-5rem)] h-[calc(100vh-8rem)] lg:h-[calc(100vh-4.5rem)] overflow-y-scroll w-full flex flex-col justify-center items-center space-y-6 p-4">
-          <h1 className="text-3xl font-bold text-center dark:text-white">
+          <h1 className="text-3xl font-bo     const isValidUrl = (url: string): boolean => {
+        const urlRegex = /^(https?:\/\/)?([\w\d-]+\.)+[\w-]+(\/[\w-./?%&=]*)?$/i;
+        return urlRegex.test(url);
+      };ld text-center dark:text-white">
             Welcome to Your Document Space
           </h1>
           <p className="text-lg text-center max-w-2xl dark:text-gray-300">
@@ -268,8 +272,10 @@ const Links = () => {
             className={`grid grid-cols-1 gap-2 ${location.includes("/collections") ? "" : "lg:grid-cols-2"}`}
           >
             <ResponsiveDialog
-              prebuildForm={false}
-              className="sm:max-w-2xl md:p-0 bg-transparent border-none"
+              open={isLinkFormOpen}
+              onOpenChange={setIsLinkFormOpen}
+              prebuildForm={profile.useFullTypeFormAdder}
+              className={`sm:max-w-2xl ${!profile.useFullTypeFormAdder && "md:p-0 bg-transparent border-none"}`}
               title="Add New Link"
               trigger={
                 <div className="flex justify-start items-center text-zinc-300 text-start">
@@ -284,24 +290,33 @@ const Links = () => {
               showCloseButton={false}
               description="Add a new link to your collection"
             >
-              <div className="w-full flex-1 overflow-auto py-4">
-                <CreateLinkBar
+              {profile.useFullTypeFormAdder
+                ? <CreateLinkForm
+                  afterSubmit={() => setIsLinkFormOpen(false)}
                   collectionTitle={currentCollectionItem?.title}
                 />
-              </div>
+                : <div className="w-full flex-1 overflow-auto py-4">
+                  <CreateLinkBar
+                    afterSubmit={() => setIsLinkFormOpen(false)}
+                    collectionTitle={currentCollectionItem?.title}
+                  />
+                </div>
+              }
             </ResponsiveDialog>
-            {links?.map((link) => (
-              <LinkCard
-                key={link._id}
-                id={link._id}
-                title={link.title}
-                color={currentCardColor}
-                link={link.link}
-                isChecked={link.isChecked}
-                currentCollectionId={currentCollectionItem?._id}
-                toggleModal={toggleModal}
-              />
-            ))}
+            {links
+              ?.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+              .map((link) => (
+                <LinkCard
+                  key={link._id}
+                  id={link._id}
+                  title={link.title}
+                  color={currentCardColor}
+                  link={link.link}
+                  isChecked={link.isChecked}
+                  currentCollectionId={currentCollectionItem?._id}
+                  toggleModal={toggleModal}
+                />
+              ))}
           </div>
           <div className="lg:h-2 h-16"></div>
         </>
@@ -313,14 +328,17 @@ const Links = () => {
             You don't have any documents on this list.
           </span>
           <ResponsiveDialog
+            open={isLinkFormOpen}
+            onOpenChange={setIsLinkFormOpen}
             title="Add New Link" description="Add a new link to your collection" trigger={
-              <div
+              <Button
+                className="bg-zinc-900 text-zinc-100 hover:bg-zinc-800/80"
                 onClick={() => {
                   setPrevPath(location);
                 }}
               >
                 Add a Link
-              </div>
+              </Button>
             }>
             <CreateLinkForm
               collectionTitle={currentCollectionItem?.title}

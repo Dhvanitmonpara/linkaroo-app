@@ -28,6 +28,7 @@ const tabTriggerClass =
 
 const Collections = ({ className, extraElementClassNames, defaultView = "list" }: CollectionsProps) => {
   const [loading, setLoading] = useState(true);
+  const [isCollectionFormOpen, setIsCollectionFormOpen] = useState(false);
   const [collectionView, setCollectionView] = useState<CollectionView>(defaultView);
   const { setCollections, collections, setInbox } = useCollectionsStore();
   const { toggleModal } = useMethodStore();
@@ -117,12 +118,12 @@ const Collections = ({ className, extraElementClassNames, defaultView = "list" }
                 </TabsTrigger>
               </TabsList>
             </Tabs>
-            <ResponsiveDialog title="Create a Collection" description="Create a new collection by filling all the fields" trigger={
+            <ResponsiveDialog open={isCollectionFormOpen} onOpenChange={setIsCollectionFormOpen} title="Create a Collection" description="Create a new collection by filling all the fields" trigger={
               <span className="bg-zinc-800 rounded-md cursor-pointer hover:bg-zinc-800/70 text-zinc-100 w-10 h-10 !text-xl !p-0 flex justify-center items-center">
                 <IoMdAdd />
               </span>
             }>
-              <CreateCollectionForm />
+              <CreateCollectionForm afterSubmit={() => setIsCollectionFormOpen(false)} />
             </ResponsiveDialog>
           </div>
         </h2>
