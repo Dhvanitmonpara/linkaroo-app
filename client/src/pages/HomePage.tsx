@@ -24,7 +24,7 @@ const HomePage = () => {
             setLoading(true);
 
             const response = await axios.post(
-                `${import.meta.env.VITE_SERVER_API_URL}/cards/quick-add/${inbox?._id}`,
+                `${import.meta.env.VITE_SERVER_API_URL}/links/quick-add/${inbox?._id}`,
                 {
                     link: url,
                 },

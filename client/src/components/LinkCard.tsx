@@ -156,7 +156,7 @@ const LinkCard = ({
                     ))
                   ) : (
                     <div className="h-14 flex justify-center items-center">
-                      No lists
+                      No collections
                     </div>
                   )}
                 </DropdownMenuContent>

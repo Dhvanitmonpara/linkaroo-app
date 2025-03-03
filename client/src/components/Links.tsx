@@ -61,7 +61,6 @@ const Links = () => {
 
   useEffect(() => {
     (async () => {
-      // if (location.pathname.includes("/lists") && prevPath !== location.pathname) {
       if (location.includes("/collections")) {
         try {
           setLoading(true);
@@ -117,9 +116,16 @@ const Links = () => {
 
   if (loading) {
     return (
-      <div className="md:h-[calc(100vh-5rem)] h-[calc(100vh-8rem)] lg:h-[calc(100vh-4.5rem)] overflow-y-scroll w-full space-y-2 no-scrollbar">
-        <div className="dark:text-white h-full flex justify-center items-center">
-          <Loader2 className="animate-spin" />
+      <div
+        className={`xl:px-0 lg:px-0 lg:pr-5 px-5 h-full select-none ${!location.includes("/links")
+          ? "lg:col-span-3 xl:col-span-5 !pr-5"
+          : "col-span-3"
+          }`}
+      >
+        <div className="md:h-[calc(100vh-5rem)] h-[calc(100vh-8rem)] lg:h-[calc(100vh-4.5rem)] overflow-y-scroll w-full space-y-2 no-scrollbar">
+          <div className="dark:text-white h-full flex justify-center items-center">
+            <Loader2 className="animate-spin" />
+          </div>
         </div>
       </div>
     );
@@ -133,7 +139,12 @@ const Links = () => {
 
   if (!currentCollectionItem?._id) {
     return (
-      <div>
+      <div
+        className={`xl:px-0 lg:px-0 lg:pr-5 px-5 h-full select-none ${!location.includes("/links")
+          ? "lg:col-span-5 xl:col-span-7 !pr-5"
+          : "col-span-3"
+          }`}
+      >
         <div className="md:h-[calc(100vh-5rem)] h-[calc(100vh-8rem)] lg:h-[calc(100vh-4.5rem)] overflow-y-scroll w-full flex flex-col justify-center items-center space-y-6 p-4">
           <h1 className="text-3xl font-bo     const isValidUrl = (url: string): boolean => {
         const urlRegex = /^(https?:\/\/)?([\w\d-]+\.)+[\w-]+(\/[\w-./?%&=]*)?$/i;
@@ -171,181 +182,188 @@ const Links = () => {
   }
 
   return (
-    <div className={`md:h-[calc(100vh-5rem)] lg:px-0 px-4 h-[calc(100vh-8rem)] lg:h-[calc(100vh-4.5rem)] overflow-y-scroll w-full space-y-2 no-scrollbar ${font}`}>
-      <div className="lg:h-2"></div>
-      <div className="h-110 w-full py-2">
-        <div
-          className="group h-2/6 w-full relative overflow-hidden rounded-t-md"
-          style={coverImageStyle}
-        >
-          <div className="h-full w-full bg-black bg-opacity-40 text-zinc-200 p-4">
-            <div className="flex justify-end items-center">
-              <DropdownMenu
-                open={dropdownOpen}
-                onOpenChange={() => {
-                  setDropdownOpen(!dropdownOpen);
-                }}
-                modal={false} // Keeps dropdown within the context of the parent
-              >
-                <DropdownMenuTrigger disabled={saveChangesLoading} className={`h-12 w-12 ${dropdownOpen || saveChangesLoading ? "opacity-100" : "opacity-0 group-hover:opacity-100"} bg-[#00000030] hover:bg-[#00000060] disabled:bg-[#00000030] transition-all flex justify-center items-center rounded-full text-xl`}>
-                  {dropdownOpen ? <BsXLg /> : (saveChangesLoading ? <Loader2 className="animate-spin" /> : <BiSolidPencil />)}
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  className={`w-96 p-2 dark:bg-zinc-900 dark:text-white dark:border-zinc-800`}
-                  onCloseAutoFocus={(event) => {
-                    event.preventDefault()
-                  }}
-                  onPointerDownOutside={(event) => {
-                    if (
-                      event.target instanceof HTMLElement &&
-                      !event.target.closest("input")
-                    ) {
-                      setDropdownOpen(false);
-                    }
-                  }}
-                >
-                  {loading ? (
-                    <div className="w-full h-28 flex justify-center items-center">
-                      <Loader2 className="animate-spin" size={16} />
-                    </div>
-                  ) : (
-                    <DropdownMenuRadioGroup className="grid grid-cols-3 gap-1">
-                      {backgroundImageUrls.map((link, index) => (
-                        <DropdownMenuRadioItem
-                          isShowCheckbox={false}
-                          isFullControl
-                          value={link}
-                          key={index}
-                          onSelect={handleSaveChanges}
-                          className="flex justify-center items-center data-[checked]:border-4 border-zinc-200 w-full h-24 cursor-default transition-colors duration-200 hover:brightness-110"
-                        >
-                          <img
-                            className="w-full h-24 object-cover" // Fit the image inside the container
-                            src={link}
-                            alt={`Background ${index}`}
-                          />
-                        </DropdownMenuRadioItem>
-                      ))}
-                    </DropdownMenuRadioGroup>
-                  )}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </div>
-        </div>
-        <div className="w-full h-4/6 rounded-b-md dark:text-zinc-300 p-4 dark:bg-zinc-900">
-          <div className="min-h-20 flex flex-col justify-start">
-            <div className="py-3">
-              <IconPicker activeIcon={currentCollectionItem.icon} defaultLoadedIcons={20} setActiveIcon={handleChangeIcon} />
-            </div>
-            <div className="flex justify-between items-center w-full">
-              <h1 className="text-2xl font-semibold">
-                {currentCollectionItem?.title}
-              </h1>
-              <CollectionActionButtons />
-            </div>
-            <div className="text-xs text-zinc-400/90 space-x-2">
-              <span>@{currentCollectionItem?.createdBy?.username}</span>
-              <span>
-                {currentCollectionItem?.createdAt &&
-                  convertMongoDBDate(currentCollectionItem?.createdAt)}
-              </span>
-            </div>
-          </div>
-          <div className="pb-4 pt-6 space-y-4">
-            <p className="text-sm text-zinc-300/70 line-clamp-2 h-10">{currentCollectionItem?.description}</p>
-            <div className="flex space-x-1">
-              {tags.length > 0 &&
-                tags.map((tag, index) => (
-                  <Tag
-                    key={index}
-                    text={tag}
-                  />
-                ))}
-            </div>
-          </div>
-        </div>
-      </div>
-      {links.length > 0 ? (
-        <>
+    <div
+      className={`xl:px-0 lg:px-0 lg:pr-5 px-5 h-full select-none ${!location.includes("/links")
+        ? "lg:col-span-3 xl:col-span-5 !pr-5"
+        : "col-span-3"
+        }`}
+    >
+      <div className={`md:h-[calc(100vh-5rem)] lg:px-0 px-4 h-[calc(100vh-8rem)] lg:h-[calc(100vh-4.5rem)] overflow-y-scroll w-full space-y-2 no-scrollbar ${font}`}>
+        <div className="lg:h-2"></div>
+        <div className="h-110 w-full py-2">
           <div
-            className={`grid grid-cols-1 gap-2 ${location.includes("/collections") ? "" : "lg:grid-cols-2"}`}
+            className="group h-2/6 w-full relative overflow-hidden rounded-t-md"
+            style={coverImageStyle}
           >
-            <ResponsiveDialog
-              open={isLinkFormOpen}
-              onOpenChange={setIsLinkFormOpen}
-              prebuildForm={profile.useFullTypeFormAdder}
-              className={`sm:max-w-2xl ${!profile.useFullTypeFormAdder && "md:p-0 bg-transparent border-none"}`}
-              title="Add New Link"
-              trigger={
-                <div className="flex justify-start items-center text-zinc-300 text-start">
-                  <p className="py-3 px-6 flex justify-normal items-center space-x-2 border-1 border-zinc-800 bg-zinc-900 hover:bg-zinc-800/80 cursor-pointer rounded-md w-full">
-                    <span>
-                      <FaPlus />
-                    </span>
-                    <span className="pt-1">Add a new link...</span>
-                  </p>
-                </div>
-              }
-              showCloseButton={false}
-              description="Add a new link to your collection"
+            <div className="h-full w-full bg-black bg-opacity-40 text-zinc-200 p-4">
+              <div className="flex justify-end items-center">
+                <DropdownMenu
+                  open={dropdownOpen}
+                  onOpenChange={() => {
+                    setDropdownOpen(!dropdownOpen);
+                  }}
+                  modal={false} // Keeps dropdown within the context of the parent
+                >
+                  <DropdownMenuTrigger disabled={saveChangesLoading} className={`h-12 w-12 ${dropdownOpen || saveChangesLoading ? "opacity-100" : "opacity-0 group-hover:opacity-100"} bg-[#00000030] hover:bg-[#00000060] disabled:bg-[#00000030] transition-all flex justify-center items-center rounded-full text-xl`}>
+                    {dropdownOpen ? <BsXLg /> : (saveChangesLoading ? <Loader2 className="animate-spin" /> : <BiSolidPencil />)}
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    className={`w-96 p-2 dark:bg-zinc-900 dark:text-white dark:border-zinc-800`}
+                    onCloseAutoFocus={(event) => {
+                      event.preventDefault()
+                    }}
+                    onPointerDownOutside={(event) => {
+                      if (
+                        event.target instanceof HTMLElement &&
+                        !event.target.closest("input")
+                      ) {
+                        setDropdownOpen(false);
+                      }
+                    }}
+                  >
+                    {loading ? (
+                      <div className="w-full h-28 flex justify-center items-center">
+                        <Loader2 className="animate-spin" size={16} />
+                      </div>
+                    ) : (
+                      <DropdownMenuRadioGroup className="grid grid-cols-3 gap-1">
+                        {backgroundImageUrls.map((link, index) => (
+                          <DropdownMenuRadioItem
+                            isShowCheckbox={false}
+                            isFullControl
+                            value={link}
+                            key={index}
+                            onSelect={handleSaveChanges}
+                            className="flex justify-center items-center data-[checked]:border-4 border-zinc-200 w-full h-24 cursor-default transition-colors duration-200 hover:brightness-110"
+                          >
+                            <img
+                              className="w-full h-24 object-cover" // Fit the image inside the container
+                              src={link}
+                              alt={`Background ${index}`}
+                            />
+                          </DropdownMenuRadioItem>
+                        ))}
+                      </DropdownMenuRadioGroup>
+                    )}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            </div>
+          </div>
+          <div className="w-full h-4/6 rounded-b-md dark:text-zinc-300 p-4 dark:bg-zinc-900">
+            <div className="min-h-20 flex flex-col justify-start">
+              <div className="py-3">
+                <IconPicker activeIcon={currentCollectionItem.icon} defaultLoadedIcons={20} setActiveIcon={handleChangeIcon} />
+              </div>
+              <div className="flex justify-between items-center w-full">
+                <h1 className="text-2xl font-semibold">
+                  {currentCollectionItem?.title}
+                </h1>
+                <CollectionActionButtons />
+              </div>
+              <div className="text-xs text-zinc-400/90 space-x-2">
+                <span>@{currentCollectionItem?.createdBy?.username}</span>
+                <span>
+                  {currentCollectionItem?.createdAt &&
+                    convertMongoDBDate(currentCollectionItem?.createdAt)}
+                </span>
+              </div>
+            </div>
+            <div className="pb-4 pt-6 space-y-4">
+              <p className="text-sm text-zinc-300/70 line-clamp-2 h-10">{currentCollectionItem?.description}</p>
+              <div className="flex space-x-1">
+                {tags.length > 0 &&
+                  tags.map((tag, index) => (
+                    <Tag
+                      key={index}
+                      text={tag}
+                    />
+                  ))}
+              </div>
+            </div>
+          </div>
+        </div>
+        {links.length > 0 ? (
+          <>
+            <div
+              className={`grid grid-cols-1 gap-2 ${location.includes("/collections") ? "" : "lg:grid-cols-2"}`}
             >
-              {profile.useFullTypeFormAdder
-                ? <CreateLinkForm
-                  afterSubmit={() => setIsLinkFormOpen(false)}
-                  collectionTitle={currentCollectionItem?.title}
-                />
-                : <div className="w-full flex-1 overflow-auto py-4">
-                  <CreateLinkBar
+              <ResponsiveDialog
+                open={isLinkFormOpen}
+                onOpenChange={setIsLinkFormOpen}
+                prebuildForm={profile.useFullTypeFormAdder}
+                className={`sm:max-w-2xl ${!profile.useFullTypeFormAdder && "md:p-0 bg-transparent border-none"}`}
+                title="Add New Link"
+                trigger={
+                  <div className="flex justify-start items-center text-zinc-300 text-start">
+                    <p className="py-3 px-6 flex justify-normal items-center space-x-2 border-1 border-zinc-800 bg-zinc-900 hover:bg-zinc-800/80 cursor-pointer rounded-md w-full">
+                      <span>
+                        <FaPlus />
+                      </span>
+                      <span className="pt-1">Add a new link...</span>
+                    </p>
+                  </div>
+                }
+                showCloseButton={false}
+                description="Add a new link to your collection"
+              >
+                {profile.useFullTypeFormAdder
+                  ? <CreateLinkForm
                     afterSubmit={() => setIsLinkFormOpen(false)}
                     collectionTitle={currentCollectionItem?.title}
                   />
-                </div>
-              }
+                  : <div className="w-full flex-1 overflow-auto py-4">
+                    <CreateLinkBar
+                      afterSubmit={() => setIsLinkFormOpen(false)}
+                      collectionTitle={currentCollectionItem?.title}
+                    />
+                  </div>
+                }
+              </ResponsiveDialog>
+              {links
+                ?.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+                .map((link) => (
+                  <LinkCard
+                    key={link._id}
+                    id={link._id}
+                    title={link.title}
+                    color={currentCardColor}
+                    link={link.link}
+                    isChecked={link.isChecked}
+                    currentCollectionId={currentCollectionItem?._id}
+                    toggleModal={toggleModal}
+                  />
+                ))}
+            </div>
+            <div className="lg:h-2 h-16"></div>
+          </>
+        ) : (
+          <div className="flex justify-center flex-col gap-4 items-center w-full h-48">
+            <span
+              className={`dark:text-zinc-200 text-zinc-800`}
+            >
+              You don't have any documents on this list.
+            </span>
+            <ResponsiveDialog
+              open={isLinkFormOpen}
+              onOpenChange={setIsLinkFormOpen}
+              title="Add New Link" description="Add a new link to your collection" trigger={
+                <Button
+                  className="bg-zinc-900 text-zinc-100 hover:bg-zinc-800/80"
+                  onClick={() => {
+                    setPrevPath(location);
+                  }}
+                >
+                  Add a Link
+                </Button>
+              }>
+              <CreateLinkForm
+                collectionTitle={currentCollectionItem?.title}
+              />
             </ResponsiveDialog>
-            {links
-              ?.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-              .map((link) => (
-                <LinkCard
-                  key={link._id}
-                  id={link._id}
-                  title={link.title}
-                  color={currentCardColor}
-                  link={link.link}
-                  isChecked={link.isChecked}
-                  currentCollectionId={currentCollectionItem?._id}
-                  toggleModal={toggleModal}
-                />
-              ))}
           </div>
-          <div className="lg:h-2 h-16"></div>
-        </>
-      ) : (
-        <div className="flex justify-center flex-col gap-4 items-center w-full h-48">
-          <span
-            className={`dark:text-zinc-200 text-zinc-800`}
-          >
-            You don't have any documents on this list.
-          </span>
-          <ResponsiveDialog
-            open={isLinkFormOpen}
-            onOpenChange={setIsLinkFormOpen}
-            title="Add New Link" description="Add a new link to your collection" trigger={
-              <Button
-                className="bg-zinc-900 text-zinc-100 hover:bg-zinc-800/80"
-                onClick={() => {
-                  setPrevPath(location);
-                }}
-              >
-                Add a Link
-              </Button>
-            }>
-            <CreateLinkForm
-              collectionTitle={currentCollectionItem?.title}
-            />
-          </ResponsiveDialog>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

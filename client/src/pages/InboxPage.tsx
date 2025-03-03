@@ -36,12 +36,12 @@ const InboxPage = () => {
                 if (!collections.length) {
                   const response: AxiosResponse = await axios({
                     method: "GET",
-                    url: `${import.meta.env.VITE_SERVER_API_URL}/lists/u`,
+                    url: `${import.meta.env.VITE_SERVER_API_URL}/collections/u`,
                     withCredentials: true,
                   });
 
                   if (!response) {
-                    toast.error("Failed to fetch user's lists.");
+                    toast.error("Failed to fetch user's collections.");
                     return;
                   }
                   const allLists = response.data.data;
@@ -121,7 +121,7 @@ const InboxPage = () => {
             />
           ))
         ) : (
-          <p className="text-lg font-semibold text-center">
+          <p className="text-lg col-span-2 font-semibold text-center">
             No docs found in inbox
           </p>
         )}

@@ -71,15 +71,18 @@ const Collections = ({ className, extraElementClassNames, defaultView = "list" }
 
   if (loading) {
     return (
-      <div className={`col-span-2 relative lg:px-0 px-4 space-y-3 overflow-y-scroll no-scrollbar h-[calc(100vh-4.5rem)] md:h-auto lg:h-[calc(100vh-4.5rem)] md:space-x-0 md:space-y-2 md:p-4 !gap-2 md:justify-start md:items-start 2xl:grid-cols-1 ${className}`}>
-        <Skeleton className={`w-full h-64`} />
-        <Skeleton className={`w-full h-64`} />
-        <Skeleton className={`w-full h-64`} />
+      <div className="col-span-2 lg:inline-block hidden relative px-7 pb-5 lg:pl-7 lg:pr-4 space-y-3 no-scrollbar max-h-[calc(100vh-5rem)]">
+        <div className={`col-span-2 relative lg:px-0 px-4 space-y-3 overflow-y-scroll no-scrollbar h-[calc(100vh-4.5rem)] md:h-auto lg:h-[calc(100vh-4.5rem)] md:space-x-0 md:space-y-2 md:p-4 !gap-2 md:justify-start md:items-start 2xl:grid-cols-1 ${className}`}>
+          <Skeleton className={`w-full h-64`} />
+          <Skeleton className={`w-full h-64`} />
+          <Skeleton className={`w-full h-64`} />
+        </div>
       </div>
     );
   }
 
   if (collections.length == 0) {
+    if (location.pathname.includes("dashboard")) return
     return (
       <div className={`dark:text-zinc-200 select-none text-zinc-900 h-[calc(100vh-4.5rem)] lg:h-[calc(100vh-5rem)] w-full flex justify-center items-center ${className}`}>
         <p className="text-center pt-24 md:pt-4 lg:pt-0 md:col-span-2 2xl:col-span-3">No Collections found. Please create a new one.</p>
@@ -89,74 +92,76 @@ const Collections = ({ className, extraElementClassNames, defaultView = "list" }
 
   return (
     <>
-      <div className={`col-span-2 relative lg:px-0 px-4 space-y-3 overflow-y-scroll no-scrollbar lg:border-r-[1px] !pr-2 lg:border-zinc-700 h-[calc(100vh-4.5rem)] md:h-auto lg:h-[calc(100vh-4.5rem)] md:space-x-0 md:space-y-2 md:p-4 !gap-2 md:justify-start md:items-start 2xl:grid-cols-1 ${className}`}>
-        <div className={`h-2 md:hidden ${extraElementClassNames}`}></div>
-        {(location.pathname.includes("/dashboard") || location.pathname.includes("/collections")) && <h2 className="pt-8 pb-3 flex justify-between items-center">
-          <span className="text-zinc-100 text-2xl">
-            Collections
-          </span>
-          <div className="flex items-center space-x-1">
-            <Tabs
-              defaultValue="list"
-              onValueChange={(value) => setCollectionView(value as CollectionView)}
-              className="w-fit"
-            >
-              <TabsList className="bg-zinc-900">
-                <TabsTrigger
-                  className={tabTriggerClass}
-                  value="grid"
-                  aria-label="Grid View"
-                >
-                  <IoGrid />
-                </TabsTrigger>
-                <TabsTrigger
-                  className={tabTriggerClass}
-                  value="list"
-                  aria-label="List View"
-                >
-                  <FaThList />
-                </TabsTrigger>
-              </TabsList>
-            </Tabs>
-            <ResponsiveDialog open={isCollectionFormOpen} onOpenChange={setIsCollectionFormOpen} title="Create a Collection" description="Create a new collection by filling all the fields" trigger={
-              <span className="bg-zinc-800 rounded-md cursor-pointer hover:bg-zinc-800/70 text-zinc-100 w-10 h-10 !text-xl !p-0 flex justify-center items-center">
-                <IoMdAdd />
-              </span>
-            }>
-              <CreateCollectionForm afterSubmit={() => setIsCollectionFormOpen(false)} />
-            </ResponsiveDialog>
-          </div>
-        </h2>
-        }
-        {collectionView === "grid" ? collections.map((collections, index) => (
-          <CollectionGridCard
-            key={index}
-            id={collections._id}
-            title={collections.title}
-            description={collections.description}
-            tagname={collections.tags}
-            collaborators={collections.collaborators}
-            createdBy={collections.createdBy}
-            theme={collections.theme}
-            font={font}
-            toggleModal={toggleModal}
-          />
-        )) : collections.map((collections, index) => (
-          <CollectionListCard
-            key={index}
-            id={collections._id}
-            title={collections.title}
-            description={collections.description}
-            tagname={collections.tags}
-            collaborators={collections.collaborators}
-            createdBy={collections.createdBy}
-            icon={collections.icon}
-            theme={collections.theme}
-            font={font}
-            toggleModal={toggleModal}
-          />
-        ))}
-        <div className="lg:h-2 h-16 md:hidden"></div>
+      <div className="col-span-2 lg:inline-block hidden relative px-7 pb-5 lg:pl-7 lg:pr-4 space-y-3 no-scrollbar max-h-[calc(100vh-5rem)]">
+        <div className={`col-span-2 relative lg:px-0 px-4 space-y-3 overflow-y-scroll no-scrollbar lg:border-r-[1px] !pr-2 lg:border-zinc-700 h-[calc(100vh-4.5rem)] md:h-auto lg:h-[calc(100vh-4.5rem)] md:space-x-0 md:space-y-2 md:p-4 !gap-2 md:justify-start md:items-start 2xl:grid-cols-1 ${className}`}>
+          <div className={`h-2 md:hidden ${extraElementClassNames}`}></div>
+          {(location.pathname.includes("/dashboard") || location.pathname.includes("/collections")) && <h2 className="pt-8 pb-3 flex justify-between items-center">
+            <span className="text-zinc-100 text-2xl">
+              Collections
+            </span>
+            <div className="flex items-center space-x-1">
+              <Tabs
+                defaultValue="list"
+                onValueChange={(value) => setCollectionView(value as CollectionView)}
+                className="w-fit"
+              >
+                <TabsList className="bg-zinc-900">
+                  <TabsTrigger
+                    className={tabTriggerClass}
+                    value="grid"
+                    aria-label="Grid View"
+                  >
+                    <IoGrid />
+                  </TabsTrigger>
+                  <TabsTrigger
+                    className={tabTriggerClass}
+                    value="list"
+                    aria-label="List View"
+                  >
+                    <FaThList />
+                  </TabsTrigger>
+                </TabsList>
+              </Tabs>
+              <ResponsiveDialog open={isCollectionFormOpen} onOpenChange={setIsCollectionFormOpen} title="Create a Collection" description="Create a new collection by filling all the fields" trigger={
+                <span className="bg-zinc-800 rounded-md cursor-pointer hover:bg-zinc-800/70 text-zinc-100 w-10 h-10 !text-xl !p-0 flex justify-center items-center">
+                  <IoMdAdd />
+                </span>
+              }>
+                <CreateCollectionForm afterSubmit={() => setIsCollectionFormOpen(false)} />
+              </ResponsiveDialog>
+            </div>
+          </h2>
+          }
+          {collectionView === "grid" ? collections.map((collections, index) => (
+            <CollectionGridCard
+              key={index}
+              id={collections._id}
+              title={collections.title}
+              description={collections.description}
+              tagname={collections.tags}
+              collaborators={collections.collaborators}
+              createdBy={collections.createdBy}
+              theme={collections.theme}
+              font={font}
+              toggleModal={toggleModal}
+            />
+          )) : collections.map((collections, index) => (
+            <CollectionListCard
+              key={index}
+              id={collections._id}
+              title={collections.title}
+              description={collections.description}
+              tagname={collections.tags}
+              collaborators={collections.collaborators}
+              createdBy={collections.createdBy}
+              icon={collections.icon}
+              theme={collections.theme}
+              font={font}
+              toggleModal={toggleModal}
+            />
+          ))}
+          <div className="lg:h-2 h-16 md:hidden"></div>
+        </div>
       </div>
     </>
   );
