@@ -3,18 +3,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import useCollectionsStore from "@/store/collectionStore";
 import useProfileStore from "@/store/profileStore"
-import { handleAxiosError } from "@/utils/handlerAxiosError";
 import axios, { AxiosError } from "axios";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
 
     const { theme, fullName } = useProfileStore().profile
     const { inbox, addInboxLinkItem } = useCollectionsStore()
-    const navigate = useNavigate()
     const [input, setInput] = useState("")
 
     const [loading, setLoading] = useState(false)
@@ -40,7 +37,12 @@ const HomePage = () => {
             toast.success("Link created successfully")
 
         } catch (error) {
-            handleAxiosError(error as AxiosError, navigate);
+            if (error instanceof AxiosError) {
+                toast.error(error.message)
+            } else {
+                console.error(error);
+                toast.error("Error while creating link")
+            }
         } finally {
             setLoading(false);
             setInput("")

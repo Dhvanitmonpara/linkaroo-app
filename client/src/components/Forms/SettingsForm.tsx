@@ -14,8 +14,6 @@ import { fontOptions, themeType } from "@/lib/types";
 import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import useProfileStore from "@/store/profileStore";
-import { useNavigate } from "react-router-dom";
-import { handleAxiosError } from "@/utils/handlerAxiosError";
 import { Label } from "../ui/label";
 import { Switch } from "../ui/switch";
 
@@ -28,7 +26,6 @@ const SettingsForm = () => {
 
   const [loading, setLoading] = useState(false);
   const { changeTheme, profile, changeFont, toggleIsSearchShortcutEnabled, toggleUseFullTypeFormAdder } = useProfileStore();
-  const navigate = useNavigate()
 
   const { control, handleSubmit } = useForm<HandleSettingsType>({
     defaultValues: {
@@ -58,7 +55,12 @@ const SettingsForm = () => {
         toast.error("Failed to update settings");
       }
     } catch (error) {
-      handleAxiosError(error as AxiosError, navigate);
+      if (error instanceof AxiosError) {
+        toast.error(error.message)
+      } else {
+        console.error(error);
+        toast.error("Error while updating settings")
+      }
     } finally {
       setLoading(false);
     }

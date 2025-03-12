@@ -15,7 +15,6 @@ import { fetchedTagType } from "@/lib/types";
 import useProfileStore from "@/store/profileStore";
 import { useNavigate, useParams } from "react-router-dom";
 import { EditListForm } from "./Forms";
-import { handleAxiosError } from "@/utils/handlerAxiosError";
 import { FaLock } from "react-icons/fa";
 import { FaLockOpen } from "react-icons/fa";
 import useLinkStore from "@/store/linkStore";
@@ -80,7 +79,12 @@ const CollectionActionButtons = () => {
 
           setCheckedTags(intersection);
         } catch (error) {
-          handleAxiosError(error as AxiosError, navigate);
+          if (error instanceof AxiosError) {
+            toast.error(error.message)
+          } else {
+            console.error(error);
+            toast.error("Error while fetching collections")
+          }
         } finally {
           setLoading(false);
         }
@@ -114,7 +118,12 @@ const CollectionActionButtons = () => {
 
       toggleIsPublic(currentCollectionItem);
     } catch (error) {
-      handleAxiosError(error as AxiosError, navigate);
+      if (error instanceof AxiosError) {
+        toast.error(error.message)
+      } else {
+        console.error(error);
+        toast.error("Error while toggle is public")
+      }
     } finally {
       toast.dismiss(loaderId);
     }
@@ -149,7 +158,12 @@ const CollectionActionButtons = () => {
       toast.success("List deleted successfully");
       setLoading(false);
     } catch (error) {
-      handleAxiosError(error as AxiosError, navigate);
+      if (error instanceof AxiosError) {
+        toast.error(error.message)
+      } else {
+        console.error(error);
+        toast.error("Error while deleting collection")
+      }
     } finally {
       navigate("/")
       setCurrentCollectionItem(null)

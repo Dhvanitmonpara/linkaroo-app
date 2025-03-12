@@ -1,9 +1,9 @@
 import { fetchedLinkType } from "@/lib/types";
 import useLinkStore from "@/store/linkStore";
 import useMethodStore from "@/store/MethodStore";
-import { handleAxiosError } from "@/utils/handlerAxiosError";
 import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const LinkScreen = () => {
@@ -22,7 +22,12 @@ const LinkScreen = () => {
 
       setCurrentCard(card);
     } catch (error) {
-      handleAxiosError(error as AxiosError, navigate);
+      if (error instanceof AxiosError) {
+        toast.error(error.message)
+      } else {
+        console.error(error);
+        toast.error("Error while fetching link data")
+      }
     } finally {
       setLoading(false);
     }

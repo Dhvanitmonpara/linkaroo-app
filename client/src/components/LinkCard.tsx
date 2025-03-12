@@ -18,7 +18,6 @@ import {
   ContextMenuTrigger,
 } from "@/components/ui/context-menu"
 import toast from "react-hot-toast";
-import { handleAxiosError } from "@/utils/handlerAxiosError";
 import axios, { AxiosError } from "axios";
 import useCollectionsStore from "@/store/collectionStore";
 import useLinkStore from "@/store/linkStore";
@@ -100,7 +99,12 @@ const LinkCard = ({
       removeInboxLinkItem(id);
       addCachedLinkItem(collectionId, response.data.data);
     } catch (error) {
-      handleAxiosError(error as AxiosError, navigate);
+      if (error instanceof AxiosError) {
+        toast.error(error.message)
+      } else {
+        console.error(error);
+        toast.error("Error while executing request");
+      }
     } finally {
       toast.dismiss(loaderId);
     }

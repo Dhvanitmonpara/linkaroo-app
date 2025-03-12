@@ -11,11 +11,12 @@ import DashboardPage from "./pages/DashboardPage";
 import App from "./App";
 import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
-import PasswordRecoveryPage from "./pages/PasswordRecoveryPage";
 import { Links, Notifications } from "@/components";
 import NotFound from "@/pages/NotFound"; // Import your NotFound component
 import HomePage from "./pages/HomePage";
 import InboxPage from "./pages/InboxPage";
+import AppLayout from "./layouts/AppLayout";
+import CreateUserForm from "./components/Forms/CreateUserForm";
 
 const RouterSetup: React.FC = () => {
   const isSmallScreen = useMediaQuery({ query: "(max-width: 1024px)" });
@@ -32,10 +33,6 @@ const RouterSetup: React.FC = () => {
           <Route path="/inbox" element={<InboxPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
-          <Route
-            path="/password-recovery"
-            element={<PasswordRecoveryPage />}
-          />
           <Route path="*" element={<NotFound />} />
         </Route>
       )
@@ -44,19 +41,18 @@ const RouterSetup: React.FC = () => {
       // Large screen
       createRoutesFromElements(
         <Route path="/" element={<App />}>
-          <Route path="" element={<HomePage />} />
-          <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
-          <Route path="/inbox" element={<InboxPage />} />
-          <Route
-            path="/password-recovery"
-            element={<PasswordRecoveryPage />}
-          />
-          <Route path="/collections" element={<DashboardPage />} />
-          <Route path="/collections/:listId" element={<DashboardPage />} />
-          <Route path="/collections/:listId/links/:docId" element={<DashboardPage />} />
-          <Route path="*" element={<NotFound />} />
+          <Route path="/auth/signin" element={<LoginPage />} />
+          <Route path="/auth/createuser" element={<CreateUserForm />} />
+          <Route path="/auth/signup" element={<SignupPage />} />
+          <Route path="/" element={<AppLayout />} >
+            <Route path="/" element={<HomePage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/inbox" element={<InboxPage />} />
+            <Route path="/collections" element={<DashboardPage />} />
+            <Route path="/collections/:listId" element={<DashboardPage />} />
+            <Route path="/collections/:listId/links/:docId" element={<DashboardPage />} />
+            <Route path="*" element={<NotFound />} />
+          </Route>
         </Route>
       )
     );

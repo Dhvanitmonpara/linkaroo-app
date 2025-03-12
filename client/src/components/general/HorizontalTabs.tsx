@@ -13,7 +13,6 @@ import { MdFeedback } from "react-icons/md";
 import { FaInfoCircle, FaSearch } from "react-icons/fa";
 import { IoLogOut } from "react-icons/io5";
 import toast from "react-hot-toast";
-import { handleAxiosError } from "@/utils/handlerAxiosError";
 import axios, { AxiosError } from "axios";
 import { FaInbox } from "react-icons/fa6";
 import { useState } from "react";
@@ -45,10 +44,15 @@ export default function HorizontalTabs() {
       );
       if (response.status === 200) {
         toast.success("Logout successful");
-        navigate("/login");
+        navigate("/auth/signin");
       }
     } catch (error) {
-      handleAxiosError(error as AxiosError, navigate);
+      if (error instanceof AxiosError) {
+        toast.error(error.message)
+      } else {
+        console.error(error);
+        toast.error("Error while logout")
+      }
     } finally {
       toast.dismiss(loaderId);
     }

@@ -12,7 +12,7 @@ const Loading = ({ isLoading }: { isLoading: boolean }) => {
       }, 100);
       return () => clearInterval(interval);
     }
-  }, [])
+  }, [isLoading])
 
   return (
     <div className="flex justify-center fixed z-50 w-screen space-x-5 items-center h-screen bg-zinc-900">

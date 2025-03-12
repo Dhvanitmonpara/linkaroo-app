@@ -5,7 +5,6 @@ import { IoMail } from "react-icons/io5";
 import toast from "react-hot-toast";
 import { Loader2 } from "lucide-react";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { handleAxiosError } from "@/utils/handlerAxiosError";
 import { useNavigate } from "react-router-dom";
 import { Collaborator } from "@/lib/types";
 import debounce from "lodash/debounce";
@@ -51,7 +50,12 @@ function AddCollaboratorForm({ value, setConfirmRequest, setValue, setOpen, conf
 
       setUserList(response.data.data);
     } catch (error) {
-      handleAxiosError(error as AxiosError, navigate);
+      if (error instanceof AxiosError) {
+        toast.error(error.message)
+      } else {
+        console.error(error);
+        toast.error("Error while adding collaborator")
+      }
       setUserList([]);
     } finally {
       setLoading(false);
@@ -72,7 +76,12 @@ function AddCollaboratorForm({ value, setConfirmRequest, setValue, setOpen, conf
     try {
       setSendRequestLoading(true);
     } catch (error) {
-      handleAxiosError(error as AxiosError, navigate);
+      if (error instanceof AxiosError) {
+        toast.error(error.message)
+      } else {
+        console.error(error);
+        toast.error("Error while adding collaborator")
+      }
     } finally {
       setSendRequestLoading(false);
     }

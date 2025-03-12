@@ -2,7 +2,6 @@ import useProfileStore from "@/store/profileStore";
 import { SettingsForm } from "./Forms";
 import toast from "react-hot-toast";
 import { Button } from "./ui/button";
-import { handleAxiosError } from "@/utils/handlerAxiosError";
 import axios, { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTrigger } from "./ui/dialog";
@@ -11,12 +10,14 @@ import { ReactNode, useState } from "react";
 import ProfileForm from "./Forms/ProfileForm";
 import FeedbackForm from "./Forms/FeedbackForm";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { useUser } from "@clerk/clerk-react";
 
 const ProfileCard = () => {
 
   const [open, setIsOpen] = useState(false)
 
   const { profile } = useProfileStore();
+  const { user } = useUser()
   const navigate = useNavigate()
 
   const handleLogout = async () => {
@@ -28,10 +29,15 @@ const ProfileCard = () => {
       );
       if (response.status === 200) {
         toast.success("Logout successful");
-        navigate("/login");
+        navigate("/auth/signin");
       }
     } catch (error) {
-      handleAxiosError(error as AxiosError, navigate);
+      if (error instanceof AxiosError) {
+        toast.error(error.message)
+      } else {
+        console.error(error);
+        toast.error("Error while logout")
+      }
     } finally {
       setIsOpen(false)
     }
@@ -42,7 +48,7 @@ const ProfileCard = () => {
       <PopoverTrigger className="!w-14 dark:text-white flex justify-center items-center rounded-md focus:outline-none">
         <img
           className="rounded-full h-10 w-10 object-cover border-zinc-700 border-2 hover:border-zinc-200 transition-colors"
-          src={profile.avatarImage}
+          src={user?.hasImage ? user.imageUrl : user?.firstName?.charAt(0)}
           alt="Profile pic"
         />
       </PopoverTrigger>

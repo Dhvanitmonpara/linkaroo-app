@@ -20,7 +20,6 @@ import "./style/EditListForm.css";
 import { cn } from "@/lib/utils";
 import { themeOptionsArray } from "@/lib/constants";
 import { useNavigate } from "react-router-dom";
-import { handleAxiosError } from "@/utils/handlerAxiosError";
 import useLinkStore from "@/store/linkStore";
 import useCollectionsStore from "@/store/collectionStore";
 
@@ -84,7 +83,12 @@ const EditListForm = () => {
       setCurrentCollectionItem(list.data.data);
       setCurrentCardColor(list.data.data.theme);
     } catch (error) {
-      handleAxiosError(error as AxiosError, navigate);
+      if (error instanceof AxiosError) {
+        toast.error(error.message)
+      } else {
+        console.error(error);
+        toast.error("Error while updating list")
+      }
     } finally {
       setLoading(false);
     }

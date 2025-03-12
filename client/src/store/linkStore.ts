@@ -1,7 +1,9 @@
-import { cachedLinks, fetchedLinkType, fetchedCollectionType } from "@/lib/types";
+import {
+  cachedLinks,
+  fetchedLinkType,
+  fetchedCollectionType,
+} from "@/lib/types";
 import { create } from "zustand";
-
-import { devtools, persist } from "zustand/middleware";
 
 interface linkState {
   cachedLinks: cachedLinks[] | [];
@@ -21,86 +23,78 @@ interface linkState {
   setCurrentCollectionItem: (item: fetchedCollectionType | null) => void;
 }
 
-const useLinkStore = create<linkState>()(
-  devtools(
-    persist(
-      (set) => ({
-        cachedLinks: [],
-        setCachedLinks: (lists) => set({ cachedLinks: lists }),
-        addCachedLinkCollection: (list) => {
-          set((state) => ({ cachedLinks: [...state.cachedLinks, list] }));
-        },
-        removeCachedLinkCollection: (listId) => {
-          set((state) => ({
-            cachedLinks: state.cachedLinks.filter(
-              (list) => list.collectionId !== listId
-            ),
-          }));
-        },
-        replaceCachedLinkCollection: (newList) => {
-          set((state) => ({
-            cachedLinks: state.cachedLinks.map((list) =>
-              list.collectionId === newList.collectionId ? newList : list
-            ),
-          }));
-        },
-        addCachedLinkItem: (listId, item) => {
-          set((state) => ({
-            cachedLinks: state.cachedLinks.map((list) =>
-              list.collectionId === listId
-                ? { ...list, Links: [...list.links, item] }
-                : list
-            ),
-          }));
-        },
-        removeCachedLinkItem: (collectionId, linkId) => {
-          set((state) => ({
-            cachedLinks: state.cachedLinks.map((list) =>
-              list.collectionId === collectionId
-                ? {
-                    ...list,
-                    Links: list.links.filter((link) => link._id !== linkId),
-                  }
-                : list
-            ),
-          }));
-        },
-        replaceCachedLinkItem: (collectionId, item) => {
-          set((state) => ({
-            cachedLinks: state.cachedLinks.map((list) =>
-              list.collectionId === collectionId
-                ? { ...list, links: [...list.links, item] }
-                : list
-            ),
-          }));
-        },
-        links: [],
-        setLinks: (links) => set({ links }),
-        addLinkItem: (collection) => {
-          set((state) => ({ links: [...state.links, collection] }));
-        },
-        removeLinkItem: (linkId) => {
-          set((state) => ({
-            links: state.links.filter((link) => link._id !== linkId),
-          }));
-        },
-        toggleIsChecked: (linkId, isChecked) => {
-          set((state) => ({
-            links: state.links.map((existingLink) =>
-              existingLink._id === linkId
-                ? { ...existingLink, isChecked: !isChecked }
-                : existingLink
-            ),
-          }));
-        },
-        currentCollectionItem: null,
-        setCurrentCollectionItem: (listItem) => set({ currentCollectionItem: listItem }),
-      }),
-      {
-        name: "Links",
-      }
-    )
-  )
-);
+const useLinkStore = create<linkState>((set) => ({
+  cachedLinks: [],
+  setCachedLinks: (lists) => set({ cachedLinks: lists }),
+  addCachedLinkCollection: (list) => {
+    set((state) => ({ cachedLinks: [...state.cachedLinks, list] }));
+  },
+  removeCachedLinkCollection: (listId) => {
+    set((state) => ({
+      cachedLinks: state.cachedLinks.filter(
+        (list) => list.collectionId !== listId
+      ),
+    }));
+  },
+  replaceCachedLinkCollection: (newList) => {
+    set((state) => ({
+      cachedLinks: state.cachedLinks.map((list) =>
+        list.collectionId === newList.collectionId ? newList : list
+      ),
+    }));
+  },
+  addCachedLinkItem: (listId, item) => {
+    set((state) => ({
+      cachedLinks: state.cachedLinks.map((list) =>
+        list.collectionId === listId
+          ? { ...list, Links: [...list.links, item] }
+          : list
+      ),
+    }));
+  },
+  removeCachedLinkItem: (collectionId, linkId) => {
+    set((state) => ({
+      cachedLinks: state.cachedLinks.map((list) =>
+        list.collectionId === collectionId
+          ? {
+              ...list,
+              Links: list.links.filter((link) => link._id !== linkId),
+            }
+          : list
+      ),
+    }));
+  },
+  replaceCachedLinkItem: (collectionId, item) => {
+    set((state) => ({
+      cachedLinks: state.cachedLinks.map((list) =>
+        list.collectionId === collectionId
+          ? { ...list, links: [...list.links, item] }
+          : list
+      ),
+    }));
+  },
+  links: [],
+  setLinks: (links) => set({ links }),
+  addLinkItem: (collection) => {
+    set((state) => ({ links: [...state.links, collection] }));
+  },
+  removeLinkItem: (linkId) => {
+    set((state) => ({
+      links: state.links.filter((link) => link._id !== linkId),
+    }));
+  },
+  toggleIsChecked: (linkId, isChecked) => {
+    set((state) => ({
+      links: state.links.map((existingLink) =>
+        existingLink._id === linkId
+          ? { ...existingLink, isChecked: !isChecked }
+          : existingLink
+      ),
+    }));
+  },
+  currentCollectionItem: null,
+  setCurrentCollectionItem: (listItem) =>
+    set({ currentCollectionItem: listItem }),
+}));
 
 export default useLinkStore;

@@ -10,11 +10,8 @@ import {
     renameTag,
     customizeCollectionTag
 } from "../controllers/tag.controller.js";
-import { verifyJWT } from "../middlewares/auth.middleware.js";
 
 const router = Router()
-
-router.use(verifyJWT)
 
 // secure routes
 router.route("/").post(createTag)

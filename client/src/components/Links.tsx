@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import { BiSolidPencil } from "react-icons/bi";
-import { handleAxiosError } from "@/utils/handlerAxiosError";
 import convertMongoDBDate from "@/utils/convertMongoDBDate";
 import { Button } from "./ui/button";
 import { CreateCollectionForm, CreateLinkBar, CreateLinkForm } from "./Forms";
@@ -53,7 +52,12 @@ const Links = () => {
       toastId = toast.loading("Changing the list banner...");
       console.log(e);
     } catch (error) {
-      handleAxiosError(error as AxiosError, navigate);
+      if (error instanceof AxiosError) {
+        toast.error(error.message)
+      } else {
+        console.error(error);
+        toast.error("Error while saving changes");
+      }
     } finally {
       toast.dismiss(toastId);
     }
@@ -90,7 +94,12 @@ const Links = () => {
           setCurrentCollectionItem(currentListRes);
         } catch (error) {
           console.log(error)
-          handleAxiosError(error as AxiosError, navigate);
+          if (error instanceof AxiosError) {
+            toast.error(error.message)
+          } else {
+            console.error(error);
+            toast.error("Error while fetching collection details");
+          }
         } finally {
           setLoading(false);
         }

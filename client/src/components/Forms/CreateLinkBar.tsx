@@ -15,7 +15,6 @@ import { useForm, Controller } from "react-hook-form";
 import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { handleAxiosError } from "@/utils/handlerAxiosError";
 import useLinkStore from "@/store/linkStore";
 import useCollectionsStore from "@/store/collectionStore";
 
@@ -107,7 +106,12 @@ const CreateLinkBar: React.FC<CreateLinkBarProps> = ({
       addCachedLinkItem(data.collection, link.data.data);
 
     } catch (error) {
-      handleAxiosError(error as AxiosError, navigate);
+      if (error instanceof AxiosError) {
+        toast.error(error.message)
+      } else {
+        console.error(error);
+        toast.error("Error while searching links");
+      }
     } finally {
       setLoading(false);
       navigate(`/collections/${data.collection}`);

@@ -3,7 +3,6 @@ import { fetchedCollectionType } from "@/lib/types";
 import useCollectionsStore from "@/store/collectionStore";
 import useMethodStore from "@/store/MethodStore";
 import useProfileStore from "@/store/profileStore";
-import { handleAxiosError } from "@/utils/handlerAxiosError";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -56,7 +55,12 @@ const InboxPage = () => {
                   setInbox(inboxList);
                 }
               } catch (error) {
-                handleAxiosError(error as AxiosError, navigate);
+                if (error instanceof AxiosError) {
+                  toast.error(error.message)
+                } else {
+                  console.error(error);
+                  toast.error("Error while fetching collections")
+                }
               } finally {
                 setLoading(false);
               }
@@ -74,7 +78,12 @@ const InboxPage = () => {
             setInboxLink(response.data.data);
           }
         } catch (error) {
-          handleAxiosError(error as AxiosError, navigate);
+          if (error instanceof AxiosError) {
+            toast.error(error.message)
+          } else {
+            console.error(error);
+            toast.error("Error while fetching collections")
+          }
         } finally {
           setLoading(false);
         }

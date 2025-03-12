@@ -7,7 +7,6 @@ import EmailSignup from "./EmailSignup";
 import ProfileSetup from "./ProfileSetup";
 import EmailVerification from "./EmailVerification";
 import EmailConfirmation from "./EmailConfirmation";
-import ConfirmPassword from "./ConfirmPassword";
 
 export {
     CreateCollectionForm,
@@ -18,6 +17,5 @@ export {
     EmailSignup,
     EmailVerification,
     ProfileSetup,
-    ConfirmPassword,
     EmailConfirmation
 }

@@ -18,7 +18,6 @@ import { Textarea } from "../ui/textarea";
 import { cn } from "@/lib/utils";
 import { backgroundImageUrls, themeOptionsArray } from "@/lib/constants";
 import { useNavigate } from "react-router-dom";
-import { handleAxiosError } from "@/utils/handlerAxiosError";
 import useDocStore from "@/store/linkStore";
 import useCollectionsStore from "@/store/collectionStore";
 
@@ -82,7 +81,12 @@ const CreateCollectionForm = ({ afterSubmit }: { afterSubmit?: () => void }) => 
       setCurrentCollectionItem(collection.data.data);
       navigate(`/collections/${collection.data.data._id}`);
     } catch (error) {
-      handleAxiosError(error as AxiosError, navigate);
+      if (error instanceof AxiosError) {
+        toast.error(error.message)
+      } else {
+        console.error(error);
+        toast.error("Error while creating collection")
+      }
     } finally {
       setLoading(false);
       afterSubmit && afterSubmit()

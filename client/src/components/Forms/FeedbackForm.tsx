@@ -11,7 +11,6 @@ import { Controller, useForm } from "react-hook-form";
 import { useState } from "react";
 import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
-import { handleAxiosError } from "@/utils/handlerAxiosError";
 import { useNavigate } from "react-router-dom";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
@@ -45,7 +44,7 @@ function FeedbackForm({ setIsOpen }: { setIsOpen: (value: boolean) => void }) {
         data,
         { withCredentials: true }
       );
-      
+
       if (res.data.success) {
         toast.success("Feedback sent successfully");
       } else {
@@ -58,7 +57,12 @@ function FeedbackForm({ setIsOpen }: { setIsOpen: (value: boolean) => void }) {
       }
 
     } catch (error) {
-      handleAxiosError(error as AxiosError, navigate);
+      if (error instanceof AxiosError) {
+        toast.error(error.message)
+      } else {
+        console.error(error);
+        toast.error("Error while sending feedback")
+      }
     } finally {
       setLoading(false);
       setIsOpen(false)

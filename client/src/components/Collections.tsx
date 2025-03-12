@@ -1,7 +1,6 @@
 import { fetchedCollectionType } from "@/lib/types";
 import useMethodStore from "@/store/MethodStore";
 import useProfileStore from "@/store/profileStore";
-import { handleAxiosError } from "@/utils/handlerAxiosError";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -61,7 +60,12 @@ const Collections = ({ className, extraElementClassNames, defaultView = "list" }
             setInbox(inboxCollection)
           }
         } catch (error) {
-          handleAxiosError(error as AxiosError, navigate);
+          if (error instanceof AxiosError) {
+            toast.error(error.message)
+          } else {
+            console.error(error);
+            toast.error("Error while fetching collection")
+          }
         } finally {
           setLoading(false);
         }

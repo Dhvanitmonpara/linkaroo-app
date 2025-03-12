@@ -3,8 +3,7 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 import { FormEventHandler, useState } from 'react'
 import toast from 'react-hot-toast';
 import { checkedTagsType } from '../CollectionActionButtons';
-import { handleAxiosError } from '@/utils/handlerAxiosError';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuGroup, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '../ui/dropdown-menu';
 import { Loader2 } from 'lucide-react';
 import { FaPlus, FaTag } from 'react-icons/fa';
@@ -30,7 +29,6 @@ function HandleTagForm({ setCheckedTags, loading, checkedTags }: {
   const [saveChangesLoading, setSaveChangesLoading] = useState(false);
 
   const { listId } = useParams();
-  const navigate = useNavigate()
 
   const HandleAddNewTag: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
@@ -66,7 +64,12 @@ function HandleTagForm({ setCheckedTags, loading, checkedTags }: {
       setNewTagInput(false);
       toast.success("Tag created successfully");
     } catch (error) {
-      handleAxiosError(error as AxiosError, navigate);
+      if (error instanceof AxiosError) {
+        toast.error(error.message)
+      } else {
+        console.error(error);
+        toast.error("Error while adding a new tag")
+      }
     } finally {
       setNewTagSubmitLoading(false);
     }
@@ -109,7 +112,12 @@ function HandleTagForm({ setCheckedTags, loading, checkedTags }: {
       setDropdownOpen(false);
       toast.success("Changes saved successfully");
     } catch (error) {
-      handleAxiosError(error as AxiosError, navigate);
+      if (error instanceof AxiosError) {
+        toast.error(error.message)
+      } else {
+        console.error(error);
+        toast.error("Error while saving changes")
+      }
     } finally {
       setSaveChangesLoading(false);
     }
