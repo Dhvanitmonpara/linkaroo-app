@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { devtools, persist } from "zustand/middleware";
 import { fontOptions, themeType } from "@/lib/types";
 import { fetchedTagType } from "@/lib/types";
 
@@ -31,79 +30,72 @@ interface ProfileState {
   setTags: (tags: fetchedTagType[]) => void;
 }
 
-const useProfileStore = create<ProfileState>()(
-  devtools(
-    persist(
-      (set) => ({
-        profile: {
-          _id: "",
-          username: "",
-          email: "",
-          fullName: "",
-          avatarImage: "",
-          isSearchShortcutEnabled: false,
-          useFullTypeFormAdder: false,
-          theme: "dark",
-          font: "font-sans",
-          createdAt: "",
-          updatedAt: "",
-          _v: 0,
-        },
-        addProfile: (profile) => set({ profile }),
-        updateProfile: (updatedProfile) =>
-          set((state) => ({
-            profile: { ...state.profile, ...updatedProfile },
-          })),
-        removeProfile: () =>
-          set({
-            profile: {
-              _id: "",
-              username: "",
-              email: "",
-              fullName: "",
-              avatarImage: "",
-              useFullTypeFormAdder: false,
-              isSearchShortcutEnabled: false,
-              theme: "light",
-              font: "font-mono",
-              createdAt: "",
-              updatedAt: "",
-              _v: 0,
-            },
-          }),
-        changeTheme: (theme: themeType) => {
-          set((state) => ({
-            profile: { ...state.profile, theme },
-          }));
-        },
-        toggleIsSearchShortcutEnabled: (value: boolean) => {
-          set((state) => ({
-            profile: {
-              ...state.profile,
-              isSearchShortcutEnabled: value,
-            },
-          }));
-        },
-        toggleUseFullTypeFormAdder: (value: boolean) => {
-          set((state) => ({
-            profile: {
-              ...state.profile,
-              useFullTypeFormAdder: value,
-            },
-          }));
-        },
-        changeFont: (font: fontOptions) => {
-          set((state) => ({
-            profile: { ...state.profile, font },
-          }));
-        },
-        tags: null,
-        setTags: (tags) => set({ tags }),
-      }),
-      { name: "profile" }
-    )
-  )
-);
+const useProfileStore = create<ProfileState>((set) => ({
+  profile: {
+    _id: "",
+    username: "",
+    email: "",
+    fullName: "",
+    avatarImage: "",
+    isSearchShortcutEnabled: false,
+    useFullTypeFormAdder: false,
+    theme: "dark",
+    font: "font-poppins",
+    createdAt: "",
+    updatedAt: "",
+    _v: 0,
+  },
+  addProfile: (profile) => set({ profile }),
+  updateProfile: (updatedProfile) =>
+    set((state) => ({
+      profile: { ...state.profile, ...updatedProfile },
+    })),
+  removeProfile: () =>
+    set({
+      profile: {
+        _id: "",
+        username: "",
+        email: "",
+        fullName: "",
+        avatarImage: "",
+        useFullTypeFormAdder: false,
+        isSearchShortcutEnabled: false,
+        theme: "light",
+        font: "font-poppins",
+        createdAt: "",
+        updatedAt: "",
+        _v: 0,
+      },
+    }),
+  changeTheme: (theme: themeType) => {
+    set((state) => ({
+      profile: { ...state.profile, theme },
+    }));
+  },
+  toggleIsSearchShortcutEnabled: (value: boolean) => {
+    set((state) => ({
+      profile: {
+        ...state.profile,
+        isSearchShortcutEnabled: value,
+      },
+    }));
+  },
+  toggleUseFullTypeFormAdder: (value: boolean) => {
+    set((state) => ({
+      profile: {
+        ...state.profile,
+        useFullTypeFormAdder: value,
+      },
+    }));
+  },
+  changeFont: (font: fontOptions) => {
+    set((state) => ({
+      profile: { ...state.profile, font },
+    }));
+  },
+  tags: null,
+  setTags: (tags) => set({ tags }),
+}));
 
 export default useProfileStore;
 export type { User };

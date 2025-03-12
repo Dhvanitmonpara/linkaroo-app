@@ -81,7 +81,7 @@ const Collections = ({ className, extraElementClassNames, defaultView = "list" }
     );
   }
 
-  if (collections.length == 0) {
+  if (collections.length == 0 || !collections) {
     if (location.pathname.includes("dashboard")) return
     return (
       <div className={`dark:text-zinc-200 select-none text-zinc-900 h-[calc(100vh-4.5rem)] lg:h-[calc(100vh-5rem)] w-full flex justify-center items-center ${className}`}>
@@ -92,8 +92,8 @@ const Collections = ({ className, extraElementClassNames, defaultView = "list" }
 
   return (
     <>
-      <div className="col-span-2 lg:inline-block hidden relative px-7 pb-5 lg:pl-7 lg:pr-4 space-y-3 no-scrollbar max-h-[calc(100vh-5rem)]">
-        <div className={`col-span-2 relative lg:px-0 px-4 space-y-3 overflow-y-scroll no-scrollbar lg:border-r-[1px] !pr-2 lg:border-zinc-700 h-[calc(100vh-4.5rem)] md:h-auto lg:h-[calc(100vh-4.5rem)] md:space-x-0 md:space-y-2 md:p-4 !gap-2 md:justify-start md:items-start 2xl:grid-cols-1 ${className}`}>
+      <div className={`col-span-2 lg:block hidden relative px-7 pb-5 lg:pl-7 space-y-3 no-scrollbar max-h-[calc(100vh-5rem)] ${(location.pathname.includes("/dashboard") || location.pathname.includes("/collections")) && "bg-zinc-900 lg:border-r-[1px] lg:!pr-2 lg:pl-3.5 lg:border-zinc-800"}`}>
+        <div className={`col-span-2 relative lg:px-0 px-4 space-y-3 overflow-y-scroll no-scrollbar !pr-2 h-[calc(100vh-4.5rem)] md:h-auto lg:h-[calc(100vh-4.5rem)] md:space-x-0 md:space-y-2 md:p-4 !gap-2 md:justify-start md:items-start 2xl:grid-cols-1 ${className}`}>
           <div className={`h-2 md:hidden ${extraElementClassNames}`}></div>
           {(location.pathname.includes("/dashboard") || location.pathname.includes("/collections")) && <h2 className="pt-8 pb-3 flex justify-between items-center">
             <span className="text-zinc-100 text-2xl">

@@ -60,7 +60,15 @@
 
   @font-face {
     font-family: "Helvetica";
-    src: url("./assets/helvetica-255//Helvetica.ttf") format("truetype");
+    src: url("./assets/helvetica-255/Helvetica.ttf") format("truetype");
+  }
+  @font-face {
+    font-family: "Poppins";
+    src: url("./assets/Poppins/Poppins-Regular.ttf") format("truetype");
+  }
+  @font-face {
+    font-family: "Comic-Neue";
+    src: url("./assets/Comic_Neue/ComicNeue-Regular.ttf") format("truetype");
   }
 }
 

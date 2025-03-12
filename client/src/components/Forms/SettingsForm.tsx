@@ -124,17 +124,18 @@ const SettingsForm = () => {
               onChange(value)
               changeFont(value)
             }}>
-              <SelectTrigger className="text-zinc-100 bg-zinc-800 border-zinc-800 sm:max-w-96">
+              <SelectTrigger className={`text-zinc-100 bg-zinc-800 border-zinc-800 sm:max-w-96 ${value}`}>
                 <SelectValue placeholder="Select font" />
               </SelectTrigger>
               <SelectContent
                 className="dark:bg-zinc-900 dark:text-white dark:border-zinc-800"
               >
                 <SelectGroup>
-                  <SelectItem value="font-mono">Mono</SelectItem>
-                  <SelectItem value="font-serif">Serif</SelectItem>
-                  <SelectItem value="font-sans">Sans</SelectItem>
-                  <SelectItem value="font-helvetica">Helvetica</SelectItem>
+                  <SelectItem className="font-mono" value="font-mono">Mono</SelectItem>
+                  <SelectItem className="font-poppins" value="font-poppins">Poppins</SelectItem>
+                  <SelectItem className="font-sans" value="font-sans">Sans</SelectItem>
+                  <SelectItem className="font-helvetica" value="font-helvetica">Helvetica</SelectItem>
+                  <SelectItem className="font-comic" value="font-comic">Comic Sans</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>

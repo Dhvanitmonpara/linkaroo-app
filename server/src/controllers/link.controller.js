@@ -110,7 +110,6 @@ const createLinkWithMetadata = asyncHandler(async (req, res) => {
             link = response,
             "Link created successfully"
         ))
-
 })
 
 const getLinksByCollection = asyncHandler(async (req, res) => {

@@ -37,7 +37,7 @@ type TagType = {
   updatedAt: string;
 };
 
-type fontOptions = "font-mono" | "font-sans" | "font-serif" | "font-helvetica";
+type fontOptions = "font-mono" | "font-sans" | "font-comic" | "font-poppins" | "font-helvetica";
 
 type fetchedTagType = {
   __v: number;

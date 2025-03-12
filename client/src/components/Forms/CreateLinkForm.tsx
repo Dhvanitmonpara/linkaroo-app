@@ -81,7 +81,7 @@ const CreateLinkForm: React.FC<CreateLinkFormProps> = ({
       if (!validUrl) {
         toast.error("Invalid URL");
         return;
-      }validUrl
+      }
 
       const newData = {
         title: data.title,
@@ -105,7 +105,7 @@ const CreateLinkForm: React.FC<CreateLinkFormProps> = ({
       }
       console.log(link)
       addCachedLinkItem(data.collection, link.data.data);
-
+ 
     } catch (error) {
       console.log(error)
       handleAxiosError(error as AxiosError, navigate);
