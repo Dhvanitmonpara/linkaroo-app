@@ -19,7 +19,6 @@ import useMethodStore from "@/store/MethodStore";
 import "./style/EditListForm.css";
 import { cn } from "@/lib/utils";
 import { themeOptionsArray } from "@/lib/constants";
-import { useNavigate } from "react-router-dom";
 import useLinkStore from "@/store/linkStore";
 import useCollectionsStore from "@/store/collectionStore";
 
@@ -36,7 +35,6 @@ const EditListForm = () => {
   const { currentCollectionItem, setCurrentCollectionItem } = useLinkStore();
   // const [icon, setIcon] = useState(currentCollectionItem?.icon || "");
   const { setCurrentCardColor } = useMethodStore();
-  const navigate = useNavigate()
 
   const { control, handleSubmit, register } = useForm<HandleListEditType>({
     defaultValues: {

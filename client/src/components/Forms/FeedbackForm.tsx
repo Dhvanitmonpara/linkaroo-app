@@ -11,7 +11,6 @@ import { Controller, useForm } from "react-hook-form";
 import { useState } from "react";
 import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import { Loader2 } from "lucide-react";
@@ -25,7 +24,6 @@ type HandleFeedbackType = {
 function FeedbackForm({ setIsOpen }: { setIsOpen: (value: boolean) => void }) {
 
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
 
   const { control, handleSubmit, register } = useForm<HandleFeedbackType>({
     defaultValues: {

@@ -5,7 +5,6 @@ import { IoMail } from "react-icons/io5";
 import toast from "react-hot-toast";
 import { Loader2 } from "lucide-react";
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { useNavigate } from "react-router-dom";
 import { Collaborator } from "@/lib/types";
 import debounce from "lodash/debounce";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -25,8 +24,6 @@ function AddCollaboratorForm({ value, setConfirmRequest, setValue, setOpen, conf
   const [searchByEmail, setSearchByEmail] = useState(false);
   const [loading, setLoading] = useState(false);
   const [sendRequestLoading, setSendRequestLoading] = useState(false);
-
-  const navigate = useNavigate();
 
   const resultRefs = useRef<Record<number, HTMLDivElement | null>>({});
   const inputRef = useRef<HTMLInputElement>(null);
