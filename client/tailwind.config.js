@@ -1,11 +1,7 @@
 /** @type {import('tailwindcss').Config} */
-import daisyui from "daisyui"
 import tailwindcssAnimate from "tailwindcss-animate"
 
 export default {
-  daisyui: {
-    themes: []
-  },
   darkMode: "class",
   content: [
     './src/**/*.{js,ts,jsx,tsx}', // Ensure all component paths are included
@@ -98,5 +94,5 @@ export default {
       },
     },
   },
-  plugins: [tailwindcssAnimate, daisyui],
+  plugins: [tailwindcssAnimate],
 }

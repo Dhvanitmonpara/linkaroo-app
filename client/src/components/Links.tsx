@@ -126,10 +126,7 @@ const Links = () => {
   if (loading) {
     return (
       <div
-        className={`xl:px-0 lg:px-0 lg:pr-5 px-5 h-full select-none ${!location.includes("/links")
-          ? "lg:col-span-3 xl:col-span-5 !pr-5"
-          : "col-span-3"
-          }`}
+        className={`xl:px-0 lg:px-0 lg:pr-5 px-5 h-full select-none lg:col-span-3 xl:col-span-5 pr-5`}
       >
         <div className="md:h-[calc(100vh-5rem)] h-[calc(100vh-8rem)] lg:h-[calc(100vh-4.5rem)] overflow-y-scroll w-full space-y-2 no-scrollbar">
           <div className="dark:text-white h-full flex justify-center items-center">
@@ -149,10 +146,7 @@ const Links = () => {
   if (!currentCollectionItem?._id) {
     return (
       <div
-        className={`xl:px-0 lg:px-0 lg:pr-5 px-5 h-full select-none ${!location.includes("/links")
-          ? "lg:col-span-5 xl:col-span-7 !pr-5"
-          : "col-span-3"
-          }`}
+        className={`xl:px-0 lg:px-0 lg:pr-5 px-5 h-full select-none lg:col-span-3 xl:col-span-5 pr-5`}
       >
         <div className="md:h-[calc(100vh-5rem)] h-[calc(100vh-8rem)] lg:h-[calc(100vh-4.5rem)] overflow-y-scroll w-full flex flex-col justify-center items-center space-y-6 p-4">
           <h1 className="text-3xl font-bold text-center dark:text-white">
@@ -189,10 +183,7 @@ const Links = () => {
 
   return (
     <div
-      className={`xl:px-0 lg:px-0 lg:pr-5 px-5 h-full select-none ${!location.includes("/links")
-        ? "lg:col-span-3 xl:col-span-5 !pr-5"
-        : "col-span-3"
-        }`}
+      className={`xl:px-0 lg:px-0 lg:pr-5 px-5 h-full select-none lg:col-span-3 xl:col-span-5 pr-5`}
     >
       <div className={`md:h-[calc(100vh-5rem)] lg:px-0 px-4 h-[calc(100vh-8rem)] lg:h-[calc(100vh-4.5rem)] overflow-y-scroll w-full space-y-2 no-scrollbar ${font}`}>
         <div className="lg:h-2"></div>
@@ -292,7 +283,7 @@ const Links = () => {
         {links.length > 0 ? (
           <>
             <div
-              className={`grid grid-cols-1 gap-2 ${location.includes("/collections") ? "" : "lg:grid-cols-2"}`}
+              className={`grid grid-cols-1 lg:grid-cols-2 gap-2`}
             >
               <ResponsiveDialog
                 open={isLinkFormOpen}
@@ -301,7 +292,7 @@ const Links = () => {
                 className={`sm:max-w-2xl ${!profile.useFullTypeFormAdder && "md:p-0 bg-transparent border-none"}`}
                 title="Add New Link"
                 trigger={
-                  <div className="flex justify-start items-center text-zinc-300 text-start">
+                  <div className={`flex justify-start items-center ${links.length % 2 === 0 ? "lg:col-span-2" : "lg:col-span-1"} text-zinc-300 text-start`}>
                     <p className="py-3 px-6 flex justify-normal items-center space-x-2 border-1 border-zinc-800 bg-zinc-900 hover:bg-zinc-800/80 cursor-pointer rounded-md w-full">
                       <span>
                         <FaPlus />
