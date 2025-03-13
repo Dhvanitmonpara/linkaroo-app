@@ -44,14 +44,15 @@ const Collections = ({ className, extraElementClassNames, defaultView = "list" }
           if (!collections.length) {
             const response: AxiosResponse = await axios({
               method: "GET",
-              url: `${import.meta.env.VITE_SERVER_API_URL}/collections/u`,
+              url: `${import.meta.env.VITE_SERVER_API_URL}/collections/u/all/${profile._id}`,
               withCredentials: true,
             });
 
-            if (!response) {
+            if (!response || response.status !== 200) {
               toast.error("Failed to fetch user's collections.");
               return;
             }
+
             const allCollections = response.data.data;
             const inboxCollection = allCollections.find((collection: fetchedCollectionType) => collection.isInbox === true);
             const regularCollections = allCollections.filter((collection: fetchedCollectionType) => collection.isInbox === false);

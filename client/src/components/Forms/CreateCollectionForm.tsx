@@ -20,6 +20,7 @@ import { backgroundImageUrls, themeOptionsArray } from "@/lib/constants";
 import { useNavigate } from "react-router-dom";
 import useDocStore from "@/store/linkStore";
 import useCollectionsStore from "@/store/collectionStore";
+import { useUser } from "@clerk/clerk-react";
 
 type HandleCollectionCreationType = {
   title: string;
@@ -31,6 +32,7 @@ const CreateCollectionForm = ({ afterSubmit }: { afterSubmit?: () => void }) => 
   const [loading, setLoading] = useState(false);
   const { addCollectionsItem } = useCollectionsStore();
   const navigate = useNavigate()
+  const { user } = useUser()
   const { setCurrentCollectionItem } = useDocStore()
 
   const { control, handleSubmit, register } = useForm<HandleCollectionCreationType>({
@@ -47,7 +49,12 @@ const CreateCollectionForm = ({ afterSubmit }: { afterSubmit?: () => void }) => 
         Math.random() * backgroundImageUrls.length
       );
 
-      const newData = { ...data, coverImage: backgroundImageUrls[randomIndex] };
+      if (!user?.primaryEmailAddress?.emailAddress) {
+        toast.error("User email not found");
+        return
+      }
+
+      const newData = { ...data, coverImage: backgroundImageUrls[randomIndex], userEmail: user?.primaryEmailAddress?.emailAddress };
 
       const response = await axios.post(
         `${import.meta.env.VITE_SERVER_API_URL}/collections`,

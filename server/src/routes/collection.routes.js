@@ -23,16 +23,14 @@ const router = Router()
 router.route("/").post(createCollection)
 
 router.route("/u/:collectionId").get(getCollectionById)
+router.route("/u/all/:userId").get(getCollectionsByUser)
 
-router.route("/o").get(getCollectionsByOwner)
-
+router.route("/o/get/:userId").get(getCollectionsByOwner)
 router.route("/o/:collectionId")
     .delete(deleteCollection)
     .patch(updateCollection)
 
-router.route("/c").get(getCollectionsByCollaborator)
-
-router.route("/u").all(getCollectionsByUser)
+router.route("/c/get/:collaboratorId").get(getCollectionsByCollaborator)
 
 router.route("/o/c/:collectionId")
     .patch(addCollaborator)
@@ -42,7 +40,7 @@ router.route("/t/:tagId").get(getCollectionsByTagId)
 
 router.route("/status/:collectionId").patch(toggleIsPublic)
 
-router.route("/o/:collectionId/cover-image")
+router.route("/o/:collectionId/cover-image/:userId")
     .delete(deleteCoverImage)
     .post(upload.single("coverImage"), uploadCoverImage)
     .patch(upload.single("coverImage"), updateCoverImage)

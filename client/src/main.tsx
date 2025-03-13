@@ -1,4 +1,3 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import RouterSetup from "./RouterSetup";
@@ -12,16 +11,14 @@ if (!PUBLISHABLE_KEY) {
 }
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <ClerkProvider
-      publishableKey={PUBLISHABLE_KEY}
-      afterSignOutUrl="/"
-      signInForceRedirectUrl="/"
-      signUpForceRedirectUrl="/auth/createuser"
-      signInUrl="/auth/signin"
-      signUpUrl="/auth/signup"
-    >
-      <RouterSetup />
-    </ClerkProvider>
-  </React.StrictMode>
+  <ClerkProvider
+    publishableKey={PUBLISHABLE_KEY}
+    afterSignOutUrl="/"
+    signInForceRedirectUrl="/"
+    signUpForceRedirectUrl="/auth/createuser"
+    signInUrl="/auth/signin"
+    signUpUrl="/auth/signup"
+  >
+    <RouterSetup />
+  </ClerkProvider>
 );

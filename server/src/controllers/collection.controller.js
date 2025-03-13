@@ -5,20 +5,33 @@ import { Collection } from "../models/collection.model.js"
 import { uploadOnCloudinary, deleteFromCloudinary } from "../utils/cloudinary.js"
 import getPublicId from "../utils/getPublicId.js"
 import collectionOwnerVerification from "../utils/collectionOwnerVerification.js"
-import { ObjectId } from "mongodb"
 import { Link } from "../models/link.model.js"
+import { User } from "../models/user.model.js"
+import convertToObjectId from "../utils/convertToObjectId.js"
 
 const createCollection = asyncHandler(async (req, res) => {
 
-    const { title, description, theme = "bg-zinc-200", coverImage, isInbox = false } = req.body
+    const { title, description, theme = "bg-zinc-200", coverImage, isInbox = false, userEmail } = req.body
 
     if (!title || !description) {
         throw new ApiError(400, "Title and description are required")
     }
 
+    if (!userEmail) {
+        throw new ApiError(400, "User email is required")
+    }
+
+    const user = await User.findOne({
+        email: userEmail
+    })
+
+    if (!user || !user._id) {
+        throw new ApiError(400, "User not found in database")
+    }
+
     const collectionOnDatabase = await Collection.findOne({
         title,
-        createdBy: req.user._id
+        createdBy: user._id
     })
 
     if (collectionOnDatabase) {
@@ -26,7 +39,7 @@ const createCollection = asyncHandler(async (req, res) => {
     }
 
     const collection = await Collection.create({
-        createdBy: req.user._id,
+        createdBy: user._id,
         title,
         description,
         isInbox,
@@ -50,7 +63,7 @@ const createCollection = asyncHandler(async (req, res) => {
 
 const addCollaborator = asyncHandler(async (req, res) => {
 
-    const collectionId = req.params.collectionId
+    const { collectionId } = req.params
 
     const collection = await Collection.findById(collectionId)
 
@@ -58,23 +71,27 @@ const addCollaborator = asyncHandler(async (req, res) => {
         throw new ApiError(404, "Collection not found")
     }
 
-    collectionOwnerVerification(collection.createdBy, req.user, res)
-
-    const { userId } = req.body
-
-    if (!userId) {
-        throw new ApiError(400, "User ID is required")
+    if (collection.isInbox) {
+        throw new ApiError(400, "Inbox is not a collection")
     }
 
-    if (userId == req.user?.id) {
+    const { collectionOwnerId, collaboratorId } = req.body
+
+    if (!collectionOwnerId || !collaboratorId) {
+        throw new ApiError(400, "collectionOwnerId and collaboratorId are required")
+    }
+
+    collectionOwnerVerification(collection.createdBy, collectionOwnerId, res)
+
+    if (collectionOwnerId == collaboratorId) {
         throw new ApiError(400, "You cannot add yourself as a collaborator")
     }
 
-    if (collection.collaborators.includes(userId)) {
+    if (collection.collaborators.includes(collaboratorId)) {
         throw new ApiError(400, "User is already a collaborator")
     }
 
-    collection.collaborators.push(userId)
+    collection.collaborators.push(collaboratorId)
     await collection.save()
 
     return res
@@ -96,16 +113,16 @@ const deleteCollaborator = asyncHandler(async (req, res) => {
         throw new ApiError(404, "Collection not found")
     }
 
-    collectionOwnerVerification(collection.createdBy, req.user, res)
+    const { collectionOwnerId, collaboratorId } = req.body
 
-    const { userId } = req.body
-
-    if (!userId) {
-        throw new ApiError(400, "User ID is required")
+    if (!collectionOwnerId || !collaboratorId) {
+        throw new ApiError(400, "collectionOwnerId and collaboratorId are required")
     }
 
+    collectionOwnerVerification(collection.createdBy, collectionOwnerId, res)
+
     const newCollaborators = collection.collaborators.filter(collaborator => (
-        (typeof collaborator == "object" ? collaborator.valueOf().toString() : collaborator.toString()) !== userId.toString()
+        (typeof collaborator == "object" ? collaborator.valueOf().toString() : collaborator.toString()) !== collaboratorId.toString()
     ))
     collection.collaborators = newCollaborators
     await collection.save()
@@ -126,9 +143,9 @@ const getCollectionById = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Collection ID is required")
     }
 
-    const collectionIdObject = new ObjectId(collectionId);
+    const collectionIdObject = convertToObjectId(collectionId);
 
-    const collection = await Collection.aggregate([
+    const collections = await Collection.aggregate([
         {
             $match: { _id: collectionIdObject }
         },
@@ -164,31 +181,24 @@ const getCollectionById = asyncHandler(async (req, res) => {
                 title: 1,
                 description: 1,
                 theme: 1,
-                font: 1,
                 createdAt: 1,
                 isInbox: 1,
                 updatedAt: 1,
                 coverImage: 1,
                 collaborators: {
                     _id: 1,
-                    username: 1,
                     email: 1,
-                    fullName: 1,
-                    avatarImage: 1,
                 },
                 createdBy: {
                     _id: 1,
-                    username: 1,
                     email: 1,
-                    fullName: 1,
-                    avatarImage: 1,
                 },
                 tags: 1
             }
         }
     ])
 
-    if (!collection) {
+    if (!collections) {
         throw new ApiError(404, "Collection not found")
     }
 
@@ -196,7 +206,7 @@ const getCollectionById = asyncHandler(async (req, res) => {
         .status(200)
         .json(new ApiResponse(
             200,
-            collection[0],
+            collections[0],
             "Collection retrieved successfully"
         ))
 
@@ -212,7 +222,13 @@ const updateCollection = asyncHandler(async (req, res) => {
 
     const collection = await Collection.findById(collectionId)
 
-    collectionOwnerVerification(collection.createdBy, req.user, res)
+    const { collectionOwnerId, collaboratorId } = req.body
+
+    if (!collectionOwnerId || !collaboratorId) {
+        throw new ApiError(400, "collectionOwnerId and collaboratorId are required")
+    }
+
+    collectionOwnerVerification(collection.createdBy, collectionOwnerId, res)
 
     const { title, description, theme = "dark" } = req.body
 
@@ -255,7 +271,13 @@ const deleteCollection = asyncHandler(async (req, res) => {
         throw new ApiError(404, "Collection not found")
     }
 
-    collectionOwnerVerification(collection.createdBy, req.user, res)
+    const { collectionOwnerId } = req.body
+
+    if (!collectionOwnerId) {
+        throw new ApiError(400, "collectionOwnerId is required")
+    }
+
+    collectionOwnerVerification(collection.createdBy, collectionOwnerId, res)
 
     const collectionLinks = Link.deleteMany({ collectionId })
 
@@ -269,6 +291,7 @@ const deleteCollection = asyncHandler(async (req, res) => {
         .status(200)
         .json(new ApiResponse(
             200,
+            {},
             "Collection deleted successfully"
         ))
 
@@ -277,7 +300,15 @@ const deleteCollection = asyncHandler(async (req, res) => {
 
 const getCollectionsByOwner = asyncHandler(async (req, res) => {
 
-    const collections = await Collection.find({ createdBy: req.user?._id })
+    const { userId } = req.params
+
+    if (!userId) {
+        throw new ApiError(400, "User ID is required")
+    }
+
+    const userIdObject = convertToObjectId(userId);
+
+    const collections = await Collection.find({ createdBy: userIdObject })
 
     if (!collections) {
         throw new ApiError(404, "No collections found for this user")
@@ -294,7 +325,15 @@ const getCollectionsByOwner = asyncHandler(async (req, res) => {
 
 const getCollectionsByCollaborator = asyncHandler(async (req, res) => {
 
-    const collections = await Collection.find({ collaborators: req.user._id })
+    const { collaboratorId } = req.params
+
+    if (!collaboratorId) {
+        throw new ApiError(400, "User ID is required")
+    }
+
+    const collaboratorIdObject = convertToObjectId(collaboratorId);
+
+    const collections = await Collection.find({ collaborators: collaboratorIdObject })
 
     if (!collections) {
         throw new ApiError(404, "No collections found for this user")
@@ -312,12 +351,20 @@ const getCollectionsByCollaborator = asyncHandler(async (req, res) => {
 
 const getCollectionsByUser = asyncHandler(async (req, res) => {
 
+    const { userId } = req.params
+
+    if (!userId) {
+        throw new ApiError(400, "User ID is required")
+    }
+
+    const userIdObject = convertToObjectId(userId);
+
     const collections = await Collection.aggregate([
         {
             $match: {
                 $or: [
-                    { createdBy: req.user?._id },
-                    { collaborators: req.user?._id }
+                    { createdBy: userIdObject },
+                    { collaborators: userIdObject }
                 ]
             }
         },
@@ -361,17 +408,11 @@ const getCollectionsByUser = asyncHandler(async (req, res) => {
                 isPublic: 1,
                 collaborators: {
                     _id: 1,
-                    username: 1,
                     email: 1,
-                    fullName: 1,
-                    avatarImage: 1,
                 },
                 createdBy: {
                     _id: 1,
-                    username: 1,
                     email: 1,
-                    fullName: 1,
-                    avatarImage: 1,
                 },
                 tags: 1
             }
@@ -399,7 +440,9 @@ const getCollectionsByTagId = asyncHandler(async (req, res) => {
         throw new ApiError(404, "Tag id is required")
     }
 
-    const collections = await Collection.find({ tags: tagId })
+    const tagIdObject = convertToObjectId(tagId);
+
+    const collections = await Collection.find({ tags: tagIdObject })
 
     if (!collections) {
         throw new ApiError(404, "No collections found for this tag")
@@ -416,10 +459,14 @@ const getCollectionsByTagId = asyncHandler(async (req, res) => {
 })
 
 const uploadCoverImage = asyncHandler(async (req, res) => {
-    const collectionId = req.params.collectionId
+    const { collectionId, userId } = req.params
 
     if (!collectionId) {
         throw new ApiError(400, "Collection ID is required")
+    }
+
+    if (!userId) {
+        throw new ApiError(400, "User ID is required")
     }
 
     const collection = await Collection.findById(CollectionId)
@@ -428,7 +475,7 @@ const uploadCoverImage = asyncHandler(async (req, res) => {
         throw new ApiError(404, "Collection not found")
     }
 
-    collectionOwnerVerification(collection.createdBy, req.user, res)
+    collectionOwnerVerification(collection.createdBy, userId, res)
 
     const coverImageLocalPath = req.file?.path
 
@@ -458,10 +505,14 @@ const uploadCoverImage = asyncHandler(async (req, res) => {
 })
 
 const updateCoverImage = asyncHandler(async (req, res) => {
-    const collectionId = req.params.collectionId
+    const { collectionId, userId } = req.params
 
     if (!collectionId) {
         throw new ApiError(400, "Collection ID is required")
+    }
+
+    if (!userId) {
+        throw new ApiError(400, "User ID is required")
     }
 
     const collection = await Collection.findById(CollectionId);
@@ -470,7 +521,7 @@ const updateCoverImage = asyncHandler(async (req, res) => {
         throw new ApiError(404, "Collection not found")
     }
 
-    collectionOwnerVerification(collection.createdBy, req.user, res)
+    collectionOwnerVerification(collection.createdBy, userId, res)
 
     if (!collection.coverImage) {
         throw new ApiError(400, "No cover image currently attached to this Collection")
@@ -507,10 +558,14 @@ const updateCoverImage = asyncHandler(async (req, res) => {
 });
 
 const deleteCoverImage = asyncHandler(async (req, res) => {
-    const collectionId = req.params.collectionId
+    const { collectionId, userId } = req.params
 
     if (!collectionId) {
         throw new ApiError(400, "Collection ID is required")
+    }
+
+    if (!userId) {
+        throw new ApiError(400, "User ID is required")
     }
 
     const collection = await Collection.findById(collectionId);
@@ -519,7 +574,7 @@ const deleteCoverImage = asyncHandler(async (req, res) => {
         throw new ApiError(404, "Collection not found")
     }
 
-    collectionOwnerVerification(collection.createdBy, req.user, res)
+    collectionOwnerVerification(collection.createdBy, userId, res)
 
     if (!collection.coverImage) {
         return res.status(400).json(new ApiResponse(400, "No cover image found"))

@@ -1,5 +1,5 @@
 const collectionOwnerVerification = (list, user, res) => {
-    if ((typeof list == 'object' ? list.valueOf() : list) !== (typeof user._id == "object" ? user._id.valueOf() : user._id)) {
+    if ((typeof list == 'object' ? list.valueOf() : list) !== (typeof user == "object" ? user.valueOf() : user)) {
         return res
             .status(403)
             .json(new ApiResponse(

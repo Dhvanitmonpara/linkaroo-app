@@ -1,5 +1,6 @@
 import { useUser } from '@clerk/clerk-react';
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
+import { Loader2 } from 'lucide-react';
 import { useEffect } from 'react'
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
@@ -12,12 +13,8 @@ function CreateUserForm() {
   useEffect(() => {
     const createUserHandler = async () => {
       try {
-        if (!isLoaded) {
-          if (!isSignedIn) {
-            navigate("/auth/signin")
-          }
-          return
-        }
+        if (!isLoaded) return
+
         const email = user?.primaryEmailAddress?.emailAddress;
         if (!email) {
           navigate("/auth/signin")
@@ -40,26 +37,37 @@ function CreateUserForm() {
           return
         }
 
-        return res.data
+        navigate("/")
       } catch (error) {
-        if (error instanceof AxiosError) {
-          if(error.status === 400){
-            toast("User already exists")
-            navigate("/")
-            return
+        if (axios.isAxiosError(error)) {
+          if (error.response?.status === 400) {
+            toast("User already exists");
+            navigate("/");
+            return;
           }
-          toast.error(error.message)
+          toast.error(error.response?.data?.message || "Error while creating user");
         } else {
           console.error(error);
-          toast.error("Error while creating user")
+          toast.error("Error while creating user");
         }
       }
     }
     createUserHandler()
-  }, [isLoaded, isSignedIn, navigate, user?.id, user?.primaryEmailAddress?.emailAddress, user?.username])
+  }, [isLoaded, isSignedIn, user]);
+
+  useEffect(() => {
+    if (!isLoaded) return;
+    if (!isSignedIn) {
+      navigate("/auth/signin");
+      return;
+    }
+  }, [isLoaded, isSignedIn, navigate]);
 
   return (
-    <div>createUserForm</div>
+    <div className='h-screen w-screen flex justify-center items-center flex-col'>
+      <h3 className='font-bold text-2xl'>Setting up your account</h3>
+      <Loader2 className="animate-spin text-2xl mt-6" />
+    </div>
   )
 }
 
