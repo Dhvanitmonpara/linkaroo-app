@@ -155,10 +155,7 @@ const Links = () => {
           }`}
       >
         <div className="md:h-[calc(100vh-5rem)] h-[calc(100vh-8rem)] lg:h-[calc(100vh-4.5rem)] overflow-y-scroll w-full flex flex-col justify-center items-center space-y-6 p-4">
-          <h1 className="text-3xl font-bo     const isValidUrl = (url: string): boolean => {
-        const urlRegex = /^(https?:\/\/)?([\w\d-]+\.)+[\w-]+(\/[\w-./?%&=]*)?$/i;
-        return urlRegex.test(url);
-      };ld text-center dark:text-white">
+          <h1 className="text-3xl font-bold text-center dark:text-white">
             Welcome to Your Document Space
           </h1>
           <p className="text-lg text-center max-w-2xl dark:text-gray-300">

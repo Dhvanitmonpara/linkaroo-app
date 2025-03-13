@@ -187,10 +187,12 @@ const getCollectionById = asyncHandler(async (req, res) => {
                 coverImage: 1,
                 collaborators: {
                     _id: 1,
+                    username: 1,
                     email: 1,
                 },
                 createdBy: {
                     _id: 1,
+                    username: 1,
                     email: 1,
                 },
                 tags: 1

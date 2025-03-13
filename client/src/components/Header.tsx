@@ -21,6 +21,7 @@ const Header = () => {
   const { setPrevPath } = useMethodStore();
 
   const [creationTab, setCreationTab] = useState("collection");
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -61,6 +62,7 @@ const Header = () => {
             </div>
           </div>
           <ResponsiveDialog
+            explicitStates={{ isOpen: dialogOpen, setIsOpen: setDialogOpen }}
             title={`${creationTab === "collection" ? "Create new Collection" : "Add new Link"}`}
             trigger={
               <button
@@ -82,10 +84,10 @@ const Header = () => {
                 <TabsTrigger className="w-full" value="link">Link</TabsTrigger>
               </TabsList>
               <TabsContent value="collection">
-                <CreateCollectionForm />
+                <CreateCollectionForm afterSubmit={() => setDialogOpen(false)} />
               </TabsContent>
               <TabsContent value="link">
-                <CreateLinkForm />
+                <CreateLinkForm afterSubmit={() => setDialogOpen(false)} />
               </TabsContent>
             </Tabs>
           </ResponsiveDialog>
