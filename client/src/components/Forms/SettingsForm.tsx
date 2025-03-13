@@ -111,11 +111,11 @@ const SettingsForm = () => {
         </div>
 
         <div className="flex p-3 space-x-6 rounded-md text-zinc-100 bg-zinc-800 border-zinc-800 w-full sm:max-w-96">
-          <Label className="space-y-1" htmlFor="search-shortcut">
+          <Label className="space-y-1" htmlFor="quick-add-link">
             <span className="text-sm font-medium">Quick add link</span>
             <p className="text-xs text-zinc-400">Add links quickly from inside collection page.</p>
           </Label>
-          <Switch id="search-shortcut" checked={profile.useFullTypeFormAdder} onCheckedChange={toggleUseFullTypeFormAdder} />
+          <Switch id="quick-add-link" checked={profile.useFullTypeFormAdder} onCheckedChange={toggleUseFullTypeFormAdder} />
         </div>
 
         <Controller

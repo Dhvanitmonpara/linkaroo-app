@@ -6,6 +6,7 @@ import { Link } from "../models/link.model.js"
 import axios from "axios"
 import validator from "validator"
 import fetchMetadata from "../utils/fetchMetadata.js"
+import convertToObjectId from "../utils/convertToObjectId.js"
 
 const createLink = asyncHandler(async (req, res) => {
     const { collectionId } = req.params;
@@ -14,56 +15,63 @@ const createLink = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Collection ID is required");
     }
 
-    const { title, description, link } = req.body;
+    const { title, description, link, userId } = req.body;
 
     if (!title || !link) {
-        throw new ApiError(400, "Title and link are required");
+        throw new ApiError(400, "Title and link are required.");
     }
 
-    // Check if the link has a valid format
+    if (!userId) {
+        throw new ApiError(400, "User ID is required.");
+    }
+
+    const userIdObject = convertToObjectId(userId);
+    const collectionIdObject = convertToObjectId(collectionId);
+
     if (!validator.isURL(link)) {
-        throw new ApiError(400, "Invalid link format");
+        throw new ApiError(400, "Invalid link format.");
     }
 
-    // Check if the link is reachable
+    // Check if link is reachable using HEAD request
     const isReachable = async (url) => {
         try {
-            const response = await axios.get(url);
-            return response.status >= 200 && response.status < 400; // Check for successful response
-        } catch {
-            return false; // Link is unreachable
+            const response = await axios.head(url, { 
+                timeout: 5000, 
+                headers: { "User-Agent": "Mozilla/5.0" }
+            });
+            return response.status >= 200 && response.status < 400;
+        } catch (error) {
+            console.error(`HEAD request failed for ${url}:`, error.message);
+            return false;
         }
     };
 
-    const linkReachable = await isReachable(link);
-    if (!linkReachable) {
-        throw new ApiError(400, "The link is not reachable or invalid");
-    }
+    const isLinkReachable = await isReachable(link);
 
     // Check for duplicate titles
-    const links = await Link.find({ userId: req.user.id, collectionId });
-    if (links.some(existingLink => existingLink.title === title)) {
-        throw new ApiError(400, "Link with the same title already exists");
+    const existingLink = await Link.findOne({ 
+        userId: userIdObject, 
+        collectionId: collectionIdObject, 
+        title 
+    });
+
+    if (existingLink) {
+        throw new ApiError(400, "A link with the same title already exists.");
     }
 
-    // Create the link
-    const response = await Link.create({
+    const newLink = await Link.create({
         title,
         description: description || "",
         link,
-        userId: req.user?._id,
-        collectionId,
+        userId: userIdObject,
+        collectionId: collectionIdObject,
     });
 
-    if (!response) {
-        throw new ApiError(500, "Failed to create link");
+    if (!newLink) {
+        throw new ApiError(500, "Failed to create link.");
     }
 
-    return res
-        .status(201)
-        .json(
-            new ApiResponse(201, response, "Link created successfully")
-        );
+    return res.status(201).json(new ApiResponse(201, { data: newLink, isLinkReachable }, "Link created successfully"));
 });
 
 const createLinkWithMetadata = asyncHandler(async (req, res) => {

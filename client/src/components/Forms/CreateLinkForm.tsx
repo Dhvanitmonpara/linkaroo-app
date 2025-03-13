@@ -17,6 +17,8 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import useLinkStore from "@/store/linkStore";
 import useCollectionsStore from "@/store/collectionStore";
+import useProfileStore from "@/store/profileStore";
+import { FaCircleInfo } from "react-icons/fa6";
 
 type CreateLinkFormProps = {
   collectionTitle?: string;
@@ -35,12 +37,12 @@ const isValidUrl = (url: string): string | null => {
 
   // Determine the protocol
   if (!/^https?:\/\//i.test(url)) {
-      url = `https://${url}`; // Default to 'https://'
+    url = `https://${url}`; // Default to 'https://'
   }
 
   // Check if the updated URL matches the regex
   if (urlRegex.test(url)) {
-      return url; // Return the valid URL
+    return url; // Return the valid URL
   }
 
   return null; // Return null if the URL is invalid
@@ -52,6 +54,7 @@ const CreateLinkForm: React.FC<CreateLinkFormProps> = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { profile } = useProfileStore()
 
   const { collections } = useCollectionsStore();
   const { addLinkItem, links, addCachedLinkItem } = useLinkStore();
@@ -74,6 +77,7 @@ const CreateLinkForm: React.FC<CreateLinkFormProps> = ({
         toast.error("Invalid list");
         return;
       }
+      console.log(data.link)
 
       const validUrl = isValidUrl(data.link);
 
@@ -86,6 +90,7 @@ const CreateLinkForm: React.FC<CreateLinkFormProps> = ({
         title: data.title,
         description: data.description,
         link: validUrl,
+        userId: profile._id,
       };
 
       const link = await axios.post(
@@ -94,17 +99,21 @@ const CreateLinkForm: React.FC<CreateLinkFormProps> = ({
         { withCredentials: true }
       );
 
-      if (!link.data.data) {
+      if (!link.data.data.data) {
         toast.error("Failed to add link");
         return
       }
 
       if (data.collection == links[0].collectionId) {
-        addLinkItem(link.data.data);
+        addLinkItem(link.data.data.data);
       }
-      console.log(link)
-      addCachedLinkItem(data.collection, link.data.data);
- 
+      if (!link.data.data.isLinkReachable) {
+        toast("Link is not reachable", {
+          icon: <FaCircleInfo />,
+        })
+      }
+      addCachedLinkItem(data.collection, link.data.data.data);
+
     } catch (error) {
       if (error instanceof AxiosError) {
         toast.error(error.message)
