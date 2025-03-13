@@ -51,7 +51,7 @@ const CollectionListCard = ({
     toggleModal(true);
     e.stopPropagation();
     setPrevPath(location.pathname);
-    navigate(`/list?listid=${title}`, { replace: true });
+    navigate(`/c?collectionId=${title}`, { replace: true });
     setModalContent(
       <CreateLinkForm
         collectionTitle={title}
@@ -70,7 +70,7 @@ const CollectionListCard = ({
 
   const openList = () => {
     setCurrentCardColor(theme);
-    navigate(`/collections/${id}`);
+    navigate(`/dashboard/c/${id}`);
   };
 
   return (

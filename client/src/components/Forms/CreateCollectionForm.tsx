@@ -11,12 +11,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useForm, Controller } from "react-hook-form";
-import { colorOptions } from "@/lib/types";
+import { CollectionType, colorOptions } from "@/lib/types";
 import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import { Textarea } from "../ui/textarea";
 import { cn } from "@/lib/utils";
-import { backgroundImageUrls, themeOptionsArray } from "@/lib/constants";
+import { backgroundImageUrls, CollectionTypeArray, themeOptionsArray } from "@/lib/constants";
 import { useNavigate } from "react-router-dom";
 import useDocStore from "@/store/linkStore";
 import useCollectionsStore from "@/store/collectionStore";
@@ -26,6 +26,7 @@ type HandleCollectionCreationType = {
   title: string;
   description: string;
   theme: colorOptions;
+  type: CollectionType;
 };
 
 const CreateCollectionForm = ({ afterSubmit }: { afterSubmit?: () => void }) => {
@@ -38,6 +39,7 @@ const CreateCollectionForm = ({ afterSubmit }: { afterSubmit?: () => void }) => 
   const { control, handleSubmit, register } = useForm<HandleCollectionCreationType>({
     defaultValues: {
       theme: "bg-zinc-200",
+      type: "custom",
     },
   });
 
@@ -82,7 +84,6 @@ const CreateCollectionForm = ({ afterSubmit }: { afterSubmit?: () => void }) => 
         toast.error("Failed to fetch collection details");
         return;
       }
-
 
       addCollectionsItem(collection.data.data);
       setCurrentCollectionItem(collection.data.data);
@@ -151,6 +152,40 @@ const CreateCollectionForm = ({ afterSubmit }: { afterSubmit?: () => void }) => 
                       </SelectItem>
                     ))}
                   </div>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          )}
+        />
+        <Controller
+          name="type"
+          control={control}
+          render={({ field: { onChange, value } }) => (
+            <Select value={value} onValueChange={onChange}>
+              <SelectTrigger className="text-zinc-100 bg-zinc-800 border-zinc-800 sm:max-w-96">
+                <SelectValue placeholder="Select Type" />
+              </SelectTrigger>
+              <SelectContent
+                className={cn(
+                  "dark:bg-zinc-900 dark:text-white dark:border-zinc-800",
+                  "[&_[role=option]]:p-0"
+                )}
+              >
+                <SelectGroup>
+                  {CollectionTypeArray.map(({ value, label, icon }) => (
+                    <SelectItem
+                      className="!py-1.5 !px-3 hover:bg-zinc-800"
+                      key={value}
+                      value={value}
+                    >
+                      <div
+                        className="flex items-center space-x-2"
+                      >
+                        <span>{icon}</span>
+                        <span>{label}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
                 </SelectGroup>
               </SelectContent>
             </Select>

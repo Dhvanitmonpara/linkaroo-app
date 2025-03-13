@@ -197,9 +197,12 @@ import {
   FaDownload,
   FaUpload,
   FaTablet,
-  FaMobileAlt
+  FaMobileAlt,
+  FaBreadSlice, 
+  FaFilm, 
+  FaGamepad,
+  FaFootballBall
 } from 'react-icons/fa';
-import { FaAnchorCircleCheck } from 'react-icons/fa6';
 
 const themeOptionsArray = [
   { value: "bg-zinc-200", label: "Zinc" },
@@ -219,6 +222,18 @@ const themeOptionsArray = [
   { value: "bg-rose-400", label: "Rose" },
   { value: "bg-sky-400", label: "Sky" },
 ];
+
+const CollectionTypeArray = [
+  { value: "movies", label: "Movies", icon: <FaFilm /> },
+  { value: "books", label: "Books", icon: <FaBook /> },
+  { value: "music", label: "Music", icon: <FaMusic /> },
+  { value: "playlists", label: "Playlists", icon: <FaPlayCircle /> },
+  { value: "tv-shows", label: "TV Shows", icon: <FaTv /> },
+  { value: "video-games", label: "Video Games", icon: <FaGamepad /> },
+  { value: "food", label: "Food", icon: <FaBreadSlice /> },
+  { value: "sports", label: "Sports", icon: <FaFootballBall /> },
+  { value: "custom", label: "Custom", icon: <FaLink /> },
+]
 
 const allIcons: string[] = [
   "FaBeer",
@@ -323,7 +338,7 @@ const allIcons: string[] = [
   "FaAlignRight",
   "FaAllergies",
   "FaAmbulance",
-  "FaAnchorCircleCheck",
+  "FaFilm",
   "FaAngleDoubleDown",
   "FaAngleDoubleLeft",
   "FaAngleDoubleRight",
@@ -587,7 +602,7 @@ const iconMap = {
   FaAlignRight,
   FaAllergies,
   FaAmbulance,
-  FaAnchorCircleCheck,
+  FaFilm,
   FaAngleDoubleDown,
   FaAngleDoubleLeft,
   FaAngleDoubleRight,
@@ -756,4 +771,4 @@ const backgroundImageUrls = [
   "https://images.unsplash.com/photo-1724781598192-19bed9bffab0?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3"
 ]
 
-export { themeOptionsArray, backgroundImageUrls, allIcons, iconMap };
+export { themeOptionsArray, backgroundImageUrls, allIcons, iconMap, CollectionTypeArray };

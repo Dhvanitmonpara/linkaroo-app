@@ -65,10 +65,10 @@ const Links = () => {
 
   useEffect(() => {
     (async () => {
-      if (location.includes("/collections")) {
+      if (location.includes("/c")) {
         try {
           setLoading(true);
-          const collectionId = location.split("/")[2];
+          const collectionId = location.split("/")[3];
 
           const cache = cachedLinks.filter((collection) => collection.collectionId === collectionId)[0];
 
@@ -328,7 +328,6 @@ const Links = () => {
                     link={link.link}
                     isChecked={link.isChecked}
                     currentCollectionId={currentCollectionItem?._id}
-                    toggleModal={toggleModal}
                   />
                 ))}
             </div>

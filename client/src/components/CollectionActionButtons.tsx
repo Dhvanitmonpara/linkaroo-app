@@ -43,11 +43,11 @@ const CollectionActionButtons = () => {
   const [checkedTags, setCheckedTags] = useState<checkedTagsType[]>([]);
 
   const navigate = useNavigate();
-  const { listId } = useParams();
+  const { collectionId } = useParams();
 
   useEffect(() => {
     (async () => {
-      if (listId !== undefined) {
+      if (collectionId !== undefined) {
         try {
           setLoading(true);
 
@@ -56,7 +56,7 @@ const CollectionActionButtons = () => {
               withCredentials: true,
             }),
             axios.get(
-              `${import.meta.env.VITE_SERVER_API_URL}/tags/get/collections/${listId}`,
+              `${import.meta.env.VITE_SERVER_API_URL}/tags/get/collections/${collectionId}`,
               { withCredentials: true }
             ),
           ]);
@@ -90,7 +90,7 @@ const CollectionActionButtons = () => {
         }
       }
     })();
-  }, [setTags, listId, navigate]);
+  }, [setTags, collectionId, navigate]);
 
   const handleToggleIsPublic = async () => {
     let loaderId = "";
@@ -106,7 +106,7 @@ const CollectionActionButtons = () => {
     }
     try {
       const list = await axios.patch(
-        `${import.meta.env.VITE_SERVER_API_URL}/lists/status/${listId}`,
+        `${import.meta.env.VITE_SERVER_API_URL}/lists/status/${collectionId}`,
         {},
         { withCredentials: true }
       );
@@ -137,7 +137,7 @@ const CollectionActionButtons = () => {
       });
 
       const deleteDBResponse: AxiosResponse = await axios.delete(
-        `${import.meta.env.VITE_SERVER_API_URL}/collections/o/${listId}`,
+        `${import.meta.env.VITE_SERVER_API_URL}/collections/o/${collectionId}`,
         { withCredentials: true }
       );
 
@@ -146,15 +146,15 @@ const CollectionActionButtons = () => {
         return;
       }
 
-      if (listId !== undefined) {
-        removeCollectionsItem(listId);
+      if (collectionId !== undefined) {
+        removeCollectionsItem(collectionId);
       } else {
         toast.error("List id not found");
         return;
       }
 
       setLinks([]);
-      removeCachedLinkCollection(listId);
+      removeCachedLinkCollection(collectionId);
       toast.success("List deleted successfully");
       setLoading(false);
     } catch (error) {

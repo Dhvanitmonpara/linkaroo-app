@@ -28,7 +28,7 @@ function HandleTagForm({ setCheckedTags, loading, checkedTags }: {
   const [newTagSubmitLoading, setNewTagSubmitLoading] = useState(false);
   const [saveChangesLoading, setSaveChangesLoading] = useState(false);
 
-  const { listId } = useParams();
+  const { collectionId } = useParams();
 
   const HandleAddNewTag: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
@@ -95,7 +95,7 @@ function HandleTagForm({ setCheckedTags, loading, checkedTags }: {
         .map((tag) => tag._id);
 
       const saveResponse: AxiosResponse = await axios.patch(
-        `${import.meta.env.VITE_SERVER_API_URL}/tags/${listId}/customize`,
+        `${import.meta.env.VITE_SERVER_API_URL}/tags/${collectionId}/customize`,
         { tagArray: tagIds },
         { withCredentials: true }
       );

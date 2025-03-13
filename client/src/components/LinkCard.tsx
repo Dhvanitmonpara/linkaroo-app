@@ -18,7 +18,7 @@ import axios, { AxiosError } from "axios";
 import useCollectionsStore from "@/store/collectionStore";
 import useLinkStore from "@/store/linkStore";
 import CustomCheckbox from "./ui/CustomCheckbox";
-import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
 
 type LinkCardProps = {
   id: string;
@@ -92,9 +92,6 @@ const LinkCard = ({
         <Dialog>
           <DialogTrigger className={cardClass}>
             <h2
-              onClick={(e) => {
-                e.stopPropagation();
-              }}
               className={`font-semibold decoration-2 cursor-pointer text-lg flex justify-start items-center w-full space-x-6 ${""}`}
             >
               <CustomCheckbox color={color} id={id} title={title} defaultChecked={isChecked} onToggle={() => {
@@ -140,17 +137,18 @@ const LinkCard = ({
               )}
               <span
                 onClick={openLink}
-                className={`md:opacity-0 absolute right-6 opacity-100 ${color === "bg-black"
-                  ? "hover:bg-[#b2b2b220]"
-                  : "hover:bg-[#00000020]"
-                  } active:scale-95 rounded-full p-2 group-hover:opacity-100 transition-all ease-in-out duration-300`}
+                className={`md:opacity-0 absolute right-6 opacity-100 hover:bg-[#b2b2b220] active:scale-95 rounded-full p-2 group-hover:opacity-100 transition-all ease-in-out duration-300`}
               >
                 <FiArrowUpRight />
               </span>
             </h2>
           </DialogTrigger>
           <DialogContent>
-            Hello
+            <DialogHeader>
+              <DialogTitle>{title}</DialogTitle>
+              <DialogDescription>{link}</DialogDescription>
+            </DialogHeader>
+            <p>Hello</p>
           </DialogContent>
         </Dialog>
       </ContextMenuTrigger>

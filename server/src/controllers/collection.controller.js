@@ -8,10 +8,11 @@ import collectionOwnerVerification from "../utils/collectionOwnerVerification.js
 import { Link } from "../models/link.model.js"
 import { User } from "../models/user.model.js"
 import convertToObjectId from "../utils/convertToObjectId.js"
+import { type } from "os"
 
 const createCollection = asyncHandler(async (req, res) => {
 
-    const { title, description, theme = "bg-zinc-200", coverImage, isInbox = false, userEmail } = req.body
+    const { title, description, theme = "bg-zinc-200", coverImage, isInbox = false, type, userEmail } = req.body
 
     if (!title || !description) {
         throw new ApiError(400, "Title and description are required")
@@ -44,6 +45,7 @@ const createCollection = asyncHandler(async (req, res) => {
         description,
         isInbox,
         theme,
+        type,
         coverImage,
         collaborators: []
     })
@@ -183,6 +185,7 @@ const getCollectionById = asyncHandler(async (req, res) => {
                 theme: 1,
                 createdAt: 1,
                 isInbox: 1,
+                type: 1,
                 updatedAt: 1,
                 coverImage: 1,
                 collaborators: {
@@ -405,6 +408,7 @@ const getCollectionsByUser = asyncHandler(async (req, res) => {
                 font: 1,
                 createdAt: 1,
                 updatedAt: 1,
+                type: 1,
                 isInbox: 1,
                 coverImage: 1,
                 isPublic: 1,

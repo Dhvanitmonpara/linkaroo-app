@@ -19,6 +19,17 @@ type colorOptions =
 
 type themeType = "light" | "dark";
 
+type CollectionType = 
+  | "movies"
+  | "books"
+  | "music"
+  | "playlists"
+  | "tv-shows"
+  | "video-games"
+  | "food"
+  | "sports"
+  | "custom";
+
 type profileOptions = "profile" | "settings" | "feedback";
 
 type Collaborator = {
@@ -71,6 +82,7 @@ type fetchedCollectionType = {
   theme: colorOptions;
   isPublic: boolean;
   title: string;
+  type: CollectionType;
   icon: string;
   coverImage: string;
   createdAt: string;
@@ -100,5 +112,6 @@ export type {
   fetchedLinkType,
   fetchedTagType,
   cachedLinks,
+  CollectionType,
   NotificationType,
 };

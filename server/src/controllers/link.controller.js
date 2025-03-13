@@ -104,7 +104,7 @@ const createLinkWithMetadata = asyncHandler(async (req, res) => {
         description: description ? description : "",
         link,
         userId: req.user?._id,
-        listId: listId
+        collectionId: collectionId
     })
 
     if (!response) {

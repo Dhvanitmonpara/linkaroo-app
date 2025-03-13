@@ -11,7 +11,7 @@ interface linkState {
   addCachedLinkCollection: (item: cachedLinks) => void;
   removeCachedLinkCollection: (itemId: string) => void;
   replaceCachedLinkCollection: (link: cachedLinks) => void;
-  addCachedLinkItem: (listId: string, item: fetchedLinkType) => void;
+  addCachedLinkItem: (collectionId: string, item: fetchedLinkType) => void;
   removeCachedLinkItem: (collectionId: string, linkId: string) => void;
   replaceCachedLinkItem: (collectionId: string, item: fetchedLinkType) => void;
   links: fetchedLinkType[] | [];
@@ -29,10 +29,10 @@ const useLinkStore = create<linkState>((set) => ({
   addCachedLinkCollection: (list) => {
     set((state) => ({ cachedLinks: [...state.cachedLinks, list] }));
   },
-  removeCachedLinkCollection: (listId) => {
+  removeCachedLinkCollection: (collectionId) => {
     set((state) => ({
       cachedLinks: state.cachedLinks.filter(
-        (list) => list.collectionId !== listId
+        (list) => list.collectionId !== collectionId
       ),
     }));
   },
@@ -43,10 +43,10 @@ const useLinkStore = create<linkState>((set) => ({
       ),
     }));
   },
-  addCachedLinkItem: (listId, item) => {
+  addCachedLinkItem: (collectionId, item) => {
     set((state) => ({
       cachedLinks: state.cachedLinks.map((list) =>
-        list.collectionId === listId
+        list.collectionId === collectionId
           ? { ...list, Links: [...list.links, item] }
           : list
       ),

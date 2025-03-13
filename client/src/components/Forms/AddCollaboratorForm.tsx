@@ -92,7 +92,7 @@ function AddCollaboratorForm({ value, setConfirmRequest, setValue, setOpen, conf
 
   const getSharableLink = () => {
     try {
-      if (!window.location.href.includes("/collections")) {
+      if (!window.location.href.includes("/c")) {
         toast.error("Please select a list");
         return;
       }

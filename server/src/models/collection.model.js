@@ -33,6 +33,10 @@ const collectionSchema = new Schema({
         type: Boolean,
         default: false
     },
+    type: {
+        type: String,
+        default: "custom"
+    },
     tags: [
         {
             type: Schema.Types.ObjectId,

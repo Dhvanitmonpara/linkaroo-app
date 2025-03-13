@@ -62,7 +62,7 @@ const CollectionGridCard = ({
 
   const openList = () => {
     setCurrentCardColor(theme);
-    navigate(`/collections/${id}`);
+    navigate(`/dashboard/c/${id}`);
   };
 
   return (
@@ -101,7 +101,7 @@ const CollectionGridCard = ({
             onClick={(e) => {
               e.stopPropagation();
               setPrevPath(location.pathname);
-              navigate(`/list?listid=${title}`, { replace: true });
+              navigate(`/c?collectionId=${title}`, { replace: true });
             }}
             className={`group-hover:opacity-100 text-xl transition-all ease-in-out duration-300 absolute right-3 opacity-0 active:scale-95 ${isBlackMode ? "hover:bg-[#b2b2b220]" : "hover:bg-[#00000015]"} cursor-pointer p-3 rounded-full`}
           >

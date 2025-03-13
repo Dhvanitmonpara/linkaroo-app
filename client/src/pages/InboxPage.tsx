@@ -1,7 +1,6 @@
 import { LinkCard } from "@/components";
 import { fetchedCollectionType } from "@/lib/types";
 import useCollectionsStore from "@/store/collectionStore";
-import useMethodStore from "@/store/MethodStore";
 import useProfileStore from "@/store/profileStore";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Loader2 } from "lucide-react";
@@ -15,7 +14,6 @@ const InboxPage = () => {
   const navigate = useNavigate();
   const { inbox, setInboxLink, inboxLinks, setCollections, setInbox, collections } =
     useCollectionsStore();
-  const { toggleModal } = useMethodStore();
 
   const [loading, setLoading] = useState(false);
 
@@ -126,7 +124,6 @@ const InboxPage = () => {
               link={doc.link}
               isChecked={doc.isChecked}
               currentCollectionId={inbox?._id}
-              toggleModal={toggleModal}
             />
           ))
         ) : (
