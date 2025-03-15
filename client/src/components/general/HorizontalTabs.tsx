@@ -2,7 +2,7 @@ import { MdHome } from "react-icons/md";
 import { FaPlus } from "react-icons/fa6";
 import { IoLink, IoPerson } from "react-icons/io5";
 import { IoMdNotifications } from "react-icons/io";
-import { useLocation, NavLink, useNavigate } from "react-router-dom";
+import { useLocation, NavLink } from "react-router-dom";
 import useProfileStore from "@/store/profileStore";
 import useMethodStore from "@/store/MethodStore";
 import { CreateLinkForm, CreateCollectionForm, SettingsForm, CreateLinkBar } from "../Forms";
@@ -12,51 +12,23 @@ import { IoMdSettings } from "react-icons/io";
 import { MdFeedback } from "react-icons/md";
 import { FaInfoCircle, FaSearch } from "react-icons/fa";
 import { IoLogOut } from "react-icons/io5";
-import toast from "react-hot-toast";
-import axios, { AxiosError } from "axios";
 import { FaInbox } from "react-icons/fa6";
 import { useState } from "react";
 import { BsCollectionFill } from "react-icons/bs";
 import "../components.css"
 import FeedbackForm from "../Forms/FeedbackForm";
+import { useAuth } from "@clerk/clerk-react";
 
 export default function HorizontalTabs() {
   const { profile } = useProfileStore();
   const { setPrevPath } = useMethodStore();
 
+  const { signOut } = useAuth()
+
   const [creationDrawer, setCreationDrawer] = useState(false)
   const [profileDrawer, setProfileDrawer] = useState(false)
 
   const location = useLocation().pathname;
-  const navigate = useNavigate();
-
-  const handleLogout = async () => {
-    let loaderId = "";
-    toast.loading((t) => {
-      loaderId = t.id;
-      return "Logging out...";
-    });
-    try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_SERVER_API_URL}/users/logout`,
-        {},
-        { withCredentials: true }
-      );
-      if (response.status === 200) {
-        toast.success("Logout successful");
-        navigate("/auth/signin");
-      }
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        toast.error(error.message)
-      } else {
-        console.error(error);
-        toast.error("Error while logout")
-      }
-    } finally {
-      toast.dismiss(loaderId);
-    }
-  };
 
   return (
     <div className="flex md:justify-between justify-evenly dark:bg-zinc-800 w-full px-5 bg-zinc-200 h-full md:px-12 sm:px-2 sm:!rounded-t-xl items-center sm:w-6/12">
@@ -232,7 +204,7 @@ export default function HorizontalTabs() {
             }
           >
             <div className="px-4 flex flex-col gap-2">
-              <button onClick={() => { handleLogout; setPrevPath(location); }} className="w-full block font-semibold py-2 px-4 rounded-md bg-red-500 hover:bg-red-600">Logout</button>
+              <button onClick={() => signOut()} className="w-full block font-semibold py-2 px-4 rounded-md bg-red-500 hover:bg-red-600">Logout</button>
               <DrawerClose asChild>
                 <button className="w-full block font-semibold py-2 px-4 rounded-md bg-zinc-300 hover:bg-zinc-400 dark:bg-zinc-800 dark:hover:bg-zinc-700">Cancel</button>
               </DrawerClose>

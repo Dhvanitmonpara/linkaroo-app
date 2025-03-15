@@ -1,47 +1,22 @@
 import useProfileStore from "@/store/profileStore";
 import { SettingsForm } from "./Forms";
-import toast from "react-hot-toast";
 import { Button } from "./ui/button";
-import axios, { AxiosError } from "axios";
-import { useNavigate } from "react-router-dom";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTrigger } from "./ui/dialog";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { ReactNode, useState } from "react";
 import ProfileForm from "./Forms/ProfileForm";
 import FeedbackForm from "./Forms/FeedbackForm";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import { useUser } from "@clerk/clerk-react";
+import { useAuth, useUser } from "@clerk/clerk-react";
 
 const ProfileCard = () => {
 
   const [open, setIsOpen] = useState(false)
 
+  const { signOut } = useAuth()
+
   const { profile } = useProfileStore();
   const { user } = useUser()
-  const navigate = useNavigate()
-
-  const handleLogout = async () => {
-    try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_SERVER_API_URL}/users/logout`,
-        {},
-        { withCredentials: true }
-      );
-      if (response.status === 200) {
-        toast.success("Logout successful");
-        navigate("/auth/signin");
-      }
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        toast.error(error.message)
-      } else {
-        console.error(error);
-        toast.error("Error while logout")
-      }
-    } finally {
-      setIsOpen(false)
-    }
-  };
 
   return (
     <Popover open={open} onOpenChange={setIsOpen}>
@@ -104,7 +79,7 @@ const ProfileCard = () => {
         >
           <div className="flex justify-center">
             <Button
-              onClick={handleLogout}
+              onClick={() => signOut()}
               className="w-full rounded-sm text-zinc-50 font-semibold bg-red-500 hover:bg-red-600"
             >
               Yes
