@@ -96,7 +96,7 @@ const Header = () => {
             prebuildForm={false}
             title="Search"
             showCloseButton={false}
-            className="sm:max-w-2xl md:p-0 bg-transparent border-none"
+            className="sm:max-w-2xl md:max-w-3xl md:p-0 bg-transparent backdrop-blur-md border-none"
             description="search something"
             trigger={
               <div

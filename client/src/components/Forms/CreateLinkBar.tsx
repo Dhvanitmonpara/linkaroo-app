@@ -188,7 +188,7 @@ const CreateLinkBar: React.FC<CreateLinkBarProps> = ({
         className="flex flex-col w-full justify-center items-center bg-zinc-800/70 rounded-3xl"
         onSubmit={handleSubmit(handleLinkCreation)}
       >
-        <div className="flex w-full relative border-zinc-800/80 border-1 rounded-3xl">
+        <div className="flex w-full relative border-zinc-800/80 border-1 pt-1 rounded-3xl">
           <Input
             id="identifier"
             type="text"
@@ -199,7 +199,7 @@ const CreateLinkBar: React.FC<CreateLinkBarProps> = ({
             placeholder="Enter a title or link"
             className="rounded-3xl dark:border-zinc-300 focus-visible:!border-transparent py-4 px-6 text-base"
           />
-          <div className="absolute top-1 right-1">
+          <div className="absolute top-2 right-1">
             {loading ? (
               <Button
                 disabled
@@ -213,7 +213,7 @@ const CreateLinkBar: React.FC<CreateLinkBarProps> = ({
               <Button
                 type="submit"
                 id="submit-form"
-                className={`dark:bg-zinc-700 h-8 rounded-full bg-zinc-200 font-semibold text-zinc-950 dark:text-white hover:bg-zinc-300 dark:hover:bg-zinc-600 w-full transition-all duration-300 ${identifier ? "scale-100" : "scale-0"}`}>
+                className={`dark:bg-zinc-700 h-8 rounded-full bg-zinc-200 font-semibold text-zinc-950 dark:text-white hover:bg-zinc-300 dark:hover:bg-zinc-600 w-full transition-all duration-200 ${identifier ? "scale-100" : "scale-0"}`}>
                 Add
               </Button>
             )}
@@ -269,7 +269,7 @@ const CreateLinkBar: React.FC<CreateLinkBarProps> = ({
                 e.preventDefault();
                 setTabIndex(index); // Manually set the tab index on click
               }}
-              className={`flex flex-col w-full py-2 px-4 rounded-lg space-y-1 ${tabIndex === index ? "bg-zinc-700/70" : "bg-zinc-800/70 hover:bg-zinc-700/70"
+              className={`flex flex-col items-start w-full py-2 px-4 rounded-lg space-y-1 ${tabIndex === index ? "bg-zinc-700/70" : "bg-zinc-800/70 hover:bg-zinc-700/70"
                 }`}
             >
               <h1 className="dark:text-zinc-300 text-lg font-semibold">{title}</h1>
