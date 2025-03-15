@@ -16,11 +16,13 @@ import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import { Textarea } from "../ui/textarea";
 import { cn } from "@/lib/utils";
-import { backgroundImageUrls, CollectionTypeArray, themeOptionsArray } from "@/lib/constants";
+import { backgroundImageUrls, themeOptionsArray } from "@/lib/constants/constants";
 import { useNavigate } from "react-router-dom";
 import useDocStore from "@/store/linkStore";
 import useCollectionsStore from "@/store/collectionStore";
 import { useUser } from "@clerk/clerk-react";
+import { CollectionTypeArray, CollectionTypeCustomArray } from "@/lib/constants/collectionArray";
+import { Separator } from "../ui/separator";
 
 type HandleCollectionCreationType = {
   title: string;
@@ -39,7 +41,7 @@ const CreateCollectionForm = ({ afterSubmit }: { afterSubmit?: () => void }) => 
   const { control, handleSubmit, register } = useForm<HandleCollectionCreationType>({
     defaultValues: {
       theme: "bg-zinc-200",
-      type: "custom",
+      type: "bookmarks",
     },
   });
 
@@ -171,22 +173,35 @@ const CreateCollectionForm = ({ afterSubmit }: { afterSubmit?: () => void }) => 
                   "[&_[role=option]]:p-0"
                 )}
               >
-                <SelectGroup>
-                  {CollectionTypeArray.map(({ value, label, icon }) => (
-                    <SelectItem
-                      className="!py-1.5 !px-3 hover:bg-zinc-800"
-                      key={value}
-                      value={value}
+                {CollectionTypeArray.map(({ value, label, icon }) => (
+                  <SelectItem
+                    className="!py-1.5 !px-3 hover:bg-zinc-800"
+                    key={value}
+                    value={value}
+                  >
+                    <div
+                      className="flex items-center space-x-2 pl-6"
                     >
-                      <div
-                        className="flex items-center space-x-2"
-                      >
-                        <span>{icon}</span>
-                        <span>{label}</span>
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
+                      <span>{icon}</span>
+                      <span>{label}</span>
+                    </div>
+                  </SelectItem>
+                ))}
+                <Separator className="my-2" />
+                {CollectionTypeCustomArray.map(({ value, label, icon }) => (
+                  <SelectItem
+                    className="!py-2 !px-3 hover:bg-zinc-800"
+                    key={value}
+                    value={value}
+                  >
+                    <div
+                      className="flex items-center space-x-2 pl-6"
+                    >
+                      <span>{icon}</span>
+                      <span>{label}</span>
+                    </div>
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           )}

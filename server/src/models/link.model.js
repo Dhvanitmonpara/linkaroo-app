@@ -10,6 +10,10 @@ const linkSchema = new Schema({
     description: {
         type: String,
     },
+    image: {
+        type: String,
+        default: null
+    },
     link: {
         type: String,
         required: true,

@@ -8,7 +8,6 @@ import collectionOwnerVerification from "../utils/collectionOwnerVerification.js
 import { Link } from "../models/link.model.js"
 import { User } from "../models/user.model.js"
 import convertToObjectId from "../utils/convertToObjectId.js"
-import { type } from "os"
 
 const createCollection = asyncHandler(async (req, res) => {
 

@@ -1,4 +1,4 @@
-import { iconMap } from "@/lib/constants";
+import { iconMap } from "@/lib/constants/Icons";
 import { BsFillCollectionFill } from "react-icons/bs";
 
 function Icon({ icon }: { icon: string }) {

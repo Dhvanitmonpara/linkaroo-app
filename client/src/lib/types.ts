@@ -28,7 +28,10 @@ type CollectionType =
   | "video-games"
   | "food"
   | "sports"
-  | "custom";
+  | "bookmarks"
+  | "cards"
+  | "banners"
+  | "todos"
 
 type profileOptions = "profile" | "settings" | "feedback";
 
@@ -65,6 +68,7 @@ type fetchedLinkType = {
   description: string;
   link: string;
   userId: string;
+  image: null | string;
   collectionId: string;
   createdAt: string;
   isChecked: boolean;

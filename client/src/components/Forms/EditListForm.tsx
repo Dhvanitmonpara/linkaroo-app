@@ -18,7 +18,7 @@ import { Textarea } from "../ui/textarea";
 import useMethodStore from "@/store/MethodStore";
 import "./style/EditListForm.css";
 import { cn } from "@/lib/utils";
-import { themeOptionsArray } from "@/lib/constants";
+import { themeOptionsArray } from "@/lib/constants/constants";
 import useLinkStore from "@/store/linkStore";
 import useCollectionsStore from "@/store/collectionStore";
 

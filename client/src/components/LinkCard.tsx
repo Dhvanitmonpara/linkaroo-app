@@ -19,12 +19,15 @@ import useCollectionsStore from "@/store/collectionStore";
 import useLinkStore from "@/store/linkStore";
 import CustomCheckbox from "./ui/CustomCheckbox";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
+import { Checkbox } from "./ui/checkbox";
 
 type LinkCardProps = {
   id: string;
   title: string;
   color: colorOptions;
   link: string;
+  image: string | null
+  type: "banners" | "cards" | "todos";
   isChecked: boolean;
   currentCollectionId: string | undefined;
 };
@@ -34,6 +37,8 @@ const LinkCard = ({
   title,
   color,
   link,
+  image,
+  type,
   currentCollectionId,
   isChecked,
 }: LinkCardProps) => {
@@ -45,7 +50,7 @@ const LinkCard = ({
     window.open(link, "_blank");
   };
 
-  const cardClass = `${color} block w-full !text-zinc-300 border-zinc-800 !bg-zinc-900 border-[1px] select-none group hover:!bg-zinc-800/80 relative px-5 h-14 flex-col transition-all duration-300 rounded-md flex justify-center items-center`;
+  const cardClass = `block w-full !text-zinc-300 select-none group relative ${type === "todos" ? "h-14 px-5 border-zinc-800 !bg-zinc-900 border-[1px] hover:!bg-zinc-800/80" : ""} flex-col transition-all duration-300 rounded-md flex justify-center items-center`;
 
   const addToListHandler = async (collectionId: string) => {
     let loaderId = "";
@@ -91,8 +96,8 @@ const LinkCard = ({
       <ContextMenuTrigger>
         <Dialog>
           <DialogTrigger className={cardClass}>
-            <h2
-              className={`font-semibold decoration-2 cursor-pointer text-lg flex justify-start items-center w-full space-x-6 ${""}`}
+            {type === "todos" && <h2
+              className={`font-semibold decoration-2 cursor-pointer text-lg flex justify-start items-center w-full space-x-6`}
             >
               <CustomCheckbox color={color} id={id} title={title} defaultChecked={isChecked} onToggle={() => {
                 toggleIsChecked(id, isChecked)
@@ -141,7 +146,31 @@ const LinkCard = ({
               >
                 <FiArrowUpRight />
               </span>
-            </h2>
+            </h2>}
+            {(type === "banners" || type === "cards") && <div
+              className={`font-semibold decoration-2 cursor-pointer text-lg flex flex-col justify-start items-center w-full space-y-4`}
+            >
+              {image ? <img src={image} alt={title} className={`w-full object-cover`} /> :
+                <div className="h-full w-full flex justify-center items-center">
+                  <p>No banner found</p>
+                </div>
+              }
+              <h2 className="w-full text-start flex justify-between items-center space-x-2">
+                <span>{title}</span>
+                <div className="flex justify-center items-center transition-all duration-300 opacity-0 group-hover:opacity-100 space-x-2">
+                  <Checkbox onClick={(e) => {
+                    e.stopPropagation();
+                    toggleIsChecked(id, isChecked)
+                  }} />
+                  <span
+                    onClick={openLink}
+                    className={`rounded-full text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-all ease-in-out duration-300`}
+                  >
+                    <FiArrowUpRight />
+                  </span>
+                </div>
+              </h2>
+            </div>}
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>

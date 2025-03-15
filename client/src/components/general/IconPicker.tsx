@@ -1,9 +1,9 @@
-import { allIcons, iconMap } from '@/lib/constants';
 import { debounce } from 'lodash';
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import TooltipContainer from './Tooltip';
 import Icon from '../ui/Icon';
+import { allIcons, iconMap } from '@/lib/constants/Icons';
 
 interface IconPickerProps {
   activeIcon: string;

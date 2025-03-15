@@ -35,7 +35,7 @@ const collectionSchema = new Schema({
     },
     type: {
         type: String,
-        default: "custom"
+        default: "todos"
     },
     tags: [
         {

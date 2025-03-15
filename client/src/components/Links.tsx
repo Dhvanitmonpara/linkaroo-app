@@ -18,12 +18,13 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { backgroundImageUrls } from "@/lib/constants";
+import { backgroundImageUrls } from "@/lib/constants/constants";
 import { BsXLg } from "react-icons/bs";
 import useLinkStore from "@/store/linkStore";
 import useCollectionsStore from "@/store/collectionStore";
 import IconPicker from "./general/IconPicker";
 import { FaPlus } from "react-icons/fa";
+import { cn } from "@/lib/utils";
 
 const Links = () => {
   const { toggleModal } = useMethodStore();
@@ -115,6 +116,15 @@ const Links = () => {
       tags.push(tagname);
     }
   });
+
+  const getItemType = (type: string, currentCollectionItem?: { type?: string }) =>
+    ["movies", "books", "tv-shows", "banners"].includes(currentCollectionItem?.type || type)
+      ? "banners"
+      : ["music", "playlists", "video-games", "food", "sports", "bookmarks", "cards"].includes(type)
+        ? "cards"
+        : "todos";
+
+  const itemType = currentCollectionItem ? getItemType(currentCollectionItem?.type) : "todos";
 
   const handleChangeIcon = (icon: string) => {
     if (!currentCollectionItem) return
@@ -283,7 +293,7 @@ const Links = () => {
         {links.length > 0 ? (
           <>
             <div
-              className={`grid grid-cols-1 lg:grid-cols-2 gap-2`}
+              className={`grid ${itemType === "todos" && "grid-cols-1 lg:grid-cols-2"} ${(itemType === "banners" || itemType === "cards") && "grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"} gap-2`}
             >
               <ResponsiveDialog
                 open={isLinkFormOpen}
@@ -292,13 +302,24 @@ const Links = () => {
                 className={`sm:max-w-2xl ${!profile.useFullTypeFormAdder && "md:p-0 bg-transparent border-none"}`}
                 title="Add New Link"
                 trigger={
-                  <div className={`flex justify-start items-center ${links.length % 2 === 0 ? "lg:col-span-2" : "lg:col-span-1"} text-zinc-300 text-start`}>
-                    <p className="py-3 px-6 flex justify-normal items-center space-x-2 border-1 border-zinc-800 bg-zinc-900 hover:bg-zinc-800/80 cursor-pointer rounded-md w-full">
+                  <div className={cn(
+                    `flex justify-start items-center text-zinc-300 text-start`,
+                    itemType === "todos" && `${links.length % 2 === 0 ? "lg:col-span-2" : "lg:col-span-1"}`,
+                    (itemType === "banners" || itemType === "cards") && `bg-zinc-900 hover:bg-zinc-800/80 flex justify-center items-center flex-col space-y-4 cursor-pointer rounded-md w-full`,
+                  )}>
+                    {itemType === "todos" ? <p className="py-3 px-6 flex justify-normal items-center space-x-2 border-1 border-zinc-800 bg-zinc-900 hover:bg-zinc-800/80 cursor-pointer rounded-md w-full">
                       <span>
                         <FaPlus />
                       </span>
                       <span className="pt-1">Add a new link...</span>
-                    </p>
+                    </p> :
+                      <>
+                        <span>
+                          <FaPlus />
+                        </span>
+                        <span className="pt-1">Add a new link...</span>
+                      </>
+                      }
                   </div>
                 }
                 showCloseButton={false}
@@ -325,6 +346,8 @@ const Links = () => {
                     id={link._id}
                     title={link.title}
                     color={currentCardColor}
+                    image={link.image}
+                    type={itemType}
                     link={link.link}
                     isChecked={link.isChecked}
                     currentCollectionId={currentCollectionItem?._id}
