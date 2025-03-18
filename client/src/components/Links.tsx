@@ -93,7 +93,8 @@ const Links = () => {
                 title: link.customTitle || link.linkId.title,
                 description: link.customDescription || link.linkId.description,
                 link: link.linkId.link,
-                id: link._id,
+                _id: link._id,
+                collectionId: collectionId,
                 image: link.linkId.image,
               };
             })

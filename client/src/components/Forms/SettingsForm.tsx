@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import {
@@ -24,8 +24,14 @@ type HandleSettingsType = {
 
 const SettingsForm = () => {
 
+  const { updateProfile, profile } = useProfileStore();
   const [loading, setLoading] = useState(false);
-  const { changeTheme, profile, changeFont, toggleIsSearchShortcutEnabled, toggleUseFullTypeFormAdder } = useProfileStore();
+  const [settings, setSettings] = useState({
+    theme: profile.theme,
+    font: profile.font,
+    useFullTypeFormAdder: profile.useFullTypeFormAdder,
+    isSearchShortcutEnabled: profile.isSearchShortcutEnabled
+  })
 
   const { control, handleSubmit } = useForm<HandleSettingsType>({
     defaultValues: {
@@ -34,26 +40,22 @@ const SettingsForm = () => {
     },
   });
 
-  const handleUpdateSettings = async (data: HandleSettingsType) => {
+  const handleUpdateSettings = async () => {
     try {
 
       setLoading(true);
 
-      const newData = {
-        theme: data.theme,
-        font: data.font,
-        isSearchShortcutEnabled: profile.isSearchShortcutEnabled
-      }
-
       const response = await axios.post(
-        `${import.meta.env.VITE_SERVER_API_URL}/users/settings/update`,
-        newData,
+        `${import.meta.env.VITE_SERVER_API_URL}/users/settings/update/${profile._id}`,
+        settings,
         { withCredentials: true }
       );
 
       if (response.status !== 200) {
         toast.error("Failed to update settings");
       }
+
+      updateProfile({...settings, ...profile})
     } catch (error) {
       if (error instanceof AxiosError) {
         toast.error(error.message)
@@ -65,10 +67,6 @@ const SettingsForm = () => {
       setLoading(false);
     }
   };
-
-  const searchShortcutHandler = useCallback(() => {
-    toggleIsSearchShortcutEnabled(!profile.isSearchShortcutEnabled);
-  }, [toggleIsSearchShortcutEnabled, profile.isSearchShortcutEnabled]);
 
   return (
     <div className="dark:text-white flex flex-col sm:max-w-96 justify-center items-center space-y-3">
@@ -83,7 +81,6 @@ const SettingsForm = () => {
             <Select
               value={value}
               onValueChange={(value: themeType) => {
-                changeTheme(value);
                 onChange(value);
               }}
             >
@@ -107,7 +104,7 @@ const SettingsForm = () => {
             <span className="text-sm font-medium">Search shortcut</span>
             <p className="text-xs text-zinc-400">Show search button instead of quick collection/link add button, this will only work on mobile phones.</p>
           </Label>
-          <Switch id="search-shortcut" checked={profile.isSearchShortcutEnabled} onCheckedChange={searchShortcutHandler} />
+          <Switch id="search-shortcut" checked={settings.isSearchShortcutEnabled} onCheckedChange={() => setSettings({ ...settings, isSearchShortcutEnabled: !settings.isSearchShortcutEnabled })} />
         </div>
 
         <div className="flex p-3 space-x-6 rounded-md text-zinc-100 bg-zinc-800 border-zinc-800 w-full sm:max-w-96">
@@ -115,7 +112,7 @@ const SettingsForm = () => {
             <span className="text-sm font-medium">Quick add link</span>
             <p className="text-xs text-zinc-400">Add links quickly from inside collection page.</p>
           </Label>
-          <Switch id="quick-add-link" checked={profile.useFullTypeFormAdder} onCheckedChange={toggleUseFullTypeFormAdder} />
+          <Switch id="quick-add-link" checked={settings.useFullTypeFormAdder} onCheckedChange={() => setSettings({ ...settings, useFullTypeFormAdder: !settings.useFullTypeFormAdder })} />
         </div>
 
         <Controller
@@ -124,7 +121,6 @@ const SettingsForm = () => {
           render={({ field: { onChange, value } }) => (
             <Select value={value} onValueChange={(value: fontOptions) => {
               onChange(value)
-              changeFont(value)
             }}>
               <SelectTrigger className={`text-zinc-100 bg-zinc-800 border-zinc-800 sm:max-w-96 ${value}`}>
                 <SelectValue placeholder="Select font" />

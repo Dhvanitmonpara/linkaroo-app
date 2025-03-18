@@ -382,8 +382,10 @@ const toggleTheme = asyncHandler(async (req, res) => {
 
 const updateProfileSettings = asyncHandler(async (req, res) => {
 
-    const { font = "font-mono", theme = "dark", isSearchShortcutEnabled } = req.body;
-    const userId = req.user?._id;
+    const { font = "font-mono", theme = "dark", isSearchShortcutEnabled, useFullTypeFormAdder } = req.body;
+    const { userId } = req.params
+
+    if (!userId) throw new ApiError(400, "User ID is required");
 
     const user = await User.findByIdAndUpdate(
         userId,
@@ -391,12 +393,12 @@ const updateProfileSettings = asyncHandler(async (req, res) => {
             $set: {
                 font,
                 theme,
-                isSearchShortcutEnabled
+                isSearchShortcutEnabled,
+                useFullTypeFormAdder
             }
         },
         {
             new: true,
-            select: "-coverImage -bio" // You can use this option to exclude directly in the query
         }
     );
 

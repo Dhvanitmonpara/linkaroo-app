@@ -115,20 +115,22 @@ const InboxPage = () => {
       </div>
       <div className="px-4 md:px-24 xl:px-56 2xl-px-64 py-8 pt-24 grid sm:grid-cols-2 gap-2">
         {inboxLinks?.length > 0 ? (
-          inboxLinks.map((doc) => (
+          inboxLinks.map((link) => (
             <LinkCard
-              key={doc._id}
-              id={doc._id}
-              title={doc.title}
+              key={link._id}
+              id={link._id}
+              title={link.title}
+              image={link.image}
+              type="todos"
               color="bg-black"
-              link={doc.link}
-              isChecked={doc.isChecked}
+              link={link.link}
+              isChecked={link.isChecked}
               currentCollectionId={inbox?._id}
             />
           ))
         ) : (
           <p className="text-lg col-span-2 font-semibold text-center">
-            No docs found in inbox
+            No links found in inbox
           </p>
         )}
       </div>
