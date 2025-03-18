@@ -17,6 +17,7 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import ResponsiveDialog from "./ResponsiveDialog";
+import { useUser } from "@clerk/clerk-react";
 
 type CollectionCardProps = {
   id: string;
@@ -46,6 +47,8 @@ const CollectionGridCard = ({
 
   const collaboratorAvatars: string[] = [];
   const { setCurrentCardColor, setPrevPath } = useMethodStore();
+
+  const { user } = useUser()
 
   collaborators?.forEach((collaborator) => {
     collaboratorAvatars.push(collaborator.avatarImage);
@@ -82,17 +85,17 @@ const CollectionGridCard = ({
                 className={`${isBlackMode ? "text-zinc-300" : "text-slate-800"
                   } font-semibold w-fit text-sm pb-3 hover:underline`}
               >
-                @{createdBy?.username}
+                @{user?.username}
               </span>
             </HoverCardTrigger>
             <HoverCardContent>
               <div className="w-full h-full flex justify-start items-center space-x-4">
                 <div>
-                  <img className="rounded-full h-12 w-12 object-cover" src={createdBy.avatarImage} alt="avatar" />
+                  <img className="rounded-full h-12 w-12 object-cover" src={user?.imageUrl} alt="avatar" />
                 </div>
                 <div>
-                  <h3>{createdBy.fullName}</h3>
-                  <p className="text-sm text-gray-400">@{createdBy.username}</p>
+                  <h3>{user?.fullName}</h3>
+                  <p className="text-sm text-gray-400">@{user?.username}</p>
                 </div>
               </div>
             </HoverCardContent>

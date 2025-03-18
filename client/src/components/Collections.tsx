@@ -158,7 +158,6 @@ const Collections = ({ className, extraElementClassNames, defaultView = "list" }
               description={collections.description}
               tagname={collections.tags}
               collaborators={collections.collaborators}
-              createdBy={collections.createdBy}
               icon={collections.icon}
               theme={collections.theme}
               font={font}

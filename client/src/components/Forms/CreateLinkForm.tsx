@@ -88,7 +88,7 @@ const CreateLinkForm: React.FC<CreateLinkFormProps> = ({
 
       const newData = {
         title: data.title,
-        description: data.description,
+        description: data.description || "",
         link: validUrl,
         userId: profile._id,
       };
@@ -123,7 +123,7 @@ const CreateLinkForm: React.FC<CreateLinkFormProps> = ({
       }
     } finally {
       setLoading(false);
-      navigate(`/collections/${data.collection}`);
+      navigate(`/dashboard/c/${data.collection}`);
       afterSubmit && afterSubmit()
     }
   };
@@ -154,9 +154,7 @@ const CreateLinkForm: React.FC<CreateLinkFormProps> = ({
           id="description"
           autoComplete="off"
           placeholder="Enter description"
-          {...register("description", {
-            required: "Description is required",
-          })}
+          {...register("description")}
         />
         <Controller
           name="collection"

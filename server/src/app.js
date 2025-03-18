@@ -64,6 +64,7 @@ import userRouter from './routes/user.routes.js'
 import linkRouter from "./routes/link.routes.js"
 import healthcheckRouter from "./routes/healthcheck.routes.js"
 import tagRouter from "./routes/tag.routes.js"
+import searchRouter from "./routes/search.routes.js"
 import collectionRouter from "./routes/collection.routes.js"
 
 //routes declaration
@@ -72,6 +73,7 @@ app.use("/api/v1/users", userRouter)
 app.use("/api/v1/links", linkRouter)
 app.use("/api/v1/tags", tagRouter)
 app.use("/api/v1/collections", collectionRouter)
+app.use("/api/v1/search", searchRouter)
 
 // http://localhost:8000/api/v1/users/register
 

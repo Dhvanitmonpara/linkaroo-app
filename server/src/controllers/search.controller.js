@@ -1,23 +1,27 @@
 import { asyncHandler } from "../utils/asyncHandler.js"
 import { ApiError } from "../utils/ApiError.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
-import { List } from "../models/list.model.js"
 import { uploadOnCloudinary, deleteFromCloudinary } from "../utils/cloudinary.js"
 import getPublicId from "../utils/getPublicId.js"
-import listOwnerVerification from "../utils/listOwnerVerification.js"
+import collectionOwnerVerification from "../utils/collectionOwnerVerification.js"
+import { Collection } from "../models/collection.model.js"
 
-const searchPublicCards = asyncHandler(async (res, req) => {
+const searchPublicLinks = asyncHandler(async (res, req) => {
 
-    const cardTitle = res.query.cardTitle
+    const linkTitle = res.query.linkTitle
 
-    if(!cardTitle) {
+    if(!linkTitle) {
         throw new ApiError(400, "Card title is required")
     }
 
-    const cards = await List.find({
-        
-    })
+    const links = await Collection.aggregate([
+        {
+            $match: {
+                isPrivate: false
+            }
+        }
+    ])
 
 })
 
-export { searchPublicCards }
+export { searchPublicLinks }

@@ -6,6 +6,8 @@ import { FaFootballBall, FaPlayCircle } from 'react-icons/fa';
 
 const CollectionTypeArray = [
   { value: "movies", label: "Movies", icon: <FaFilm /> },
+  { value: "anime", label: "Anime", icon: <FaFilm /> },
+  { value: "manga", label: "Manga", icon: <FaBook /> },
   { value: "books", label: "Books", icon: <FaBook /> },
   { value: "music", label: "Music", icon: <FaMusic /> },
   { value: "playlists", label: "Playlists", icon: <FaPlayCircle /> },

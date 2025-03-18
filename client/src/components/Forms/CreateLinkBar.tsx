@@ -1,7 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Input } from "../ui/input";
-import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
@@ -17,25 +15,74 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import useLinkStore from "@/store/linkStore";
 import useCollectionsStore from "@/store/collectionStore";
+import { debounce } from "lodash";
+import { CollectionType } from "@/lib/types";
 
-const dummies = [
-  {
-    title: "Google",
-    link: "https://www.google.com",
-  },
-  {
-    title: "Amazon",
-    link: "https://www.amazon.com",
-  },
-  {
-    title: "Youtube",
-    link: "https://www.youtube.com",
-  },
-  {
-    title: "wiki",
-    link: "https://www.wikipedia.com"
+const searchMovieDatabase = async (title: string, type: "movies" | "tv" | "multi" | "person") => {
+  try {
+    const processedTitle = encodeURIComponent(title); // Safer way to handle spaces & special chars
+    const response = await axios.get(
+      `https://api.themoviedb.org/3/search/${type}?query=${processedTitle}&include_adult=true&language=en-US&page=1`,
+      {
+        headers: {
+          'Authorization': `Bearer ${import.meta.env.VITE_TMDM_ACCESS_TOKEN}`,
+        },
+      }
+    );
+
+    return response.data || { results: [] };
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      console.error("Error fetching movies:", error.message);
+    } else {
+      console.error("Error fetching movies:", error);
+    }
+    return { results: [] };
   }
-]
+};
+
+const getAnime = async (title: string) => {
+  const query = `
+  query ($search: String) {
+    Page(perPage: 10) { # Fetch up to 10 results per request
+      media(search: $search, type: ANIME) {
+        id
+        title {
+          romaji
+          english
+          native
+        }
+        coverImage {
+          large
+        }
+        description
+        averageScore
+      }
+    }
+  }
+  `;
+
+  const variables = { search: title };
+
+  try {
+    const response = await fetch("https://graphql.anilist.co", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({ query, variables }),
+    });
+
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.errors?.[0]?.message || "API Error");
+
+    return data.data.Page.media;
+  } catch (error) {
+    console.error("Error searching anime:", error);
+    return [];
+  }
+}
 
 type CreateLinkBarProps = {
   collectionTitle?: string;
@@ -49,6 +96,15 @@ type HandleLinkCreationType = {
   collection: string;
 };
 
+type SearchResults = {
+  title: string;
+  link: string;
+  image: string | null;
+  type: string;
+  id: string
+  description: string
+}
+
 const CreateLinkBar: React.FC<CreateLinkBarProps> = ({
   collectionTitle,
   afterSubmit,
@@ -56,19 +112,21 @@ const CreateLinkBar: React.FC<CreateLinkBarProps> = ({
   const [loading, setLoading] = useState(false);
   const [identifier, setIdentifier] = useState("")
   const [tabIndex, setTabIndex] = useState(-1)
+  const [searchResults, setSearchResults] = useState<null | SearchResults[]>(null)
+  const [searchType, setSearchType] = useState<CollectionType>("todos")
   const [isDescriptionActive, setIsDescriptionActive] = useState(false)
 
   const navigate = useNavigate();
   const formRef = useRef<HTMLFormElement>(null);
 
-  const { collections } = useCollectionsStore();
+  const { collections, inbox } = useCollectionsStore();
   const { addLinkItem, links, addCachedLinkItem } = useLinkStore();
 
   const { control, handleSubmit, register } = useForm<HandleLinkCreationType>({
     defaultValues: {
       collection: collectionTitle
         ? collections.find((collection) => collection.title === collectionTitle)?._id
-        : "",
+        : inbox?._id,
     },
   });
 
@@ -119,19 +177,66 @@ const CreateLinkBar: React.FC<CreateLinkBarProps> = ({
     }
   };
 
+  const debouncedSearchQuery = useMemo(
+    () => debounce(async () => {
+      if (!identifier) return;
+      const searchResults: SearchResults[] = [];
+
+      if(!collectionTitle){
+        // this is search bar so main use-case should be user can find his own created links first even he wrote some text in description then show it in upper row
+        // if you don't get at least 5 links then show public links
+        // TODO: query for the links on linkaroo db for public links if you find at least 5 then set searchResult and return the function
+      } else {
+        const linksOnDatabase = await axios.get(``)
+      }
+
+      if (searchType === "movies") {
+        const movies = await searchMovieDatabase(identifier, "movies");
+        console.log(movies)
+        const movieResults = movies.results.map((movie: any) => ({
+          title: movie.title,
+          link: `https://www.themoviedb.org/movie/${movie.id}`,
+          image: movie.poster_path,
+          type: "movies",
+          id: movie.id.toString(),
+          description: movie.overview
+        }))
+        searchResults.push(...movieResults);
+      }
+      if (searchType === "anime") {
+        const anime = await getAnime(identifier);
+        searchResults.push(...anime);
+      }
+
+      setSearchResults(searchResults);
+    }, 700),
+    [collectionTitle, identifier, searchType]
+  );
+
+  const handleSearch = useCallback(() => {
+    debouncedSearchQuery();
+  }, [debouncedSearchQuery]);
+
+  useEffect(() => {
+    handleSearch();
+    return () => debouncedSearchQuery.cancel();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [identifier, searchType, handleSearch]);
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (!searchResults) return
       if (e.key === "Tab") {
         e.preventDefault();
         setTabIndex((prevTabIndex) => {
-          const newTabIndex = (prevTabIndex + 1) % dummies.length;
+          const newTabIndex = (prevTabIndex + 1) % searchResults.length;
           return newTabIndex;
         });
       } else if (e.key === "Enter") {
         // TODO: fix the enter to submit form issue
         if (tabIndex !== -1) {
           e.preventDefault();
-          setIdentifier(dummies[tabIndex].title); // Set identifier
+          setIdentifier(searchResults[tabIndex].title); // Set identifier
         }
 
         // Submit the form if `Enter` is pressed outside the list
@@ -151,19 +256,20 @@ const CreateLinkBar: React.FC<CreateLinkBarProps> = ({
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [tabIndex]);
+  }, [searchResults, tabIndex]);
 
   useEffect(() => {
+    if (!searchResults) return
     if (tabIndex !== -1) {
-      setIdentifier(dummies[tabIndex].title); // Update identifier when tabIndex changes
+      setIdentifier(searchResults[tabIndex].title); // Update identifier when tabIndex changes
     }
-  }, [tabIndex]); // Dependency ensures the effect runs when tabIndex changes  
+  }, [searchResults, tabIndex]); // Dependency ensures the effect runs when tabIndex changes  
 
   return (
     <div className="dark:text-white px-4 flex flex-col w-full justify-center items-center">
-      <div className="xl:hidden w-full mb-6 space-y-2 rounded-3xl bg-zinc-800/70 p-4">
-        {dummies.length > 0 ? (
-          dummies.map(({ title, link }, index) => (
+      {identifier && <div className="xl:hidden w-full mb-6 space-y-2 rounded-3xl bg-zinc-800/70 p-4">
+        {searchResults && searchResults.length > 0 ? (
+          searchResults.map(({ title, link }, index) => (
             <button
               key={index}
               onClick={(e) => {
@@ -182,42 +288,25 @@ const CreateLinkBar: React.FC<CreateLinkBarProps> = ({
             <h1>No search result found</h1>
           </div>
         )}
-      </div>
+      </div>}
       <form
         ref={formRef}
         className="flex flex-col w-full justify-center items-center bg-zinc-800/70 rounded-3xl"
         onSubmit={handleSubmit(handleLinkCreation)}
       >
-        <div className="flex w-full relative border-zinc-800/80 border-1 pt-1 rounded-3xl">
+        <div className="flex w-full border-zinc-800/80 border-1 pt-1 rounded-3xl">
           <Input
             id="identifier"
             type="text"
             autoFocus
             autoComplete="off"
-            onChange={(e) => setIdentifier(e.target.value)}
+            onChange={(e) => {
+              setIdentifier(e.target.value);
+            }}
             value={identifier}
             placeholder="Enter a title or link"
             className="rounded-3xl dark:border-zinc-300 focus-visible:!border-transparent py-4 px-6 text-base"
           />
-          <div className="absolute top-2 right-1">
-            {loading ? (
-              <Button
-                disabled
-                id="submit-form"
-                className="dark:bg-zinc-700 h-8 rounded-full dark:hover:bg-zinc-600 hover:bg-zinc-300/70 text-zinc-900 bg-zinc-200 w-full dark:text-white cursor-wait"
-              >
-                <Loader2 className="mr-2 h-4 w-4 animate-spin dark:text-white" />
-                Please wait
-              </Button>
-            ) : (
-              <Button
-                type="submit"
-                id="submit-form"
-                className={`dark:bg-zinc-700 h-8 rounded-full bg-zinc-200 font-semibold text-zinc-950 dark:text-white hover:bg-zinc-300 dark:hover:bg-zinc-600 w-full transition-all duration-200 ${identifier ? "scale-100" : "scale-0"}`}>
-                Add
-              </Button>
-            )}
-          </div>
         </div>
         <div className="flex space-x-2 py-2 w-full px-6">
           <Controller
@@ -225,14 +314,21 @@ const CreateLinkBar: React.FC<CreateLinkBarProps> = ({
             control={control}
             rules={{ required: "Please select a list" }}
             render={({ field: { onChange, value } }) => (
-              <Select value={value} onValueChange={onChange}>
+              <Select value={value} onValueChange={(value) => {
+                const collection = collections.find((item) => item._id === value);
+                if (collection) setSearchType(collection.type); else setSearchType("todos");
+                onChange(value)
+              }}>
                 <SelectTrigger className="text-zinc-300 !bg-zinc-800/70 hover:bg-zinc-700/70 max-w-24 py-0.5 px-2.5 h-fit border-0">
-                  <SelectValue placeholder="Select list" />
+                  <SelectValue placeholder="Select collection" />
                 </SelectTrigger>
                 <SelectContent
                   className="dark:bg-zinc-900 dark:text-white dark:border-zinc-800"
                 >
                   <SelectGroup>
+                    {inbox && <SelectItem key={inbox._id} value={inbox._id}>
+                      Inbox
+                    </SelectItem>}
                     {collections.map((list) => (
                       <SelectItem key={list._id} value={list._id}>
                         {list.title}
@@ -250,7 +346,7 @@ const CreateLinkBar: React.FC<CreateLinkBarProps> = ({
             {isDescriptionActive ? "Remove" : "Add"} Description
           </button>
         </div>
-        <div className={`px-6 w-full transition-all duration-300 overflow-hidden ${isDescriptionActive ? "pb-2" : "h-0"}`}>
+        <div className={`px-6 w-full transition-all duration-300 overflow-hidden ${isDescriptionActive ? "pb-2 pt-1" : "h-0"}`}>
           <Textarea
             id="description"
             placeholder="Enter description"
@@ -260,9 +356,9 @@ const CreateLinkBar: React.FC<CreateLinkBarProps> = ({
           />
         </div>
       </form>
-      <div className="hidden xl:block w-full mt-6 space-y-2 rounded-3xl bg-zinc-800/70 p-4">
-        {dummies.length > 0 ? (
-          dummies.map(({ title, link }, index) => (
+      {identifier && <div className="hidden xl:block w-full mt-6 space-y-2 rounded-3xl bg-zinc-800/70 p-4">
+        {searchResults && searchResults.length > 0 ? (
+          searchResults.map(({ title, link }, index) => (
             <button
               key={index}
               onClick={(e) => {
@@ -281,7 +377,7 @@ const CreateLinkBar: React.FC<CreateLinkBarProps> = ({
             <h1>No search result found</h1>
           </div>
         )}
-      </div>
+      </div>}
     </div>
   );
 };

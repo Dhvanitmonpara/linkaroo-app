@@ -6,8 +6,6 @@ type User = {
   _id: string;
   username: string;
   email: string;
-  fullName: string;
-  avatarImage: string;
   theme: themeType;
   useFullTypeFormAdder: boolean;
   isSearchShortcutEnabled: boolean;
@@ -56,8 +54,6 @@ const useProfileStore = create<ProfileState>((set) => ({
         _id: "",
         username: "",
         email: "",
-        fullName: "",
-        avatarImage: "",
         useFullTypeFormAdder: false,
         isSearchShortcutEnabled: false,
         theme: "light",

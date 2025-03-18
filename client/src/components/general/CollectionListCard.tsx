@@ -12,13 +12,13 @@ import { removeUsernameTag } from "@/utils/toggleUsernameInTag";
 import useMethodStore from "@/store/MethodStore";
 import { CreateLinkForm } from "@/components/Forms";
 import Icon from "../ui/Icon";
+import { useUser } from "@clerk/clerk-react";
 
 type CollectionCardProps = {
   id: string;
   tagname: TagType[];
   description: string;
   title: string;
-  createdBy: Collaborator;
   theme: colorOptions;
   font: fontOptions;
   icon: string;
@@ -35,13 +35,14 @@ const CollectionListCard = ({
   theme,
   font,
   icon,
-  createdBy,
   toggleModal,
 }: CollectionCardProps) => {
   const navigate = useNavigate();
 
   const collaboratorAvatars: string[] = [];
   const { setModalContent, setCurrentCardColor, setPrevPath } = useMethodStore();
+
+  const {user} = useUser()
 
   collaborators?.forEach((collaborator) => {
     collaboratorAvatars.push(collaborator.avatarImage);
@@ -103,7 +104,7 @@ const CollectionListCard = ({
           <AvatarGroup
             width="w-7"
             height="h-7"
-            imgSrcArray={[createdBy?.avatarImage, ...collaboratorAvatars]}
+            imgSrcArray={[user!.imageUrl, ...collaboratorAvatars]}
           />
           {tags.length > 0 &&
             tags.map((tag, index) => (

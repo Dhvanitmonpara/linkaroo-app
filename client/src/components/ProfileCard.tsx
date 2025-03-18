@@ -23,7 +23,7 @@ const ProfileCard = () => {
       <PopoverTrigger className="!w-14 dark:text-white flex justify-center items-center rounded-md focus:outline-none">
         <img
           className="rounded-full h-10 w-10 object-cover border-zinc-700 border-2 hover:border-zinc-200 transition-colors"
-          src={user?.hasImage ? user.imageUrl : user?.firstName?.charAt(0)}
+          src={user?.imageUrl}
           alt="Profile pic"
         />
       </PopoverTrigger>
@@ -33,11 +33,11 @@ const ProfileCard = () => {
         <div className="flex justify-start items-center select-none cursor-pointer px-3 py-3 bg-zinc-800/70 hover:bg-zinc-800 rounded-sm">
           <img
             className="rounded-full h-10 w-10 object-cover"
-            src={profile.avatarImage}
+            src={user?.imageUrl}
             alt="Profile pic"
           />
           <div className="ml-3 text-start">
-            <h5 className="text-sm dark:text-zinc-200 font-semibold cursor-pointer">{profile.fullName}</h5>
+            <h5 className="text-sm dark:text-zinc-200 font-semibold cursor-pointer">{user?.fullName}</h5>
             <p className="text-xs text-zinc-500 dark:text-gray-400 cursor-pointer">
               {profile.email}
             </p>

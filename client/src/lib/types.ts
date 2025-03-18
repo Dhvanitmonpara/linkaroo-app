@@ -19,8 +19,10 @@ type colorOptions =
 
 type themeType = "light" | "dark";
 
-type CollectionType = 
+type CollectionType =
   | "movies"
+  | "anime"
+  | "manga"
   | "books"
   | "music"
   | "playlists"
@@ -31,7 +33,7 @@ type CollectionType =
   | "bookmarks"
   | "cards"
   | "banners"
-  | "todos"
+  | "todos";
 
 type profileOptions = "profile" | "settings" | "feedback";
 
@@ -51,7 +53,12 @@ type TagType = {
   updatedAt: string;
 };
 
-type fontOptions = "font-mono" | "font-sans" | "font-comic" | "font-poppins" | "font-helvetica";
+type fontOptions =
+  | "font-mono"
+  | "font-sans"
+  | "font-comic"
+  | "font-poppins"
+  | "font-helvetica";
 
 type fetchedTagType = {
   __v: number;

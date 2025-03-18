@@ -37,7 +37,7 @@ const Header = () => {
 
   return (
     <>
-      <nav className="lg:h-[4.5rem] h-16 lg:py-5 pt-4 pb-[1rem] flex justify-between items-center space-x-2 px-5 lg:px-20 border-b-[1px] border-zinc-700 select-none">
+      <nav className="lg:h-[4.5rem] h-16 lg:py-5 pt-4 pb-[1rem] flex justify-between items-center space-x-2 px-5 lg:px-20 border-b-[1px] border-zinc-700 dark:bg-zinc-900 select-none">
         <Link
           to="/"
           className="text-zinc-300 transition-colors cursor-pointer text-2xl font-helvetica font-semibold hover:text-white flex space-x-2 justify-center items-center"
@@ -54,10 +54,10 @@ const Header = () => {
           <div className="w-full relative hidden md:inline-block">
             <Input
               onClick={() => setOpen(true)}
-              className="dark:bg-zinc-900 dark:text-white dark:border-zinc-800"
+              className="dark:bg-zinc-800/60 dark:text-white dark:border-zinc-700/80"
               placeholder="Create or Search something..."
             />
-            <div className="absolute top-2 right-2 border-1 bg-zinc-900 border-zinc-800 text-zinc-300 w-fit py-1 px-2 text-xs rounded-md">
+            <div className="absolute top-2 right-2 border-1 bg-zinc-900 border-zinc-700/80 text-zinc-300 w-fit py-1 px-2 text-xs rounded-md">
               ⌘K
             </div>
           </div>
@@ -66,7 +66,7 @@ const Header = () => {
             title={`${creationTab === "collection" ? "Create new Collection" : "Add new Link"}`}
             trigger={
               <button
-                className="w-12 transition-colors duration-200 lg:flex hidden justify-center items-center dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-white rounded-sm border-2 dark:border-zinc-800 border-zinc-200 hover:bg-zinc-200"
+                className="w-12 transition-colors duration-200 lg:flex hidden justify-center items-center dark:bg-zinc-800/60 dark:hover:bg-zinc-800 dark:text-white rounded-sm border-1 dark:border-zinc-700/80 border-zinc-200 hover:bg-zinc-200"
                 onClick={() => {
                   setPrevPath(location.pathname);
                 }}
@@ -96,12 +96,12 @@ const Header = () => {
             prebuildForm={false}
             title="Search"
             showCloseButton={false}
-            className="sm:max-w-2xl md:max-w-3xl md:p-0 bg-transparent backdrop-blur-md border-none"
+            className="sm:max-w-2xl md:max-w-2xl md:p-0 bg-transparent backdrop-blur-md border-none"
             description="search something"
             trigger={
               <div
                 onClick={() => setOpen(true)}
-                className="md:w-12 cursor-pointer transition-colors duration-200 w-10 text-xl md:text-base md:hidden flex justify-center items-center md:dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-zinc-300 rounded-sm md:border-2 md:dark:border-zinc-800 md:border-zinc-200 hover:bg-zinc-200"
+                className="md:w-12 cursor-pointer transition-colors duration-200 w-10 text-xl md:text-base md:hidden flex justify-center items-center md:dark:bg-zinc-800/60 dark:hover:bg-zinc-800 dark:text-zinc-300 rounded-sm md:border-1 md:dark:border-zinc-700/80 md:border-zinc-200 hover:bg-zinc-200"
               >
                 <IoSearchSharp />
               </div>
@@ -110,12 +110,12 @@ const Header = () => {
               <CreateLinkBar />
             </div>
           </ResponsiveDialog>
-          <div className="md:w-12 cursor-pointer transition-colors duration-200 w-10 text-xl md:text-base flex justify-center items-center md:dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-white rounded-sm md:border-2 md:dark:border-zinc-800 md:border-zinc-200 hover:bg-zinc-200">
+          <div className="md:w-12 cursor-pointer transition-colors duration-200 w-10 text-xl md:text-base flex justify-center items-center md:dark:bg-zinc-800/60 dark:hover:bg-zinc-800 dark:text-white rounded-sm md:border-1 md:dark:border-zinc-700/80 md:border-zinc-200 hover:bg-zinc-200">
             <IoFilterOutline />
           </div>
           <Popover>
             <PopoverTrigger className="md:w-12 cursor-pointer transition-colors duration-200 w-10 text-xl md:text-base hidden lg:flex">
-              <div className="w-full h-full flex justify-center items-center text-zinc-400 dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-white rounded-sm border-2 dark:border-zinc-800 border-zinc-200 hover:bg-zinc-200">
+              <div className="w-full h-full flex justify-center items-center text-zinc-400 dark:bg-zinc-800/60 dark:hover:bg-zinc-800 dark:text-white rounded-sm border-1 dark:border-zinc-700/80 border-zinc-200 hover:bg-zinc-200">
                 <IoMdNotificationsOutline />
               </div>
             </PopoverTrigger>

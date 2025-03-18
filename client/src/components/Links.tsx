@@ -257,7 +257,7 @@ const Links = () => {
               </div>
             </div>
           </div>
-          <div className="w-full h-4/6 rounded-b-md dark:text-zinc-300 p-4 dark:bg-zinc-900">
+          <div className="w-full h-4/6 rounded-b-md dark:text-zinc-300 p-4 dark:bg-zinc-800/60">
             <div className="min-h-20 flex flex-col justify-start">
               <div className="py-3">
                 <IconPicker activeIcon={currentCollectionItem.icon} defaultLoadedIcons={20} setActiveIcon={handleChangeIcon} />
@@ -299,7 +299,7 @@ const Links = () => {
                 open={isLinkFormOpen}
                 onOpenChange={setIsLinkFormOpen}
                 prebuildForm={profile.useFullTypeFormAdder}
-                className={`sm:max-w-2xl ${!profile.useFullTypeFormAdder && "md:p-0 bg-transparent border-none"}`}
+                className={`${profile.useFullTypeFormAdder ? "sm:max-w-2xl" : "md:p-0 bg-transparent border-none md:max-w-2xl"}`}
                 title="Add New Link"
                 trigger={
                   <div className={cn(
@@ -319,7 +319,7 @@ const Links = () => {
                         </span>
                         <span className="pt-1">Add a new link...</span>
                       </>
-                      }
+                    }
                   </div>
                 }
                 showCloseButton={false}
