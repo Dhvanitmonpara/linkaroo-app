@@ -41,6 +41,7 @@ const createLink = asyncHandler(async (req, res) => {
     const isLinkReachable = await isReachable(link);
 
     let existingLinkId = linkIdObject;
+    let existingLinkRef = null
 
     if (!linkIdObject) {
         // Run both queries in parallel for optimization
@@ -62,6 +63,7 @@ const createLink = asyncHandler(async (req, res) => {
             if (!newLink) throw new ApiError(500, "Failed to create link.");
             existingLinkId = newLink._id;
         }
+        existingLinkRef = existingLink
     }
 
     // Check if the user already has this link in the same collection
@@ -72,7 +74,7 @@ const createLink = asyncHandler(async (req, res) => {
     });
 
     if (existingUserLink) {
-        return res.status(400).json(new ApiResponse(400, {}, "You already have this link in this collection"));
+        throw new ApiError(400, "You already have this link in this collection")
     }
 
     // Create UserLink
@@ -80,147 +82,197 @@ const createLink = asyncHandler(async (req, res) => {
         userId: userIdObject,
         linkId: existingLinkId,
         collectionId: collectionIdObject,
-        customTitle: title || existingUserLink.title || "",
-        customDescription: description || existingUserLink.description || "",
+        customTitle: title || existingUserLink?.title || "",
+        customDescription: description || existingUserLink?.description || "",
     });
 
-    return res.status(201).json(new ApiResponse(201, { data: newUserLink, isLinkReachable }, "Link created successfully"));
+    if (!newUserLink) throw new ApiError(500, "Failed to create user link")
+
+    const customLink = {
+        title: newUserLink.customTitle,
+        description: newUserLink.customDescription,
+        collectionId: collectionId,
+        link: link,
+        image: image,
+        isChecked: false
+    }
+
+    return res.status(201).json(new ApiResponse(201, { data: customLink, isLinkReachable }, "Link created successfully"));
 });
 
 const createLinkWithMetadata = asyncHandler(async (req, res) => {
-
-    const { collectionId } = req.params
-
-    if (!collectionId) {
-        throw new ApiError(400, "Collection ID is required")
-    }
-
-    const { link } = req.body
-
-    const data = await fetchMetadata(link);
-
-    if (!data.title || !data.description) {
-        throw new ApiError(500, "Something went wrong while fetching meta-data")
-    }
-
-    const title = data.title
-    const description = data.description
-
-    const links = await Link.find({ userId: req.user.id, collectionId })
-
-    if (links.some(link => link.title == title)) {
-        throw new ApiError(400, "Link with the same title already exists")
-    }
-
-    const response = await Link.create({
-        title,
-        description: description ? description : "",
-        link,
-        userId: req.user?._id,
-        collectionId: collectionId
-    })
-
-    if (!response) {
-        throw new ApiError(500, "Failed to create link")
-    }
-
-    return res
-        .status(201)
-        .json(new ApiResponse(
-            201,
-            link = response,
-            "Link created successfully"
-        ))
-})
-
-const getLinksByCollection = asyncHandler(async (req, res) => {
-
-    const collectionId = req.params.collectionId
+    const { collectionId } = req.params;
 
     if (!collectionId) {
-        throw new ApiError(400, "Collection ID is required")
+        throw new ApiError(400, "Collection ID is required.");
     }
 
-    const links = await Link.find({ collectionId })
+    const { link, userId } = req.body;
 
-    if (!links) {
-        throw new ApiError(404, "Link not found for the given collection")
+    if (!userId) throw new ApiError(400, "User ID is required.");
+    if (!link) throw new ApiError(400, "Link is required.");
+
+    // Fetch metadata
+    let metadata;
+    try {
+        metadata = await fetchMetadata(link);
+    } catch (error) {
+        console.error("Error fetching metadata:", error);
+        throw new ApiError(500, "Failed to fetch metadata.");
     }
 
-    return res
-        .status(200)
-        .json(new ApiResponse(
-            200,
-            links,
-            "Links retrieved successfully"
-        ))
-})
+    const title = metadata?.title || "Untitled Link";
+    const description = metadata?.description || "";
+    const image = metadata?.image || null;
 
-const updateLink = asyncHandler(async (req, res) => {
+    // Check if link already exists (shared among users)
+    let existingLink = await Link.findOne({ link });
 
-    const linkId = req.params.linkId
-
-    if (!linkId) {
-        throw new ApiError(400, "Link ID is required")
-    }
-
-    const { title, description, link } = req.body
-
-    if (!title || !link) {
-        throw new ApiError(400, "title and link are required")
-    }
-
-    const response = await Link.findByIdAndUpdate(
-        linkId,
-        {
+    if (!existingLink) {
+        // Create the Link document if it doesn't exist
+        existingLink = await Link.create({
             title,
             description,
-            link
-        },
-        { new: true }
-    )
+            link,
+            image,
+        });
 
+        if (!existingLink) {
+            throw new ApiError(500, "Failed to create link.");
+        }
+    }
 
-    return res
-        .status(200)
-        .json(new ApiResponse(
-            200,
-            link = response,
-            "Link updated successfully"
-        ))
-})
+    // Check if UserLink already exists (avoid duplicates)
+    const existingUserLink = await UserLink.findOne({
+        userId,
+        collectionId,
+        linkId: existingLink._id,
+    });
 
-const deleteLink = asyncHandler(async (req, res) => {
+    if (existingUserLink) {
+        throw new ApiError(400, "You already have this link in your collection.");
+    }
 
-    const linkId = req.params.linkId
+    // Create UserLink (user's personal reference)
+    const newUserLink = await UserLink.create({
+        userId,
+        collectionId,
+        linkId: existingLink._id,
+        customTitle: title,
+        customDescription: description,
+    });
+
+    return res.status(201).json(
+        new ApiResponse(201, { userLink: newUserLink, link: existingLink }, "Link added to collection successfully")
+    );
+});
+
+const getLinksByCollection = asyncHandler(async (req, res) => {
+    const { collectionId } = req.params;
+
+    if (!collectionId) {
+        throw new ApiError(400, "Collection ID is required");
+    }
+
+    const collectionIdObject = convertToObjectId(collectionId);
+
+    // Fetch user-specific links from UserLink and populate link details
+    const userLinks = await UserLink.find({ collectionId: collectionIdObject })
+        .populate({
+            path: "linkId",
+            select: "title description link image", // Fetch only required fields
+        })
+        .select("customTitle customDescription linkId"); // Select only needed UserLink fields
+
+    if (userLinks.length === 0) {
+        throw new ApiError(404, "No links found for the given collection");
+    }
+
+    return res.status(200).json(new ApiResponse(200, userLinks, "Links retrieved successfully"));
+});
+
+const updateLink = asyncHandler(async (req, res) => {
+    const { linkId } = req.params;
 
     if (!linkId) {
-        throw new ApiError(400, "Link ID is required")
+        throw new ApiError(400, "Link ID is required");
     }
 
-    const link = await Link.findByIdAndDelete(linkId)
+    const { title, description, link } = req.body;
 
-    if (!link) {
-        throw new ApiError(400, "Error deleting Link")
+    // Ensure link is a valid URL if provided
+    if (link && !validator.isURL(link)) {
+        throw new ApiError(400, "Invalid link format.");
+    }
+
+    // Only update provided fields (prevent overwriting with undefined)
+    const updateFields = {};
+    if (title) updateFields.title = title;
+    if (description) updateFields.description = description;
+    if (link) updateFields.link = link;
+
+    // Update link document
+    const updatedLink = await Link.findByIdAndUpdate(
+        linkId,
+        updateFields,
+        { new: true } // Return updated document
+    );
+
+    // Handle case where link doesn't exist
+    if (!updatedLink) {
+        throw new ApiError(404, "Link not found.");
     }
 
     return res
         .status(200)
-        .json(new ApiResponse(
-            200,
-            "Link deleted successfully"
-        ))
-})
+        .json(new ApiResponse(200, updatedLink, "Link updated successfully"));
+});
+
+const deleteLink = asyncHandler(async (req, res) => {
+    const { userLinkId } = req.params;
+
+    if (!userLinkId) {
+        throw new ApiError(400, "UserLink ID is required");
+    }
+
+    const userLinkIdObject = convertToObjectId(userLinkId)
+
+    // Find the UserLink document
+    const userLink = await UserLink.findById(userLinkIdObject);
+
+    if (!userLink) {
+        throw new ApiError(404, "UserLink not found");
+    }
+
+    const { linkId } = userLink;
+
+    // Delete the user-specific link reference
+    await UserLink.findByIdAndDelete(userLinkId);
+
+    // Check if any other users still reference this link
+    const otherReferences = await UserLink.findOne({ linkId });
+
+    // If no other users have this link, delete the actual Link document
+    if (!otherReferences) {
+        await Link.findByIdAndDelete(linkId);
+    }
+
+    return res.status(200).json(new ApiResponse(
+        200,
+        { deletedUserLinkId: userLinkId },
+        "UserLink deleted successfully"
+    ));
+});
 
 const toggleIsChecked = asyncHandler(async (req, res) => {
 
-    const linkId = req.params.linkId
+    const { linkId } = req.params
 
     if (!linkId) {
         throw new ApiError(400, "Link ID is required")
     }
 
-    const link = await Link.findById(linkId)
+    const link = await UserLink.findById(linkId)
 
     if (!link) {
         throw new ApiError(400, "Link not found")
@@ -234,6 +286,7 @@ const toggleIsChecked = asyncHandler(async (req, res) => {
         .status(200)
         .json(new ApiResponse(
             200,
+            null,
             "Link updated successfully"
         ))
 })
@@ -252,7 +305,7 @@ const moveLinkFromInbox = asyncHandler(async (req, res) => {
         throw new ApiError(404, "Collection not found")
     }
 
-    const Link = await Link.findByIdAndUpdate(
+    const Link = await UserLink.findByIdAndUpdate(
         linkId,
         {
             $set: {
@@ -270,6 +323,7 @@ const moveLinkFromInbox = asyncHandler(async (req, res) => {
         .status(200)
         .json(new ApiResponse(
             200,
+            null,
             "Link moved successfully"
         ))
 })

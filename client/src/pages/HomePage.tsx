@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import useCollectionsStore from "@/store/collectionStore";
 import useProfileStore from "@/store/profileStore"
+import { useUser } from "@clerk/clerk-react";
 import axios, { AxiosError } from "axios";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
@@ -10,9 +11,11 @@ import toast from "react-hot-toast";
 
 const HomePage = () => {
 
-    const { theme, fullName } = useProfileStore().profile
+    const { theme, _id } = useProfileStore().profile
     const { inbox, addInboxLinkItem } = useCollectionsStore()
     const [input, setInput] = useState("")
+
+    const { user } = useUser()
 
     const [loading, setLoading] = useState(false)
 
@@ -24,6 +27,7 @@ const HomePage = () => {
                 `${import.meta.env.VITE_SERVER_API_URL}/links/quick-add/${inbox?._id}`,
                 {
                     link: url,
+                    userId: _id
                 },
                 { withCredentials: true }
             );
@@ -53,7 +57,7 @@ const HomePage = () => {
         <div className={`${theme !== "light" ? "text-zinc-100" : "text-zinc-900"} no-scrollbar w-full select-none h-[calc(100vh-4.5rem)] overflow-y-scroll`}>
             <div className="flex justify-center items-center flex-col space-y-12 pt-12 sm:pt-36">
                 <div className="flex w-full sm:justify-center sm:items-center flex-col px-5 md:px-24 md:p-0 space-y-3">
-                    <h1 className="text-4xl md:text-5xl font-semibold">Welcome back, {fullName}</h1>
+                    <h1 className="text-4xl md:text-5xl font-semibold">Welcome back, {user?.fullName || user?.firstName}</h1>
                     <p className={`mt-4 md:text-lg ${theme !== "light" ? "text-zinc-400" : "text-zinc-500"}`}>Ready to capture your links?</p>
                 </div>
                 <form onSubmit={(e) => {

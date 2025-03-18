@@ -25,6 +25,7 @@ import useCollectionsStore from "@/store/collectionStore";
 import IconPicker from "./general/IconPicker";
 import { FaPlus } from "react-icons/fa";
 import { cn } from "@/lib/utils";
+import { fetchedLinkType } from "@/lib/types";
 
 const Links = () => {
   const { toggleModal } = useMethodStore();
@@ -85,8 +86,19 @@ const Links = () => {
               toast.error("Failed to fetch collection details");
               return;
             }
-            setLinks(response.data.data);
-            addCachedLinkCollection({ collectionId, links: response.data.data });
+
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const formattedLinks: fetchedLinkType[] = response.data.data.map((link: any) => {
+              return {
+                title: link.customTitle || link.linkId.title,
+                description: link.customDescription || link.linkId.description,
+                link: link.linkId.link,
+                id: link._id,
+                image: link.linkId.image,
+              };
+            })
+            setLinks(formattedLinks);
+            addCachedLinkCollection({ collectionId, links: formattedLinks });
           }
 
           const currentListRes = await collections.filter(
@@ -163,13 +175,13 @@ const Links = () => {
             Welcome to Your Document Space
           </h1>
           <p className="text-lg text-center max-w-2xl dark:text-gray-300">
-            It looks like you haven't selected a list yet. To get started,
-            create a new list or select an existing one from the sidebar.
+            It looks like you haven't selected a collection yet. To get started,
+            create a new collection or select an existing one from the sidebar.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <Button
               onClick={() => navigate("/collections")}
-              className={`bg-zinc-300 hover:bg-zinc-400 px-6 py-2 dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-zinc-200`}
+              className={`bg-zinc-300 hover:bg-zinc-400 px-6 py-2 dark:bg-zinc-800 dark:hover:bg-zinc-700/80 dark:text-zinc-200`}
             >
               View Your Collections
             </Button>
@@ -181,9 +193,9 @@ const Links = () => {
                   <CreateCollectionForm />
                 );
               }}
-              className={`bg-zinc-300 hover:bg-zinc-400 px-6 py-2 dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:text-zinc-200`}
+              className={`bg-zinc-300 hover:bg-zinc-400 px-6 py-2 dark:bg-zinc-800 dark:hover:bg-zinc-700/80 dark:text-zinc-200`}
             >
-              Create New List
+              Create New Collection
             </Button>
           </div>
         </div>
@@ -361,14 +373,14 @@ const Links = () => {
             <span
               className={`dark:text-zinc-200 text-zinc-800`}
             >
-              You don't have any documents on this list.
+              You don't have any documents on this collection.
             </span>
             <ResponsiveDialog
               open={isLinkFormOpen}
               onOpenChange={setIsLinkFormOpen}
               title="Add New Link" description="Add a new link to your collection" trigger={
                 <Button
-                  className="bg-zinc-900 text-zinc-100 hover:bg-zinc-800/80"
+                  className="bg-zinc-800 text-zinc-100 hover:bg-zinc-700/80"
                   onClick={() => {
                     setPrevPath(location);
                   }}

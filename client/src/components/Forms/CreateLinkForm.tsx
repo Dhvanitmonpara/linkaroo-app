@@ -57,7 +57,7 @@ const CreateLinkForm: React.FC<CreateLinkFormProps> = ({
   const { profile } = useProfileStore()
 
   const { collections } = useCollectionsStore();
-  const { addLinkItem, links, addCachedLinkItem } = useLinkStore();
+  const { addLinkItem, addCachedLinkItem, currentCollectionItem } = useLinkStore();
 
   const { control, handleSubmit, register } = useForm<HandleLinkCreationType>({
     defaultValues: {
@@ -104,9 +104,7 @@ const CreateLinkForm: React.FC<CreateLinkFormProps> = ({
         return
       }
 
-      if (data.collection == links[0].collectionId) {
-        addLinkItem(link.data.data.data);
-      }
+      if (data.collection == currentCollectionItem?._id) addLinkItem(link.data.data.data);
       if (!link.data.data.isLinkReachable) {
         toast("Link is not reachable", {
           icon: <FaCircleInfo />,
@@ -116,7 +114,7 @@ const CreateLinkForm: React.FC<CreateLinkFormProps> = ({
 
     } catch (error) {
       if (error instanceof AxiosError) {
-        toast.error(error.message)
+        toast.error(error.response?.data.message || error.message)
       } else {
         console.error(error);
         toast.error("Error while creating link")

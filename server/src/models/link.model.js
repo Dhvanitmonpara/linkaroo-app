@@ -13,8 +13,6 @@ const userLinkSchema = new Schema({
     userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     collectionId: { type: Schema.Types.ObjectId, ref: "Collection", required: true },
     linkId: { type: Schema.Types.ObjectId, ref: "Link", required: true },
-
-    // Custom user-specific overrides
     customTitle: { type: String, default: null }, 
     customDescription: { type: String, default: null },
     isChecked: { type: Boolean, default: false }
