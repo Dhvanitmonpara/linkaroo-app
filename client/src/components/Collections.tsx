@@ -1,3 +1,4 @@
+import { fetchedCollectionType } from "@/lib/types";
 import useMethodStore from "@/store/MethodStore";
 import useProfileStore from "@/store/profileStore";
 import axios, { AxiosError, AxiosResponse } from "axios";
@@ -28,7 +29,7 @@ const Collections = ({ className, extraElementClassNames, defaultView = "list" }
   const [loading, setLoading] = useState(true);
   const [isCollectionFormOpen, setIsCollectionFormOpen] = useState(false);
   const [collectionView, setCollectionView] = useState<CollectionView>(defaultView);
-  const { setCollections, collections } = useCollectionsStore();
+  const { setCollections, collections, setInbox } = useCollectionsStore();
   const { toggleModal } = useMethodStore();
   const { profile } = useProfileStore();
   const { font } = profile;
@@ -52,7 +53,12 @@ const Collections = ({ className, extraElementClassNames, defaultView = "list" }
               return;
             }
 
-            setCollections(response.data.data);
+            const allCollections = response.data.data;
+            const inboxCollection = allCollections.find((collection: fetchedCollectionType) => collection.isInbox === true);
+            const regularCollections = allCollections.filter((collection: fetchedCollectionType) => collection.isInbox === false);
+
+            setCollections(regularCollections);
+            setInbox(inboxCollection)
           }
         } catch (error) {
           if (error instanceof AxiosError) {
@@ -66,7 +72,7 @@ const Collections = ({ className, extraElementClassNames, defaultView = "list" }
         }
       }
     })();
-  }, [collections.length, navigate, profile._id, setCollections]);
+  }, [collections.length, navigate, profile._id, setCollections, setInbox]);
 
   if (loading) {
     return (

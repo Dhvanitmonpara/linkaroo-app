@@ -390,9 +390,6 @@ const getCollectionsByUser = asyncHandler(async (req, res) => {
                     { createdBy: userIdObject },
                     { collaborators: userIdObject },
                 ],
-                $and: [
-                    { isInbox: false }
-                ]
             }
         },
         {

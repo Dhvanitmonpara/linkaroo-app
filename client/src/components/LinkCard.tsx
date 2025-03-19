@@ -63,9 +63,9 @@ const LinkCard = ({
       }
 
       const response = await axios.patch(
-        `${import.meta.env.VITE_SERVER_API_URL}/cards/move-card`,
+        `${import.meta.env.VITE_SERVER_API_URL}/links/move-link`,
         {
-          cardId: id,
+          linkId: id,
           collectionId: existingList._id,
         },
         { withCredentials: true }

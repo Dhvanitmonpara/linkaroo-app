@@ -24,7 +24,7 @@ import ResponsiveDialog from "./ResponsiveDialog";
 import DrawerMenu from "./DrawerMenu";
 import { DrawerClose } from "./ui/drawer";
 import AddCollaboratorForm from "./Forms/AddCollaboratorForm";
-import { IoMdPersonAdd } from "react-icons/io";
+import { IoIosCopy, IoMdPersonAdd } from "react-icons/io";
 import HandleTagForm from "./Forms/HandleTagForm";
 
 type Checked = boolean;
@@ -363,38 +363,64 @@ const CollectionActionButtons = () => {
 
 export default CollectionActionButtons;
 
-const AddCollaborator: React.FC = () => {
+const AddCollaborator: React.FC = ({ collaborators }: { collaborators?: string[] }) => {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
+  const [isCopied, setIsCopied] = useState(false)
 
-  const [confirmRequest, setConfirmRequest] = useState(false);
+  const getSharableLink = () => {
+    try {
+      if (!window.location.href.includes("/c")) {
+        toast.error("Please select a list");
+        return;
+      }
+      navigator.clipboard.writeText(window.location.href);
+      if (collaborators && collaborators.length > 0) {
+        setOpen(false);
+      } else {
+        setIsCopied(true);
+        setTimeout(() => {
+          setIsCopied(false)
+        }, 4000);
+      }
+      toast(
+        <div className="flex space-x-2 justify-center items-center">
+          <IoIosCopy />
+          <span>A sharable Link copied to clipboard!</span>
+        </div>
+      )
+    } catch {
+      toast.error("Failed to copy link");
+    }
+  };
 
   return (
-    <ResponsiveDialog
-      open={open}
-      onOpenChange={setOpen}
-      description="add collaborator by email or username"
-      title="Add Collaborator"
-      trigger={
-        <div
+    <>
+      {collaborators && collaborators.length > 0
+        ? <ResponsiveDialog
+          open={open}
+          onOpenChange={setOpen}
+          description="collaborator has to request access to join the collection"
+          title="Manage Collaborations"
+          trigger={
+            <div></div>
+          }>
+          <div className="flex flex-col gap-2">
+            <AddCollaboratorForm
+              getSharableLink={getSharableLink}
+            />
+          </div>
+        </ResponsiveDialog>
+        : <div
+          onClick={getSharableLink}
           className="space-x-2 w-full md:space-x-0 bg-transparent hover:bg-transparent border-none flex items-center rounded-full text-xl"
           aria-label="Tag Options"
         >
           <span className="flex justify-center items-center h-12 w-12">
-            <IoMdPersonAdd />
+            {isCopied ? <IoIosCopy /> : <IoMdPersonAdd />}
           </span>
           <span className="text-lg md:hidden">Add Collaborators</span>
         </div>
-      }>
-      <div className="flex flex-col gap-2">
-        <AddCollaboratorForm
-          confirmRequest={confirmRequest}
-          setConfirmRequest={setConfirmRequest}
-          value={value}
-          setOpen={setOpen}
-          setValue={setValue}
-        />
-      </div>
-    </ResponsiveDialog>
+      }
+    </>
   );
 };

@@ -17,13 +17,9 @@ router.route("/:collectionId")
     .get(getLinksByCollection)
 
 router.route("/quick-add/:collectionId").post(createLinkWithMetadata)
-
-router.route("/move-card").patch(moveLinkFromInbox)
-
-router.route("/:cardId")
-    .patch(updateLink)
-    .delete(deleteLink)
-
+router.route("/move-link").patch(moveLinkFromInbox)
+router.route("/:linkId").patch(updateLink)
+router.route("/:userLinkId").delete(deleteLink)
 router.route("/:linkId/toggle-checked").patch(toggleIsChecked)
 
 export default router

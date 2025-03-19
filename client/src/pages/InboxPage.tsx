@@ -1,4 +1,5 @@
 import { LinkCard } from "@/components";
+import { fetchedCollectionType } from "@/lib/types";
 import useCollectionsStore from "@/store/collectionStore";
 import useProfileStore from "@/store/profileStore";
 import formatLinks from "@/utils/formatLinks";
@@ -24,34 +25,37 @@ const InboxPage = () => {
       try {
         setLoading(true);
 
-        let inboxId = inbox?._id;
-
-        if (!inboxId) {
+        if (!inbox?._id) {
           const response: AxiosResponse = await axios({
             method: "GET",
-            url: `${import.meta.env.VITE_SERVER_API_URL}/collections/n/${encodeURIComponent(user?.username + "/inbox")}`,
+            url: `${import.meta.env.VITE_SERVER_API_URL}/collections/u/all/${profile._id}`,
             withCredentials: true,
           });
 
-          if (!response) {
-            toast.error("Failed to fetch user's collection.");
+          if (!response || response.status !== 200) {
+            toast.error("Failed to fetch user's collections.");
             return;
           }
 
-          setInbox(response.data.data);
-          inboxId = response.data.data._id;
-        }
-        const response: AxiosResponse = await axios.get(
-          `${import.meta.env.VITE_SERVER_API_URL}/links/${inboxId}`,
-          { withCredentials: true }
-        );
+          const allCollections = response.data.data;
+          const inboxCollection = allCollections.find((collection: fetchedCollectionType) => collection.isInbox === true);
+          const regularCollections = allCollections.filter((collection: fetchedCollectionType) => collection.isInbox === false);
 
-        if (!response.data.data) {
-          toast.error("Failed to fetch collection details");
-          return;
+          setCollections(regularCollections);
+          setInbox(inboxCollection)
+        } else {
+          const response: AxiosResponse = await axios.get(
+            `${import.meta.env.VITE_SERVER_API_URL}/links/${inbox?._id}`,
+            { withCredentials: true }
+          );
+
+          if (!response.data.data) {
+            toast.error("Failed to fetch collection details");
+            return;
+          }
+          const formattedLinks = formatLinks(response.data.data)
+          setInboxLink(formattedLinks);
         }
-        const formattedLinks = formatLinks(response.data.data)
-        setInboxLink(formattedLinks);
       } catch (error) {
         if (error instanceof AxiosError) {
           toast.error(error.response?.data.message || error.message)
