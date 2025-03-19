@@ -9,7 +9,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { BiSolidPencil } from "react-icons/bi";
 import convertMongoDBDate from "@/utils/convertMongoDBDate";
 import { Button } from "./ui/button";
-import { CreateCollectionForm, CreateLinkBar, CreateLinkForm } from "./Forms";
+import { CreateLinkBar, CreateLinkForm } from "./Forms";
 import { removeUsernameTag } from "@/utils/toggleUsernameInTag";
 import {
   DropdownMenu,
@@ -26,9 +26,9 @@ import IconPicker from "./general/IconPicker";
 import { FaPlus } from "react-icons/fa";
 import { cn } from "@/lib/utils";
 import formatLinks from "@/utils/formatLinks";
+import DashboardWelcomeScreen from "./DashboardWelcomeScreen";
 
 const Links = () => {
-  const { toggleModal } = useMethodStore();
   const [loading, setLoading] = useState(false);
   const [isLinkFormOpen, setIsLinkFormOpen] = useState(false);
   const location = useLocation().pathname;
@@ -36,12 +36,12 @@ const Links = () => {
   const { links, cachedLinks, setLinks, addCachedLinkCollection, setCurrentCollectionItem, currentCollectionItem } = useLinkStore()
   const { collections } = useCollectionsStore()
   const { profile } = useProfileStore();
+  const { currentCardColor, setPrevPath } = useMethodStore();
+
   const { font } = profile;
-  const { currentCardColor, setPrevPath, setModalContent } = useMethodStore();
   const navigate = useNavigate();
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  // const [uploadImage, setUploadImage] = useState(false);
   const [saveChangesLoading, setSaveChangesLoading] = useState(false);
 
   // TODO: create a dropdown along with images and custom image function
@@ -164,41 +164,12 @@ const Links = () => {
   };
 
   if (!currentCollectionItem?._id) {
-    return (
-      <div
-        className={`xl:px-0 lg:px-0 lg:pr-5 px-5 h-full select-none lg:col-span-3 xl:col-span-5 pr-5`}
-      >
-        <div className="md:h-[calc(100vh-5rem)] h-[calc(100vh-8rem)] lg:h-[calc(100vh-4.5rem)] overflow-y-scroll w-full flex flex-col justify-center items-center space-y-6 p-4">
-          <h1 className="text-3xl font-bold text-center dark:text-white">
-            Welcome to Your Document Space
-          </h1>
-          <p className="text-lg text-center max-w-2xl dark:text-gray-300">
-            It looks like you haven't selected a collection yet. To get started,
-            create a new collection or select an existing one from the sidebar.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Button
-              onClick={() => navigate("/collections")}
-              className={`bg-zinc-300 hover:bg-zinc-400 px-6 py-2 dark:bg-zinc-800 dark:hover:bg-zinc-700/80 dark:text-zinc-200`}
-            >
-              View Your Collections
-            </Button>
-            <Button
-              onClick={() => {
-                setPrevPath(location);
-                toggleModal(true);
-                setModalContent(
-                  <CreateCollectionForm />
-                );
-              }}
-              className={`bg-zinc-300 hover:bg-zinc-400 px-6 py-2 dark:bg-zinc-800 dark:hover:bg-zinc-700/80 dark:text-zinc-200`}
-            >
-              Create New Collection
-            </Button>
-          </div>
-        </div>
-      </div>
-    );
+    if (collections.length > 0) {
+      navigate(`/dashboard/c/${collections[0]._id}`, { replace: true })
+      return null
+    } else {
+      return <DashboardWelcomeScreen />
+    }
   }
 
   return (

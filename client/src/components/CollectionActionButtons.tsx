@@ -1,6 +1,5 @@
 import { BiSolidPencil } from "react-icons/bi";
 import { RiDeleteBinFill } from "react-icons/ri";
-import useMethodStore from "@/store/MethodStore";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,7 +33,6 @@ export type checkedTagsType = fetchedTagType & {
 };
 
 const CollectionActionButtons = () => {
-  const { setPrevPath } = useMethodStore();
   const { setTags, profile } = useProfileStore();
   const { removeCollectionsItem, toggleIsPublic } = useCollectionsStore();
   const { setLinks, currentCollectionItem, setCurrentCollectionItem, removeCachedLinkCollection } = useLinkStore()
@@ -116,6 +114,7 @@ const CollectionActionButtons = () => {
       }
 
       toggleIsPublic(currentCollectionItem);
+      toast.success("Collection updated successfully");
     } catch (error) {
       if (error instanceof AxiosError) {
         toast.error(error.response?.data.message || error.message)
@@ -229,12 +228,10 @@ const CollectionActionButtons = () => {
           </DrawerMenu>
         </>
       ),
-      action: () => { },
       tooltip: `Make this collection ${currentCollectionItem?.isPublic ? "private" : "public"}`,
     },
     {
       element: <AddCollaborator />,
-      action: () => { },
       tooltip: "Add Collaborators",
     },
     {
@@ -256,9 +253,6 @@ const CollectionActionButtons = () => {
           <EditListForm />
         </ResponsiveDialog>
       ),
-      action: () => {
-        setPrevPath(location.pathname);
-      },
       tooltip: "Edit Collection",
     },
     {
@@ -288,12 +282,10 @@ const CollectionActionButtons = () => {
             </span>
             <div className="flex gap-2 w-full justify-center items-center">
               <DropdownMenuItem
-                onClick={() => {
-                  handleToggleIsPublic();
-                }}
+                onClick={handleDeleteCollection}
                 className="w-full cursor-pointer bg-red-500 hover:!bg-red-500/70 h-10 hover:!text-zinc-50 flex justify-center items-center"
               >
-                <span onClick={handleDeleteCollection}>Yes</span>
+                <span>Yes</span>
               </DropdownMenuItem>
               <DropdownMenuItem className="w-full cursor-pointer bg-zinc-800 hover:!bg-zinc-800/70 hover:!text-zinc-50 h-10 flex justify-center items-center">
                 No
@@ -318,7 +310,6 @@ const CollectionActionButtons = () => {
           </div>
         </DrawerMenu>
       </>,
-      action: () => { },
       tooltip: "Delete Collection",
     },
   ];
@@ -329,7 +320,6 @@ const CollectionActionButtons = () => {
         {actionButtons.map((actionButton, index) => (
           <TooltipContainer tooltip={actionButton.tooltip} key={index}>
             <button
-              onClick={actionButton.action}
               className="h-12 w-12 bg-[#6d6d6d20] hover:bg-[#6d6d6d50] transition-colors flex justify-center items-center rounded-full text-xl"
             >
               {actionButton.element}
@@ -346,7 +336,6 @@ const CollectionActionButtons = () => {
               <button
                 onClick={e => {
                   e.preventDefault();
-                  actionButton.action ? actionButton.action() : null
                 }}
                 key={index}
                 className="flex flex-col p-2 dark:bg-zinc-800 dark:hover:bg-zinc-700/70 bg-zinc-100 hover:bg-zinc-200 w-full"

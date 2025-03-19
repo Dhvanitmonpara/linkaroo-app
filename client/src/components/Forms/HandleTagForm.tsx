@@ -14,6 +14,8 @@ import DrawerMenu from '../DrawerMenu';
 import { Separator } from '../ui/separator';
 import { Checkbox } from '../ui/checkbox';
 import { Label } from '../ui/label';
+import useProfileStore from '@/store/profileStore';
+import { useUser } from '@clerk/clerk-react';
 
 function HandleTagForm({ setCheckedTags, loading, checkedTags }: {
   loading: boolean,
@@ -22,12 +24,14 @@ function HandleTagForm({ setCheckedTags, loading, checkedTags }: {
 }) {
 
   const { updateCollectionsTags } = useCollectionsStore();
+  const { profile } = useProfileStore()
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [newTagInput, setNewTagInput] = useState(false);
   const [newTagSubmitLoading, setNewTagSubmitLoading] = useState(false);
   const [saveChangesLoading, setSaveChangesLoading] = useState(false);
 
+  const { user } = useUser()
   const { collectionId } = useParams();
 
   const HandleAddNewTag: FormEventHandler<HTMLFormElement> = async (event) => {
@@ -46,7 +50,11 @@ function HandleTagForm({ setCheckedTags, loading, checkedTags }: {
 
       const createTagResponse: AxiosResponse = await axios.post(
         `${import.meta.env.VITE_SERVER_API_URL}/tags`,
-        { tag: newTagName },
+        {
+          tag: newTagName,
+          username: user?.username,
+          userId: profile?._id
+        },
         { withCredentials: true }
       );
 

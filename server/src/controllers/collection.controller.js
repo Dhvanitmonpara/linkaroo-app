@@ -377,10 +377,7 @@ const getCollectionsByUser = asyncHandler(async (req, res) => {
 
     const { userId } = req.params
 
-    if (!userId) {
-        throw new ApiError(400, "User ID is required")
-    }
-
+    if (!userId) throw new ApiError(400, "User ID is required");
     const userIdObject = convertToObjectId(userId);
 
     const collections = await Collection.aggregate([
@@ -444,9 +441,7 @@ const getCollectionsByUser = asyncHandler(async (req, res) => {
         }
     ])
 
-    if (!collections) {
-        throw new ApiError(404, "No collections found")
-    }
+    if (!collections) throw new ApiError(404, "No collections found");
 
     return res
         .status(200)

@@ -3,6 +3,7 @@ import { ApiError } from "../utils/ApiError.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
 import { Tag } from "../models/tag.model.js"
 import { Collection } from "../models/collection.model.js"
+import convertToObjectId from "../utils/convertToObjectId.js"
 import collectionOwnerVerification from "../utils/collectionOwnerVerification.js"
 
 const addUsernameInTag = (tag, username) => {
@@ -17,23 +18,19 @@ const removeUsernameTag = (tag, username) => {
 
 const createTag = asyncHandler(async (req, res) => {
 
-    const { tag } = req.body
+    const { tag, username, userId } = req.body
 
-    if (!tag) {
-        throw new ApiError(400, "tag is required")
-    }
+    if (!tag) throw new ApiError(400, "tag is required");
+    if (!userId) throw new ApiError(400, "userId is required");
 
-    const userTag = addUsernameInTag(tag, req.user.username)
-
+    const userIdObject = convertToObjectId(userId);
+    const userTag = addUsernameInTag(tag, username)
     const existingTag = await Tag.findOne({ tagname: userTag })
 
-    if (existingTag) {
-        throw new ApiError(400, "Tag already exists")
-    }
+    if (existingTag) throw new ApiError(400, "Tag already exists");
 
-    const newTag = await Tag.create({ tagname: userTag, owner: req.user._id })
-
-    const removedUserTag = removeUsernameTag(newTag.tagname, req.user.username)
+    const newTag = await Tag.create({ tagname: userTag, owner: userIdObject })
+    const removedUserTag = removeUsernameTag(newTag.tagname, username)
 
     return res
         .status(201)
