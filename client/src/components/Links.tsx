@@ -360,7 +360,6 @@ const Links = () => {
                     type={itemType}
                     link={link.link}
                     isChecked={link.isChecked}
-                    currentCollectionId={currentCollectionItem?._id}
                   />
                 ))}
             </div>

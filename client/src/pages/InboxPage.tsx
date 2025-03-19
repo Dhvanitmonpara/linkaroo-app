@@ -105,7 +105,6 @@ const InboxPage = () => {
               color="bg-black"
               link={link.link}
               isChecked={link.isChecked}
-              currentCollectionId={inbox?._id}
             />
           ))
         ) : (

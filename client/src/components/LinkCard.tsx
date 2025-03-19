@@ -29,7 +29,6 @@ type LinkCardProps = {
   image: string | null
   type: "banners" | "cards" | "todos";
   isChecked: boolean;
-  currentCollectionId: string | undefined;
 };
 
 const LinkCard = ({
@@ -39,7 +38,6 @@ const LinkCard = ({
   link,
   image,
   type,
-  currentCollectionId,
   isChecked,
 }: LinkCardProps) => {
   const { addCachedLinkItem, toggleIsChecked } = useLinkStore()
