@@ -16,27 +16,28 @@ import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import { Textarea } from "../ui/textarea";
 import useMethodStore from "@/store/MethodStore";
-import "./style/EditListForm.css";
+import "./style/EditCollectionForm.css";
 import { cn } from "@/lib/utils";
 import { themeOptionsArray } from "@/lib/constants/constants";
 import useLinkStore from "@/store/linkStore";
 import useCollectionsStore from "@/store/collectionStore";
+import useProfileStore from "@/store/profileStore";
 
-type HandleListEditType = {
+type HandleCollectionEditType = {
   title: string;
   description: string;
   theme: colorOptions;
 };
 
-const EditListForm = () => {
+const EditCollectionForm = () => {
 
   const [loading, setLoading] = useState(false);
   const { updateCollectionsItem } = useCollectionsStore();
   const { currentCollectionItem, setCurrentCollectionItem } = useLinkStore();
-  // const [icon, setIcon] = useState(currentCollectionItem?.icon || "");
   const { setCurrentCardColor } = useMethodStore();
+  const { profile } = useProfileStore()
 
-  const { control, handleSubmit, register } = useForm<HandleListEditType>({
+  const { control, handleSubmit, register } = useForm<HandleCollectionEditType>({
     defaultValues: {
       theme: currentCollectionItem?.theme,
       title: currentCollectionItem?.title,
@@ -44,48 +45,47 @@ const EditListForm = () => {
     },
   });
 
-  const handleListCreation = async (data: HandleListEditType) => {
+  const handlecollectionCreation = async (data: HandleCollectionEditType) => {
     try {
       setLoading(true);
 
       const response = await axios.patch(
-        `${import.meta.env.VITE_SERVER_API_URL}/lists/o/${currentCollectionItem?._id
-        }`,
-        data,
+        `${import.meta.env.VITE_SERVER_API_URL}/collections/o/${currentCollectionItem?._id}`,
+        { ...data, collectionOwnerId: profile._id },
         { withCredentials: true }
       );
 
       if (response.status !== 200) {
-        toast.error("Failed to update list");
+        toast.error("Failed to update collection");
         return;
       }
 
       const collectionId = response.data.data._id;
 
       if (!collectionId) {
-        toast.error("Failed to update list");
+        toast.error("Failed to update collection");
         return;
       }
 
-      const list = await axios.get(
-        `${import.meta.env.VITE_SERVER_API_URL}/lists/u/${collectionId}`,
+      const collection = await axios.get(
+        `${import.meta.env.VITE_SERVER_API_URL}/collections/u/${collectionId}`,
         { withCredentials: true }
       );
 
-      if (!list) {
-        toast.error("Failed to fetch list details");
+      if (!collection) {
+        toast.error("Failed to fetch collection details");
         return;
       }
 
-      updateCollectionsItem(list.data.data);
-      setCurrentCollectionItem(list.data.data);
-      setCurrentCardColor(list.data.data.theme);
+      updateCollectionsItem(collection.data.data);
+      setCurrentCollectionItem(collection.data.data);
+      setCurrentCardColor(collection.data.data.theme);
     } catch (error) {
       if (error instanceof AxiosError) {
-        toast.error(error.message)
+        toast.error(error.response?.data.message || error.message)
       } else {
         console.error(error);
-        toast.error("Error while updating list")
+        toast.error("Error while updating collection")
       }
     } finally {
       setLoading(false);
@@ -96,7 +96,7 @@ const EditListForm = () => {
     <div className="dark:text-white flex flex-col sm:w-full sm:max-w-96 justify-center items-center space-y-3">
       <form
         className="h-4/5 flex flex-col space-y-4 w-full justify-center items-center"
-        onSubmit={handleSubmit(handleListCreation)}
+        onSubmit={handleSubmit(handlecollectionCreation)}
       >
         <Input
           id="title"
@@ -108,9 +108,7 @@ const EditListForm = () => {
         <Textarea
           id="description"
           placeholder="Enter description"
-          {...register("description", {
-            required: "Description is required",
-          })}
+          {...register("description")}
         />
         <div className="flex justify-center items-center w-full space-x-2">
           <Controller
@@ -168,4 +166,4 @@ const EditListForm = () => {
   );
 };
 
-export default EditListForm;
+export default EditCollectionForm;

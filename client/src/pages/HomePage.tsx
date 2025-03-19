@@ -1,6 +1,7 @@
 import { Collections } from "@/components";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { fetchedLinkType } from "@/lib/types";
 import useCollectionsStore from "@/store/collectionStore";
 import useProfileStore from "@/store/profileStore"
 import { useUser } from "@clerk/clerk-react";
@@ -36,7 +37,23 @@ const HomePage = () => {
                 toast.error("Failed to create card");
             }
 
-            addInboxLinkItem(response.data.data)
+            const userLink = response.data.data.userLink
+
+            const formattedLink: fetchedLinkType = {
+                _id: userLink._id,
+                title: userLink.customTitle,
+                description: userLink.customDescription,
+                link: response.data.data.link.link,
+                userId: userLink.userId,
+                createdAt: userLink.createdAt,
+                updatedAt: userLink.updatedAt,
+                collectionId: userLink.collectionId,
+                image: response.data.data.link.image,
+                isChecked: userLink.isChecked,
+                __v: userLink.__v
+            }
+
+            addInboxLinkItem(formattedLink)
 
             toast.success("Link created successfully")
 

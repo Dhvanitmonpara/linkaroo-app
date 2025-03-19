@@ -7,11 +7,10 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const InboxPage = () => {
   const profile = useProfileStore().profile;
-  const location = useLocation().pathname;
   const navigate = useNavigate();
   const { inbox, setInboxLink, inboxLinks, setCollections, setInbox, collections } =
     useCollectionsStore();
@@ -22,51 +21,49 @@ const InboxPage = () => {
 
   useEffect(() => {
     (async () => {
-      if (location.includes("/inbox") && inboxLinks.length == 0) {
-        try {
-          setLoading(true);
+      try {
+        setLoading(true);
 
-          let inboxId = inbox?._id;
+        let inboxId = inbox?._id;
 
-          if (!inboxId) {
-            const response: AxiosResponse = await axios({
-              method: "GET",
-              url: `${import.meta.env.VITE_SERVER_API_URL}/collections/n/${encodeURIComponent(user?.username + "/inbox")}`,
-              withCredentials: true,
-            });
+        if (!inboxId) {
+          const response: AxiosResponse = await axios({
+            method: "GET",
+            url: `${import.meta.env.VITE_SERVER_API_URL}/collections/n/${encodeURIComponent(user?.username + "/inbox")}`,
+            withCredentials: true,
+          });
 
-            if (!response) {
-              toast.error("Failed to fetch user's collection.");
-              return;
-            }
-
-            setInbox(response.data.data);
-            inboxId = response.data.data._id;
-          }
-          const response: AxiosResponse = await axios.get(
-            `${import.meta.env.VITE_SERVER_API_URL}/links/${inboxId}`,
-            { withCredentials: true }
-          );
-
-          if (!response.data.data) {
-            toast.error("Failed to fetch collection details");
+          if (!response) {
+            toast.error("Failed to fetch user's collection.");
             return;
           }
-          const formattedLinks = formatLinks(response.data.data)
-          setInboxLink(formattedLinks);
-        } catch (error) {
-          if (error instanceof AxiosError) {
-            toast.error(error.response?.data.message || error.message)
-          } else {
-            console.error(error);
-            toast.error("Error while fetching collections")
-          }
-        } finally {
-          setLoading(false);
+
+          setInbox(response.data.data);
+          inboxId = response.data.data._id;
         }
+        const response: AxiosResponse = await axios.get(
+          `${import.meta.env.VITE_SERVER_API_URL}/links/${inboxId}`,
+          { withCredentials: true }
+        );
+
+        if (!response.data.data) {
+          toast.error("Failed to fetch collection details");
+          return;
+        }
+        const formattedLinks = formatLinks(response.data.data)
+        setInboxLink(formattedLinks);
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          toast.error(error.response?.data.message || error.message)
+        } else {
+          console.error(error);
+          toast.error("Error while fetching collections")
+        }
+      } finally {
+        setLoading(false);
       }
     })();
-  }, [setInboxLink, location, inbox?._id, navigate, inboxLinks.length, profile._id, collections.length, setCollections, setInbox, user?.username]);
+  }, [setInboxLink, inbox?._id, navigate, inboxLinks.length, profile._id, collections.length, setCollections, setInbox, user?.username]);
 
   if (loading) {
     return (

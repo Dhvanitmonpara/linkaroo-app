@@ -11,7 +11,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { IoIosCopy } from "react-icons/io";
 import { cn } from "@/lib/utils";
-import { DropdownMenuItem, DropdownMenuSeparator } from "../ui/dropdown-menu";
+import { Separator } from "../ui/separator";
 
 function AddCollaboratorForm({ value, setConfirmRequest, setValue, setOpen, confirmRequest }: {
   confirmRequest: boolean;
@@ -61,8 +61,11 @@ function AddCollaboratorForm({ value, setConfirmRequest, setValue, setOpen, conf
 
   useEffect(() => {
     searchUsers(value);
-    return () => searchUsers.cancel();
-  }, [value, searchUsers]);
+    return () => {
+      searchUsers.cancel();
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);  
 
   const handleSelect = (user: string) => {
     setConfirmRequest(true);
@@ -140,9 +143,9 @@ function AddCollaboratorForm({ value, setConfirmRequest, setValue, setOpen, conf
       </div>
       {value ? (
         <>
-          <DropdownMenuSeparator />
+          <Separator />
           <ScrollArea>
-            <div className="p-2">
+            <div className="py-2">
               {loading ? (
                 <div className="flex items-center justify-center p-2">
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -167,7 +170,7 @@ function AddCollaboratorForm({ value, setConfirmRequest, setValue, setOpen, conf
                 </div>
               ) : (
                 userList.map((user, index) => (
-                  <DropdownMenuItem
+                  <div
                     key={user.email}
                     ref={(el) => (resultRefs.current[index] = el)}
                     className={cn(
@@ -184,7 +187,7 @@ function AddCollaboratorForm({ value, setConfirmRequest, setValue, setOpen, conf
                     }}
                   >
                     {searchByEmail ? user.email : `@${user.username}`}
-                  </DropdownMenuItem>
+                  </div>
                 ))
               )}
             </div>

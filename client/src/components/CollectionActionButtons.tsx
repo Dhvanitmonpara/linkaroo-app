@@ -344,7 +344,7 @@ const CollectionActionButtons = () => {
           <div className="flex flex-col font-helvetica space-y-1 rounded-2xl overflow-hidden">
             {actionButtons?.map((actionButton, index) => (
               <button
-                onSelect={e => {
+                onClick={e => {
                   e.preventDefault();
                   actionButton.action ? actionButton.action() : null
                 }}

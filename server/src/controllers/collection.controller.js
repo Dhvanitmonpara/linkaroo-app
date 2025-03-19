@@ -253,7 +253,7 @@ const getCollectionByName = asyncHandler(async (req, res) => {
 
 const updateCollection = asyncHandler(async (req, res) => {
 
-    const collectionId = req.params.collectionId
+    const { collectionId } = req.params
 
     if (!collectionId) {
         throw new ApiError(400, "Collection ID is required")
@@ -261,22 +261,16 @@ const updateCollection = asyncHandler(async (req, res) => {
 
     const collection = await Collection.findById(collectionId)
 
-    const { collectionOwnerId, collaboratorId } = req.body
+    const { collectionOwnerId, title, description, theme = "dark" } = req.body
 
-    if (!collectionOwnerId || !collaboratorId) {
-        throw new ApiError(400, "collectionOwnerId and collaboratorId are required")
+    if (!collectionOwnerId) {
+        throw new ApiError(400, "collectionOwnerId is required")
     }
 
     collectionOwnerVerification(collection.createdBy, collectionOwnerId, res)
 
-    const { title, description, theme = "dark" } = req.body
-
-    if (!title || !description) {
-        throw new ApiError(400, "At least one field needs to be updated")
-    }
-
     const updatedCollection = await Collection.findByIdAndUpdate(
-        CollectionId,
+        collectionId,
         {
             $set: {
                 title,
@@ -394,7 +388,10 @@ const getCollectionsByUser = asyncHandler(async (req, res) => {
             $match: {
                 $or: [
                     { createdBy: userIdObject },
-                    { collaborators: userIdObject }
+                    { collaborators: userIdObject },
+                ],
+                $and: [
+                    { isInbox: false }
                 ]
             }
         },

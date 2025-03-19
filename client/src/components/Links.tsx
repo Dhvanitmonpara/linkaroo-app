@@ -203,7 +203,7 @@ const Links = () => {
 
   return (
     <div
-      className={`xl:px-0 lg:px-0 lg:pr-5 px-5 h-full select-none lg:col-span-3 xl:col-span-5 pr-5`}
+      className={`lg:pl-0 px-5 h-full select-none lg:col-span-3 xl:col-span-5 pr-5`}
     >
       <div className={`md:h-[calc(100vh-5rem)] lg:px-0 px-4 h-[calc(100vh-8rem)] lg:h-[calc(100vh-4.5rem)] overflow-y-scroll w-full space-y-2 no-scrollbar ${font}`}>
         <div className="lg:h-2"></div>
@@ -267,7 +267,7 @@ const Links = () => {
               </div>
             </div>
           </div>
-          <div className="w-full h-4/6 rounded-b-md dark:text-zinc-300 p-4 dark:bg-zinc-800/60">
+          <div className="w-full h-4/6 rounded-b-md dark:text-zinc-300 py-4 px-8 dark:bg-zinc-800">
             <div className="min-h-20 flex flex-col justify-start">
               <div className="py-3">
                 <IconPicker activeIcon={currentCollectionItem.icon} defaultLoadedIcons={20} setActiveIcon={handleChangeIcon} />
@@ -367,11 +367,11 @@ const Links = () => {
             <div className="lg:h-2 h-16"></div>
           </>
         ) : (
-          <div className="flex justify-center flex-col gap-4 items-center w-full h-48">
+          <div className="flex justify-center flex-col gap-4 items-center w-full h-48 lg:h-96">
             <span
               className={`dark:text-zinc-200 text-zinc-800`}
             >
-              You don't have any documents on this collection.
+              You don't have any links on this collection.
             </span>
             <ResponsiveDialog
               open={isLinkFormOpen}

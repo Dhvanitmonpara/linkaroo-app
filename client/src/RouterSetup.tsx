@@ -46,7 +46,7 @@ const RouterSetup: React.FC = () => {
           {/* Conditional Small & Large Screen Handling */}
           {isSmallScreen ? (
             <>
-              <Route path="/collections/:collectionId" element={<Links />} />
+              <Route path="/c/:collectionId" element={<Links />} />
             </>
           ) : (
             <>

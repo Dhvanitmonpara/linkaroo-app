@@ -77,7 +77,7 @@ const CollectionListCard = ({
   return (
     <div
       onClick={openList}
-      className={`group relative select-none overflow-hidden transition-all h-32 w-full p-4 rounded-md flex space-x-3 dark:text-zinc-300 dark:border-zinc-800 dark:bg-zinc-800/50 dark:hover:bg-zinc-800/90 border-1 text-black`}
+      className={`group relative select-none overflow-hidden transition-all h-32 w-full p-4 rounded-md flex space-x-3 dark:text-zinc-300 dark:border-zinc-800 dark:bg-zinc-800 dark:hover:bg-zinc-700/60 border-1 text-black`}
     >
       <div className={`absolute top-0 left-0 ${!location.pathname.includes(id) && "opacity-0 group-hover:opacity-100"} ${theme || "bg-zinc-100"} h-full w-1 transition-opacity duration-200`}></div>
       <div className="pt-1">
@@ -98,7 +98,7 @@ const CollectionListCard = ({
               {title}
             </h1>
           </div>
-          <p className={`text-sm text-zinc-300/70 font-semibold ${font}`}>{description}</p>
+         {description && <p className={`text-sm text-zinc-300/70 font-semibold ${font}`}>{description}</p>}
         </div>
         <div className="flex pt-3 space-x-2 overflow-x-scroll no-scrollbar">
           <AvatarGroup

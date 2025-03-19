@@ -1,7 +1,7 @@
 import CreateLinkForm from "./CreateLinkForm";
 import SettingsForm from "./SettingsForm";
 import CreateCollectionForm from "./CreateCollectionForm"
-import EditListForm from "./EditListForm";
+import EditListForm from "./EditCollectionForm";
 import CreateLinkBar from "./CreateLinkBar";
 import ProfileSetup from "./ProfileSetup";
 
