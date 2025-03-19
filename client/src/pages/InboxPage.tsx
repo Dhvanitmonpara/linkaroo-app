@@ -1,7 +1,7 @@
 import { LinkCard } from "@/components";
-import { fetchedCollectionType } from "@/lib/types";
 import useCollectionsStore from "@/store/collectionStore";
 import useProfileStore from "@/store/profileStore";
+import { useUser } from "@clerk/clerk-react";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -15,6 +15,8 @@ const InboxPage = () => {
   const { inbox, setInboxLink, inboxLinks, setCollections, setInbox, collections } =
     useCollectionsStore();
 
+  const { user } = useUser()
+
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -23,61 +25,36 @@ const InboxPage = () => {
         try {
           setLoading(true);
 
-          const inboxId = inbox?._id;
+          let inboxId = inbox?._id;
 
           if (!inboxId) {
-            if (profile._id !== "") {
-              try {
-                setLoading(true);
+            const response: AxiosResponse = await axios({
+              method: "GET",
+              url: `${import.meta.env.VITE_SERVER_API_URL}/collections/n/${encodeURIComponent(user?.username + "/inbox")}`,
+              withCredentials: true,
+            });
 
-                if (!collections.length) {
-                  const response: AxiosResponse = await axios({
-                    method: "GET",
-                    url: `${import.meta.env.VITE_SERVER_API_URL}/collections/u`,
-                    withCredentials: true,
-                  });
-
-                  if (!response) {
-                    toast.error("Failed to fetch user's collections.");
-                    return;
-                  }
-                  const allLists = response.data.data;
-                  const inboxList = allLists.find(
-                    (list: fetchedCollectionType) => list.isInbox === true
-                  );
-                  const regularLists = allLists.filter(
-                    (list: fetchedCollectionType) => list.isInbox === false
-                  );
-
-                  setCollections(regularLists);
-                  setInbox(inboxList);
-                }
-              } catch (error) {
-                if (error instanceof AxiosError) {
-                  toast.error(error.message)
-                } else {
-                  console.error(error);
-                  toast.error("Error while fetching collections")
-                }
-              } finally {
-                setLoading(false);
-              }
-            }
-          } else {
-            const response: AxiosResponse = await axios.get(
-              `${import.meta.env.VITE_SERVER_API_URL}/cards/${inboxId}`,
-              { withCredentials: true }
-            );
-
-            if (!response.data.data) {
-              toast.error("Failed to fetch list details");
+            if (!response) {
+              toast.error("Failed to fetch user's collection.");
               return;
             }
-            setInboxLink(response.data.data);
+
+            setInbox(response.data.data);
+            inboxId = response.data.data._id;
           }
+          const response: AxiosResponse = await axios.get(
+            `${import.meta.env.VITE_SERVER_API_URL}/links/${inboxId}`,
+            { withCredentials: true }
+          );
+
+          if (!response.data.data) {
+            toast.error("Failed to fetch collection details");
+            return;
+          }
+          setInboxLink(response.data.data);
         } catch (error) {
           if (error instanceof AxiosError) {
-            toast.error(error.message)
+            toast.error(error.response?.data.message || error.message)
           } else {
             console.error(error);
             toast.error("Error while fetching collections")
@@ -87,7 +64,7 @@ const InboxPage = () => {
         }
       }
     })();
-  }, [setInboxLink, location, inbox?._id, navigate, inboxLinks.length, profile._id, collections.length, setCollections, setInbox]);
+  }, [setInboxLink, location, inbox?._id, navigate, inboxLinks.length, profile._id, collections.length, setCollections, setInbox, user?.username]);
 
   if (loading) {
     return (

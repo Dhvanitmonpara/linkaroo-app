@@ -138,7 +138,7 @@ const deleteCollaborator = asyncHandler(async (req, res) => {
 })
 
 const getCollectionById = asyncHandler(async (req, res) => {
-    const collectionId = req.params.collectionId
+    const { collectionId } = req.params
 
     if (!collectionId) {
         throw new ApiError(400, "Collection ID is required")
@@ -211,6 +211,41 @@ const getCollectionById = asyncHandler(async (req, res) => {
         .json(new ApiResponse(
             200,
             collections[0],
+            "Collection retrieved successfully"
+        ))
+
+})
+
+const getCollectionByName = asyncHandler(async (req, res) => {
+    const { collectionName } = req.params
+
+    if (!collectionName) {
+        throw new ApiError(400, "Collection name is required")
+    }
+    
+    const collection = await Collection.findOne(
+        { title: collectionName, isInbox: true },
+        {
+            title: 1,
+            description: 1,
+            theme: 1,
+            createdAt: 1,
+            isInbox: 1,
+            type: 1,
+            updatedAt: 1,
+            createdBy: 1,
+        }
+    );    
+
+    if (!collection) {
+        throw new ApiError(404, "Collection not found")
+    }
+
+    return res
+        .status(200)
+        .json(new ApiResponse(
+            200,
+            collection,
             "Collection retrieved successfully"
         ))
 
@@ -298,8 +333,6 @@ const deleteCollection = asyncHandler(async (req, res) => {
             {},
             "Collection deleted successfully"
         ))
-
-
 })
 
 const getCollectionsByOwner = asyncHandler(async (req, res) => {
@@ -646,6 +679,7 @@ export {
     deleteCollaborator,
     updateCoverImage,
     uploadCoverImage,
+    getCollectionByName,
     deleteCoverImage,
     toggleIsPublic
 }

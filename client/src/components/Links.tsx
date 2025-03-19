@@ -90,11 +90,13 @@ const Links = () => {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const formattedLinks: fetchedLinkType[] = response.data.data.map((link: any) => {
               return {
+                _id: link._id,
                 title: link.customTitle || link.linkId.title,
                 description: link.customDescription || link.linkId.description,
                 link: link.linkId.link,
-                _id: link._id,
-                collectionId: collectionId,
+                collectionId: link.collectionId,
+                userId: link.userId,
+                isChecked: link.isChecked,
                 image: link.linkId.image,
               };
             })
@@ -119,6 +121,7 @@ const Links = () => {
         }
       }
     })();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [collections, currentCardColor, location, setLinks, setCurrentCollectionItem, addCachedLinkCollection, navigate]);
 
   const tags: string[] = [];

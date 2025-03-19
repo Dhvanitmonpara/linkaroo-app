@@ -177,12 +177,12 @@ const getLinksByCollection = asyncHandler(async (req, res) => {
     const collectionIdObject = convertToObjectId(collectionId);
 
     // Fetch user-specific links from UserLink and populate link details
-    const userLinks = await UserLink.find({ collectionId: collectionIdObject })
+    const userLinks = await UserLink
+        .find({ collectionId: collectionIdObject })
         .populate({
             path: "linkId",
             select: "title description link image", // Fetch only required fields
         })
-        .select("customTitle customDescription linkId"); // Select only needed UserLink fields
 
     if (userLinks.length === 0) {
         throw new ApiError(404, "No links found for the given collection");

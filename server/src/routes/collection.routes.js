@@ -13,7 +13,8 @@ import {
     uploadCoverImage,
     deleteCoverImage,
     toggleIsPublic,
-    getCollectionsByUser
+    getCollectionsByUser,
+    getCollectionByName
 } from "../controllers/collection.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 
@@ -37,6 +38,8 @@ router.route("/o/c/:collectionId")
     .delete(deleteCollaborator)
 
 router.route("/t/:tagId").get(getCollectionsByTagId)
+
+router.route("/n/:collectionName").get(getCollectionByName)
 
 router.route("/status/:collectionId").patch(toggleIsPublic)
 
