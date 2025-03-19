@@ -27,8 +27,9 @@ router.route("/u/:collectionId").get(getCollectionById)
 router.route("/u/all/:userId").get(getCollectionsByUser)
 
 router.route("/o/get/:userId").get(getCollectionsByOwner)
-router.route("/o/:collectionId")
+router.route("/o/:collectionId/:collectionOwnerId")
     .delete(deleteCollection)
+router.route("/o/:collectionId")
     .patch(updateCollection)
 
 router.route("/c/get/:collaboratorId").get(getCollectionsByCollaborator)

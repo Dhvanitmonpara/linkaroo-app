@@ -1,6 +1,7 @@
 import { LinkCard } from "@/components";
 import useCollectionsStore from "@/store/collectionStore";
 import useProfileStore from "@/store/profileStore";
+import formatLinks from "@/utils/formatLinks";
 import { useUser } from "@clerk/clerk-react";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Loader2 } from "lucide-react";
@@ -51,7 +52,8 @@ const InboxPage = () => {
             toast.error("Failed to fetch collection details");
             return;
           }
-          setInboxLink(response.data.data);
+          const formattedLinks = formatLinks(response.data.data)
+          setInboxLink(formattedLinks);
         } catch (error) {
           if (error instanceof AxiosError) {
             toast.error(error.response?.data.message || error.message)

@@ -25,7 +25,7 @@ import useCollectionsStore from "@/store/collectionStore";
 import IconPicker from "./general/IconPicker";
 import { FaPlus } from "react-icons/fa";
 import { cn } from "@/lib/utils";
-import { fetchedLinkType } from "@/lib/types";
+import formatLinks from "@/utils/formatLinks";
 
 const Links = () => {
   const { toggleModal } = useMethodStore();
@@ -74,6 +74,15 @@ const Links = () => {
 
           const cache = cachedLinks.filter((collection) => collection.collectionId === collectionId)[0];
 
+          const currentListRes = collections.find(
+            (collection) => collection._id === collectionId
+          )
+          if (!currentListRes) {
+            navigate("/dashboard")
+            return
+          }
+          setCurrentCollectionItem(currentListRes);
+
           if (cache) {
             setLinks(cache.links);
           } else {
@@ -87,30 +96,15 @@ const Links = () => {
               return;
             }
 
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const formattedLinks: fetchedLinkType[] = response.data.data.map((link: any) => {
-              return {
-                _id: link._id,
-                title: link.customTitle || link.linkId.title,
-                description: link.customDescription || link.linkId.description,
-                link: link.linkId.link,
-                collectionId: link.collectionId,
-                userId: link.userId,
-                isChecked: link.isChecked,
-                image: link.linkId.image,
-              };
-            })
+            const formattedLinks = formatLinks(response.data.data)
             setLinks(formattedLinks);
             addCachedLinkCollection({ collectionId, links: formattedLinks });
           }
-
-          const currentListRes = await collections.filter(
-            (collection) => collection._id === collectionId
-          )[0];
-          setCurrentCollectionItem(currentListRes);
         } catch (error) {
-          console.log(error)
           if (error instanceof AxiosError) {
+            if (error.response?.status === 404) {
+              return
+            }
             toast.error(error.message)
           } else {
             console.error(error);
@@ -121,8 +115,8 @@ const Links = () => {
         }
       }
     })();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [collections, currentCardColor, location, setLinks, setCurrentCollectionItem, addCachedLinkCollection, navigate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentCardColor, location, setLinks, setCurrentCollectionItem, addCachedLinkCollection, navigate]);
 
   const tags: string[] = [];
 

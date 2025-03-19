@@ -89,10 +89,10 @@ const CreateCollectionForm = ({ afterSubmit }: { afterSubmit?: () => void }) => 
 
       addCollectionsItem(collection.data.data);
       setCurrentCollectionItem(collection.data.data);
-      navigate(`/collections/${collection.data.data._id}`);
+      navigate(`/dashboard/c/${collection.data.data._id}`);
     } catch (error) {
       if (error instanceof AxiosError) {
-        toast.error(error.message)
+        toast.error(error.response?.data.message || error.message)
       } else {
         console.error(error);
         toast.error("Error while creating collection")
@@ -118,9 +118,7 @@ const CreateCollectionForm = ({ afterSubmit }: { afterSubmit?: () => void }) => 
         <Textarea
           id="description"
           placeholder="Enter description"
-          {...register("description", {
-            required: "Description is required",
-          })}
+          {...register("description")}
         />
         <Controller
           name="theme"

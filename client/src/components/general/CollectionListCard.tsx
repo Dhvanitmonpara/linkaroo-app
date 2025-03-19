@@ -42,7 +42,7 @@ const CollectionListCard = ({
   const collaboratorAvatars: string[] = [];
   const { setModalContent, setCurrentCardColor, setPrevPath } = useMethodStore();
 
-  const {user} = useUser()
+  const { user } = useUser()
 
   collaborators?.forEach((collaborator) => {
     collaboratorAvatars.push(collaborator.avatarImage);

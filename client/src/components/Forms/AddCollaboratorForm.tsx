@@ -118,8 +118,8 @@ function AddCollaboratorForm({ value, setConfirmRequest, setValue, setOpen, conf
 
   return (
     <>
-      <div className="flex justify-center items-center p-2 space-x-2">
-        <div className={cn("bg-zinc-900 text-zinc-200 w-full md:w-fit")}>
+      <div className="flex justify-center items-center space-x-2">
+        <div className={cn("bg-zinc-900 text-zinc-200 w-full")}>
           <Input
             ref={inputRef}
             placeholder={placeholder}
@@ -203,7 +203,7 @@ function AddCollaboratorForm({ value, setConfirmRequest, setValue, setOpen, conf
               <hr className="dark:border-zinc-600 border-zinc-300" />
             </span>
           </div>
-          <div className="w-full h-full p-2 space-y-2">
+          <div className="w-full h-full space-y-2">
             <Button
               onClick={getSharableLink}
               className="w-full flex justify-center p-0 items-center dark:text-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 bg-zinc-100 hover:bg-zinc-200 text-zinc-950"

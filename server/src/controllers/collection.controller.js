@@ -11,10 +11,10 @@ import convertToObjectId from "../utils/convertToObjectId.js"
 
 const createCollection = asyncHandler(async (req, res) => {
 
-    const { title, description, theme = "bg-zinc-200", coverImage, isInbox = false, type, userEmail } = req.body
+    const { title, description = "", theme = "bg-zinc-200", coverImage, isInbox = false, type, userEmail } = req.body
 
-    if (!title || !description) {
-        throw new ApiError(400, "Title and description are required")
+    if (!title) {
+        throw new ApiError(400, "Title is required")
     }
 
     if (!userEmail) {
@@ -222,7 +222,7 @@ const getCollectionByName = asyncHandler(async (req, res) => {
     if (!collectionName) {
         throw new ApiError(400, "Collection name is required")
     }
-    
+
     const collection = await Collection.findOne(
         { title: collectionName, isInbox: true },
         {
@@ -235,7 +235,7 @@ const getCollectionByName = asyncHandler(async (req, res) => {
             updatedAt: 1,
             createdBy: 1,
         }
-    );    
+    );
 
     if (!collection) {
         throw new ApiError(404, "Collection not found")
@@ -298,22 +298,15 @@ const updateCollection = asyncHandler(async (req, res) => {
 
 const deleteCollection = asyncHandler(async (req, res) => {
 
-    const collectionId = req.params.CollectionId
+    const { collectionId, collectionOwnerId } = req.params
 
-    if (!collectionId) {
-        throw new ApiError(400, "Collection ID is required")
-    }
+    if (!collectionId) throw new ApiError(400, "Collection ID is required");
+    if (!collectionOwnerId) throw new ApiError(400, "collectionOwnerId is required");
 
     const collection = await Collection.findById(collectionId)
 
     if (!collection) {
         throw new ApiError(404, "Collection not found")
-    }
-
-    const { collectionOwnerId } = req.body
-
-    if (!collectionOwnerId) {
-        throw new ApiError(400, "collectionOwnerId is required")
     }
 
     collectionOwnerVerification(collection.createdBy, collectionOwnerId, res)

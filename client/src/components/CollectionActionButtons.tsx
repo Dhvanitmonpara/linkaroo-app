@@ -25,7 +25,6 @@ import DrawerMenu from "./DrawerMenu";
 import { DrawerClose } from "./ui/drawer";
 import AddCollaboratorForm from "./Forms/AddCollaboratorForm";
 import { IoMdPersonAdd } from "react-icons/io";
-import { cn } from "@/lib/utils";
 import HandleTagForm from "./Forms/HandleTagForm";
 
 type Checked = boolean;
@@ -36,7 +35,7 @@ export type checkedTagsType = fetchedTagType & {
 
 const CollectionActionButtons = () => {
   const { setPrevPath } = useMethodStore();
-  const { setTags } = useProfileStore();
+  const { setTags, profile } = useProfileStore();
   const { removeCollectionsItem, toggleIsPublic } = useCollectionsStore();
   const { setLinks, currentCollectionItem, setCurrentCollectionItem, removeCachedLinkCollection } = useLinkStore()
   const [loading, setLoading] = useState(false);
@@ -51,7 +50,7 @@ const CollectionActionButtons = () => {
         try {
           setLoading(true);
 
-          const [userTagResponse, listTagResponse] = await Promise.all([
+          const [userTagResponse, collectionTagResponse] = await Promise.all([
             axios.get(`${import.meta.env.VITE_SERVER_API_URL}/tags/get/o`, {
               withCredentials: true,
             }),
@@ -61,7 +60,7 @@ const CollectionActionButtons = () => {
             ),
           ]);
 
-          if (!userTagResponse.data.data || !listTagResponse.data.data) {
+          if (!userTagResponse.data.data || !collectionTagResponse.data.data) {
             toast.error("Failed to fetch tags");
             return;
           }
@@ -71,7 +70,7 @@ const CollectionActionButtons = () => {
           const intersection: checkedTagsType[] = userTagResponse.data.data.map(
             (tag: checkedTagsType) => ({
               ...tag,
-              isChecked: listTagResponse.data.data.some(
+              isChecked: collectionTagResponse.data.data.some(
                 (userTag: fetchedTagType) => userTag.tagname === tag.tagname
               ),
             })
@@ -80,7 +79,7 @@ const CollectionActionButtons = () => {
           setCheckedTags(intersection);
         } catch (error) {
           if (error instanceof AxiosError) {
-            toast.error(error.message)
+            toast.error(error.response?.data.message || error.message)
           } else {
             console.error(error);
             toast.error("Error while fetching collections")
@@ -97,29 +96,29 @@ const CollectionActionButtons = () => {
 
     toast.loading((t) => {
       loaderId = t.id;
-      return "Updating list...";
+      return "Updating Collection...";
     });
 
     if (!currentCollectionItem) {
-      toast.error("List not found");
+      toast.error("Collection not found");
       return;
     }
     try {
-      const list = await axios.patch(
-        `${import.meta.env.VITE_SERVER_API_URL}/lists/status/${collectionId}`,
+      const collection = await axios.patch(
+        `${import.meta.env.VITE_SERVER_API_URL}/collections/status/${collectionId}`,
         {},
         { withCredentials: true }
       );
 
-      if (!list) {
-        toast.error("Failed to update list");
+      if (!collection) {
+        toast.error("Failed to update Collection");
         return;
       }
 
       toggleIsPublic(currentCollectionItem);
     } catch (error) {
       if (error instanceof AxiosError) {
-        toast.error(error.message)
+        toast.error(error.response?.data.message || error.message)
       } else {
         console.error(error);
         toast.error("Error while toggle is public")
@@ -132,40 +131,42 @@ const CollectionActionButtons = () => {
   const handleDeleteCollection = async () => {
     const loadingId = Date.now().toString();
     try {
-      toast.loading("Deleting list...", {
+      toast.loading("Deleting Collection...", {
         id: loadingId,
       });
 
-      const deleteDBResponse: AxiosResponse = await axios.delete(
-        `${import.meta.env.VITE_SERVER_API_URL}/collections/o/${collectionId}`,
-        { withCredentials: true }
-      );
-
-      if (!deleteDBResponse) {
-        toast.error("Failed to delete list");
+      if (!collectionId) {
+        toast.error("Collection id not found");
         return;
       }
 
+      const deleteDBResponse: AxiosResponse = await axios.delete(
+        `${import.meta.env.VITE_SERVER_API_URL}/collections/o/${collectionId}/${profile._id}`,
+        { withCredentials: true }
+      );
+
       if (collectionId !== undefined) {
         removeCollectionsItem(collectionId);
-      } else {
-        toast.error("List id not found");
+      }
+
+      if (!deleteDBResponse) {
+        toast.error("Failed to delete Collection");
         return;
       }
 
       setLinks([]);
       removeCachedLinkCollection(collectionId);
-      toast.success("List deleted successfully");
+      toast.success("Collection deleted successfully");
       setLoading(false);
     } catch (error) {
       if (error instanceof AxiosError) {
-        toast.error(error.message)
+        toast.error(error.response?.data.message || error.message)
       } else {
         console.error(error);
         toast.error("Error while deleting collection")
       }
     } finally {
-      navigate("/")
+      navigate("/dashboard")
       setCurrentCollectionItem(null)
       toast.dismiss(loadingId);
     }
@@ -362,66 +363,38 @@ const CollectionActionButtons = () => {
 
 export default CollectionActionButtons;
 
-// Add Collaborator
 const AddCollaborator: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
 
   const [confirmRequest, setConfirmRequest] = useState(false);
 
-  const { profile } = useProfileStore();
-  const theme = profile.theme;
-
   return (
-    <>
-      <DropdownMenu
-        open={open}
-        onOpenChange={() => {
-          setOpen(!open);
-          setConfirmRequest(false);
-          setValue("");
-        }}
-        modal={false}
-      >
-        <DropdownMenuTrigger className="hidden md:flex" asChild>
-          <div className="h-full w-full flex justify-center items-center cursor-pointer">
-            <IoMdPersonAdd />
-          </div>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent
-          className={cn(
-            "w-[200px] p-0",
-            theme !== "light" && "bg-zinc-900 text-zinc-200 border-zinc-700"
-          )}
+    <ResponsiveDialog
+      open={open}
+      onOpenChange={setOpen}
+      description="add collaborator by email or username"
+      title="Add Collaborator"
+      trigger={
+        <div
+          className="space-x-2 w-full md:space-x-0 bg-transparent hover:bg-transparent border-none flex items-center rounded-full text-xl"
+          aria-label="Tag Options"
         >
-          <AddCollaboratorForm
-            confirmRequest={confirmRequest}
-            setConfirmRequest={setConfirmRequest}
-            value={value}
-            setOpen={setOpen}
-            setValue={setValue}
-          />
-        </DropdownMenuContent>
-      </DropdownMenu>
-      <DrawerMenu triggerClassNames="md:hidden" trigger={<div
-        className="space-x-2 w-full md:space-x-0 bg-transparent hover:bg-transparent border-none flex items-center rounded-full text-xl"
-        aria-label="Tag Options"
-      >
-        <span className="flex md:hidden justify-center items-center h-12 w-12">
-          <IoMdPersonAdd />
-        </span>
-        <span className="text-lg">Add Collaborators</span>
-      </div>}>
-        <div className="px-4 flex flex-col gap-2">
-          <AddCollaboratorForm
-            confirmRequest={confirmRequest}
-            setConfirmRequest={setConfirmRequest}
-            value={value}
-            setOpen={setOpen}
-            setValue={setValue}
-          />
+          <span className="flex justify-center items-center h-12 w-12">
+            <IoMdPersonAdd />
+          </span>
+          <span className="text-lg md:hidden">Add Collaborators</span>
         </div>
-      </DrawerMenu>
-    </>
+      }>
+      <div className="flex flex-col gap-2">
+        <AddCollaboratorForm
+          confirmRequest={confirmRequest}
+          setConfirmRequest={setConfirmRequest}
+          value={value}
+          setOpen={setOpen}
+          setValue={setValue}
+        />
+      </div>
+    </ResponsiveDialog>
   );
 };
