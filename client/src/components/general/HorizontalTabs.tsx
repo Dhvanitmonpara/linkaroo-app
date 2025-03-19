@@ -17,13 +17,13 @@ import { useState } from "react";
 import { BsCollectionFill } from "react-icons/bs";
 import "../components.css"
 import FeedbackForm from "../Forms/FeedbackForm";
-import { useAuth } from "@clerk/clerk-react";
+import { useClerk } from "@clerk/clerk-react";
 
 export default function HorizontalTabs() {
   const { profile } = useProfileStore();
   const { setPrevPath } = useMethodStore();
 
-  const { signOut } = useAuth()
+  const { signOut, user } = useClerk()
 
   const [creationDrawer, setCreationDrawer] = useState(false)
   const [profileDrawer, setProfileDrawer] = useState(false)
@@ -129,7 +129,7 @@ export default function HorizontalTabs() {
           >
             <img
               className="rounded-full !h-8 !w-8 object-cover border-zinc-700 border-2 hover:border-zinc-200 transition-colors"
-              src={profile.avatarImage}
+              src={user?.imageUrl}
               alt="Profile pic"
             />
           </label>
