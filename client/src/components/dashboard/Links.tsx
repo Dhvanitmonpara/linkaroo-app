@@ -1,4 +1,3 @@
-import useMethodStore from "@/store/MethodStore";
 import useProfileStore from "@/store/profileStore";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Loader2 } from "lucide-react";
@@ -17,7 +16,6 @@ const Links = () => {
   const { cachedLinks, setLinks, addCachedLinkCollection, setCurrentCollectionItem, currentCollectionItem } = useLinkStore()
   const { collections } = useCollectionsStore()
   const { profile } = useProfileStore();
-  const { currentCardColor } = useMethodStore();
 
   const { font } = profile;
   const location = useLocation().pathname;
@@ -78,8 +76,8 @@ const Links = () => {
         }
       }
     })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentCardColor, location, setLinks, setCurrentCollectionItem, addCachedLinkCollection, navigate]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location, setLinks, setCurrentCollectionItem, addCachedLinkCollection, navigate, collectionId]);
 
   const tags: string[] = [];
 
