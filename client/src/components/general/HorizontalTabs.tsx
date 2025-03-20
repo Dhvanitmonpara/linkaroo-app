@@ -2,9 +2,8 @@ import { MdHome } from "react-icons/md";
 import { FaPlus } from "react-icons/fa6";
 import { IoLink, IoPerson } from "react-icons/io5";
 import { IoMdNotifications } from "react-icons/io";
-import { useLocation, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import useProfileStore from "@/store/profileStore";
-import useMethodStore from "@/store/MethodStore";
 import { CreateLinkForm, CreateCollectionForm, SettingsForm, CreateLinkBar } from "../Forms";
 import DrawerMenu from "../DrawerMenu";
 import { DrawerClose } from "../ui/drawer";
@@ -21,14 +20,10 @@ import { useClerk } from "@clerk/clerk-react";
 
 export default function HorizontalTabs() {
   const { profile } = useProfileStore();
-  const { setPrevPath } = useMethodStore();
-
   const { signOut, user } = useClerk()
 
   const [creationDrawer, setCreationDrawer] = useState(false)
   const [profileDrawer, setProfileDrawer] = useState(false)
-
-  const location = useLocation().pathname;
 
   return (
     <div className="flex md:justify-between justify-evenly dark:bg-zinc-800 w-full px-5 bg-zinc-200 h-full md:px-12 sm:px-2 sm:!rounded-t-xl items-center sm:w-6/12">
@@ -136,9 +131,7 @@ export default function HorizontalTabs() {
         }
       >
         <div className="w-full rounded-2xl overflow-hidden space-y-1 flex flex-col">
-          <DrawerClose onClick={() => {
-            setPrevPath(location);
-          }}>
+          <DrawerClose>
             <div className="flex p-2 justify-normal items-center rounded-sm bg-zinc-800 hover:bg-zinc-700 text-zinc-200">
               <span className="w-12 h-12 flex justify-center items-center text-xl">
                 <IoPerson />
@@ -175,9 +168,7 @@ export default function HorizontalTabs() {
             }>
             <FeedbackForm setIsOpen={() => { }} />
           </DrawerMenu>
-          <DrawerClose onClick={() => {
-            setPrevPath(location);
-          }}>
+          <DrawerClose>
             <div
               className="flex p-2 justify-normal items-center rounded-sm bg-zinc-800 hover:bg-zinc-700 text-zinc-200">
               <span className="w-12 h-12 flex justify-center items-center text-xl">
@@ -192,9 +183,6 @@ export default function HorizontalTabs() {
             contentClassName="!pt-0"
             trigger={
               <div
-                onClick={() => {
-                  setPrevPath(location);
-                }}
                 className="flex p-2 justify-normal items-center rounded-sm bg-zinc-800 hover:bg-zinc-700 text-zinc-200">
                 <span className="w-12 h-12 flex justify-center items-center text-xl">
                   <IoLogOut />

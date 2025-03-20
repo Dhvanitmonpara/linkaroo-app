@@ -10,7 +10,6 @@ import { IoMdAdd } from "react-icons/io";
 import Tag from "@/components/Tag";
 import { removeUsernameTag } from "@/utils/toggleUsernameInTag";
 import useMethodStore from "@/store/MethodStore";
-import { CreateLinkForm } from "@/components/Forms";
 import Icon from "../ui/Icon";
 
 type CollectionCardProps = {
@@ -23,7 +22,6 @@ type CollectionCardProps = {
   createdBy: Collaborator;
   icon: string;
   collaborators: Collaborator[];
-  toggleModal: (isOpen: boolean) => void;
 };
 
 const CollectionListCard = ({
@@ -36,28 +34,15 @@ const CollectionListCard = ({
   createdBy,
   font,
   icon,
-  toggleModal,
 }: CollectionCardProps) => {
   const navigate = useNavigate();
 
   const collaboratorAvatars: string[] = [];
-  const { setModalContent, setCurrentCardColor, setPrevPath } = useMethodStore();
+  const { setCurrentCardColor } = useMethodStore();
 
   collaborators?.forEach((collaborator) => {
     collaboratorAvatars.push(collaborator.imageUrl);
   });
-
-  const openModal = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
-    toggleModal(true);
-    e.stopPropagation();
-    setPrevPath(location.pathname);
-    navigate(`/c?collectionId=${title}`, { replace: true });
-    setModalContent(
-      <CreateLinkForm
-        collectionTitle={title}
-      />
-    );
-  };
 
   const tags: string[] = [];
 
@@ -86,9 +71,6 @@ const CollectionListCard = ({
         <div className="space-y-2">
           <div>
             <span
-              onClick={(e) => {
-                openModal(e);
-              }}
               className={`group-hover:opacity-100 text-xl transition-all ease-in-out duration-300 absolute right-3 opacity-0 active:scale-95 dark:hover:bg-[#b2b2b220] hover:bg-[#00000015] cursor-pointer p-3 rounded-full`}
             >
               <IoMdAdd />

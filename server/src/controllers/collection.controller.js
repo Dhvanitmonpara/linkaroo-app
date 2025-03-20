@@ -186,17 +186,20 @@ const getCollectionById = asyncHandler(async (req, res) => {
                 createdAt: 1,
                 isInbox: 1,
                 type: 1,
+                isPublic: 1,
                 updatedAt: 1,
                 coverImage: 1,
                 collaborators: {
                     _id: 1,
                     username: 1,
                     email: 1,
+                    clerkId: 1,
                 },
                 createdBy: {
                     _id: 1,
                     username: 1,
                     email: 1,
+                    clerkId: 1,
                 },
                 tags: 1
             }

@@ -10,7 +10,6 @@ import {
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { IoSearchSharp } from "react-icons/io5";
 import { CreateCollectionForm, CreateLinkBar, CreateLinkForm } from "./Forms";
-import useMethodStore from "@/store/MethodStore";
 import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import ProfileCard from "./ProfileCard";
@@ -18,7 +17,6 @@ import Notifications from "./Notifications";
 import ResponsiveDialog from "./ResponsiveDialog";
 
 const Header = () => {
-  const { setPrevPath } = useMethodStore();
 
   const [creationTab, setCreationTab] = useState("collection");
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -66,11 +64,7 @@ const Header = () => {
             title={`${creationTab === "collection" ? "Create new Collection" : "Add new Link"}`}
             trigger={
               <button
-                className="w-12 transition-colors duration-200 lg:flex hidden justify-center items-center dark:bg-zinc-800/60 dark:hover:bg-zinc-800 dark:text-white rounded-sm border-1 dark:border-zinc-700/80 border-zinc-200 hover:bg-zinc-200"
-                onClick={() => {
-                  setPrevPath(location.pathname);
-                }}
-              >
+                className="w-12 transition-colors duration-200 lg:flex hidden justify-center items-center dark:bg-zinc-800/60 dark:hover:bg-zinc-800 dark:text-white rounded-sm border-1 dark:border-zinc-700/80 border-zinc-200 hover:bg-zinc-200">
                 <IoMdAdd />
               </button>
             }

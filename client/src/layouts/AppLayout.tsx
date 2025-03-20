@@ -12,28 +12,14 @@ import { useUser } from "@clerk/clerk-react";
 const AppLayout = () => {
   const { isSignedIn, isLoaded, user } = useUser()
 
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<"loading" | "loaded" | "fetched">("loading");
   const navigate = useNavigate();
 
   const {
-    isModalOpen,
-    setModalContent,
-    toggleModal,
-    prevPath,
     notifications,
     setNotifications,
   } = useMethodStore();
   const { addProfile, profile } = useProfileStore();
-
-  document.addEventListener("keydown", ({ key }) => {
-    if (key == "Escape" && isModalOpen) {
-      toggleModal(false);
-      setModalContent("");
-      if (prevPath != null) {
-        navigate(prevPath);
-      }
-    }
-  });
 
   useEffect(() => {
     const socket = initializeSocket(profile._id);
@@ -93,7 +79,8 @@ const AppLayout = () => {
           toast.error("Error while fetching user")
         }
       } finally {
-        setLoading(false);
+        setLoading("fetched")
+        setTimeout(() => setLoading("loaded"), 500)
       }
     })();
   }, [addProfile, isLoaded, isSignedIn, navigate, user?.primaryEmailAddress?.emailAddress]);
@@ -104,7 +91,7 @@ const AppLayout = () => {
     toggleThemeModeAtRootElem(theme);
   }, [theme]);
 
-  if (loading) {
+  if (loading !== "loaded") {
     return <Loading isLoading={loading} />;
   }
 

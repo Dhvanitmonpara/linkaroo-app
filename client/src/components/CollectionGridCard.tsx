@@ -28,7 +28,6 @@ type CollectionCardProps = {
   theme: colorOptions;
   font: fontOptions;
   collaborators: Collaborator[];
-  toggleModal: (isOpen: boolean) => void;
 };
 
 const CollectionGridCard = ({
@@ -45,7 +44,7 @@ const CollectionGridCard = ({
   const navigate = useNavigate();
 
   const collaboratorAvatars: string[] = [];
-  const { setCurrentCardColor, setPrevPath } = useMethodStore();
+  const { setCurrentCardColor } = useMethodStore();
 
   collaborators?.forEach((collaborator) => {
     collaboratorAvatars.push(collaborator.imageUrl);
@@ -100,7 +99,6 @@ const CollectionGridCard = ({
           <ResponsiveDialog title="Add link" description="Add a new link to current collection" trigger={<span
             onClick={(e) => {
               e.stopPropagation();
-              setPrevPath(location.pathname);
               navigate(`/c?collectionId=${title}`, { replace: true });
             }}
             className={`group-hover:opacity-100 text-xl transition-all ease-in-out duration-300 absolute right-3 opacity-0 active:scale-95 ${isBlackMode ? "hover:bg-[#b2b2b220]" : "hover:bg-[#00000015]"} cursor-pointer p-3 rounded-full`}

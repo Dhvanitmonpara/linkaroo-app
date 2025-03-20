@@ -362,7 +362,7 @@ const AddCollaborator: React.FC = ({ collaborators }: { collaborators?: string[]
         toast.error("Please select a list");
         return;
       }
-      navigator.clipboard.writeText(window.location.href);
+      navigator.clipboard.writeText(`${window.location.href}?shared=true`);
       if (collaborators && collaborators.length > 0) {
         setOpen(false);
       } else {

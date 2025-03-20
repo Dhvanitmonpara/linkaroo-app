@@ -1,5 +1,4 @@
 import { fetchedCollectionType } from "@/lib/types";
-import useMethodStore from "@/store/MethodStore";
 import useProfileStore from "@/store/profileStore";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
@@ -30,7 +29,6 @@ const Collections = ({ className, extraElementClassNames, defaultView = "list" }
   const [isCollectionFormOpen, setIsCollectionFormOpen] = useState(false);
   const [collectionView, setCollectionView] = useState<CollectionView>(defaultView);
   const { setCollections, collections, setInbox } = useCollectionsStore();
-  const { toggleModal } = useMethodStore();
   const { profile } = useProfileStore();
   const { font } = profile;
   const navigate = useNavigate();
@@ -148,7 +146,6 @@ const Collections = ({ className, extraElementClassNames, defaultView = "list" }
               createdBy={collections.createdBy}
               theme={collections.theme}
               font={font}
-              toggleModal={toggleModal}
             />
           )) : collections.map((collections, index) => (
             <CollectionListCard
@@ -162,7 +159,6 @@ const Collections = ({ className, extraElementClassNames, defaultView = "list" }
               icon={collections.icon}
               theme={collections.theme}
               font={font}
-              toggleModal={toggleModal}
             />
           ))}
           <div className="lg:h-2 h-16 md:hidden"></div>
