@@ -17,7 +17,6 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import ResponsiveDialog from "./ResponsiveDialog";
-import { useUser } from "@clerk/clerk-react";
 
 type CollectionCardProps = {
   id: string;
@@ -48,10 +47,8 @@ const CollectionGridCard = ({
   const collaboratorAvatars: string[] = [];
   const { setCurrentCardColor, setPrevPath } = useMethodStore();
 
-  const { user } = useUser()
-
   collaborators?.forEach((collaborator) => {
-    collaboratorAvatars.push(collaborator.avatarImage);
+    collaboratorAvatars.push(collaborator.imageUrl);
   });
 
   const tags: string[] = [];
@@ -85,17 +82,17 @@ const CollectionGridCard = ({
                 className={`${isBlackMode ? "text-zinc-300" : "text-slate-800"
                   } font-semibold w-fit text-sm pb-3 hover:underline`}
               >
-                @{user?.username}
+                @{createdBy?.username}
               </span>
             </HoverCardTrigger>
             <HoverCardContent>
               <div className="w-full h-full flex justify-start items-center space-x-4">
                 <div>
-                  <img className="rounded-full h-12 w-12 object-cover" src={user?.imageUrl} alt="avatar" />
+                  <img className="rounded-full h-12 w-12 object-cover" src={createdBy?.imageUrl} alt="avatar" />
                 </div>
                 <div>
-                  <h3>{user?.fullName}</h3>
-                  <p className="text-sm text-gray-400">@{user?.username}</p>
+                  <h3>{createdBy?.fullName}</h3>
+                  <p className="text-sm text-gray-400">@{createdBy?.username}</p>
                 </div>
               </div>
             </HoverCardContent>
@@ -124,7 +121,7 @@ const CollectionGridCard = ({
         <AvatarGroup
           width="w-7"
           height="h-7"
-          imgSrcArray={[createdBy?.avatarImage, ...collaboratorAvatars]}
+          imgSrcArray={[createdBy?.imageUrl, ...collaboratorAvatars]}
         />
         {isBlackMode ? (
           <div className={`w-7 h-7 ${theme} rounded-full`}></div>

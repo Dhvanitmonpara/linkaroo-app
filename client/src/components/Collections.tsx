@@ -62,7 +62,7 @@ const Collections = ({ className, extraElementClassNames, defaultView = "list" }
           }
         } catch (error) {
           if (error instanceof AxiosError) {
-            toast.error(error.message)
+            toast.error(error.response?.data.message || error.message)
           } else {
             console.error(error);
             toast.error("Error while fetching collection")
@@ -158,6 +158,7 @@ const Collections = ({ className, extraElementClassNames, defaultView = "list" }
               description={collections.description}
               tagname={collections.tags}
               collaborators={collections.collaborators}
+              createdBy={collections.createdBy}
               icon={collections.icon}
               theme={collections.theme}
               font={font}

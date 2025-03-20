@@ -12,7 +12,6 @@ import { removeUsernameTag } from "@/utils/toggleUsernameInTag";
 import useMethodStore from "@/store/MethodStore";
 import { CreateLinkForm } from "@/components/Forms";
 import Icon from "../ui/Icon";
-import { useUser } from "@clerk/clerk-react";
 
 type CollectionCardProps = {
   id: string;
@@ -21,6 +20,7 @@ type CollectionCardProps = {
   title: string;
   theme: colorOptions;
   font: fontOptions;
+  createdBy: Collaborator;
   icon: string;
   collaborators: Collaborator[];
   toggleModal: (isOpen: boolean) => void;
@@ -33,6 +33,7 @@ const CollectionListCard = ({
   title,
   collaborators,
   theme,
+  createdBy,
   font,
   icon,
   toggleModal,
@@ -42,10 +43,8 @@ const CollectionListCard = ({
   const collaboratorAvatars: string[] = [];
   const { setModalContent, setCurrentCardColor, setPrevPath } = useMethodStore();
 
-  const { user } = useUser()
-
   collaborators?.forEach((collaborator) => {
-    collaboratorAvatars.push(collaborator.avatarImage);
+    collaboratorAvatars.push(collaborator.imageUrl);
   });
 
   const openModal = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
@@ -104,7 +103,7 @@ const CollectionListCard = ({
           <AvatarGroup
             width="w-7"
             height="h-7"
-            imgSrcArray={[user!.imageUrl, ...collaboratorAvatars]}
+            imgSrcArray={[createdBy.imageUrl, ...collaboratorAvatars]}
           />
           {tags.length > 0 &&
             tags.map((tag, index) => (

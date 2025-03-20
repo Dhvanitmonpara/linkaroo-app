@@ -8,6 +8,7 @@ import collectionOwnerVerification from "../utils/collectionOwnerVerification.js
 import { Link } from "../models/link.model.js"
 import { User } from "../models/user.model.js"
 import convertToObjectId from "../utils/convertToObjectId.js"
+import { clerkClient } from "@clerk/express"
 
 const createCollection = asyncHandler(async (req, res) => {
 
@@ -431,10 +432,14 @@ const getCollectionsByUser = asyncHandler(async (req, res) => {
                 collaborators: {
                     _id: 1,
                     email: 1,
+                    username: 1,
+                    clerkId: 1,
                 },
                 createdBy: {
                     _id: 1,
                     email: 1,
+                    username: 1,
+                    clerkId: 1,
                 },
                 tags: 1
             }
@@ -443,11 +448,67 @@ const getCollectionsByUser = asyncHandler(async (req, res) => {
 
     if (!collections) throw new ApiError(404, "No collections found");
 
+    // Extract unique emails from creators and collaborators
+    const uniqueEmails = [
+        ...new Set([
+            ...collections.map(collection => collection.createdBy.email),
+            ...collections.flatMap(collection =>
+                collection.collaborators ? collection.collaborators.map(c => c.email) : []
+            )
+        ])
+    ];
+
+    if (uniqueEmails.length === 0) {
+        return res
+            .status(200)
+            .json(new ApiResponse(
+                300,
+                collections,
+                "Collections fetched successfully but no users found"
+            ))
+    }
+
+    const users = await clerkClient.users.getUserList({
+        emailAddress: uniqueEmails,
+        limit: uniqueEmails.length,
+    });
+
+    const collectionWithUsers = collections.map(collection => {
+
+        const creator = users.data.find(user =>
+            Array.isArray(user.emailAddresses) &&
+            user.emailAddresses.some(email => email.emailAddress.toLowerCase() === collection.createdBy.email.toLowerCase())
+        )
+
+        const processedCollection = {
+            ...collection,
+            createdBy: {
+                ...collection.createdBy,
+                fullName: creator?.fullName || creator?.firstName,
+                imageUrl: creator?.imageUrl || null
+            },
+            collaborators: (collection.collaborators || []).map(collaborator => {
+                const collaboratorUser = users.data.find(user =>
+                    Array.isArray(user.emailAddresses) &&
+                    user.emailAddresses.some(email => email.emailAddress.toLowerCase() === collaborator.email.toLowerCase())
+                );
+
+                return {
+                    ...collaborator,
+                    fullName: collaborator?.fullName || collaborator?.firstName,
+                    imageUrl: collaboratorUser?.imageUrl || null
+                };
+            })
+        }
+
+        return processedCollection
+    });
+
     return res
         .status(200)
         .json(new ApiResponse(
             200,
-            collections,
+            collectionWithUsers,
             "Collections fetched successfully"
         ))
 })

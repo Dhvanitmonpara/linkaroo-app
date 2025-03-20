@@ -205,7 +205,9 @@ const getTagsByCollection = asyncHandler(async (req, res) => {
 
 const getTagsByOwner = asyncHandler(async (req, res) => {
 
-    const userId = req.user?._id
+    const { userId } = req.params
+    if (!userId) throw new ApiError(400, "User ID is required");
+
     const tags = await Tag.find({ owner: userId })
 
     if (!tags) {
@@ -227,9 +229,12 @@ const getTagsByOwner = asyncHandler(async (req, res) => {
 
 const getTagsByCollaborator = asyncHandler(async (req, res) => {
 
+    const {collaboratorId} = req.params
+    if (!collaboratorId) throw new ApiError(400, "Collaborator ID is required");
+    
     const tags = await Collection.aggregate([
         {
-            $match: { collaborators: req.user?._id }
+            $match: { collaborators: req.collaboratorId }
         },
         {
             $lookup: {

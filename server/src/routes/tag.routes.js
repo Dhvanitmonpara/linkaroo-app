@@ -17,8 +17,8 @@ const router = Router()
 router.route("/").post(createTag)
 
 router.route("/get/collections/:collectionId").get(getTagsByCollection)
-router.route("/get/o").get(getTagsByOwner)
-router.route("/get/c").get(getTagsByCollaborator)
+router.route("/get/o/:userId").get(getTagsByOwner)
+router.route("/get/c/:collaboratorId").get(getTagsByCollaborator)
 
 router.route("/:collectionId/add").patch(addTag)
 router.route("/:collectionId/remove").patch(removeTag)

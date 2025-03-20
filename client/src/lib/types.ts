@@ -41,8 +41,9 @@ type Collaborator = {
   _id: string;
   username: string;
   email: string;
-  avatarImage: string;
   fullName: string;
+  imageUrl: string;
+  clerkId: string;
 };
 
 type TagType = {
