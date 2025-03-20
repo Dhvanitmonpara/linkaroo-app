@@ -187,12 +187,13 @@ const CreateLinkBar: React.FC<CreateLinkBarProps> = ({
         // if you don't get at least 5 links then show public links
         // TODO: query for the links on linkaroo db for public links if you find at least 5 then set searchResult and return the function
       } else {
-        const linksOnDatabase = await axios.get(``)
+        // const linksOnDatabase = await axios.get(``)
       }
 
       if (searchType === "movies") {
         const movies = await searchMovieDatabase(identifier, "movies");
         console.log(movies)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const movieResults = movies.results.map((movie: any) => ({
           title: movie.title,
           link: `https://www.themoviedb.org/movie/${movie.id}`,
@@ -264,6 +265,12 @@ const CreateLinkBar: React.FC<CreateLinkBarProps> = ({
       setIdentifier(searchResults[tabIndex].title); // Update identifier when tabIndex changes
     }
   }, [searchResults, tabIndex]); // Dependency ensures the effect runs when tabIndex changes  
+
+  if(loading){
+    return (
+      <div>Loading...</div>
+    )
+  }
 
   return (
     <div className="dark:text-white px-4 flex flex-col w-full justify-center items-center">
