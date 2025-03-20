@@ -9,7 +9,7 @@ function App() {
   const location = useLocation()
 
   if (!isLoaded) {
-    return <Loading isLoading={true} />
+    return <Loading isLoading={"loading"} />
   }
 
   if (!isSignedIn && !location.pathname.includes("/auth")) {
