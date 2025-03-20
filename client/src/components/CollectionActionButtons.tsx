@@ -49,7 +49,7 @@ const CollectionActionButtons = () => {
           setLoading(true);
 
           const [userTagResponse, collectionTagResponse] = await Promise.all([
-            axios.get(`${import.meta.env.VITE_SERVER_API_URL}/tags/get/o`, {
+            axios.get(`${import.meta.env.VITE_SERVER_API_URL}/tags/get/o/${profile._id}`, {
               withCredentials: true,
             }),
             axios.get(
@@ -87,7 +87,7 @@ const CollectionActionButtons = () => {
         }
       }
     })();
-  }, [setTags, collectionId, navigate]);
+  }, [setTags, collectionId, navigate, profile._id]);
 
   const handleToggleIsPublic = async () => {
     let loaderId = "";
