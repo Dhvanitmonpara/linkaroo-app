@@ -3,16 +3,24 @@ import { useEffect, useState } from "react";
 
 const Loading = ({ isLoading }: { isLoading: boolean }) => {
 
-  const [progress, setProgress] = useState(0)
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     if (isLoading) {
+      setProgress(0);
       const interval = setInterval(() => {
-        setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10));
+        setProgress((prev) => {
+          if (prev >= 85) return prev;
+          return prev + Math.random() * 5 + 3;
+        });
       }, 100);
+  
       return () => clearInterval(interval);
+    } else {
+      const timeout = setTimeout(() => setProgress(100), 300);
+      return () => clearTimeout(timeout);
     }
-  }, [isLoading])
+  }, [isLoading]);  
 
   return (
     <div className="flex justify-center fixed z-50 w-screen space-x-5 items-center h-screen bg-zinc-900">
