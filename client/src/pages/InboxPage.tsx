@@ -1,4 +1,4 @@
-import { LinkCard } from "@/components";
+import { LinkCard } from "@/components/dashboard";
 import { fetchedCollectionType } from "@/lib/types";
 import useCollectionsStore from "@/store/collectionStore";
 import useProfileStore from "@/store/profileStore";

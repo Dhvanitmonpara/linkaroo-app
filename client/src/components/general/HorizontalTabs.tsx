@@ -5,7 +5,7 @@ import { IoMdNotifications } from "react-icons/io";
 import { NavLink } from "react-router-dom";
 import useProfileStore from "@/store/profileStore";
 import { CreateLinkForm, CreateCollectionForm, SettingsForm, CreateLinkBar } from "../Forms";
-import DrawerMenu from "../DrawerMenu";
+import DrawerMenu from "./DrawerMenu";
 import { DrawerClose } from "../ui/drawer";
 import { IoMdSettings } from "react-icons/io";
 import { MdFeedback } from "react-icons/md";
@@ -14,7 +14,7 @@ import { IoLogOut } from "react-icons/io5";
 import { FaInbox } from "react-icons/fa6";
 import { useState } from "react";
 import { BsCollectionFill } from "react-icons/bs";
-import "../components.css"
+import "./components.css"
 import FeedbackForm from "../Forms/FeedbackForm";
 import { useClerk } from "@clerk/clerk-react";
 

@@ -13,18 +13,18 @@ import toast from "react-hot-toast";
 import { fetchedTagType } from "@/lib/types";
 import useProfileStore from "@/store/profileStore";
 import { useNavigate, useParams } from "react-router-dom";
-import { EditListForm } from "./Forms";
 import { FaLock } from "react-icons/fa";
 import { FaLockOpen } from "react-icons/fa";
 import useLinkStore from "@/store/linkStore";
 import useCollectionsStore from "@/store/collectionStore";
-import TooltipContainer from "./general/Tooltip";
-import ResponsiveDialog from "./ResponsiveDialog";
-import DrawerMenu from "./DrawerMenu";
-import { DrawerClose } from "./ui/drawer";
-import AddCollaboratorForm from "./Forms/AddCollaboratorForm";
+import DrawerMenu from "../general/DrawerMenu";
+import { DrawerClose } from "../ui/drawer";
+import ResponsiveDialog from "../general/ResponsiveDialog";
+import HandleTagForm from "../Forms/HandleTagForm";
+import { EditListForm } from "../Forms";
+import TooltipContainer from "../general/Tooltip";
+import AddCollaboratorForm from "../Forms/AddCollaboratorForm";
 import { IoIosCopy, IoMdPersonAdd } from "react-icons/io";
-import HandleTagForm from "./Forms/HandleTagForm";
 
 type Checked = boolean;
 

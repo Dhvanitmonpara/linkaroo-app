@@ -1,4 +1,3 @@
-import { Input } from "./ui/input";
 import { IoMdAdd } from "react-icons/io";
 import { IoFilterOutline } from "react-icons/io5";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -9,12 +8,13 @@ import {
 } from "@/components/ui/popover";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { IoSearchSharp } from "react-icons/io5";
-import { CreateCollectionForm, CreateLinkBar, CreateLinkForm } from "./Forms";
+import { CreateCollectionForm, CreateLinkBar, CreateLinkForm } from "../Forms";
 import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
+import { Input } from "../ui/input";
+import ResponsiveDialog from "./ResponsiveDialog";
 import ProfileCard from "./ProfileCard";
 import Notifications from "./Notifications";
-import ResponsiveDialog from "./ResponsiveDialog";
 
 const Header = () => {
 

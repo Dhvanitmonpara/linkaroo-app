@@ -7,10 +7,10 @@ import { BsXLg } from "react-icons/bs";
 import { Loader2 } from "lucide-react";
 import { backgroundImageUrls } from "@/lib/constants/constants";
 import IconPicker from "../general/IconPicker";
-import CollectionActionButtons from "../CollectionActionButtons";
+import CollectionActionButtons from "@/components/dashboard/CollectionActionButtons";
 import convertMongoDBDate from "@/utils/convertMongoDBDate";
 import { BiSolidPencil } from "react-icons/bi";
-import Tag from "../Tag";
+import Tag from "../general/Tag";
 
 function LinkBanner({ tags, loading }: { tags: string[], loading: boolean }) {
 

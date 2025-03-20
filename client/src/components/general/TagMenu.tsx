@@ -1,6 +1,6 @@
 import { RadioGroup, RadioGroupItem } from "@radix-ui/react-radio-group";
 import { Label } from "@radix-ui/react-label";
-import "../components.css"
+import "./components.css"
 
 type TagMenuProps = {
   setTagValue: (value: string) => void;

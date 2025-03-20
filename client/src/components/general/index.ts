@@ -1,23 +1,18 @@
 import Tag from "./Tag";
-import LinkCard from "./LinkCard";
-import CollectionCard from "./CollectionGridCard";
 import Header from "./Header";
 import Stepper from "./Stepper";
-import HorizontalTabs from "./general/HorizontalTabs";
+import HorizontalTabs from "./HorizontalTabs";
 import ProfileCard from "./ProfileCard";
-import LinkScreen from "./linkScreen";
-import Collections from "./Collections";
-import Links from "./Links";
+import LinkScreen from "../dashboard/LinkModal";
+import Collections from "../dashboard/Collections";
+import Links from "../dashboard/Links";
 import Loading from "./Loading";
 import ResponsiveDialog from "./ResponsiveDialog";
-import CollectionActionButtons from "./CollectionActionButtons";
 import NotificationCard from "./NotificationCard";
 import Notifications from "./Notifications";
 
 export {
-  CollectionCard,
   Tag,
-  LinkCard,
   Header,
   Stepper,
   HorizontalTabs,
@@ -27,7 +22,6 @@ export {
   Links,
   Loading,
   ResponsiveDialog,
-  CollectionActionButtons,
   NotificationCard,
   Notifications,
 };

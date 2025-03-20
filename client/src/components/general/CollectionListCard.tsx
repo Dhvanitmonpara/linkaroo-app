@@ -7,7 +7,7 @@ import {
 } from "@/lib/types.ts";
 import { useNavigate } from "react-router-dom";
 import { IoMdAdd } from "react-icons/io";
-import Tag from "@/components/Tag";
+import Tag from "@/components/general/Tag";
 import { removeUsernameTag } from "@/utils/toggleUsernameInTag";
 import useMethodStore from "@/store/MethodStore";
 import Icon from "../ui/Icon";

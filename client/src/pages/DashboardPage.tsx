@@ -1,4 +1,4 @@
-import { Collections, Links } from "../components";
+import { Collections, Links } from "../components/general";
 
 function DashboardPage() {
   return (

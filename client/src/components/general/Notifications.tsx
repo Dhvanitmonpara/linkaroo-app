@@ -1,4 +1,4 @@
-import NotificationCard from "./NotificationCard";
+import NotificationCard from "../general/NotificationCard";
 import useMethodStore from "@/store/MethodStore";
 
 const Notifications: React.FC = () => {

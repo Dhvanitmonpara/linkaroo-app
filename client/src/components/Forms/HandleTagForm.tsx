@@ -2,7 +2,6 @@ import useCollectionsStore from '@/store/collectionStore';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { FormEventHandler, useState } from 'react'
 import toast from 'react-hot-toast';
-import { checkedTagsType } from '../CollectionActionButtons';
 import { useParams } from 'react-router-dom';
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuGroup, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '../ui/dropdown-menu';
 import { Loader2 } from 'lucide-react';
@@ -10,12 +9,13 @@ import { FaPlus, FaTag } from 'react-icons/fa';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { removeUsernameTag } from '@/utils/toggleUsernameInTag';
-import DrawerMenu from '../DrawerMenu';
+import DrawerMenu from '../general/DrawerMenu';
 import { Separator } from '../ui/separator';
 import { Checkbox } from '../ui/checkbox';
 import { Label } from '../ui/label';
 import useProfileStore from '@/store/profileStore';
 import { useUser } from '@clerk/clerk-react';
+import { checkedTagsType } from '../dashboard/CollectionActionButtons';
 
 function HandleTagForm({ setCheckedTags, loading, checkedTags }: {
   loading: boolean,

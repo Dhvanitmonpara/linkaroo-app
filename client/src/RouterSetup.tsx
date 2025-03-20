@@ -10,7 +10,7 @@ import App from "./App";
 import DashboardPage from "./pages/DashboardPage";
 import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
-import { Links, Notifications } from "@/components";
+import { Links, Notifications } from "@/components/general";
 import NotFound from "@/pages/NotFound";
 import HomePage from "./pages/HomePage";
 import InboxPage from "./pages/InboxPage";

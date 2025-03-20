@@ -1,4 +1,4 @@
-import { Collections } from "@/components";
+import { Collections } from "@/components/general";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { fetchedLinkType } from "@/lib/types";

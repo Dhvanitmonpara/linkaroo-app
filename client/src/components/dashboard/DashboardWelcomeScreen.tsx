@@ -1,7 +1,7 @@
 import useCollectionsStore from "@/store/collectionStore"
-import { CreateCollectionForm } from "./Forms"
-import ResponsiveDialog from "./ResponsiveDialog"
 import { useState } from "react"
+import { ResponsiveDialog } from "../general";
+import { CreateCollectionForm } from "../Forms";
 
 function DashboardWelcomeScreen() {
 

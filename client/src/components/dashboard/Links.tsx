@@ -9,9 +9,7 @@ import { removeUsernameTag } from "@/utils/toggleUsernameInTag";
 import useLinkStore from "@/store/linkStore";
 import useCollectionsStore from "@/store/collectionStore";
 import formatLinks from "@/utils/formatLinks";
-import DashboardWelcomeScreen from "./DashboardWelcomeScreen";
-import LinkBanner from "./dashboard/LinkBanner";
-import LinkMapper from "./dashboard/LinkMapper";
+import { DashboardWelcomeScreen, LinkBanner, LinkMapper } from "@/components/dashboard/index"
 
 const Links = () => {
   const [loading, setLoading] = useState(false)
@@ -121,7 +119,7 @@ const Links = () => {
     >
       <div className={`md:h-[calc(100vh-5rem)] lg:px-0 px-4 h-[calc(100vh-8rem)] lg:h-[calc(100vh-4.5rem)] overflow-y-scroll w-full space-y-2 no-scrollbar ${font}`}>
         <div className="lg:h-2"></div>
-        <LinkBanner loading={loading} tags={tags} key={currentCollectionItem._id}/>
+        <LinkBanner loading={loading} tags={tags} key={currentCollectionItem._id} />
         <LinkMapper />
       </div>
     </div>

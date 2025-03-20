@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 
-const LinkScreen = () => {
+const LinkModal = () => {
   const [loading, setLoading] = useState(true);
   const { links } = useLinkStore();
   const [currentCard, setCurrentCard] = useState<fetchedLinkType | null>(null);
@@ -57,4 +57,4 @@ const LinkScreen = () => {
   );
 };
 
-export default LinkScreen;
+export default LinkModal;

@@ -8,12 +8,12 @@ import { Skeleton } from "@/components/ui/skeleton"
 import useCollectionsStore from "@/store/collectionStore";
 import { IoMdAdd } from "react-icons/io";
 import CollectionGridCard from "./CollectionGridCard";
-import CollectionListCard from "./general/CollectionListCard";
-import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
+import CollectionListCard from "../general/CollectionListCard";
+import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 import { IoGrid } from "react-icons/io5";
 import { FaThList } from "react-icons/fa";
-import ResponsiveDialog from "./ResponsiveDialog";
-import { CreateCollectionForm } from "./Forms";
+import ResponsiveDialog from "../general/ResponsiveDialog";
+import { CreateCollectionForm } from "../Forms";
 
 type CollectionsProps = {
   className?: string;

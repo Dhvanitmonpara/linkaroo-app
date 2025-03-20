@@ -1,4 +1,4 @@
-import { LinkCard, CollectionActionButtons, Tag, ResponsiveDialog } from "@/components";
+import { Tag, ResponsiveDialog } from "@/components/general";
 import useMethodStore from "@/store/MethodStore";
 import useProfileStore from "@/store/profileStore";
 import axios, { AxiosError, AxiosResponse } from "axios";
@@ -25,9 +25,9 @@ import useCollectionsStore from "@/store/collectionStore";
 import { FaPlus } from "react-icons/fa";
 import { cn } from "@/lib/utils";
 import formatLinks from "@/utils/formatLinks";
-import PrivateCollectionGuestView from "@/components/PrivateCollectionGuestView";
-import DashboardWelcomeScreen from "@/components/DashboardWelcomeScreen";
+import PrivateCollectionGuestView from "@/components/dashboard/PrivateCollectionGuestView";
 import IconPicker from "@/components/general/IconPicker";
+import { DashboardWelcomeScreen, CollectionActionButtons, LinkCard } from "@/components/dashboard/index";
 
 const SharedCollectionPage = () => {
   const [loading, setLoading] = useState(false);
@@ -197,7 +197,7 @@ const SharedCollectionPage = () => {
     }
   }
 
-  if(!doesUserHaveAccess && !currentCollectionItem.isPublic) {
+  if (!doesUserHaveAccess && !currentCollectionItem.isPublic) {
     return <PrivateCollectionGuestView />
   }
 

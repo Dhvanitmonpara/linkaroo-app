@@ -5,7 +5,7 @@ import useMethodStore from "@/store/MethodStore";
 import useProfileStore from "@/store/profileStore";
 import axios, { AxiosError } from "axios";
 import toggleThemeModeAtRootElem from "@/utils/toggleThemeMode";
-import { Header, HorizontalTabs, Loading } from "@/components";
+import { Header, HorizontalTabs, Loading } from "@/components/general";
 import { initializeSocket } from "@/utils/initializeSocket";
 import { useUser } from "@clerk/clerk-react";
 

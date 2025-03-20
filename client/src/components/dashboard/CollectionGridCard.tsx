@@ -1,4 +1,3 @@
-import AvatarGroup from "./ui/avatarGroup";
 import {
   colorOptions,
   TagType,
@@ -7,16 +6,17 @@ import {
 } from "@/lib/types.ts";
 import { useNavigate } from "react-router-dom";
 import { IoMdAdd } from "react-icons/io";
-import Tag from "./Tag";
 import { removeUsernameTag } from "@/utils/toggleUsernameInTag";
 import useMethodStore from "@/store/MethodStore";
-import { CreateLinkForm } from "./Forms";
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import ResponsiveDialog from "./ResponsiveDialog";
+import ResponsiveDialog from "../general/ResponsiveDialog";
+import { CreateLinkForm } from "../Forms";
+import AvatarGroup from "../ui/avatarGroup";
+import Tag from "../general/Tag";
 
 type CollectionCardProps = {
   id: string;

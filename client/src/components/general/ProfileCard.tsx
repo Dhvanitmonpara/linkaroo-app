@@ -1,12 +1,12 @@
 import useProfileStore from "@/store/profileStore";
-import { SettingsForm } from "./Forms";
-import { Button } from "./ui/button";
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTrigger } from "./ui/dialog";
+import { SettingsForm } from "../Forms";
+import { Button } from "../ui/button";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTrigger } from "../ui/dialog";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { ReactNode, useState } from "react";
-import ProfileForm from "./Forms/ProfileForm";
-import FeedbackForm from "./Forms/FeedbackForm";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import ProfileForm from "../Forms/ProfileForm";
+import FeedbackForm from "../Forms/FeedbackForm";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { useAuth, useUser } from "@clerk/clerk-react";
 
 const ProfileCard = () => {

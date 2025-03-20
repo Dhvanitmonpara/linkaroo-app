@@ -17,9 +17,9 @@ import toast from "react-hot-toast";
 import axios, { AxiosError } from "axios";
 import useCollectionsStore from "@/store/collectionStore";
 import useLinkStore from "@/store/linkStore";
-import CustomCheckbox from "./ui/CustomCheckbox";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
-import { Checkbox } from "./ui/checkbox";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
+import CustomCheckbox from "../ui/CustomCheckbox";
+import { Checkbox } from "../ui/checkbox";
 
 type LinkCardProps = {
   id: string;

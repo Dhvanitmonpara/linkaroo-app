@@ -1,6 +1,6 @@
 import { useAuth } from "@clerk/clerk-react"
 import { Outlet, useLocation, useNavigate } from "react-router-dom"
-import { Loading } from "./components"
+import { Loading } from "./components/general"
 
 function App() {
 

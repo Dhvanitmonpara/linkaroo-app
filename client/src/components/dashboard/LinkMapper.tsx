@@ -3,10 +3,11 @@ import useMethodStore from "@/store/MethodStore";
 import { useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { cn } from "@/lib/utils";
-import { LinkCard, ResponsiveDialog } from "@/components";
+import { ResponsiveDialog } from "@/components/general";
 import useProfileStore from "@/store/profileStore";
 import { CreateLinkBar, CreateLinkForm } from "../Forms";
 import { Button } from "../ui/button";
+import LinkCard from "./LinkCard";
 
 function LinkMapper() {
 
