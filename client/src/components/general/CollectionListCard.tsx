@@ -11,6 +11,8 @@ import Tag from "@/components/general/Tag";
 import { removeUsernameTag } from "@/utils/toggleUsernameInTag";
 import useMethodStore from "@/store/MethodStore";
 import Icon from "../ui/Icon";
+import ResponsiveDialog from "./ResponsiveDialog";
+import { CreateLinkForm } from "../Forms";
 
 type CollectionCardProps = {
   id: string;
@@ -70,16 +72,24 @@ const CollectionListCard = ({
       <div className="h-full">
         <div className="space-y-2">
           <div>
-            <span
-              className={`group-hover:opacity-100 text-xl transition-all ease-in-out duration-300 absolute right-3 opacity-0 active:scale-95 dark:hover:bg-[#b2b2b220] hover:bg-[#00000015] cursor-pointer p-3 rounded-full`}
-            >
-              <IoMdAdd />
-            </span>
+            <ResponsiveDialog
+              title="Add link"
+              description="Add a new link to current collection"
+              trigger={
+                <span
+                  onClick={e => e.stopPropagation()}
+                  className={`group-hover:opacity-100 text-xl transition-all ease-in-out duration-300 absolute right-3 opacity-0 active:scale-95 dark:hover:bg-[#b2b2b220] hover:bg-[#00000015] cursor-pointer p-3 rounded-full`}
+                >
+                  <IoMdAdd />
+                </span>
+              }>
+              <CreateLinkForm collectionTitle={title} />
+            </ResponsiveDialog>
             <h1 className={`text-xl font-bold hover:underline ${font}`}>
               {title}
             </h1>
           </div>
-         {description && <p className={`text-sm text-zinc-300/70 font-semibold ${font}`}>{description}</p>}
+          {description && <p className={`text-sm text-zinc-300/70 font-semibold ${font}`}>{description}</p>}
         </div>
         <div className="flex pt-3 space-x-2 overflow-x-scroll no-scrollbar">
           <AvatarGroup

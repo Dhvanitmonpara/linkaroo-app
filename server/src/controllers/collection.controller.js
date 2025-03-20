@@ -179,6 +179,14 @@ const getCollectionById = asyncHandler(async (req, res) => {
             }
         },
         {
+            $lookup: {
+                from: 'users',
+                localField: 'viewers',
+                foreignField: '_id',
+                as: 'viewers'
+            }
+        },
+        {
             $project: {
                 title: 1,
                 description: 1,
@@ -196,6 +204,12 @@ const getCollectionById = asyncHandler(async (req, res) => {
                     clerkId: 1,
                 },
                 createdBy: {
+                    _id: 1,
+                    username: 1,
+                    email: 1,
+                    clerkId: 1,
+                },
+                viewers: {
                     _id: 1,
                     username: 1,
                     email: 1,

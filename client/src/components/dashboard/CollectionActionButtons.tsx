@@ -231,7 +231,7 @@ const CollectionActionButtons = () => {
       tooltip: `Make this collection ${currentCollectionItem?.isPublic ? "private" : "public"}`,
     },
     {
-      element: <AddCollaborator />,
+      element: <AddCollaborator collectionId={collectionId}/>,
       tooltip: "Add Collaborators",
     },
     {
@@ -352,17 +352,17 @@ const CollectionActionButtons = () => {
 
 export default CollectionActionButtons;
 
-const AddCollaborator: React.FC = ({ collaborators }: { collaborators?: string[] }) => {
+const AddCollaborator = ({ collaborators, collectionId }: { collaborators?: string[], collectionId: string | undefined }) => {
   const [open, setOpen] = useState(false);
   const [isCopied, setIsCopied] = useState(false)
 
   const getSharableLink = () => {
     try {
-      if (!window.location.href.includes("/c")) {
-        toast.error("Please select a list");
+      if (!window.location.href.includes("/c") || !collectionId) {
+        toast.error("Please select a collection");
         return;
       }
-      navigator.clipboard.writeText(`${window.location.href}?shared=true`);
+      navigator.clipboard.writeText(`${import.meta.env.VITE_ACCESS_CONTROL_ORIGIN}/shared/${collectionId}`);
       if (collaborators && collaborators.length > 0) {
         setOpen(false);
       } else {

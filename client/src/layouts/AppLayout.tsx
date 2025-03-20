@@ -98,10 +98,10 @@ const AppLayout = () => {
   return (
     <div className="min-h-screen w-screen">
       <div
-        className={`p-0 w-full min-h-[calc(100vh-env(safe-area-inset-top))] bg-black`}
+        className={`p-0 w-full min-h-[calc(100vh-env(safe-area-inset-top))] bg-zinc-900`}
       >
         <div
-          className={`w-full bg-black}`}
+          className={`w-full}`}
           style={{ paddingTop: "env(safe-area-inset-top)" }}
         >
           <Header />
@@ -109,7 +109,7 @@ const AppLayout = () => {
         <Outlet />
       </div>
       <div
-        className={`fixed z-30 bottom-0 px-0 dark:text-zinc-400 bg-black sm:!bg-transparent justify-center items-center flex w-screen h-16 lg:hidden`}
+        className={`fixed z-30 bottom-0 px-0 dark:text-zinc-400 bg-zinc-900 sm:!bg-transparent justify-center items-center flex w-screen h-16 lg:hidden`}
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       >
         <HorizontalTabs />

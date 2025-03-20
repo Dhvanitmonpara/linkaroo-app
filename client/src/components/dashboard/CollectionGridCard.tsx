@@ -96,18 +96,18 @@ const CollectionGridCard = ({
               </div>
             </HoverCardContent>
           </HoverCard>
-          <ResponsiveDialog title="Add link" description="Add a new link to current collection" trigger={<span
-            onClick={(e) => {
-              e.stopPropagation();
-              navigate(`/c?collectionId=${title}`, { replace: true });
-            }}
-            className={`group-hover:opacity-100 text-xl transition-all ease-in-out duration-300 absolute right-3 opacity-0 active:scale-95 ${isBlackMode ? "hover:bg-[#b2b2b220]" : "hover:bg-[#00000015]"} cursor-pointer p-3 rounded-full`}
-          >
-            <IoMdAdd />
-          </span>}>
-            <CreateLinkForm
-              collectionTitle={title}
-            />
+          <ResponsiveDialog
+            title="Add link"
+            description="Add a new link to current collection"
+            trigger={
+              <span
+                onClick={e => e.stopPropagation()}
+                className={`group-hover:opacity-100 text-xl transition-all ease-in-out duration-300 absolute right-3 opacity-0 active:scale-95 ${isBlackMode ? "hover:bg-[#b2b2b220]" : "hover:bg-[#00000015]"} cursor-pointer p-3 rounded-full`}
+              >
+                <IoMdAdd />
+              </span>
+            }>
+            <CreateLinkForm collectionTitle={title} />
           </ResponsiveDialog>
           <h1 className={`text-2xl py-1 font-bold hover:underline ${font}`}>
             {title}

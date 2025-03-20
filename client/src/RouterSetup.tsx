@@ -16,6 +16,7 @@ import HomePage from "./pages/HomePage";
 import InboxPage from "./pages/InboxPage";
 import AppLayout from "./layouts/AppLayout";
 import CreateUserForm from "./components/Forms/CreateUserForm";
+import SharedCollectionPage from "./pages/SharedCollectionPage";
 
 const RouterSetup: React.FC = () => {
   const [isSmallScreen, setIsSmallScreen] = useState(false);
@@ -42,6 +43,7 @@ const RouterSetup: React.FC = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/inbox" element={<InboxPage />} />
           <Route path="/notifications" element={<Notifications />} />
+          <Route path="/shared/:collectionId" element={<SharedCollectionPage />} />
 
           {/* Conditional Small & Large Screen Handling */}
           {isSmallScreen ? (

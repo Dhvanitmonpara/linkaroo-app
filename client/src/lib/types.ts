@@ -87,6 +87,7 @@ type fetchedLinkType = {
 type fetchedCollectionType = {
   _id: string;
   collaborators: Collaborator[];
+  viewers: Collaborator[];
   createdBy: Collaborator;
   description: string;
   tags: TagType[];

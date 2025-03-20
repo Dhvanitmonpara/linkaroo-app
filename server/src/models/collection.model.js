@@ -48,6 +48,12 @@ const collectionSchema = new Schema({
             type: Schema.Types.ObjectId,
             ref: "User"
         }
+    ],
+    viewers: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "User"
+        }
     ]
 
 }, { timestamps: true })
