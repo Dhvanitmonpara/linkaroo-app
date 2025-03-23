@@ -14,7 +14,6 @@ const ProfileCard = () => {
   const [open, setIsOpen] = useState(false)
 
   const { signOut } = useAuth()
-
   const { profile } = useProfileStore();
   const { user } = useUser()
 

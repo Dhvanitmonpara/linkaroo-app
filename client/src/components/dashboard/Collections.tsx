@@ -100,7 +100,7 @@ const Collections = ({ className, extraElementClassNames, defaultView = "list" }
           <div className={`h-2 md:hidden ${extraElementClassNames}`}></div>
           {(location.pathname.includes("/dashboard") || location.pathname.includes("/c")) && <h2 className="pt-8 pb-3 flex justify-between items-center">
             <span className="text-zinc-100 text-2xl">
-              Collections
+              Unpinned
             </span>
             <div className="flex items-center space-x-1">
               <Tabs

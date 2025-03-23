@@ -5,14 +5,21 @@ import {
   Collaborator,
   fontOptions,
 } from "@/lib/types.ts";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import { useNavigate } from "react-router-dom";
-import { IoMdAdd } from "react-icons/io";
 import Tag from "@/components/general/Tag";
 import { removeUsernameTag } from "@/utils/toggleUsernameInTag";
 import useMethodStore from "@/store/MethodStore";
 import Icon from "../ui/Icon";
 import ResponsiveDialog from "./ResponsiveDialog";
 import { CreateLinkForm } from "../Forms";
+import { BsThreeDots } from "react-icons/bs";
+import { RiMenuAddFill } from "react-icons/ri";
+import { useState } from "react";
 
 type CollectionCardProps = {
   id: string;
@@ -72,19 +79,7 @@ const CollectionListCard = ({
       <div className="h-full">
         <div className="space-y-2">
           <div>
-            <ResponsiveDialog
-              title="Add link"
-              description="Add a new link to current collection"
-              trigger={
-                <span
-                  onClick={e => e.stopPropagation()}
-                  className={`group-hover:opacity-100 text-xl transition-all ease-in-out duration-300 absolute right-3 opacity-0 active:scale-95 dark:hover:bg-[#b2b2b220] hover:bg-[#00000015] cursor-pointer p-3 rounded-full`}
-                >
-                  <IoMdAdd />
-                </span>
-              }>
-              <CreateLinkForm collectionTitle={title} />
-            </ResponsiveDialog>
+            <CollectionActionButtons id={id} title={title} />
             <h1 className={`text-xl font-bold hover:underline ${font}`}>
               {title}
             </h1>
@@ -108,3 +103,39 @@ const CollectionListCard = ({
 };
 
 export default CollectionListCard;
+
+const CollectionActionButtons = ({
+  id,
+  title,
+}: { id: string, title: string }) => {
+
+  const [open, setOpen] = useState(false)
+
+  return (
+    <Popover
+      open={open}
+      onOpenChange={setOpen}
+    >
+      <PopoverTrigger
+        onClick={e => e.stopPropagation()}
+        className="absolute right-3 group-hover:opacity-100 text-xl transition-all ease-in-out duration-300 opacity-0 active:scale-95 dark:hover:bg-[#b2b2b220] hover:bg-[#00000015] cursor-pointer p-3 rounded-full"
+      >
+        <BsThreeDots />
+      </PopoverTrigger>
+      <PopoverContent>
+        <ResponsiveDialog
+          onOpenChange={(value) => (value !== true && setOpen(false))}
+          title="Add link"
+          description="Add a new link to current collection"
+          trigger={
+            <div className="flex items-center space-x-2">
+              <RiMenuAddFill />
+              <span>Add Link</span>
+            </div>
+          }>
+          <CreateLinkForm collectionTitle={title} />
+        </ResponsiveDialog>
+      </PopoverContent>
+    </Popover >
+  )
+}
