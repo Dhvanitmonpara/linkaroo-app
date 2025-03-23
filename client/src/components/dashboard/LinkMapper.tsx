@@ -37,8 +37,8 @@ function LinkMapper() {
             <ResponsiveDialog
               open={isLinkFormOpen}
               onOpenChange={setIsLinkFormOpen}
-              prebuildForm={profile.useFullTypeFormAdder}
-              className={`${profile.useFullTypeFormAdder ? "sm:max-w-2xl" : "md:p-0 bg-transparent border-none md:max-w-2xl"}`}
+              prebuildForm={!profile.useFullTypeFormAdder}
+              className={`${profile.useFullTypeFormAdder ?  "md:p-0 bg-transparent border-none md:max-w-2xl" : "sm:max-w-2xl"}`}
               title="Add New Link"
               trigger={
                 <div className={cn(
@@ -65,16 +65,17 @@ function LinkMapper() {
               description="Add a new link to your collection"
             >
               {profile.useFullTypeFormAdder
-                ? <CreateLinkForm
-                  afterSubmit={() => setIsLinkFormOpen(false)}
-                  collectionTitle={currentCollectionItem?.title}
-                />
-                : <div className="w-full flex-1 overflow-auto py-4">
+                ? <div className="w-full flex-1 overflow-auto py-4">
                   <CreateLinkBar
                     afterSubmit={() => setIsLinkFormOpen(false)}
                     collectionTitle={currentCollectionItem?.title}
                   />
                 </div>
+                : <CreateLinkForm
+                  afterSubmit={() => setIsLinkFormOpen(false)}
+                  collectionTitle={currentCollectionItem?.title}
+                />
+
               }
             </ResponsiveDialog>
             {links

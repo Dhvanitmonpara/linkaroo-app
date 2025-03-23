@@ -11,7 +11,7 @@ import formatLinks from "@/utils/formatLinks";
 import { DashboardWelcomeScreen, LinkBanner, LinkMapper } from "@/components/dashboard/index"
 
 const Links = () => {
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   const { cachedLinks, setLinks, addCachedLinkCollection, setCurrentCollectionItem, currentCollectionItem } = useLinkStore()
   const { collections } = useCollectionsStore()
@@ -24,59 +24,62 @@ const Links = () => {
 
   useEffect(() => {
     (async () => {
-      if (location.includes("/c")) {
-        try {
-          if (!collectionId) {
-            navigate("/dashboard")
-            return
-          }
+      try {
+        setLoading(true);
 
-          setLoading(true);
-          const cache = cachedLinks.filter((collection) => collection.collectionId === collectionId)[0];
-
-          const currentListRes = collections.find(
-            (collection) => collection._id === collectionId
-          )
-          if (!currentListRes) {
-            navigate("/dashboard")
-            return
-          }
-
-          setCurrentCollectionItem(currentListRes);
-
-          if (cache) {
-            setLinks(cache.links);
-          } else {
-            const response: AxiosResponse = await axios.get(
-              `${import.meta.env.VITE_SERVER_API_URL}/links/${collectionId}`,
-              { withCredentials: true }
-            );
-
-            if (!response.data.data) {
-              toast.error("Failed to fetch collection details");
-              return;
-            }
-
-            const formattedLinks = formatLinks(response.data.data)
-            setLinks(formattedLinks);
-            addCachedLinkCollection({ collectionId, links: formattedLinks });
-          }
-        } catch (error) {
-          if (error instanceof AxiosError) {
-            if (error.response?.status === 404) {
-              return
-            }
-            toast.error(error.message)
-          } else {
-            console.error(error);
-            toast.error("Error while fetching collection details");
-          }
-        } finally {
-          setLoading(false);
+        if (!location.includes("/c")) {
+          return
         }
+        if (!collectionId) {
+          navigate("/dashboard")
+          return
+        }
+
+        const cache = cachedLinks.filter((collection) => collection.collectionId === collectionId)[0];
+
+        const currentCollectionRes = collections.find(
+          (collection) => collection._id === collectionId
+        )
+        if (!currentCollectionRes) {
+          navigate("/dashboard")
+          return
+        }
+
+        setCurrentCollectionItem(currentCollectionRes);
+
+        if (cache) {
+          setLinks(cache.links);
+        } else {
+          const response: AxiosResponse = await axios.get(
+            `${import.meta.env.VITE_SERVER_API_URL}/links/${collectionId}`,
+            { withCredentials: true }
+          );
+
+          if (!response.data.data) {
+            toast.error("Failed to fetch collection details");
+            return;
+          }
+
+          const formattedLinks = formatLinks(response.data.data)
+          setLinks(formattedLinks);
+          addCachedLinkCollection({ collectionId, links: formattedLinks });
+        }
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          if (error.response?.status === 404) {
+            setLinks([]);
+            return
+          }
+          toast.error(error.message)
+        } else {
+          console.error(error);
+          toast.error("Error while fetching collection details");
+        }
+      } finally {
+        setLoading(false);
       }
     })();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location, setLinks, setCurrentCollectionItem, addCachedLinkCollection, navigate, collectionId]);
 
   const tags: string[] = [];

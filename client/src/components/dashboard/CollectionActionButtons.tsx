@@ -6,13 +6,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { TbCopyCheckFilled } from "react-icons/tb";
 import { PiDotsThreeOutlineFill } from "react-icons/pi";
 import { useEffect, useState } from "react";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import toast from "react-hot-toast";
 import { fetchedTagType } from "@/lib/types";
 import useProfileStore from "@/store/profileStore";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { FaLock } from "react-icons/fa";
 import { FaLockOpen } from "react-icons/fa";
 import useLinkStore from "@/store/linkStore";
@@ -25,6 +26,7 @@ import { EditListForm } from "../Forms";
 import TooltipContainer from "../general/Tooltip";
 import AddCollaboratorForm from "../Forms/AddCollaboratorForm";
 import { IoIosCopy, IoMdPersonAdd } from "react-icons/io";
+import { FaCircleInfo } from "react-icons/fa6";
 
 type Checked = boolean;
 
@@ -39,6 +41,7 @@ const CollectionActionButtons = () => {
   const [checkedTags, setCheckedTags] = useState<checkedTagsType[]>([]);
 
   const { collectionId } = useParams();
+  const location = useLocation().pathname
 
   useEffect(() => {
     (async () => {
@@ -90,50 +93,72 @@ const CollectionActionButtons = () => {
   return (
     <div className="flex justify-center items-center">
       <div className="hidden md:flex justify-center items-center space-x-3 !relative">
-        <DesktopButtonWrapper tooltip={"Add Collaborators"}>
-          <ToggleIsPublicButton />
-        </DesktopButtonWrapper>
-        <DesktopButtonWrapper tooltip={`Make this collection ${currentCollectionItem?.isPublic ? "private" : "public"}`}>
-          <AddCollaborator collectionId={collectionId} />
-        </DesktopButtonWrapper>
-        <DesktopButtonWrapper tooltip={"Edit Collection"}>
-          <EditCollectionButton />
-        </DesktopButtonWrapper>
-        <DesktopButtonWrapper tooltip={"Edit Tags"}>
-          <HandleTagForm
-            loading={loading}
-            checkedTags={checkedTags}
-            setCheckedTags={setCheckedTags}
-          />
-        </DesktopButtonWrapper>
-        <DesktopButtonWrapper tooltip={"Delete Collection"}>
-          <DeleteCollectionButton />
-        </DesktopButtonWrapper>
+        {location.includes("/shared")
+          ? <>
+            <DesktopButtonWrapper tooltip={"Make a copy of this collection"}>
+              <CopyCollectionButton />
+            </DesktopButtonWrapper>
+            <DesktopButtonWrapper tooltip={"Request to join as a collaborator"}>
+              <JoinAsCollaborator />
+            </DesktopButtonWrapper>
+          </>
+          : <>
+            <DesktopButtonWrapper tooltip={"Add Collaborators"}>
+              <ManageCollaborators collectionId={collectionId} />
+            </DesktopButtonWrapper>
+            <DesktopButtonWrapper tooltip={`Make this collection ${currentCollectionItem?.isPublic ? "private" : "public"}`}>
+              <ToggleIsPublicButton />
+            </DesktopButtonWrapper>
+            <DesktopButtonWrapper tooltip={"Edit Collection"}>
+              <EditCollectionButton />
+            </DesktopButtonWrapper>
+            <DesktopButtonWrapper tooltip={"Edit Tags"}>
+              <HandleTagForm
+                loading={loading}
+                checkedTags={checkedTags}
+                setCheckedTags={setCheckedTags}
+              />
+            </DesktopButtonWrapper>
+            <DesktopButtonWrapper tooltip={"Delete Collection"}>
+              <DeleteCollectionButton />
+            </DesktopButtonWrapper>
+          </>}
       </div>
       <div>
         <DrawerMenu contentClassName="px-4 !pt-0" title="Collection options" trigger={<button className="md:hidden h-12 w-12 bg-[#6d6d6d20] hover:bg-[#6d6d6d50] transition-colors flex justify-center items-center rounded-full text-xl">
           <PiDotsThreeOutlineFill />
         </button>}>
           <div className="flex flex-col font-helvetica space-y-1 rounded-2xl overflow-hidden">
-            <MobileButtonWrapper>
-              <ToggleIsPublicButton />
-            </MobileButtonWrapper>
-            <MobileButtonWrapper>
-              <AddCollaborator collectionId={collectionId} />
-            </MobileButtonWrapper>
-            <MobileButtonWrapper>
-              <EditCollectionButton />
-            </MobileButtonWrapper>
-            <MobileButtonWrapper>
-              <HandleTagForm
-                loading={loading}
-                checkedTags={checkedTags}
-                setCheckedTags={setCheckedTags}
-              />
-            </MobileButtonWrapper>
-            <MobileButtonWrapper>
-              <DeleteCollectionButton />
-            </MobileButtonWrapper>
+            {location.includes("/shared")
+              ? <>
+                <MobileButtonWrapper>
+                  <CopyCollectionButton />
+                </MobileButtonWrapper>
+                <MobileButtonWrapper>
+                  <JoinAsCollaborator />
+                </MobileButtonWrapper>
+              </>
+              : <>
+                <MobileButtonWrapper>
+                  <ManageCollaborators collectionId={collectionId} />
+                </MobileButtonWrapper>
+                <MobileButtonWrapper>
+                  <ToggleIsPublicButton />
+                </MobileButtonWrapper>
+                <MobileButtonWrapper>
+                  <EditCollectionButton />
+                </MobileButtonWrapper>
+                <MobileButtonWrapper>
+                  <HandleTagForm
+                    loading={loading}
+                    checkedTags={checkedTags}
+                    setCheckedTags={setCheckedTags}
+                  />
+                </MobileButtonWrapper>
+                <MobileButtonWrapper>
+                  <DeleteCollectionButton />
+                </MobileButtonWrapper>
+              </>}
           </div>
         </DrawerMenu>
       </div>
@@ -168,7 +193,83 @@ const DesktopButtonWrapper = ({ children, tooltip }: { children: React.ReactNode
   )
 }
 
-const AddCollaborator = ({ collaborators, collectionId }: { collaborators?: string[], collectionId: string | undefined }) => {
+const CopyCollectionButton = () => {
+
+  const [isLoading, setIsLoading] = useState(false)
+
+  const { currentCollectionItem, setCurrentCollectionItem } = useLinkStore()
+  const { profile } = useProfileStore()
+  const navigate = useNavigate()
+
+  const copyCollectionHandler = async () => {
+    const id = Date.now().toString()
+    try {
+      setIsLoading(true)
+      toast.loading("Copying Collection...", {
+        id
+      })
+
+      if (isLoading) return
+      if (!currentCollectionItem?._id) {
+        toast.error("Collection id not found")
+        return
+      }
+
+      const res = await axios.post(`${import.meta.env.VITE_SERVER_API_URL}/collections/v/${currentCollectionItem?._id}`, {
+        userId: profile._id
+      })
+
+      if (res.status !== 200 || !res.data.data._id) {
+        toast.error("Failed to copy Collection")
+        return
+      }
+
+      toast.success("Collection copied successfully")
+      navigate(`/dashboard/c/${res.data.data._id}`)
+
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.status === 301) {
+          toast("Collection already exists", {
+            icon: <FaCircleInfo />
+          })
+          setCurrentCollectionItem(null)
+          console.log(`/dashboard/c/${error.response?.data.data._id}`)
+          navigate(`/dashboard/c/${error.response?.data.data._id}`, { replace: true })
+          return
+        }
+        toast.error(error.response?.data.message || error.message)
+      } else {
+        console.error(error);
+        toast.error("Error while fetching collection details");
+      }
+    } finally {
+      setIsLoading(false)
+      toast.dismiss(id)
+    }
+  }
+
+  return (
+    <div className={`h-full w-full flex justify-center items-center ${isLoading && "cursor-not-allowed opacity-70"}`} onClick={copyCollectionHandler}>
+      <IoIosCopy />
+    </div>
+  )
+}
+
+const JoinAsCollaborator = () => {
+
+  const sendJoinRequestHandler = () => {
+    // TODO: define a function to send a join request
+  }
+
+  return (
+    <div className="h-full w-full justify-center items-center flex" onClick={sendJoinRequestHandler}>
+      <IoMdPersonAdd />
+    </div>
+  )
+}
+
+const ManageCollaborators = ({ collaborators, collectionId }: { collaborators?: string[], collectionId: string | undefined }) => {
   const [open, setOpen] = useState(false);
   const [isCopied, setIsCopied] = useState(false)
 
@@ -189,7 +290,7 @@ const AddCollaborator = ({ collaborators, collectionId }: { collaborators?: stri
       }
       toast(
         <div className="flex space-x-2 justify-center items-center">
-          <IoIosCopy />
+          <TbCopyCheckFilled />
           <span>A sharable Link copied to clipboard!</span>
         </div>
       )
@@ -221,7 +322,7 @@ const AddCollaborator = ({ collaborators, collectionId }: { collaborators?: stri
           aria-label="Tag Options"
         >
           <span className="flex justify-center items-center h-12 w-12">
-            {isCopied ? <IoIosCopy /> : <IoMdPersonAdd />}
+            {isCopied ? <TbCopyCheckFilled /> : <IoMdPersonAdd />}
           </span>
           <span className="text-lg md:hidden">Add Collaborators</span>
         </div>
@@ -353,7 +454,7 @@ const EditCollectionButton = () => {
 
 const ToggleIsPublicButton = () => {
 
-  const { currentCollectionItem } = useLinkStore()
+  const { currentCollectionItem, setCurrentCollectionItem } = useLinkStore()
   const { toggleIsPublic } = useCollectionsStore()
 
   const handleToggleIsPublic = async () => {
@@ -381,6 +482,7 @@ const ToggleIsPublicButton = () => {
       }
 
       toggleIsPublic(currentCollectionItem);
+      setCurrentCollectionItem({ ...currentCollectionItem, isPublic: !currentCollectionItem.isPublic });
       toast.success("Collection updated successfully");
     } catch (error) {
       if (error instanceof AxiosError) {

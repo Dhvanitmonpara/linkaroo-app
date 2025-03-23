@@ -138,6 +138,77 @@ const deleteCollaborator = asyncHandler(async (req, res) => {
         ))
 })
 
+const copyCollection = asyncHandler(async (req, res) => {
+    const { collectionId } = req.params;
+    const { userId } = req.body;
+
+    if (!collectionId) throw new ApiError(400, "Collection ID is required");
+    if (!userId) throw new ApiError(400, "User ID is required");
+
+    const collectionIdObject = convertToObjectId(collectionId);
+    const userIdObject = convertToObjectId(userId);
+
+    const collection = await Collection
+        .findById(collectionIdObject)
+        .select("-collaborators -viewers -isInbox -isPublic -tags -createdAt -updatedAt");
+
+    if (!collection) throw new ApiError(404, "Collection not found");
+
+    const existingCollection = await Collection.findOne({
+        title: collection.title + " (copy)",
+        createdBy: userIdObject,
+        type: collection.type
+    });
+
+    if (existingCollection) {
+        return res.status(301).json(new ApiResponse(
+            301,
+            { _id: existingCollection._id },
+            "Collection already exists"
+        ));
+    }
+
+    const newCollection = await Collection.create({
+        createdBy: userIdObject,
+        title: collection.title + " (copy)",
+        description: collection.description,
+        theme: collection.theme,
+        coverImage: collection.coverImage,
+        collaborators: [],
+        icon: collection.icon,
+        viewers: [],
+        type: collection.type
+    });
+
+    if (!newCollection) throw new ApiError(500, "Failed to create collection");
+
+    const links = await Link.find({ collectionId: collectionIdObject }).lean();
+
+    if (links.length > 0) {
+        const newLinks = links.map(({ title, description, link, image, tags, icon }) => ({
+            collectionId: newCollection._id,
+            title,
+            description,
+            link,
+            image,
+            tags,
+            icon
+        }));
+
+        try {
+            await Link.insertMany(newLinks);
+        } catch (error) {
+            throw new ApiError(500, "Failed to copy links");
+        }
+    }
+
+    return res.status(200).json(new ApiResponse(
+        200,
+        newCollection,
+        "Collection copied successfully"
+    ));
+});
+
 const getCollectionById = asyncHandler(async (req, res) => {
     const { collectionId } = req.params
 
@@ -701,7 +772,7 @@ const deleteCoverImage = asyncHandler(async (req, res) => {
 
 const toggleIsPublic = asyncHandler(async (req, res) => {
 
-    const collectionId = req.params.collectionId
+    const { collectionId } = req.params
 
     if (!collectionId) {
         throw new ApiError(400, "Collection ID is required")
@@ -720,7 +791,7 @@ const toggleIsPublic = asyncHandler(async (req, res) => {
         .status(200)
         .json(new ApiResponse(
             200,
-            collection,
+            {},
             "Collection visibility toggled successfully"
         ))
 
@@ -728,6 +799,7 @@ const toggleIsPublic = asyncHandler(async (req, res) => {
 
 export {
     createCollection,
+    copyCollection,
     getCollectionById,
     getCollectionsByOwner,
     getCollectionsByCollaborator,

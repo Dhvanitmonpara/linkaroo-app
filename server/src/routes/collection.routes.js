@@ -13,6 +13,7 @@ import {
     uploadCoverImage,
     deleteCoverImage,
     toggleIsPublic,
+    copyCollection,
     getCollectionsByUser,
     getCollectionByName
 } from "../controllers/collection.controller.js";
@@ -33,6 +34,8 @@ router.route("/o/:collectionId")
     .patch(updateCollection)
 
 router.route("/c/get/:collaboratorId").get(getCollectionsByCollaborator)
+
+router.route("/v/:collectionId").post(copyCollection)
 
 router.route("/o/c/:collectionId")
     .patch(addCollaborator)

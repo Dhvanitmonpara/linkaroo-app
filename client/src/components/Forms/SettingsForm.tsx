@@ -22,7 +22,7 @@ type HandleSettingsType = {
   font: fontOptions;
 };
 
-const SettingsForm = () => {
+const SettingsForm = ({ afterSubmit }: { afterSubmit?: () => void }) => {
 
   const { updateProfile, profile } = useProfileStore();
   const [loading, setLoading] = useState(false);
@@ -55,7 +55,7 @@ const SettingsForm = () => {
         toast.error("Failed to update settings");
       }
 
-      updateProfile({...settings, ...profile})
+      updateProfile({ ...profile, ...settings })
     } catch (error) {
       if (error instanceof AxiosError) {
         toast.error(error.message)
@@ -65,6 +65,7 @@ const SettingsForm = () => {
       }
     } finally {
       setLoading(false);
+      afterSubmit && afterSubmit()
     }
   };
 

@@ -59,7 +59,7 @@ const ProfileCard = () => {
           title="Settings"
           description="Are you sure you want to logout?"
         >
-          <SettingsForm />
+          <SettingsForm afterSubmit={() => setIsOpen(false)} />
         </DialogContainer>
 
         <DialogContainer
